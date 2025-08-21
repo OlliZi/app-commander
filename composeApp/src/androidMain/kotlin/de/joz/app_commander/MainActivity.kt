@@ -6,14 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import de.joz.app_commander.domain.ExecuteScriptUseCase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        val executeScriptUseCase = ExecuteScriptUseCase()
+
         setContent {
-            App()
+            App(
+                executeScriptUseCase = executeScriptUseCase,
+            )
         }
     }
 }
@@ -21,5 +26,9 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App()
+    val executeScriptUseCase = ExecuteScriptUseCase()
+
+    App(
+        executeScriptUseCase = executeScriptUseCase,
+    )
 }

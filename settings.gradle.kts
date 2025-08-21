@@ -1,4 +1,4 @@
-rootProject.name = "Appcommander"
+rootProject.name = "App-Commander"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
