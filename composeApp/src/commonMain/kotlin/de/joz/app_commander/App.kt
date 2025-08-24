@@ -1,50 +1,49 @@
 package de.joz.app_commander
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import de.joz.app_commander.domain.ExecuteScriptUseCase
-import kotlinx.coroutines.launch
+import de.joz.app_commander.domain.GetPreferenceUseCase
+import de.joz.app_commander.domain.NavigationScreens
+import de.joz.app_commander.domain.SavePreferenceUseCase
+import de.joz.app_commander.ui.scripts.ScriptsScreen
+import de.joz.app_commander.ui.settings.SettingsScreen
+import de.joz.app_commander.ui.welcome.WelcomeScreen
+import de.joz.app_commander.ui.welcome.WelcomeViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App(
-    executeScriptUseCase: ExecuteScriptUseCase
+    executeScriptUseCase: ExecuteScriptUseCase,
+    savePreferenceUseCase: SavePreferenceUseCase,
+    getPreferenceUseCase: GetPreferenceUseCase,
 ) {
     MaterialTheme {
-        var log by remember { mutableStateOf("") }
+        val navController: NavHostController = rememberNavController()
+        val viewModel = WelcomeViewModel(
+            savePreferenceUseCase = savePreferenceUseCase,
+            getPreferenceUseCase = getPreferenceUseCase,
+            navController = navController,
+        )
 
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        NavHost(
+            navController = navController,
+            startDestination = NavigationScreens.WelcomeScreen,
         ) {
-            val coroutineScope = rememberCoroutineScope()
-            Button(onClick = {
-                coroutineScope.launch {
-                    log =
-                        executeScriptUseCase(script = "adb devices", selectedDevice = "").toString()
-                }
-            }) {
-                Text("adb test")
+            composable<NavigationScreens.WelcomeScreen> {
+                WelcomeScreen(viewModel = viewModel)
             }
-
-            Text(text = log)
+            composable<NavigationScreens.ScriptsScreen> {
+                ScriptsScreen(executeScriptUseCase = executeScriptUseCase)
+            }
+            composable<NavigationScreens.SettingsScreen> {
+                SettingsScreen()
+            }
         }
     }
 }
