@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import de.joz.app_commander.domain.GetPreferenceUseCase
 import de.joz.app_commander.domain.NavigationScreens
 import de.joz.app_commander.domain.SavePreferenceUseCase
-import de.joz.app_commander.ui.misc.UnidirectionalDataFlow
+import de.joz.app_commander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class WelcomeViewModel(
     private val savePreferenceUseCase: SavePreferenceUseCase,
     private val getPreferenceUseCase: GetPreferenceUseCase,
 ) : ViewModel(),
-    UnidirectionalDataFlow<WelcomeViewModel.UiState, WelcomeViewModel.Event> {
+    UnidirectionalDataFlowViewModel<WelcomeViewModel.UiState, WelcomeViewModel.Event> {
 
     private val _viewState = MutableStateFlow(UiState())
     override val viewState = _viewState.asStateFlow()

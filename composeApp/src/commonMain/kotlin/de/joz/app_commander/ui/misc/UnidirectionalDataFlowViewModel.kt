@@ -2,7 +2,7 @@ package de.joz.app_commander.ui.misc
 
 import kotlinx.coroutines.flow.Flow
 
-interface UnidirectionalDataFlow<S, E> {
+interface UnidirectionalDataFlowViewModel<S, E> {
     val viewState: Flow<S>
     fun onEvent(event: E)
 }
