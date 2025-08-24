@@ -10,9 +10,11 @@ import de.joz.app_commander.domain.PreferencesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
+import org.koin.core.annotation.Factory
 
+@Factory
 class PreferencesRepositoryImpl(
-    private val dataStore: DataStore<Preferences>,
+    private val dataStore: DataStore<Preferences> = getDataStore(),
 ) : PreferencesRepository {
     override suspend fun get(
         key: String,

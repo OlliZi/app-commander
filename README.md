@@ -17,6 +17,7 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 - Run desktop app via ...
 
 # Technical background
+- DI with koin
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
 
