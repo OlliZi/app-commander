@@ -3,14 +3,17 @@
 App-Commander: Execute your custom scripts for your apps on multiple devices.
 
 # Features
-- TBD
+
+- implement welcome-screen
 
 # TODOs
+
 - use Koin as DI
 - integrate detekt plugin + ktlint
 - Theming (light and dark)
 
 # Installation
+
 - Run desktop app via ...
 
 # Technical background

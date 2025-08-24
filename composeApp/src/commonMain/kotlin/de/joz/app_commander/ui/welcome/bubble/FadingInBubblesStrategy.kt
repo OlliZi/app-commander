@@ -5,14 +5,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
-import de.joz.app_commander.ui.welcome.bubble.Bubble
-import de.joz.app_commander.ui.welcome.bubble.BubblesStrategy
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-class BlinkingBubblesStrategy : BubblesStrategy {
+class FadingInBubblesStrategy : BubblesStrategy {
     private val darkOrange = Color(red = 199, green = 110, blue = 0).copy(alpha = 0.5f)
     private val bubbles =
         BubblesStrategy.createRandomBubbles(

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 class MultiBubblesStrategy : BubblesStrategy {
     private val clients = listOf(
         FallingBubblesStrategy(),
-        BlinkingBubblesStrategy(),
+        FadingInBubblesStrategy(),
     )
 
     override fun drawBubbles(
