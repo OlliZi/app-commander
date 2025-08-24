@@ -10,9 +10,9 @@ import de.joz.app_commander.domain.PreferencesRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
-import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Single
 
-@Factory
+@Single
 class PreferencesRepositoryImpl(
     private val dataStore: DataStore<Preferences> = getDataStore(),
 ) : PreferencesRepository {
