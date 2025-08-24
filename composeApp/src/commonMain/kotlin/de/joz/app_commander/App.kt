@@ -6,40 +6,35 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import de.joz.app_commander.domain.ExecuteScriptUseCase
-import de.joz.app_commander.domain.GetPreferenceUseCase
 import de.joz.app_commander.domain.NavigationScreens
-import de.joz.app_commander.domain.SavePreferenceUseCase
 import de.joz.app_commander.ui.scripts.ScriptsScreen
 import de.joz.app_commander.ui.settings.SettingsScreen
 import de.joz.app_commander.ui.welcome.WelcomeScreen
 import de.joz.app_commander.ui.welcome.WelcomeViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 @Preview
 fun App(
-    executeScriptUseCase: ExecuteScriptUseCase,
-    savePreferenceUseCase: SavePreferenceUseCase,
-    getPreferenceUseCase: GetPreferenceUseCase,
+    navHostController: NavHostController = rememberNavController()
 ) {
     MaterialTheme {
-        val navController: NavHostController = rememberNavController()
-        val viewModel = WelcomeViewModel(
-            savePreferenceUseCase = savePreferenceUseCase,
-            getPreferenceUseCase = getPreferenceUseCase,
-            navController = navController,
-        )
-
         NavHost(
-            navController = navController,
+            navController = navHostController,
             startDestination = NavigationScreens.WelcomeScreen,
         ) {
             composable<NavigationScreens.WelcomeScreen> {
+                val viewModel: WelcomeViewModel = koinViewModel {
+                    parametersOf(navHostController)
+                }
+
                 WelcomeScreen(viewModel = viewModel)
             }
             composable<NavigationScreens.ScriptsScreen> {
-                ScriptsScreen(executeScriptUseCase = executeScriptUseCase)
+                ScriptsScreen(executeScriptUseCase = koinInject())
             }
             composable<NavigationScreens.SettingsScreen> {
                 SettingsScreen()

@@ -32,7 +32,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.app_commander.resources.Res
 import de.joz.app_commander.resources.welcome
 import de.joz.app_commander.resources.welcome_action
@@ -40,9 +39,9 @@ import de.joz.app_commander.resources.welcome_do_not_show_again
 import de.joz.app_commander.resources.welcome_title
 import de.joz.app_commander.ui.misc.SwitchWithLabel
 import de.joz.app_commander.ui.welcome.bubble.BubblesStrategy
-import de.joz.app_commander.ui.welcome.bubble.MultiBubblesStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun WelcomeScreen(
@@ -51,7 +50,6 @@ fun WelcomeScreen(
     isInTextExecution: Boolean = false,
 ) {
     WelcomeContent(
-        viewState = viewModel.viewState.collectAsStateWithLifecycle().value,
         onNavigateToScripts = {
             viewModel.onEvent(event = WelcomeViewModel.Event.OnNavigateToScripts)
         },
@@ -65,7 +63,7 @@ fun WelcomeScreen(
 
 @Composable
 internal fun WelcomeContent(
-    viewState: WelcomeViewModel.UiState,
+    bubblesStrategy: BubblesStrategy = koinInject(),
     onNavigateToScripts: () -> Unit,
     onDoNotShowWelcomeAgain: (Boolean) -> Unit,
     isInTextExecution: Boolean,
@@ -95,7 +93,7 @@ internal fun WelcomeContent(
             Modifier
                 .fillMaxSize()
                 .drawBehind {
-                    renderBubbles(yOffset, isInTextExecution)
+                    renderBubbles(yOffset, isInTextExecution, bubblesStrategy)
                 }
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
@@ -144,11 +142,10 @@ internal fun WelcomeContent(
     }
 }
 
-private val bubblesStrategy: BubblesStrategy = MultiBubblesStrategy()
-
 private fun DrawScope.renderBubbles(
     yOffset: Float,
     isInTextExecution: Boolean,
+    bubblesStrategy: BubblesStrategy,
 ) {
     if (isInTextExecution.not()) {
         bubblesStrategy.drawBubbles(

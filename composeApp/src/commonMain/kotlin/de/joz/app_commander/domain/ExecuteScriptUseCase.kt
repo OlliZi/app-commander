@@ -1,5 +1,8 @@
 package de.joz.app_commander.domain
 
+import org.koin.core.annotation.Factory
+
+@Factory
 class ExecuteScriptUseCase(
     private val scriptRunner: ScriptRunner = getScriptRunner(),
 ) {

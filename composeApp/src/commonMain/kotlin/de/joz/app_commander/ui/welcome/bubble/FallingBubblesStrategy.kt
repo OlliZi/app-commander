@@ -3,7 +3,6 @@ package de.joz.app_commander.ui.welcome.bubble
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import de.joz.app_commander.ui.welcome.bubble.BubblesStrategy
 
 class FallingBubblesStrategy : BubblesStrategy {
     private val bubbles = BubblesStrategy.createRandomBubbles()

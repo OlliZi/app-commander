@@ -1,12 +1,15 @@
 package de.joz.app_commander
 
 import androidx.compose.ui.window.ComposeUIViewController
-import de.joz.app_commander.domain.ExecuteScriptUseCase
+import org.koin.compose.KoinApplication
+import org.koin.ksp.generated.*
 
 fun MainViewController() = ComposeUIViewController {
-    val executeScriptUseCase = ExecuteScriptUseCase()
-
-    App(
-        executeScriptUseCase = executeScriptUseCase,
-    )
+    KoinApplication(
+        application = {
+            modules(DependencyInjection().module)
+        }
+    ) {
+        App()
+    }
 }
