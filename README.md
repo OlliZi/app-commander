@@ -8,7 +8,6 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 
 # TODOs
 
-- use Koin as DI
 - integrate detekt plugin + ktlint
 - Theming (light and dark)
 
