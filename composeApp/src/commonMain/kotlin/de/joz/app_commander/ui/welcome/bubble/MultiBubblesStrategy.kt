@@ -7,7 +7,6 @@ class MultiBubblesStrategy : BubblesStrategy {
     private val clients = listOf(
         FallingBubblesStrategy(),
         BlinkingBubblesStrategy(),
-        // MatrixBubblesStrategy(),
     )
 
     override fun drawBubbles(

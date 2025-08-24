@@ -41,7 +41,6 @@ import de.joz.app_commander.resources.welcome_title
 import de.joz.app_commander.ui.misc.SwitchWithLabel
 import de.joz.app_commander.ui.welcome.bubble.BubblesStrategy
 import de.joz.app_commander.ui.welcome.bubble.MultiBubblesStrategy
-import de.joz.app_commander.ui.welcome.bubble.TestBubblesStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -151,13 +150,7 @@ private fun DrawScope.renderBubbles(
     yOffset: Float,
     isInTextExecution: Boolean,
 ) {
-    if (isInTextExecution) {
-        TestBubblesStrategy.drawBubbles(
-            drawScope = this,
-            size = size,
-            step = yOffset,
-        )
-    } else {
+    if (isInTextExecution.not()) {
         bubblesStrategy.drawBubbles(
             drawScope = this,
             size = size,
