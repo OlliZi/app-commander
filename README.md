@@ -4,12 +4,16 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 
 # Features
 
-- implement welcome-screen
+- Welcome-screen
 
 # TODOs
 - unit-test
+- shared prefs via DI
 - rm package name
 - integrate detekt plugin + ktlint
+- integrate lib upate tooling
+- script screen
+- settings screen
 - Theming (light and dark)
 
 # Installation
@@ -18,8 +22,9 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 
 # Technical background
 
-- clean architecture (UI -> ViewModel -> UseCases -> Repository -> DB/API)
-- dependency injection with koin
+- Clean architecture (UI -> ViewModel -> UseCases -> Repository -> DB/API)
+- Dependency injection with koin
+- Preferences via datastore
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
 
