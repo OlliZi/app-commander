@@ -108,7 +108,7 @@ ksp {
 
 compose.desktop {
     application {
-        mainClass = "de.joz.appcommander.MainKt"
+        mainClass = "de.joz.appcommander.DesktopAppKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
