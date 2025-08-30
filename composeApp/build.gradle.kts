@@ -64,11 +64,11 @@ kotlin {
 }
 
 android {
-    namespace = "de.joz.app_commander"
+    namespace = "de.joz.appcommander"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "de.joz.app_commander"
+        applicationId = "de.joz.appcommander"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -92,7 +92,7 @@ android {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "de.joz.app_commander.resources"
+    packageOfResClass = "de.joz.appcommander.resources"
     generateResClass = always
 }
 
@@ -108,11 +108,11 @@ ksp {
 
 compose.desktop {
     application {
-        mainClass = "de.joz.app_commander.MainKt"
+        mainClass = "de.joz.appcommander.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "de.joz.app_commander"
+            packageName = "de.joz.appcommander"
             packageVersion = "1.0.0"
         }
     }

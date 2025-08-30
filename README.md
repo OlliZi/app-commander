@@ -7,18 +7,23 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 - Welcome-screen
 
 # TODOs
-- unit-test
+
+- unit-tests
 - shared prefs via DI
-- rm package name
 - integrate detekt plugin + ktlint
-- integrate lib upate tooling
+- integrate lib update tooling
 - script screen
 - settings screen
 - Theming (light and dark)
+- Code coverage
 
 # Installation
 
-- Run desktop app via ...
+- Run desktop app:
+    - Navigate to main.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start main
+      function
+
+    - Installation: Run gradle task "package" or "package<platform>"
 
 # Technical background
 
