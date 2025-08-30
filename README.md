@@ -20,7 +20,8 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 # Installation
 
 - Run desktop app:
-    - Navigate to main.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start main
+    - Navigate to DesktopApp.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start
+      main
       function
 
     - Installation: Run gradle task "package" or "package<platform>"
