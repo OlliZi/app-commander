@@ -7,6 +7,7 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 - implement welcome-screen
 
 # TODOs
+- unit-test
 - rm package name
 - integrate detekt plugin + ktlint
 - Theming (light and dark)
