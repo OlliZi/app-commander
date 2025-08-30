@@ -5,6 +5,7 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 # Features
 
 - Welcome-screen
+- Save user preferences
 
 # TODOs
 
@@ -17,14 +18,13 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 - Theming (light and dark)
 - Code coverage
 
-# Installation
+# Installation/Run
 
 - Run desktop app:
     - Navigate to DesktopApp.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start
-      main
-      function
+      main function.
 
-    - Installation: Run gradle task "package" or "package<platform>"
+    - Installation: Run gradle task "package" or "package<platform>".
 
 # Technical background
 
