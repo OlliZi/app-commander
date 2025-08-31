@@ -119,3 +119,8 @@ compose.desktop {
         }
     }
 }
+
+tasks.register("runDependencyUpdates") {
+    group = "_joz"
+    dependsOn("dependencyUpdates")
+}
