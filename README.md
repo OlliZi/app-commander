@@ -29,8 +29,8 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 # Technical background
 
 - Clean architecture (UI -> ViewModel -> UseCases -> Repository -> DB/API)
-- Dependency injection with koin
-- Preferences via datastore
+- Dependency injection by koin
+- Preferences by datastore
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
 
