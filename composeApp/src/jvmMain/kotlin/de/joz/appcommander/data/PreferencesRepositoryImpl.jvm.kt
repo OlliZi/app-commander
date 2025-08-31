@@ -12,8 +12,14 @@ private val baseDirectory: String by lazy {
     baseFile.absolutePath
 }
 
+// TODO use DI
+private var dataStore: DataStore<Preferences>? = null
 actual fun getDataStore(fileName: String): DataStore<Preferences> {
-    return createDataStore {
+    if (dataStore != null) {
+        return dataStore!!
+    }
+    dataStore = createDataStore {
         File(baseDirectory, fileName).absolutePath
     }
+    return dataStore!!
 }

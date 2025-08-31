@@ -31,7 +31,10 @@ fun App(
                     parametersOf(navHostController)
                 }
 
-                WelcomeScreen(viewModel = viewModel)
+                WelcomeScreen(
+                    viewModel = viewModel,
+                    bubblesStrategy = koinInject(),
+                )
             }
             composable<NavigationScreens.ScriptsScreen> {
                 ScriptsScreen(executeScriptUseCase = koinInject())

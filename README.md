@@ -9,12 +9,13 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 
 # TODOs
 
-- unit-tests
 - shared prefs via DI
 - integrate detekt plugin + ktlint
 - integrate lib update tooling
 - script screen
 - settings screen
+- unit-tests for PreferencesRepositoryImpl
+- ui-test
 - Theming (light and dark)
 - Code coverage
 

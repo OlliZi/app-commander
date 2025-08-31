@@ -42,12 +42,12 @@ import de.joz.appcommander.ui.misc.SwitchWithLabel
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel,
     modifier: Modifier = Modifier,
+    bubblesStrategy: BubblesStrategy,
     isInTextExecution: Boolean = false,
 ) {
     WelcomeContent(
@@ -58,13 +58,14 @@ fun WelcomeScreen(
             viewModel.onEvent(event = WelcomeViewModel.Event.OnDoNotShowWelcomeAgain(value = checked))
         },
         modifier = modifier,
+        bubblesStrategy = bubblesStrategy,
         isInTextExecution = isInTextExecution,
     )
 }
 
 @Composable
 internal fun WelcomeContent(
-    bubblesStrategy: BubblesStrategy = koinInject(),
+    bubblesStrategy: BubblesStrategy,
     onNavigateToScripts: () -> Unit,
     onDoNotShowWelcomeAgain: (Boolean) -> Unit,
     isInTextExecution: Boolean,

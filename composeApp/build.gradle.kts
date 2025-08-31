@@ -52,6 +52,8 @@ kotlin {
             implementation(libs.bundles.koin)
         }
         commonTest.dependencies {
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
             implementation(libs.kotlin.test)
             implementation(libs.mockk)
             implementation(libs.kotlinx.coroutines.test)
