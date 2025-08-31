@@ -13,7 +13,7 @@ import okio.Path.Companion.toPath
 import org.koin.core.annotation.Single
 
 @Single
-class PreferencesRepositoryImpl(
+internal class PreferencesRepositoryImpl(
     private val dataStore: DataStore<Preferences> = getDataStore(),
 ) : PreferencesRepository {
     override suspend fun get(

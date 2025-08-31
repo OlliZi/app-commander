@@ -12,31 +12,38 @@ class GetPreferenceUseCaseTest {
 
     @Test
     fun `should execute repository for integer when use case is executed`() = runTest {
-        val preferencesRepository: PreferencesRepository = mockk()
+        val preferencesRepositoryMock: PreferencesRepository = mockk()
         coEvery {
-            preferencesRepository.get("key", defaultValue = -1)
+            preferencesRepositoryMock.get("key", defaultValue = -1)
         } returns 123
 
-        val getPreferenceUseCase = GetPreferenceUseCase(preferencesRepository)
+        val getPreferenceUseCase =
+            GetPreferenceUseCase(
+                preferencesRepository = preferencesRepositoryMock,
+            )
+
         assertEquals(123, getPreferenceUseCase.get(key = "key", defaultValue = -1))
 
         coVerify {
-            preferencesRepository.get(key = "key", defaultValue = -1)
+            preferencesRepositoryMock.get(key = "key", defaultValue = -1)
         }
     }
 
     @Test
     fun `should execute repository for boolean when use case is executed`() = runTest {
-        val preferencesRepository: PreferencesRepository = mockk()
+        val preferencesRepositoryMock: PreferencesRepository = mockk()
         coEvery {
-            preferencesRepository.get("key", defaultValue = false)
+            preferencesRepositoryMock.get("key", defaultValue = false)
         } returns true
 
-        val getPreferenceUseCase = GetPreferenceUseCase(preferencesRepository)
+        val getPreferenceUseCase =
+            GetPreferenceUseCase(
+                preferencesRepository = preferencesRepositoryMock,
+            )
         assertTrue(getPreferenceUseCase.get(key = "key", defaultValue = false))
 
         coVerify {
-            preferencesRepository.get(key = "key", defaultValue = false)
+            preferencesRepositoryMock.get(key = "key", defaultValue = false)
         }
     }
 }
