@@ -1,0 +1,25 @@
+build:
+  excludes: '**/generated/**'
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 166
+    ignoreAnnotated: [ 'Composable' ]
+  LongParameterList:
+    ignoreDefaultParameters: true
+    functionThreshold: 9
+    constructorThreshold: 10
+    ignoreAnnotated: [ 'Inject', 'Composable' ]
+
+style:
+  UnusedPrivateMember:
+    ignoreAnnotated: [ 'Preview', 'DarkLightModePreviews', 'Composable' ]
+  MagicNumber:
+    ignoreEnums: true
+    ignoreAnnotated: [ 'Composable' ]
+    ignorePropertyDeclaration: true
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: [ 'Composable' ]

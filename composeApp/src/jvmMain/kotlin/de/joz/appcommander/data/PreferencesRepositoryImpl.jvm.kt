@@ -15,11 +15,13 @@ private val baseDirectory: String by lazy {
 // TODO use DI
 private var dataStore: DataStore<Preferences>? = null
 actual fun getDataStore(fileName: String): DataStore<Preferences> {
-    if (dataStore != null) {
-        return dataStore!!
+    var localDataStore = dataStore
+    if (localDataStore != null) {
+        return localDataStore
     }
-    dataStore = createDataStore {
+    localDataStore = createDataStore {
         File(baseDirectory, fileName).absolutePath
     }
-    return dataStore!!
+    dataStore = localDataStore
+    return localDataStore
 }

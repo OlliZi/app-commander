@@ -16,6 +16,7 @@ koin = "4.1.0"
 koin-annotations = "2.1.0"
 ksp = "2.2.0-2.0.2"
 gradleVersionsPlugin = "0.52.0"
+detekt = "1.23.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -44,6 +45,7 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+io-gitlab-arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 [bundles]
 koin = [
