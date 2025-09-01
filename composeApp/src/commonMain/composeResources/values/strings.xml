@@ -4,4 +4,9 @@
     <string name="welcome_title">Willkommen beim\n'App-Commander'.</string>
     <string name="welcome_action">Los geht's!</string>
     <string name="welcome_do_not_show_again">Willkommens-Ansicht nicht erneut anzeigen.</string>
+
+    <string name="scripts_title">Deine Skripte</string>
+
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_preference_show_welcome_screen">Willkommens-Ansicht beim Start ausblenden.</string>
 </resources>
