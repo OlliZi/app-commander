@@ -10,7 +10,7 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 # TODOs
 
 - shared prefs via DI
-- integrate detekt plugin + ktlint
+- integrate ktlint
 - script screen
 - settings screen
 - unit-tests for PreferencesRepositoryImpl
@@ -31,7 +31,8 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 - Clean architecture (UI -> ViewModel -> UseCases -> Repository -> DB/API)
 - Dependency injection by koin
 - Preferences by datastore
-- Integrated library update tooling
+- Integrate library update tooling
+- Integrate detekt plugin + baseline
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
 
