@@ -6,6 +6,7 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 
 - Welcome-screen
 - Save user preferences
+- Code quality (UI-test, Unit-test, detekt)
 
 # TODOs
 
