@@ -22,35 +22,31 @@ fun TitleBar(
     onBackNavigation: (() -> Unit)? = null,
     actions: List<Action> = emptyList(),
 ) {
-    TopAppBar(
-        title = {
-            Text(text = title)
-        },
-        navigationIcon = {
-            if (onBackNavigation != null) {
-                IconButton(
-                    onClick = onBackNavigation,
-                ) {
-                    Icon(
-                        imageVector = FeatherIcons.ArrowLeft,
-                        contentDescription = null,
-                    )
-                }
-            }
-        },
-        actions = {
-            actions.forEach { actionItem ->
-                IconButton(
-                    onClick = actionItem.action,
-                ) {
-                    Icon(
-                        imageVector = actionItem.icon,
-                        contentDescription = null,
-                    )
-                }
+    TopAppBar(title = {
+        Text(text = title)
+    }, navigationIcon = {
+        if (onBackNavigation != null) {
+            IconButton(
+                onClick = onBackNavigation,
+            ) {
+                Icon(
+                    imageVector = FeatherIcons.ArrowLeft,
+                    contentDescription = null,
+                )
             }
         }
-    )
+    }, actions = {
+        actions.forEach { actionItem ->
+            IconButton(
+                onClick = actionItem.action,
+            ) {
+                Icon(
+                    imageVector = actionItem.icon,
+                    contentDescription = null,
+                )
+            }
+        }
+    })
 }
 
 data class Action(
@@ -66,12 +62,14 @@ private fun PreviewTitleBar() {
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             TitleBar(
-                title = "Title bar",
-                onBackNavigation = {},
-                actions = emptyList(),
+                title = "Title bar (plain)",
             )
             TitleBar(
-                title = "Title bar with actions",
+                title = "Title bar with back",
+                onBackNavigation = {},
+            )
+            TitleBar(
+                title = "Title bar with back + actions",
                 onBackNavigation = {},
                 actions = listOf(
                     Action(
