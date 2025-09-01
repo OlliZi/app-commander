@@ -18,11 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Settings
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_title
-import de.joz.appcommander.resources.welcome
 import de.joz.appcommander.ui.misc.Action
 import de.joz.appcommander.ui.misc.TitleBar
 import kotlinx.coroutines.launch
@@ -30,8 +31,8 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ScriptsScreen(
-    navController: NavController,
     executeScriptUseCase: ExecuteScriptUseCase,
+    navController: NavController,
 ) {
     ScriptsContent(navController, executeScriptUseCase)
 }
@@ -49,16 +50,13 @@ private fun ScriptsContent(
         topBar = {
             TitleBar(
                 title = stringResource(Res.string.scripts_title),
-                onBackNavigation = {
-                    // TODO
-                },
                 actions = listOf(
                     Action(
                         action = {
                             // TODO viewmodel
                             navController.navigate(NavigationScreens.SettingsScreen)
                         },
-                        icon = Res.drawable.welcome,
+                        icon = FeatherIcons.Settings,
                     )
                 )
             )

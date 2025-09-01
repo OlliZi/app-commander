@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_title
@@ -22,11 +23,13 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     SettingsContent(
         uiState = uiState.value,
+        navController = navController,
         onToggleItem = { toggleItem, isChecked ->
             viewModel.onEvent(
                 event = SettingsViewModel.Event.OnToggleItem(
@@ -41,6 +44,7 @@ fun SettingsScreen(
 @Composable
 internal fun SettingsContent(
     uiState: SettingsViewModel.UiState,
+    navController: NavController,
     onToggleItem: (SettingsViewModel.ToggleItem, Boolean) -> Unit,
 ) {
     Scaffold(
@@ -49,7 +53,7 @@ internal fun SettingsContent(
             TitleBar(
                 title = stringResource(Res.string.settings_title),
                 onBackNavigation = {
-                    // viewmodel
+                    navController.navigateUp()
                 }
             )
         }

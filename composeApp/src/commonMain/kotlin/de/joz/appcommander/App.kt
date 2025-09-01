@@ -39,8 +39,8 @@ fun App(
             }
             composable<NavigationScreens.ScriptsScreen> {
                 ScriptsScreen(
+                    executeScriptUseCase = koinInject(),
                     navController = navHostController,
-                    executeScriptUseCase = koinInject()
                 )
             }
             composable<NavigationScreens.SettingsScreen> {
@@ -48,6 +48,7 @@ fun App(
 
                 SettingsScreen(
                     viewModel = viewModel,
+                    navController = navHostController,
                 )
             }
         }

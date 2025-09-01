@@ -9,17 +9,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.welcome
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.ArrowLeft
+import compose.icons.feathericons.Settings
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TitleBar(
     title: String,
-    onBackNavigation: () -> Unit,
+    onBackNavigation: (() -> Unit)? = null,
     actions: List<Action> = emptyList(),
 ) {
     TopAppBar(
@@ -27,13 +27,15 @@ fun TitleBar(
             Text(text = title)
         },
         navigationIcon = {
-            IconButton(
-                onClick = onBackNavigation,
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.welcome),
-                    contentDescription = null,
-                )
+            if (onBackNavigation != null) {
+                IconButton(
+                    onClick = onBackNavigation,
+                ) {
+                    Icon(
+                        imageVector = FeatherIcons.ArrowLeft,
+                        contentDescription = null,
+                    )
+                }
             }
         },
         actions = {
@@ -42,7 +44,7 @@ fun TitleBar(
                     onClick = actionItem.action,
                 ) {
                     Icon(
-                        painter = painterResource(actionItem.icon),
+                        imageVector = actionItem.icon,
                         contentDescription = null,
                     )
                 }
@@ -52,7 +54,7 @@ fun TitleBar(
 }
 
 data class Action(
-    val icon: DrawableResource,
+    val icon: ImageVector,
     val action: () -> Unit,
 )
 
@@ -74,7 +76,7 @@ private fun PreviewTitleBar() {
                 actions = listOf(
                     Action(
                         action = {},
-                        icon = Res.drawable.welcome,
+                        icon = FeatherIcons.Settings,
                     )
                 ),
             )
