@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.settings.SettingsScreen
+import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.welcome.WelcomeScreen
 import de.joz.appcommander.ui.welcome.WelcomeViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -37,10 +38,18 @@ fun App(
                 )
             }
             composable<NavigationScreens.ScriptsScreen> {
-                ScriptsScreen(executeScriptUseCase = koinInject())
+                ScriptsScreen(
+                    executeScriptUseCase = koinInject(),
+                    navController = navHostController,
+                )
             }
             composable<NavigationScreens.SettingsScreen> {
-                SettingsScreen()
+                val viewModel: SettingsViewModel = koinViewModel()
+
+                SettingsScreen(
+                    viewModel = viewModel,
+                    navController = navHostController,
+                )
             }
         }
     }

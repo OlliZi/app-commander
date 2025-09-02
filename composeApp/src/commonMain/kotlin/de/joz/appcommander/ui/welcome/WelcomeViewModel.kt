@@ -7,6 +7,7 @@ import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.settings.SettingsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,12 +21,15 @@ class WelcomeViewModel(
     private val getPreferenceUseCase: GetPreferenceUseCase,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<Unit, WelcomeViewModel.Event> {
 
-    private val _viewState = MutableStateFlow(Unit)
-    override val viewState = _viewState.asStateFlow()
+    private val _uiState = MutableStateFlow(Unit)
+    override val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            if (getPreferenceUseCase.get(HIDE_WELCOME_SCREEN_PREF_KEY, defaultValue = false)) {
+            if (getPreferenceUseCase.get(
+                    SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, defaultValue = false
+                )
+            ) {
                 navController.navigate(NavigationScreens.ScriptsScreen)
             }
         }
@@ -39,7 +43,9 @@ class WelcomeViewModel(
                 }
 
                 is Event.OnDoNotShowWelcomeAgain -> {
-                    savePreferenceUseCase(HIDE_WELCOME_SCREEN_PREF_KEY, value = event.value)
+                    savePreferenceUseCase(
+                        SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, value = event.value
+                    )
                 }
             }
         }
@@ -48,9 +54,5 @@ class WelcomeViewModel(
     sealed interface Event {
         object OnNavigateToScripts : Event
         data class OnDoNotShowWelcomeAgain(val value: Boolean) : Event
-    }
-
-    companion object {
-        private const val HIDE_WELCOME_SCREEN_PREF_KEY = "HIDE_WELCOME_SCREEN_PREF_KEY"
     }
 }

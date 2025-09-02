@@ -17,6 +17,7 @@ koin-annotations = "2.1.0"
 ksp = "2.2.0-2.0.2"
 gradleVersionsPlugin = "0.52.0"
 detekt = "1.23.8"
+compose-icons = "1.1.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -35,6 +36,7 @@ koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-view
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 gradle-versions-plugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradleVersionsPlugin" }
+compose-icons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "compose-icons" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

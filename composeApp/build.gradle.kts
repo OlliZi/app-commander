@@ -64,6 +64,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.androidx.datastore.preferences)
             implementation(libs.bundles.koin)
+            implementation(libs.compose.icons)
         }
         commonTest.dependencies {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
