@@ -14,7 +14,6 @@ App-Commander: Execute your custom scripts for your apps on multiple devices.
 - shared prefs via DI
 - integrate ktlint
 - script screen
-- settings screen
 - unit-tests for PreferencesRepositoryImpl
 - ui-test
 - Theming (light and dark)
