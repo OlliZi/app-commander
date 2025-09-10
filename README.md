@@ -13,7 +13,6 @@ is still maybe possible in future.
 
 # TODOs
 
-- shared prefs via DI
 - integrate ktlint
 - script screen
 - unit-tests for PreferencesRepositoryImpl
