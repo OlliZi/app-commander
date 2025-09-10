@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
 import org.koin.core.annotation.Single
 
+expect fun getPreferenceFileStorePath(fileName: String = SIMPLE_PREF_FILE_NAME): String
+
 @Single
 internal class PreferencesRepositoryImpl(
-    private val dataStore: DataStore<Preferences> = getDataStore(),
+    private val dataStore: DataStore<Preferences> = createDataStore(),
 ) : PreferencesRepository {
+
     override suspend fun get(
         key: String,
         defaultValue: Boolean,
@@ -48,21 +51,18 @@ internal class PreferencesRepositoryImpl(
     }
 }
 
-expect fun getDataStore(fileName: String = SIMPLE_PREF_FILE_NAME): DataStore<Preferences>
-
-fun createDataStore(producePath: () -> String): DataStore<Preferences> =
-    PreferenceDataStoreFactory.createWithPath(
-        corruptionHandler = null,
-        migrations = emptyList(),
-        produceFile = {
-            val filePath = producePath()
-            if (filePath.endsWith(SIMPLE_PREF_FILE_EXTENSION)) {
-                filePath
-            } else {
-                "$filePath$SIMPLE_PREF_FILE_EXTENSION"
-            }.toPath()
-        },
-    )
+private fun createDataStore(): DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(
+    corruptionHandler = null,
+    migrations = emptyList(),
+    produceFile = {
+        val filePath = getPreferenceFileStorePath()
+        if (filePath.endsWith(SIMPLE_PREF_FILE_EXTENSION)) {
+            filePath
+        } else {
+            "$filePath$SIMPLE_PREF_FILE_EXTENSION"
+        }.toPath()
+    },
+)
 
 internal const val SIMPLE_PREF_FILE_EXTENSION = ".preferences_pb"
-internal const val SIMPLE_PREF_FILE_NAME = ".appcommander$SIMPLE_PREF_FILE_EXTENSION"
+internal const val SIMPLE_PREF_FILE_NAME = ".app_commander$SIMPLE_PREF_FILE_EXTENSION"
