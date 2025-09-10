@@ -5,7 +5,7 @@ import java.io.File
 actual fun getScriptRunner(): ScriptRunner = JvmScriptRunner()
 
 internal class JvmScriptRunner(
-    private val workingDir: File = File(".")
+    private val workingDir: File = File("."),
 ) : ScriptRunner {
     override suspend fun executeScript(
         script: String,
