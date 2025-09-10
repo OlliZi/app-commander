@@ -25,7 +25,6 @@ is still maybe possible in future.
 - Run desktop app:
     - Navigate to DesktopApp.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start
       main function.
-
     - Installation: Run gradle task "package" or "package<platform>".
 
 # Technical background
