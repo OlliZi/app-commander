@@ -1,49 +1,55 @@
 package de.joz.appcommander.ui.scripts
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Settings
-import de.joz.appcommander.domain.ExecuteScriptUseCase
-import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
 import de.joz.appcommander.ui.misc.TitleBar
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ScriptsScreen(
-    executeScriptUseCase: ExecuteScriptUseCase,
-    navController: NavController,
+    viewModel: ScriptsViewModel,
 ) {
-    ScriptsContent(navController, executeScriptUseCase)
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    ScriptsContent(
+        uiState = uiState.value,
+        onDeviceSelect = { device ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
+        },
+        onNavigateToSettings = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
+        }
+    )
 }
 
 @Composable
 private fun ScriptsContent(
-    navController: NavController,
-    executeScriptUseCase: ExecuteScriptUseCase,
+    uiState: ScriptsViewModel.UiState,
+    onDeviceSelect: (ScriptsViewModel.Device) -> Unit,
+    onNavigateToSettings: () -> Unit,
 ) {
-    var log by remember { mutableStateOf("") }
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxSize().background(Color.Red),
@@ -52,34 +58,49 @@ private fun ScriptsContent(
                 title = stringResource(Res.string.scripts_title),
                 actions = listOf(
                     Action(
-                        action = {
-                            // TODO viewmodel
-                            navController.navigate(NavigationScreens.SettingsScreen)
-                        },
+                        action = onNavigateToSettings,
                         icon = FeatherIcons.Settings,
                     )
                 )
             )
         }
-    ) {
+    ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top,
         ) {
-            val coroutineScope = rememberCoroutineScope()
-            Button(onClick = {
-                coroutineScope.launch {
-                    log =
-                        executeScriptUseCase(script = "adb devices", selectedDevice = "").toString()
-                }
-            }) {
-                Text("adb test")
-            }
+            ConnectedDevices(
+                connectedDevices = uiState.connectedDevices,
+                onDeviceSelect = onDeviceSelect,
+            )
+        }
+    }
+}
 
-            Text(text = log)
+@Composable
+private fun ConnectedDevices(
+    connectedDevices: List<ScriptsViewModel.Device>,
+    onDeviceSelect: (ScriptsViewModel.Device) -> Unit,
+) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        connectedDevices.forEach { device ->
+            Button(
+                modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f),
+                onClick = {
+                    onDeviceSelect(device)
+                },
+            ) {
+                Text(
+                    text = device.label,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.scripts.ScriptsScreen
+import de.joz.appcommander.ui.scripts.ScriptsViewModel
 import de.joz.appcommander.ui.settings.SettingsScreen
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.welcome.WelcomeScreen
@@ -38,9 +39,12 @@ fun App(
                 )
             }
             composable<NavigationScreens.ScriptsScreen> {
+                val viewModel: ScriptsViewModel = koinViewModel {
+                    parametersOf(navHostController)
+                }
+
                 ScriptsScreen(
-                    executeScriptUseCase = koinInject(),
-                    navController = navHostController,
+                    viewModel = viewModel,
                 )
             }
             composable<NavigationScreens.SettingsScreen> {
