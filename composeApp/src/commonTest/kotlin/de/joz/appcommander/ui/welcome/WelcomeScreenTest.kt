@@ -63,9 +63,10 @@ class WelcomeScreenTest {
                 )
             }
 
-            onNodeWithText("Willkommen beim\n'App-Commander'.").assertIsDisplayed()
-            onNodeWithText("Los geht's!").assertIsDisplayed().assertHasClickAction()
-            onNodeWithText("Willkommens-Ansicht nicht erneut anzeigen.").assertIsDisplayed()
+            onNodeWithText("Welcome to \n'App-Commander'.").assertIsDisplayed()
+            onNodeWithText("Execute your custom scripts for your apps on multiple devices.").assertIsDisplayed()
+            onNodeWithText("Let`s go!").assertIsDisplayed().assertHasClickAction()
+            onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
         }
     }
 
@@ -83,7 +84,7 @@ class WelcomeScreenTest {
                 )
             }
 
-            onNodeWithText("Willkommens-Ansicht nicht erneut anzeigen.").performClick()
+            onNodeWithText("Do not show welcome screen again.").performClick()
         }
 
         assertTrue(
@@ -108,8 +109,8 @@ class WelcomeScreenTest {
                 )
             }
 
-            onNodeWithText("Willkommens-Ansicht nicht erneut anzeigen.").performClick()
-            onNodeWithText("Willkommens-Ansicht nicht erneut anzeigen.").performClick()
+            onNodeWithText("Do not show welcome screen again.").performClick()
+            onNodeWithText("Do not show welcome screen again.").performClick()
         }
 
         assertFalse(
