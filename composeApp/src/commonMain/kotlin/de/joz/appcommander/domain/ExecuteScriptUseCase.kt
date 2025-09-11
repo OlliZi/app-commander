@@ -8,7 +8,7 @@ class ExecuteScriptUseCase(
 ) {
     suspend operator fun invoke(
         script: String,
-        selectedDevice: String,
+        selectedDevice: String = "",
     ): ScriptRunner.Result {
         return scriptRunner.executeScript(script = script, selectedDevice = selectedDevice)
     }
