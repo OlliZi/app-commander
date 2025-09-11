@@ -39,7 +39,7 @@ import de.joz.appcommander.resources.welcome_action
 import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_do_not_show_again
 import de.joz.appcommander.resources.welcome_title
-import de.joz.appcommander.ui.misc.SwitchWithLabel
+import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -135,7 +135,7 @@ internal fun WelcomeContent(
             Spacer(Modifier.weight(1f))
 
             var isChecked by remember { mutableStateOf(false) }
-            SwitchWithLabel(
+            LabelledSwitch(
                 modifier =
                     Modifier
                         .widthIn(max = 360.dp)

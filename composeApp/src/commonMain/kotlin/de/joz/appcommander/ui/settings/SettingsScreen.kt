@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_title
-import de.joz.appcommander.ui.misc.SwitchWithLabel
+import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.misc.TitleBar
 import org.jetbrains.compose.resources.stringResource
 
@@ -67,7 +67,7 @@ internal fun SettingsContent(
             verticalArrangement = Arrangement.Top,
         ) {
             uiState.togglePreferences.forEach { toggleItem ->
-                SwitchWithLabel(
+                LabelledSwitch(
                     label = stringResource(Res.string.settings_preference_show_welcome_screen),
                     checked = toggleItem.isChecked,
                     onCheckedChange = { isChecked ->
