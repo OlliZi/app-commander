@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.welcome
 import de.joz.appcommander.resources.welcome_action
+import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_do_not_show_again
 import de.joz.appcommander.resources.welcome_title
 import de.joz.appcommander.ui.misc.SwitchWithLabel
@@ -109,9 +110,15 @@ internal fun WelcomeContent(
                 textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(Res.string.welcome_catch_phrase),
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(16.dp))
             if (!isInTextExecution) { // does not work for screenshot testing
                 Image(
-                    modifier = Modifier.size(400.dp),
+                    modifier = Modifier.size(380.dp),
                     painter = painterResource(Res.drawable.welcome),
                     contentDescription = null,
                 )

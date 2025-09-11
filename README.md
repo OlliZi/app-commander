@@ -13,6 +13,7 @@ is still maybe possible in future.
 
 # TODOs
 
+- Previews for all screens and elements
 - integrate ktlint
 - script screen
 - unit-tests for PreferencesRepositoryImpl
