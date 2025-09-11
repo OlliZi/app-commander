@@ -3,7 +3,7 @@ package de.joz.appcommander.ui.scripts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.GetConnectedDevivesUseCase
+import de.joz.appcommander.domain.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,29 +15,16 @@ import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class ScriptsViewModel(
-    @InjectedParam
-    private val navController: NavController,
-    private val getConnectedDevivesUseCase: GetConnectedDevivesUseCase,
-) : ViewModel(),
-    UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
+    @InjectedParam private val navController: NavController,
+    private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
+) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 
     private val _uiState = MutableStateFlow(UiState())
     override val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            _uiState.update { oldState ->
-                val devices = getConnectedDevivesUseCase()
-                oldState.copy(
-                    connectedDevices = devices.mapIndexed { index, device ->
-                        Device(
-                            id = index,
-                            label = device,
-                            isSelected = devices.size == 1,
-                        )
-                    },
-                )
-            }
+            onRefreshDevices()
         }
     }
 
@@ -46,7 +33,23 @@ class ScriptsViewModel(
             when (event) {
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
                 Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
+                Event.OnRefreshDevices -> onRefreshDevices()
             }
+        }
+    }
+
+    private suspend fun onRefreshDevices() {
+        _uiState.update { oldState ->
+            val devices = getConnectedDevicesUseCase()
+            oldState.copy(
+                connectedDevices = devices.mapIndexed { index, device ->
+                    Device(
+                        id = index,
+                        label = device,
+                        isSelected = devices.size == 1,
+                    )
+                },
+            )
         }
     }
 
@@ -59,14 +62,14 @@ class ScriptsViewModel(
                     } else {
                         it
                     }
-                }
-            )
+                })
         }
     }
 
     sealed interface Event {
         data class OnDeviceSelected(val device: Device) : Event
         data object OnNavigateToSettings : Event
+        data object OnRefreshDevices : Event
     }
 
     data class UiState(

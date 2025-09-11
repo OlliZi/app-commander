@@ -3,7 +3,7 @@ package de.joz.appcommander.domain
 import org.koin.core.annotation.Factory
 
 @Factory
-class GetConnectedDevivesUseCase(
+class GetConnectedDevicesUseCase(
     private val executeScriptUseCase: ExecuteScriptUseCase,
 ) {
     suspend operator fun invoke(): List<String> {
