@@ -2,7 +2,6 @@ package de.joz.appcommander.ui.scripts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -166,18 +165,19 @@ private fun ScriptsSection(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.fillMaxWidth().weight(1f),
                         ) {
                             Text(
+                                modifier = Modifier.fillMaxWidth(),
                                 text = script.label,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
+                                modifier = Modifier.fillMaxWidth(),
                                 text = script.script,
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
-                        Box(modifier = Modifier.weight(1f))
                         ExpandButton(
                             isExpanded = true,
                             onClick = { onExpand(script) },

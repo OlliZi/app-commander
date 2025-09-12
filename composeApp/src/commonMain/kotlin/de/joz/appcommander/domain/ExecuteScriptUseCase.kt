@@ -11,7 +11,7 @@ class ExecuteScriptUseCase(
         script: String,
         selectedDevice: String = "",
     ): Result {
-        println("Execute script: $script on device: $selectedDevice...")
+        println("Execute script: '$script' on device '$selectedDevice' ...")
         return runCatching {
             Result.Success(
                 output = ProcessBuilder(script.split(" "))
@@ -20,7 +20,7 @@ class ExecuteScriptUseCase(
                     .inputReader()
                     .readText()
                     .also {
-                        println("Script executed: $it")
+                        println("Script executed: '$it'.")
                     }
             )
         }.getOrElse {

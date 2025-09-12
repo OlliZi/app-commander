@@ -96,13 +96,13 @@ class ScriptsViewModel(
     private fun onExpandScript(script: Script) {
         _uiState.update { oldState ->
             oldState.copy(
-                scripts = oldState.scripts.map {
-                    if (it == script) {
-                        script.copy(
-                            isExpanded = it.isExpanded.not()
+                scripts = oldState.scripts.map { currentScript ->
+                    if (currentScript == script) {
+                        currentScript.copy(
+                            isExpanded = script.isExpanded.not()
                         )
                     } else {
-                        script
+                        currentScript
                     }
                 }
             )
