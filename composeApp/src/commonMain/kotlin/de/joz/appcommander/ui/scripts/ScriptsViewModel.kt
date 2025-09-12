@@ -34,6 +34,8 @@ class ScriptsViewModel(
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
                 Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
                 Event.OnRefreshDevices -> onRefreshDevices()
+                is Event.OnExecuteScript -> onExecuteScript(script = event.script)
+                is Event.OnExpandScript -> onExpandScript(script = event.script)
             }
         }
     }
@@ -66,19 +68,53 @@ class ScriptsViewModel(
         }
     }
 
+    private fun onExecuteScript(script: Script) {
+
+    }
+
+    private fun onExpandScript(script: Script) {
+        _uiState.update { oldState ->
+            oldState.copy(
+                scripts = oldState.scripts.map {
+                    if (it == script) {
+                        script.copy(
+                            isExpanded = it.isExpanded.not()
+                        )
+                    } else {
+                        script
+                    }
+                }
+            )
+        }
+    }
+
     sealed interface Event {
         data class OnDeviceSelected(val device: Device) : Event
         data object OnNavigateToSettings : Event
         data object OnRefreshDevices : Event
+        data class OnExecuteScript(val script: Script) : Event
+        data class OnExpandScript(val script: Script) : Event
     }
 
     data class UiState(
         val connectedDevices: List<Device> = emptyList(),
+        val scripts: List<Script> = listOf(
+            Script(
+                label = "AAA jk iefwbfjdf jtrbg ",
+                script = "ndsffnbdjkvnk ndsffnbdjkvnk ndsffnbdjkvnk ndsffnbdjkvnk ndsffnbdjkvnk",
+            )
+        )
     )
 
     data class Device(
         val id: Int,
         val label: String,
         val isSelected: Boolean,
+    )
+
+    data class Script(
+        val label: String,
+        val script: String,
+        val isExpanded: Boolean = false,
     )
 }
