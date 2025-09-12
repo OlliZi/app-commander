@@ -40,6 +40,7 @@ kotlin {
             implementation(libs.androidx.datastore.preferences)
             implementation(libs.bundles.koin)
             implementation(libs.compose.icons)
+            implementation(libs.kotlinx.serialization.json)
         }
         commonTest.dependencies {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)

@@ -3,7 +3,9 @@ package de.joz.appcommander.ui.scripts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +19,8 @@ import org.koin.core.annotation.InjectedParam
 class ScriptsViewModel(
     @InjectedParam private val navController: NavController,
     private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
+    private val executeScriptUseCase: ExecuteScriptUseCase,
+    private val getUserScriptsUseCase: GetUserScriptsUseCase,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -25,6 +29,7 @@ class ScriptsViewModel(
     init {
         viewModelScope.launch {
             onRefreshDevices()
+            onRefreshScripts()
         }
     }
 
@@ -34,6 +39,8 @@ class ScriptsViewModel(
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
                 Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
                 Event.OnRefreshDevices -> onRefreshDevices()
+                is Event.OnExecuteScript -> onExecuteScript(script = event.script)
+                is Event.OnExpandScript -> onExpandScript(script = event.script)
             }
         }
     }
@@ -53,6 +60,20 @@ class ScriptsViewModel(
         }
     }
 
+    private suspend fun onRefreshScripts() {
+        _uiState.update { oldState ->
+            val scripts = getUserScriptsUseCase()
+            oldState.copy(
+                scripts = scripts.map {
+                    Script(
+                        label = it.label,
+                        script = it.script,
+                    )
+                }
+            )
+        }
+    }
+
     private fun onDeviceSelected(device: Device) {
         _uiState.update { oldState ->
             oldState.copy(
@@ -66,19 +87,50 @@ class ScriptsViewModel(
         }
     }
 
+    private fun onExecuteScript(script: Script) {
+        viewModelScope.launch {
+            executeScriptUseCase(script = script.script)
+        }
+    }
+
+    private fun onExpandScript(script: Script) {
+        _uiState.update { oldState ->
+            oldState.copy(
+                scripts = oldState.scripts.map { currentScript ->
+                    if (currentScript == script) {
+                        currentScript.copy(
+                            isExpanded = script.isExpanded.not()
+                        )
+                    } else {
+                        currentScript
+                    }
+                }
+            )
+        }
+    }
+
     sealed interface Event {
         data class OnDeviceSelected(val device: Device) : Event
         data object OnNavigateToSettings : Event
         data object OnRefreshDevices : Event
+        data class OnExecuteScript(val script: Script) : Event
+        data class OnExpandScript(val script: Script) : Event
     }
 
     data class UiState(
         val connectedDevices: List<Device> = emptyList(),
+        val scripts: List<Script> = emptyList(),
     )
 
     data class Device(
         val id: Int,
         val label: String,
         val isSelected: Boolean,
+    )
+
+    data class Script(
+        val label: String,
+        val script: String,
+        val isExpanded: Boolean = false,
     )
 }
