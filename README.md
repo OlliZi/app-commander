@@ -15,6 +15,7 @@ is still maybe possible in future.
 
 - script screen
 - Previews for all screens and elements
+- Fix detekt
 - integrate ktlint
 - unit-tests for PreferencesRepositoryImpl
 - ui-tests
