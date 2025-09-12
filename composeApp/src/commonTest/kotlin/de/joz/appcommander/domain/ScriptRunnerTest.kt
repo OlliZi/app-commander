@@ -5,11 +5,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class JvmScriptRunnerTest {
+class ScriptRunnerTest {
 
     @Test
     fun `should execute script when launched`() = runTest {
-        val scriptRunner = JvmScriptRunner()
+        val scriptRunner = ScriptRunner()
 
         val result = scriptRunner.executeScript("echo foo", "Pixel7")
 
@@ -19,7 +19,7 @@ class JvmScriptRunnerTest {
 
     @Test
     fun `should return an failure if script execution fails`() = runTest {
-        val scriptRunner = JvmScriptRunner()
+        val scriptRunner = ScriptRunner()
 
         val result = scriptRunner.executeScript("foo_bar_unknown_command", "")
 

@@ -4,7 +4,7 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class ExecuteScriptUseCase(
-    private val scriptRunner: ScriptRunner = getScriptRunner(),
+    private val scriptRunner: ScriptRunner,
 ) {
     suspend operator fun invoke(
         script: String,
