@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.scripts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
@@ -17,6 +18,7 @@ import org.koin.core.annotation.InjectedParam
 class ScriptsViewModel(
     @InjectedParam private val navController: NavController,
     private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
+    private val executeScriptUseCase: ExecuteScriptUseCase,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -69,7 +71,9 @@ class ScriptsViewModel(
     }
 
     private fun onExecuteScript(script: Script) {
-
+        viewModelScope.launch {
+            executeScriptUseCase(script = script.script)
+        }
     }
 
     private fun onExpandScript(script: Script) {
@@ -101,7 +105,7 @@ class ScriptsViewModel(
         val scripts: List<Script> = listOf(
             Script(
                 label = "AAA jk iefwbfjdf jtrbg ",
-                script = "ndsffnbdjkvnk ndsffnbdjkvnk ndsffnbdjkvnk ndsffnbdjkvnk ndsffnbdjkvnk",
+                script = "adb devices",
             )
         )
     )

@@ -11,6 +11,7 @@ class ExecuteScriptUseCase(
         script: String,
         selectedDevice: String = "",
     ): Result {
+        println("Execute script: $script on device: $selectedDevice...")
         return runCatching {
             Result.Success(
                 output = ProcessBuilder(script.split(" "))
@@ -18,6 +19,9 @@ class ExecuteScriptUseCase(
                     .start()
                     .inputReader()
                     .readText()
+                    .also {
+                        println("Script executed: $it")
+                    }
             )
         }.getOrElse {
             Result.Error(message = it.message ?: "Unknown error")
