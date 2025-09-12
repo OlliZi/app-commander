@@ -1,61 +1,83 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-    <ManuallySuppressedIssues />
-    <CurrentIssues>
-        <ID>ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDataPreferencesRepositoryImpl
-        </ID>
-        <ID>ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDependencyInjection</ID>
-        <ID>ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDomainExecuteScriptUseCase</ID>
-        <ID>ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDomainGetPreferenceUseCase</ID>
-        <ID>ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDomainSavePreferenceUseCase</ID>
-        <ID>
-            ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderUiWelcomeBubbleMultiBubblesStrategy
-        </ID>
-        <ID>ClassNaming:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderUiWelcomeWelcomeViewModel</ID>
-        <ID>FunctionNaming:KoinMeta-4685676b.kt$public fun
-            _KSP_DeJozAppcommanderDomainPreferencesRepository() : Unit
-        </ID>
-        <ID>FunctionNaming:KoinMeta-4685676b.kt$public fun
-            _KSP_DeJozAppcommanderUiWelcomeBubbleBubblesStrategy() : Unit
-        </ID>
-        <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$factory() { _ -&gt;
-            de.joz.appcommander.ui.welcome.bubble.MultiBubblesStrategy() }
-            bind(de.joz.appcommander.ui.welcome.bubble.BubblesStrategy::class)
-        </ID>
-        <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$public val
-            de.joz.appcommander.DependencyInjection.module : org.koin.core.module.Module get() =
-            de_joz_appcommander_DependencyInjection
-        </ID>
-        <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$single() { _ -&gt;
-            de.joz.appcommander.data.PreferencesRepositoryImpl() }
-            bind(de.joz.appcommander.domain.PreferencesRepository::class)
-        </ID>
-        <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$viewModel() { (navController
-            : androidx.navigation.NavController) -&gt;
-            de.joz.appcommander.ui.welcome.WelcomeViewModel(navController,savePreferenceUseCase=get(),getPreferenceUseCase=get())
-            }
-        </ID>
-        <ID>
-            MaxLineLength:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDataPreferencesRepositoryImpl$@MetaDefinition("de.joz.appcommander.data.PreferencesRepositoryImpl",
-            binds=["de.joz.appcommander.domain.PreferencesRepository"])
-        </ID>
-        <ID>
-            MaxLineLength:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDomainGetPreferenceUseCase$@MetaDefinition("de.joz.appcommander.domain.GetPreferenceUseCase",
-            dependencies=["preferencesRepository:de.joz.appcommander.domain.PreferencesRepository"])
-        </ID>
-        <ID>
-            MaxLineLength:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderDomainSavePreferenceUseCase$@MetaDefinition("de.joz.appcommander.domain.SavePreferenceUseCase",
-            dependencies=["preferencesRepository:de.joz.appcommander.domain.PreferencesRepository"])
-        </ID>
-        <ID>
-            MaxLineLength:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderUiWelcomeBubbleMultiBubblesStrategy$@MetaDefinition("de.joz.appcommander.ui.welcome.bubble.MultiBubblesStrategy",
-            binds=["de.joz.appcommander.ui.welcome.bubble.BubblesStrategy"])
-        </ID>
-        <ID>
-            MaxLineLength:KoinMeta-4685676b.kt$_KSP_DeJozAppcommanderUiWelcomeWelcomeViewModel$@MetaDefinition("de.joz.appcommander.ui.welcome.WelcomeViewModel",
-            dependencies=["savePreferenceUseCase:de.joz.appcommander.domain.SavePreferenceUseCase","getPreferenceUseCase:de.joz.appcommander.domain.GetPreferenceUseCase"])
-        </ID>
-        <ID>NewLineAtEndOfFile:KoinMeta-4685676b.kt$org.koin.ksp.generated.KoinMeta-4685676b.kt</ID>
-        <ID>WildcardImport:DependencyInjectionGende$joz$appcommander.kt$import org.koin.dsl.*</ID>
-    </CurrentIssues>
+  <ManuallySuppressedIssues />
+  <CurrentIssues>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDataPreferencesRepositoryImpl</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDependencyInjection</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainExecuteScriptUseCase</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainGetConnectedDevicesUseCase</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainGetPreferenceUseCase</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainSavePreferenceUseCase</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiScriptsScriptsViewModel</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiSettingsSettingsViewModel</ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiWelcomeBubbleMultiBubblesStrategy
+    </ID>
+    <ID>ClassNaming:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiWelcomeWelcomeViewModel</ID>
+    <ID>FunctionNaming:KoinMeta-fb9ef376.kt$public fun
+      _KSP_DeJozAppcommanderDomainPreferencesRepository() : Unit
+    </ID>
+    <ID>FunctionNaming:KoinMeta-fb9ef376.kt$public fun
+      _KSP_DeJozAppcommanderUiWelcomeBubbleBubblesStrategy() : Unit
+    </ID>
+    <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$factory() { _ -&gt;
+      de.joz.appcommander.ui.welcome.bubble.MultiBubblesStrategy() }
+      bind(de.joz.appcommander.ui.welcome.bubble.BubblesStrategy::class)
+    </ID>
+    <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$public val
+      de.joz.appcommander.DependencyInjection.module : org.koin.core.module.Module get() =
+      de_joz_appcommander_DependencyInjection
+    </ID>
+    <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$single() { _ -&gt;
+      de.joz.appcommander.data.PreferencesRepositoryImpl() }
+      bind(de.joz.appcommander.domain.PreferencesRepository::class)
+    </ID>
+    <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$viewModel() { (navController :
+      androidx.navigation.NavController) -&gt;
+      de.joz.appcommander.ui.scripts.ScriptsViewModel(navController,getConnectedDevicesUseCase=get())
+      }
+    </ID>
+    <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$viewModel() { (navController :
+      androidx.navigation.NavController) -&gt;
+      de.joz.appcommander.ui.welcome.WelcomeViewModel(navController,savePreferenceUseCase=get(),getPreferenceUseCase=get())
+      }
+    </ID>
+    <ID>MaxLineLength:DependencyInjectionGende$joz$appcommander.kt$viewModel() { _ -&gt;
+      de.joz.appcommander.ui.settings.SettingsViewModel(savePreferenceUseCase=get(),getPreferenceUseCase=get())
+      }
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDataPreferencesRepositoryImpl$@MetaDefinition("de.joz.appcommander.data.PreferencesRepositoryImpl",
+      binds=["de.joz.appcommander.domain.PreferencesRepository"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainGetConnectedDevicesUseCase$@MetaDefinition("de.joz.appcommander.domain.GetConnectedDevicesUseCase",
+      dependencies=["executeScriptUseCase:de.joz.appcommander.domain.ExecuteScriptUseCase"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainGetPreferenceUseCase$@MetaDefinition("de.joz.appcommander.domain.GetPreferenceUseCase",
+      dependencies=["preferencesRepository:de.joz.appcommander.domain.PreferencesRepository"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderDomainSavePreferenceUseCase$@MetaDefinition("de.joz.appcommander.domain.SavePreferenceUseCase",
+      dependencies=["preferencesRepository:de.joz.appcommander.domain.PreferencesRepository"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiScriptsScriptsViewModel$@MetaDefinition("de.joz.appcommander.ui.scripts.ScriptsViewModel",
+      dependencies=["getConnectedDevicesUseCase:de.joz.appcommander.domain.GetConnectedDevicesUseCase"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiSettingsSettingsViewModel$@MetaDefinition("de.joz.appcommander.ui.settings.SettingsViewModel",
+      dependencies=["savePreferenceUseCase:de.joz.appcommander.domain.SavePreferenceUseCase","getPreferenceUseCase:de.joz.appcommander.domain.GetPreferenceUseCase"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiWelcomeBubbleMultiBubblesStrategy$@MetaDefinition("de.joz.appcommander.ui.welcome.bubble.MultiBubblesStrategy",
+      binds=["de.joz.appcommander.ui.welcome.bubble.BubblesStrategy"])
+    </ID>
+    <ID>
+      MaxLineLength:KoinMeta-fb9ef376.kt$_KSP_DeJozAppcommanderUiWelcomeWelcomeViewModel$@MetaDefinition("de.joz.appcommander.ui.welcome.WelcomeViewModel",
+      dependencies=["savePreferenceUseCase:de.joz.appcommander.domain.SavePreferenceUseCase","getPreferenceUseCase:de.joz.appcommander.domain.GetPreferenceUseCase"])
+    </ID>
+    <ID>NewLineAtEndOfFile:KoinMeta-fb9ef376.kt$org.koin.ksp.generated.KoinMeta-fb9ef376.kt</ID>
+    <ID>WildcardImport:DependencyInjectionGende$joz$appcommander.kt$import org.koin.dsl.*</ID>
+  </CurrentIssues>
 </SmellBaseline>
