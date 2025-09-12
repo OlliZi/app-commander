@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ class ScriptsViewModel(
     @InjectedParam private val navController: NavController,
     private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
     private val executeScriptUseCase: ExecuteScriptUseCase,
+    private val getUserScriptsUseCase: GetUserScriptsUseCase,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -27,6 +29,7 @@ class ScriptsViewModel(
     init {
         viewModelScope.launch {
             onRefreshDevices()
+            onRefreshScripts()
         }
     }
 
@@ -53,6 +56,20 @@ class ScriptsViewModel(
                         isSelected = devices.size == 1,
                     )
                 },
+            )
+        }
+    }
+
+    private suspend fun onRefreshScripts() {
+        _uiState.update { oldState ->
+            val scripts = getUserScriptsUseCase()
+            oldState.copy(
+                scripts = scripts.map {
+                    Script(
+                        label = it.label,
+                        script = it.script,
+                    )
+                }
             )
         }
     }
@@ -102,12 +119,7 @@ class ScriptsViewModel(
 
     data class UiState(
         val connectedDevices: List<Device> = emptyList(),
-        val scripts: List<Script> = listOf(
-            Script(
-                label = "AAA jk iefwbfjdf jtrbg ",
-                script = "adb devices",
-            )
-        )
+        val scripts: List<Script> = emptyList(),
     )
 
     data class Device(
