@@ -13,10 +13,11 @@ is still maybe possible in future.
 
 # TODOs
 
-- integrate ktlint
 - script screen
+- Previews for all screens and elements
+- integrate ktlint
 - unit-tests for PreferencesRepositoryImpl
-- ui-test
+- ui-tests
 - Theming (light and dark)
 - Code coverage
 
