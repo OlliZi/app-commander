@@ -17,7 +17,7 @@ class GetConnectedDevicesUseCaseTest {
                 any(),
                 any()
             )
-        } returns ScriptRunner.Result.Success("List of devices attached\n\npixel-7")
+        } returns ExecuteScriptUseCase.Result.Success("List of devices attached\n\npixel-7")
 
         val getConnectedDevicesUseCase = GetConnectedDevicesUseCase(executeScriptUseCase)
         val result = getConnectedDevicesUseCase()
@@ -34,7 +34,7 @@ class GetConnectedDevicesUseCaseTest {
                 any(),
                 any()
             )
-        } returns ScriptRunner.Result.Success("List of devices attached\n\n")
+        } returns ExecuteScriptUseCase.Result.Success("List of devices attached\n\n")
 
         val getConnectedDevicesUseCase = GetConnectedDevicesUseCase(executeScriptUseCase)
         val result = getConnectedDevicesUseCase()
@@ -51,7 +51,7 @@ class GetConnectedDevicesUseCaseTest {
                 any(),
                 any()
             )
-        } returns ScriptRunner.Result.Error(message = "mock error")
+        } returns ExecuteScriptUseCase.Result.Error(message = "mock error")
 
         val getConnectedDevicesUseCase = GetConnectedDevicesUseCase(executeScriptUseCase)
         val result = getConnectedDevicesUseCase()

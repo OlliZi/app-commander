@@ -12,8 +12,8 @@ class GetConnectedDevicesUseCase(
 
     private suspend fun getConnectedAndroidDevices(): List<String> {
         return when (val result = executeScriptUseCase(script = "adb devices")) {
-            is ScriptRunner.Result.Error -> emptyList()
-            is ScriptRunner.Result.Success -> {
+            is ExecuteScriptUseCase.Result.Error -> emptyList()
+            is ExecuteScriptUseCase.Result.Success -> {
                 result.output
                     .split("\n")
                     .drop(1)
