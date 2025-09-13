@@ -172,12 +172,12 @@ private fun ScriptsSection(
                         ) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
-                                text = script.label,
+                                text = script.description,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
-                                text = script.script,
+                                text = script.scriptText,
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -193,7 +193,7 @@ private fun ScriptsSection(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
-                            text = script.label,
+                            text = script.description,
                             style = MaterialTheme.typography.bodyMedium,
                         )
                         Text(
@@ -202,7 +202,7 @@ private fun ScriptsSection(
                         )
                         Text(
                             modifier = Modifier.weight(1f),
-                            text = script.script,
+                            text = script.scriptText,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodySmall,

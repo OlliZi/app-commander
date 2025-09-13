@@ -69,8 +69,8 @@ class ScriptsViewModelTest {
         assertEquals(
             listOf(
                 ScriptsViewModel.Script(
-                    label = "my script",
-                    script = "foo",
+                    description = "my script",
+                    scriptText = "foo",
                     originalScript = ScriptsRepository.Script(
                         label = "my script",
                         script = "foo",
@@ -106,7 +106,6 @@ class ScriptsViewModelTest {
     @Test
     fun `should select device when event 'OnDeviceSelected' is fired`() = runTest {
         val viewModel = createViewModel()
-
         val device = viewModel.uiState.value.connectedDevices.first()
         val preSelectedState = device.isSelected
 
@@ -120,7 +119,6 @@ class ScriptsViewModelTest {
     @Test
     fun `should expand script when event 'OnExpandScript' is fired`() = runTest {
         val viewModel = createViewModel()
-
         val script = viewModel.uiState.value.scripts.first()
         val preExpandedState = script.isExpanded
 
@@ -130,6 +128,84 @@ class ScriptsViewModelTest {
         assertFalse(preExpandedState)
         assertTrue(viewModel.uiState.value.scripts.first().isExpanded)
     }
+
+    @Test
+    fun `should execute script when event 'OnExecuteScript' is fired`() = runTest {
+        val viewModel = createViewModel()
+        val script = viewModel.uiState.value.scripts.first()
+
+        coEvery {
+            executeScriptUseCaseMock(
+                script = script.originalScript,
+                selectedDevice = "p7",
+            )
+        } returns ExecuteScriptUseCase.Result.Success(output = "")
+
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
+        runCurrent()
+
+        coVerify {
+            executeScriptUseCaseMock(
+                script = script.originalScript,
+                selectedDevice = "p7",
+            )
+        }
+    }
+
+    @Test
+    fun `should execute script on multiple devices when event 'OnExecuteScript' is fired and multiples devices are selected`() =
+        runTest {
+            val testScript = ScriptsRepository.Script(
+                label = "my script",
+                script = "foo",
+                platform = ScriptsRepository.Platform.ANDROID,
+            )
+
+            coEvery {
+                getConnectedDevicesUseCaseMock()
+            } returns listOf(
+                GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+                GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+                GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
+            )
+            coEvery {
+                executeScriptUseCaseMock(
+                    script = testScript,
+                    selectedDevice = "P1",
+                )
+            } returns ExecuteScriptUseCase.Result.Success(output = "")
+            coEvery {
+                executeScriptUseCaseMock(
+                    script = testScript,
+                    selectedDevice = "P3",
+                )
+            } returns ExecuteScriptUseCase.Result.Success(output = "")
+
+            val viewModel = createViewModel()
+
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = viewModel.uiState.value.connectedDevices.first()))
+            runCurrent()
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = viewModel.uiState.value.connectedDevices.last()))
+            runCurrent()
+
+            viewModel.onEvent(
+                event = ScriptsViewModel.Event.OnExecuteScript(
+                    script = ScriptsViewModel.Script(
+                        originalScript = testScript,
+                        description = "",
+                        scriptText = "",
+                    )
+                )
+            )
+            runCurrent()
+
+            coVerify {
+                executeScriptUseCaseMock(
+                    script = testScript,
+                    selectedDevice = "P1",
+                )
+            }
+        }
 
     private fun createViewModel(): ScriptsViewModel {
         return ScriptsViewModel(

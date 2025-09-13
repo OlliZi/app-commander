@@ -71,8 +71,8 @@ class ScriptsViewModel(
             oldState.copy(
                 scripts = scripts.map {
                     Script(
-                        label = it.label,
-                        script = it.script,
+                        description = it.label,
+                        scriptText = it.script,
                         originalScript = it,
                     )
                 }
@@ -94,10 +94,11 @@ class ScriptsViewModel(
     }
 
     private fun onExecuteScript(script: Script) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             _uiState.value.connectedDevices.filter {
                 it.isSelected
             }.forEach { device ->
+                println(device)
                 executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
             }
         }
@@ -139,8 +140,8 @@ class ScriptsViewModel(
     )
 
     data class Script(
-        val label: String,
-        val script: String,
+        val description: String,
+        val scriptText: String,
         val originalScript: ScriptsRepository.Script,
         val isExpanded: Boolean = false,
     )
