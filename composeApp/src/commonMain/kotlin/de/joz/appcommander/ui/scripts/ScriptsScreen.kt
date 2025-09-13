@@ -61,7 +61,7 @@ fun ScriptsScreen(
 }
 
 @Composable
-private fun ScriptsContent(
+internal fun ScriptsContent(
     uiState: ScriptsViewModel.UiState,
     onDeviceSelect: (ScriptsViewModel.Device) -> Unit,
     onRefreshDevices: () -> Unit,
