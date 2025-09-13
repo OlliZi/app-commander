@@ -54,7 +54,8 @@ class ScriptsViewModel(
                     Device(
                         id = device.id,
                         label = device.label,
-                        isSelected = devices.size == 1,
+                        isSelected = devices.size == 1
+                                || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
                     )
                 },
             )
