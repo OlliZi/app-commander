@@ -53,12 +53,12 @@ class GetConnectedDevicesUseCase(
     )
 
     companion object {
-        private val ANDROID_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
+        val ANDROID_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
             label = "Get connected Android devices",
             script = "adb devices",
             platform = ScriptsRepository.Platform.ANDROID,
         )
-        private val IOS_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
+        val IOS_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
             label = "Get connected iOS devices",
             script = "TODO for iOS",
             platform = ScriptsRepository.Platform.IOS,

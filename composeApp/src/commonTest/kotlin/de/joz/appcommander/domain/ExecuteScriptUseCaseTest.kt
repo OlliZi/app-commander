@@ -27,7 +27,7 @@ class ExecuteScriptUseCaseTest {
         val executeScriptUseCase = ExecuteScriptUseCase()
         val script = ScriptsRepository.Script(
             label = "Test",
-            script = "foo_bar_unknown_commando",
+            script = "foo_bar_unknown_command",
             platform = ScriptsRepository.Platform.ANDROID,
         )
 
