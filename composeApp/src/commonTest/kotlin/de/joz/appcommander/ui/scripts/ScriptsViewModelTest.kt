@@ -18,6 +18,8 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ScriptsViewModelTest {
@@ -99,6 +101,34 @@ class ScriptsViewModelTest {
         verify {
             navControllerMock.navigate(NavigationScreens.SettingsScreen)
         }
+    }
+
+    @Test
+    fun `should select device when event 'OnDeviceSelected' is fired`() = runTest {
+        val viewModel = createViewModel()
+
+        val device = viewModel.uiState.value.connectedDevices.first()
+        val preSelectedState = device.isSelected
+
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
+        runCurrent()
+
+        assertTrue(preSelectedState)
+        assertFalse(viewModel.uiState.value.connectedDevices.first().isSelected)
+    }
+
+    @Test
+    fun `should expand script when event 'OnExpandScript' is fired`() = runTest {
+        val viewModel = createViewModel()
+
+        val script = viewModel.uiState.value.scripts.first()
+        val preExpandedState = script.isExpanded
+
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
+        runCurrent()
+
+        assertFalse(preExpandedState)
+        assertTrue(viewModel.uiState.value.scripts.first().isExpanded)
     }
 
     private fun createViewModel(): ScriptsViewModel {
