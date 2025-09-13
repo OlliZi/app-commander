@@ -17,7 +17,7 @@ is still maybe possible in future.
 - Previews for all screens and elements
 - Fix detekt
 - integrate ktlint
-- unit-tests for PreferencesRepositoryImpl
+- Unit-tests for PreferencesRepositoryImpl
 - ui-tests
 - Theming (light and dark)
 - Code coverage
