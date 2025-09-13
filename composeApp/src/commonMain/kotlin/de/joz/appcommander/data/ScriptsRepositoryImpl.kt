@@ -9,10 +9,11 @@ import java.io.File
 
 @OptIn(ExperimentalSerializationApi::class)
 @Single
-class ScriptsRepositoryImpl : ScriptsRepository {
+class ScriptsRepositoryImpl(
+    private val fileDirectory: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME)
+) : ScriptsRepository {
 
     override fun getScripts(): List<ScriptsRepository.Script> {
-        val fileDirectory = getPreferenceFileStorePath(fileName = JSON_FILE_NAME)
         val jsonFile = File(fileDirectory)
 
         if (!jsonFile.exists()) {
