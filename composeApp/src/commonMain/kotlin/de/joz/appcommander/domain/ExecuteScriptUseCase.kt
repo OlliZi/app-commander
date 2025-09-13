@@ -8,23 +8,44 @@ class ExecuteScriptUseCase(
     private val workingDir: File = File("."),
 ) {
     suspend operator fun invoke(
-        script: String,
+        script: ScriptsRepository.Script,
         selectedDevice: String = "",
     ): Result {
-        println("Execute script: '$script' on device '$selectedDevice' ...")
+        val scriptForSelectedDevice = injectDeviceConfig(script, selectedDevice)
+        println("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice' ...")
+
         return runCatching {
             Result.Success(
-                output = ProcessBuilder(script.split(" "))
+                output = ProcessBuilder(scriptForSelectedDevice.split(" "))
                     .directory(workingDir)
                     .start()
                     .inputReader()
                     .readText()
                     .also {
-                        println("Script executed: '$it'.")
+                        println("Script executed: '$scriptForSelectedDevice'.")
                     }
             )
         }.getOrElse {
             Result.Error(message = it.message ?: "Unknown error")
+        }
+    }
+
+    private fun injectDeviceConfig(
+        script: ScriptsRepository.Script,
+        selectedDevice: String,
+    ): String {
+        if (selectedDevice.isEmpty()) {
+            return script.script
+        }
+
+        return when (script.platform) {
+            ScriptsRepository.Platform.ANDROID -> script.script.replace(
+                "adb",
+                "adb -s $selectedDevice",
+            )
+
+            // TODO
+            ScriptsRepository.Platform.IOS -> script.script
         }
     }
 

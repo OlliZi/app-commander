@@ -10,8 +10,13 @@ class ExecuteScriptUseCaseTest {
     @Test
     fun `should execute script when launched`() = runTest {
         val executeScriptUseCase = ExecuteScriptUseCase()
+        val script = ScriptsRepository.Script(
+            label = "Test",
+            script = "echo foo",
+            platform = ScriptsRepository.Platform.ANDROID,
+        )
 
-        val result = executeScriptUseCase("echo foo", "Pixel7")
+        val result = executeScriptUseCase(script, "Pixel7")
 
         assertTrue(result is ExecuteScriptUseCase.Result.Success)
         assertEquals("foo\n", result.output)
@@ -20,13 +25,18 @@ class ExecuteScriptUseCaseTest {
     @Test
     fun `should return an failure if script execution fails`() = runTest {
         val executeScriptUseCase = ExecuteScriptUseCase()
+        val script = ScriptsRepository.Script(
+            label = "Test",
+            script = "foo_bar_unknown_commando",
+            platform = ScriptsRepository.Platform.ANDROID,
+        )
 
-        val result = executeScriptUseCase("foo_bar_unknown_command", "")
+        val result = executeScriptUseCase(script, "")
 
         assertTrue(result is ExecuteScriptUseCase.Result.Error)
         assertEquals(
             "Cannot run program \"foo_bar_unknown_command\" (in directory \".\"): error=2, No such file or directory",
-            result.message
+            result.message,
         )
     }
 }

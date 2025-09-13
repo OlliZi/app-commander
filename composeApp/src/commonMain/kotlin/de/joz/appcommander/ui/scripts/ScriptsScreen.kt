@@ -96,6 +96,7 @@ private fun ScriptsContent(
 
             ScriptsSection(
                 scripts = uiState.scripts,
+                isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
                 onExecuteScript = onExecuteScript,
                 onExpand = onExpand,
             )
@@ -148,6 +149,7 @@ private fun ConnectedDevices(
 @Composable
 private fun ScriptsSection(
     scripts: List<Script>,
+    isAtMinimumOneDeviceSelected: Boolean,
     onExecuteScript: (Script) -> Unit,
     onExpand: (Script) -> Unit,
 ) {
@@ -156,6 +158,7 @@ private fun ScriptsSection(
     ) {
         items(scripts) { script ->
             Button(
+                enabled = isAtMinimumOneDeviceSelected,
                 shape = RoundedCornerShape(10.dp),
                 onClick = { onExecuteScript(script) },
             ) {

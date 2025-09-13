@@ -7,6 +7,7 @@ import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,8 +52,8 @@ class ScriptsViewModel(
             oldState.copy(
                 connectedDevices = devices.mapIndexed { index, device ->
                     Device(
-                        id = index,
-                        label = device,
+                        id = device.id,
+                        label = device.label,
                         isSelected = devices.size == 1,
                     )
                 },
@@ -68,6 +69,7 @@ class ScriptsViewModel(
                     Script(
                         label = it.label,
                         script = it.script,
+                        originalScript = it,
                     )
                 }
             )
@@ -89,7 +91,11 @@ class ScriptsViewModel(
 
     private fun onExecuteScript(script: Script) {
         viewModelScope.launch {
-            executeScriptUseCase(script = script.script)
+            _uiState.value.connectedDevices.filter {
+                it.isSelected
+            }.forEach { device ->
+                executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
+            }
         }
     }
 
@@ -123,7 +129,7 @@ class ScriptsViewModel(
     )
 
     data class Device(
-        val id: Int,
+        val id: String,
         val label: String,
         val isSelected: Boolean,
     )
@@ -131,6 +137,7 @@ class ScriptsViewModel(
     data class Script(
         val label: String,
         val script: String,
+        val originalScript: ScriptsRepository.Script,
         val isExpanded: Boolean = false,
     )
 }

@@ -13,14 +13,18 @@ is still maybe possible in future.
 
 # TODOs
 
-- script screen
+- Script screen
 - Previews for all screens and elements
 - Fix detekt
-- integrate ktlint
-- unit-tests for PreferencesRepositoryImpl
-- ui-tests
+- Integrate ktlint
+- Unit-tests for PreferencesRepositoryImpl
+- UI-tests
 - Theming (light and dark)
 - Code coverage
+- Open script file
+- Auto refresh script file
+- Terminal screen
+- Log screen
 
 # Installation/Run
 
