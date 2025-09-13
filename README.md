@@ -13,7 +13,7 @@ is still maybe possible in future.
 
 # TODOs
 
-- script screen
+- Script screen
 - Previews for all screens and elements
 - Fix detekt
 - integrate ktlint
