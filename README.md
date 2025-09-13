@@ -18,7 +18,7 @@ is still maybe possible in future.
 - Fix detekt
 - integrate ktlint
 - Unit-tests for PreferencesRepositoryImpl
-- ui-tests
+- UI-tests
 - Theming (light and dark)
 - Code coverage
 
