@@ -25,6 +25,7 @@ is still maybe possible in future.
 - Auto refresh script file
 - Terminal screen
 - Log screen
+- Unit-test for appended device id in ExecuteScriptUseCase
 
 # Installation/Run
 

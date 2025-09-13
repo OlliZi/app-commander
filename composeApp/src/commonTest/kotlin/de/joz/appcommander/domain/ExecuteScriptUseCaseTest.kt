@@ -16,7 +16,7 @@ class ExecuteScriptUseCaseTest {
             platform = ScriptsRepository.Platform.ANDROID,
         )
 
-        val result = executeScriptUseCase(script, "Pixel7")
+        val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
         assertTrue(result is ExecuteScriptUseCase.Result.Success)
         assertEquals("foo\n", result.output)
@@ -31,7 +31,7 @@ class ExecuteScriptUseCaseTest {
             platform = ScriptsRepository.Platform.ANDROID,
         )
 
-        val result = executeScriptUseCase(script, "")
+        val result = executeScriptUseCase(script = script, selectedDevice = "")
 
         assertTrue(result is ExecuteScriptUseCase.Result.Error)
         assertEquals(

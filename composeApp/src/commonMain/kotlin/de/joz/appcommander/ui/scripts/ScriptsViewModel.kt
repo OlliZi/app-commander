@@ -9,6 +9,8 @@ import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,26 +24,27 @@ class ScriptsViewModel(
     private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
     private val executeScriptUseCase: ExecuteScriptUseCase,
     private val getUserScriptsUseCase: GetUserScriptsUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 
     private val _uiState = MutableStateFlow(UiState())
     override val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onRefreshDevices()
             onRefreshScripts()
         }
     }
 
     override fun onEvent(event: Event) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             when (event) {
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
-                Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
-                Event.OnRefreshDevices -> onRefreshDevices()
                 is Event.OnExecuteScript -> onExecuteScript(script = event.script)
                 is Event.OnExpandScript -> onExpandScript(script = event.script)
+                Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
+                Event.OnRefreshDevices -> onRefreshDevices()
             }
         }
     }
