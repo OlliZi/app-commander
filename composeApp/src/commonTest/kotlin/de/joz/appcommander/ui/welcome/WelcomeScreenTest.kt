@@ -57,7 +57,6 @@ class WelcomeScreenTest {
                     viewModel = WelcomeViewModel(
                         navController = rememberNavController(),
                         savePreferenceUseCase = koin.get(),
-                        getPreferenceUseCase = koin.get(),
                     ),
                     bubblesStrategy = koin.get(),
                 )
@@ -78,7 +77,6 @@ class WelcomeScreenTest {
                     viewModel = WelcomeViewModel(
                         navController = rememberNavController(),
                         savePreferenceUseCase = koin.get(),
-                        getPreferenceUseCase = koin.get(),
                     ),
                     bubblesStrategy = koin.get(),
                 )
@@ -103,7 +101,6 @@ class WelcomeScreenTest {
                     viewModel = WelcomeViewModel(
                         navController = rememberNavController(),
                         savePreferenceUseCase = koin.get(),
-                        getPreferenceUseCase = koin.get(),
                     ),
                     bubblesStrategy = koin.get(),
                 )
@@ -131,7 +128,6 @@ class WelcomeScreenTest {
                     viewModel = WelcomeViewModel(
                         navController = navController,
                         savePreferenceUseCase = koin.get(),
-                        getPreferenceUseCase = koin.get(),
                     ),
                     bubblesStrategy = koin.get(),
                 )

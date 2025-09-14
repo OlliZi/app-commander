@@ -2,10 +2,12 @@ package de.joz.appcommander
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import de.joz.appcommander.domain.GetStartDestinationUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
@@ -21,12 +23,13 @@ import org.koin.core.parameter.parametersOf
 @Composable
 @Preview
 fun App(
-    navHostController: NavHostController = rememberNavController()
+    navHostController: NavHostController = rememberNavController(),
+    getStartDestination: GetStartDestinationUseCase = koinInject(),
 ) {
     MaterialTheme {
         NavHost(
             navController = navHostController,
-            startDestination = NavigationScreens.WelcomeScreen,
+            startDestination = getStartDestination(rememberCoroutineScope()),
         ) {
             composable<NavigationScreens.WelcomeScreen> {
                 val viewModel: WelcomeViewModel = koinViewModel {
