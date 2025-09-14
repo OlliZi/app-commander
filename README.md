@@ -14,10 +14,11 @@ is still maybe possible in future.
 
 # TODOs
 
+- Script screen
 - Previews for all screens and elements
 - Fix detekt
-- Integrate ktlint
-- Unit-tests for PreferencesRepositoryImpl
+- integrate ktlint
+- Unit-Tests for PreferencesRepositoryImpl
 - UI-tests
 - Theming (light and dark)
 - Code coverage
