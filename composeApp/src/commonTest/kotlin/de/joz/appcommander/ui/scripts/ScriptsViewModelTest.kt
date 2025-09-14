@@ -252,6 +252,7 @@ class ScriptsViewModelTest {
             executeScriptUseCase = executeScriptUseCaseMock,
             getUserScriptsUseCase = getUserScriptsUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
+            dispatcherIO = Dispatchers.Unconfined,
         )
     }
 }

@@ -10,6 +10,7 @@
     <string name="scripts_hint_devices">Your connected devices:</string>
     <string name="scripts_hint_no_devices">Connect your devices over USB and click refresh.</string>
     <string name="scripts_hint_no_devices_refresh">Refresh</string>
+    <string name="scripts_open_script_file">Open script file</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_preference_show_welcome_screen">Hide welcome screen on startup.</string>

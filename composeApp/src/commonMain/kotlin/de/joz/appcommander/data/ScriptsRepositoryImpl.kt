@@ -29,6 +29,15 @@ class ScriptsRepositoryImpl(
         }.getOrDefault(DEFAULT_SCRIPTS)
     }
 
+    override fun openScriptFile() {
+        runCatching {
+            ProcessBuilder("open $fileDirectory".split(" "))
+                .start()
+        }.onFailure {
+            println("Cannot open script file '$fileDirectory'. (Error: ${it.message})")
+        }
+    }
+
     companion object {
         private val DEFAULT_SCRIPTS = listOf(
             ScriptsRepository.Script(
