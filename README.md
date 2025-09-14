@@ -7,13 +7,13 @@ is still maybe possible in future.
 # Features
 
 - Welcome-screen
+- Script screen
 - Settings-screen
 - Save user preferences
 - Code quality (UI-tests, Unit-tests, detekt)
 
 # TODOs
 
-- Script screen
 - Previews for all screens and elements
 - Fix detekt
 - Integrate ktlint
