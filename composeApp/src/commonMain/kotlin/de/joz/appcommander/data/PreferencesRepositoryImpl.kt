@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
 import org.koin.core.annotation.Single
 
-expect fun getPreferenceFileStorePath(fileName: String = SIMPLE_PREF_FILE_NAME): String
+expect fun getPreferenceFileStorePath(fileName: String): String
 
 @Single
 internal class PreferencesRepositoryImpl(
@@ -55,14 +55,8 @@ private fun createDataStore(): DataStore<Preferences> = PreferenceDataStoreFacto
     corruptionHandler = null,
     migrations = emptyList(),
     produceFile = {
-        val filePath = getPreferenceFileStorePath()
-        if (filePath.endsWith(SIMPLE_PREF_FILE_EXTENSION)) {
-            filePath
-        } else {
-            "$filePath$SIMPLE_PREF_FILE_EXTENSION"
-        }.toPath()
+        getPreferenceFileStorePath(fileName = SIMPLE_PREF_FILE_NAME).toPath()
     },
 )
 
-internal const val SIMPLE_PREF_FILE_EXTENSION = ".preferences_pb"
-internal const val SIMPLE_PREF_FILE_NAME = ".app_commander$SIMPLE_PREF_FILE_EXTENSION"
+internal const val SIMPLE_PREF_FILE_NAME = "userprefs.preferences_pb"

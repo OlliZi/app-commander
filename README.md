@@ -7,6 +7,7 @@ is still maybe possible in future.
 # Features
 
 - Welcome-screen
+- Script screen
 - Settings-screen
 - Save user preferences
 - Code quality (UI-tests, Unit-tests, detekt)
@@ -21,6 +22,11 @@ is still maybe possible in future.
 - UI-tests
 - Theming (light and dark)
 - Code coverage
+- Open script file
+- Auto refresh script file
+- Terminal screen
+- Log screen
+- Unit-test for appended device id in ExecuteScriptUseCase
 
 # Installation/Run
 

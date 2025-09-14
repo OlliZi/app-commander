@@ -17,13 +17,31 @@ class GetConnectedDevicesUseCaseTest {
                 any(),
                 any()
             )
-        } returns ExecuteScriptUseCase.Result.Success("List of devices attached\n\npixel-7")
+        } returns ExecuteScriptUseCase.Result.Success("List of devices attached\n\ndevice-7\tdevice")
 
         val getConnectedDevicesUseCase = GetConnectedDevicesUseCase(executeScriptUseCase)
         val result = getConnectedDevicesUseCase()
 
-        assertEquals(listOf("pixel-7"), result)
-        coVerify { executeScriptUseCase(script = "adb devices", selectedDevice = "") }
+        assertEquals(
+            listOf(
+                // Android
+                GetConnectedDevicesUseCase.ConnectedDevice(
+                    id = "device-7",
+                    label = "device-7\tdevice",
+                ),
+                // iOS
+                GetConnectedDevicesUseCase.ConnectedDevice(
+                    id = "device-7\tdevice",
+                    label = "device-7\tdevice",
+                )
+            ), result
+        )
+        coVerify {
+            executeScriptUseCase(
+                script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
+                selectedDevice = ""
+            )
+        }
     }
 
     @Test
@@ -40,7 +58,12 @@ class GetConnectedDevicesUseCaseTest {
         val result = getConnectedDevicesUseCase()
 
         assertEquals(emptyList(), result)
-        coVerify { executeScriptUseCase(script = "adb devices", selectedDevice = "") }
+        coVerify {
+            executeScriptUseCase(
+                script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
+                selectedDevice = ""
+            )
+        }
     }
 
     @Test
@@ -57,6 +80,11 @@ class GetConnectedDevicesUseCaseTest {
         val result = getConnectedDevicesUseCase()
 
         assertEquals(emptyList(), result)
-        coVerify { executeScriptUseCase(script = "adb devices", selectedDevice = "") }
+        coVerify {
+            executeScriptUseCase(
+                script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
+                selectedDevice = ""
+            )
+        }
     }
 }
