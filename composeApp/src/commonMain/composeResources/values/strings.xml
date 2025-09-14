@@ -3,7 +3,7 @@
 
     <string name="welcome_title">Welcome to \n'App-Commander'.</string>
     <string name="welcome_catch_phrase">Execute your custom scripts for your apps on multiple devices.</string>
-    <string name="welcome_action">Let`s go!</string>
+    <string name="welcome_action">Let's go!</string>
     <string name="welcome_do_not_show_again">Do not show welcome screen again.</string>
 
     <string name="scripts_title">Your scripts</string>

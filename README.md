@@ -11,19 +11,18 @@ is still maybe possible in future.
 - Settings-screen
 - Save user preferences
 - Open script file to make changes
+- Auto refresh script list if file has changed
 - Code quality (UI-tests, Unit-tests, detekt)
 
 # TODOs
 
-- Script screen
 - Previews for all screens and elements
 - Fix detekt
-- integrate ktlint
+- Integrate ktlint
 - Unit-Tests for PreferencesRepositoryImpl
 - UI-tests
 - Theming (light and dark)
 - Code coverage
-- Auto refresh script file
 - Terminal screen
 - Log screen
 - Unit-test for appended device id in ExecuteScriptUseCase
