@@ -6,6 +6,8 @@ interface ScriptsRepository {
 
     fun getScripts(): List<Script>
 
+    fun openScriptFile()
+
     @Serializable
     data class Script(
         val label: String,

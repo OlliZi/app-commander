@@ -1,6 +1,5 @@
 package de.joz.appcommander.domain
 
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -10,14 +9,10 @@ class SavePreferenceUseCaseTest {
 
     @Test
     fun `should execute repository for integer when use case is executed`() = runTest {
-        val preferencesRepositoryMock: PreferencesRepository = mockk()
+        val preferencesRepositoryMock: PreferencesRepository = mockk(relaxed = true)
         val savePreferenceUseCase = SavePreferenceUseCase(
             preferencesRepository = preferencesRepositoryMock
         )
-
-        coEvery {
-            preferencesRepositoryMock.store("key", value = 123)
-        } returns Unit
 
         savePreferenceUseCase(key = "key", value = 123)
 
@@ -28,14 +23,10 @@ class SavePreferenceUseCaseTest {
 
     @Test
     fun `should execute repository for boolean when use case is executed`() = runTest {
-        val preferencesRepositoryMock: PreferencesRepository = mockk()
+        val preferencesRepositoryMock: PreferencesRepository = mockk(relaxed = true)
         val savePreferenceUseCase = SavePreferenceUseCase(
             preferencesRepository = preferencesRepositoryMock
         )
-
-        coEvery {
-            preferencesRepositoryMock.store("key", value = true)
-        } returns Unit
 
         savePreferenceUseCase(key = "key", value = true)
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -35,9 +36,11 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
+import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
 import de.joz.appcommander.ui.misc.TitleBar
+import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import org.jetbrains.compose.resources.stringResource
 
@@ -47,17 +50,27 @@ fun ScriptsScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    ScriptsContent(uiState = uiState.value, onDeviceSelect = { device ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-    }, onRefreshDevices = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-    }, onNavigateToSettings = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
-    }, onExecuteScript = { script ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
-    }, onExpand = { script ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
-    })
+    ScriptsContent(
+        uiState = uiState.value,
+        onDeviceSelect = { device ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
+        },
+        onRefreshDevices = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
+        },
+        onNavigateToSettings = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
+        },
+        onExecuteScript = { script ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
+        },
+        onExpand = { script ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
+        },
+        onOpenScriptFile = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
+        }
+    )
 }
 
 @Composable
@@ -68,6 +81,7 @@ internal fun ScriptsContent(
     onNavigateToSettings: () -> Unit,
     onExecuteScript: (Script) -> Unit,
     onExpand: (Script) -> Unit,
+    onOpenScriptFile: () -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -81,7 +95,13 @@ internal fun ScriptsContent(
                     )
                 )
             )
-        }) { paddingValues ->
+        },
+        bottomBar = {
+            BottomBar(
+                onOpenScriptFile = onOpenScriptFile,
+            )
+        },
+    ) { paddingValues ->
         Column(
             Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -232,5 +252,26 @@ private fun ExpandButton(
             imageVector = if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown,
             contentDescription = null,
         )
+    }
+}
+
+@Composable
+private fun BottomBar(
+    onOpenScriptFile: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .navigationBarsPadding()
+            .fillMaxWidth()
+            .background(Color.LightGray.lighter(factor = 1.1f))
+            .padding(16.dp),
+    ) {
+        Button(
+            onClick = onOpenScriptFile,
+        ) {
+            Text(
+                text = stringResource(Res.string.scripts_open_script_file)
+            )
+        }
     }
 }

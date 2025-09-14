@@ -7,6 +7,7 @@ import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +25,9 @@ class ScriptsViewModel(
     private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
     private val executeScriptUseCase: ExecuteScriptUseCase,
     private val getUserScriptsUseCase: GetUserScriptsUseCase,
+    private val openScriptFileUseCase: OpenScriptFileUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -40,11 +43,12 @@ class ScriptsViewModel(
     override fun onEvent(event: Event) {
         viewModelScope.launch(dispatcher) {
             when (event) {
+                Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
+                Event.OnRefreshDevices -> onRefreshDevices()
+                Event.OnOpenScriptFile -> onOpenScriptFile()
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
                 is Event.OnExecuteScript -> onExecuteScript(script = event.script)
                 is Event.OnExpandScript -> onExpandScript(script = event.script)
-                Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
-                Event.OnRefreshDevices -> onRefreshDevices()
             }
         }
     }
@@ -94,7 +98,7 @@ class ScriptsViewModel(
     }
 
     private fun onExecuteScript(script: Script) {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(dispatcherIO) {
             _uiState.value.connectedDevices.filter {
                 it.isSelected
             }.forEach { device ->
@@ -120,10 +124,17 @@ class ScriptsViewModel(
         }
     }
 
+    private fun onOpenScriptFile() {
+        viewModelScope.launch(dispatcherIO) {
+            openScriptFileUseCase()
+        }
+    }
+
     sealed interface Event {
-        data class OnDeviceSelected(val device: Device) : Event
         data object OnNavigateToSettings : Event
         data object OnRefreshDevices : Event
+        data object OnOpenScriptFile : Event
+        data class OnDeviceSelected(val device: Device) : Event
         data class OnExecuteScript(val script: Script) : Event
         data class OnExpandScript(val script: Script) : Event
     }

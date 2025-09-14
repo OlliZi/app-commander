@@ -23,6 +23,7 @@ class ScriptsScreenTest {
                     onRefreshDevices = {},
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onOpenScriptFile = {},
                 )
             }
 
@@ -51,6 +52,7 @@ class ScriptsScreenTest {
                     onRefreshDevices = {},
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onOpenScriptFile = {},
                 )
             }
 
@@ -74,12 +76,37 @@ class ScriptsScreenTest {
                     },
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onOpenScriptFile = {},
                 )
             }
 
             onNodeWithText("Refresh").performClick()
 
             assertEquals(1, isRefreshClicked)
+        }
+    }
+
+    @Test
+    fun `should open script file when open button is clicked`() {
+        runComposeUiTest {
+            var isOpenClicked = 0
+            setContent {
+                ScriptsContent(
+                    uiState = ScriptsViewModel.UiState(),
+                    onDeviceSelect = {},
+                    onExecuteScript = {},
+                    onRefreshDevices = {},
+                    onExpand = {},
+                    onNavigateToSettings = {},
+                    onOpenScriptFile = {
+                        isOpenClicked++
+                    },
+                )
+            }
+
+            onNodeWithText("Open script file").performClick()
+
+            assertEquals(1, isOpenClicked)
         }
     }
 }

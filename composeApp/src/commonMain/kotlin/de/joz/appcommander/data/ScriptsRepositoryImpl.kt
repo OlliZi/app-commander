@@ -10,7 +10,8 @@ import java.io.File
 @OptIn(ExperimentalSerializationApi::class)
 @Single
 class ScriptsRepositoryImpl(
-    private val fileDirectory: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME)
+    private val fileDirectory: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
+    private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
 
     override fun getScripts(): List<ScriptsRepository.Script> {
@@ -27,6 +28,15 @@ class ScriptsRepositoryImpl(
         return runCatching {
             Json.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
         }.getOrDefault(DEFAULT_SCRIPTS)
+    }
+
+    override fun openScriptFile() {
+        runCatching {
+            processBuilder.command("open", fileDirectory)
+            processBuilder.start()
+        }.onFailure {
+            println("Cannot open script file '$fileDirectory'. (Error: ${it.message})")
+        }
     }
 
     companion object {

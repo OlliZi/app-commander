@@ -7,9 +7,10 @@ is still maybe possible in future.
 # Features
 
 - Welcome-screen
-- Script screen
+- Script-screen
 - Settings-screen
 - Save user preferences
+- Open script file to make changes
 - Code quality (UI-tests, Unit-tests, detekt)
 
 # TODOs
@@ -22,7 +23,6 @@ is still maybe possible in future.
 - UI-tests
 - Theming (light and dark)
 - Code coverage
-- Open script file
 - Auto refresh script file
 - Terminal screen
 - Log screen

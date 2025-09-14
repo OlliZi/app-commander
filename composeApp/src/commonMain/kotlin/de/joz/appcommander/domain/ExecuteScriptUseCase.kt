@@ -6,6 +6,7 @@ import java.io.File
 @Factory
 class ExecuteScriptUseCase(
     private val workingDir: File = File("."),
+    private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) {
     suspend operator fun invoke(
         script: ScriptsRepository.Script,
@@ -16,7 +17,7 @@ class ExecuteScriptUseCase(
 
         return runCatching {
             Result.Success(
-                output = ProcessBuilder(scriptForSelectedDevice.split(" "))
+                output = processBuilder.command(scriptForSelectedDevice.split(" "))
                     .directory(workingDir)
                     .start()
                     .inputReader()
