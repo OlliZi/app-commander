@@ -3,7 +3,6 @@ package de.joz.appcommander.ui.welcome
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
@@ -18,22 +17,10 @@ import org.koin.core.annotation.InjectedParam
 class WelcomeViewModel(
     @InjectedParam private val navController: NavController,
     private val savePreferenceUseCase: SavePreferenceUseCase,
-    private val getPreferenceUseCase: GetPreferenceUseCase,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<Unit, WelcomeViewModel.Event> {
 
     private val _uiState = MutableStateFlow(Unit)
     override val uiState = _uiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            if (getPreferenceUseCase.get(
-                    SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, defaultValue = false
-                )
-            ) {
-                navController.navigate(NavigationScreens.ScriptsScreen)
-            }
-        }
-    }
 
     override fun onEvent(event: Event) {
         viewModelScope.launch {
