@@ -23,6 +23,7 @@ class ScriptsScreenTest {
                     onRefreshDevices = {},
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onOpenScriptFile = {},
                 )
             }
 
@@ -51,6 +52,7 @@ class ScriptsScreenTest {
                     onRefreshDevices = {},
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onOpenScriptFile = {},
                 )
             }
 
@@ -74,6 +76,7 @@ class ScriptsScreenTest {
                     },
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onOpenScriptFile = {},
                 )
             }
 

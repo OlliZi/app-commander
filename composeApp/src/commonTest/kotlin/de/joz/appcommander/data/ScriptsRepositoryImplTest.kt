@@ -1,6 +1,8 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.data
 
-import de.joz.appcommander.data.ScriptsRepositoryImpl
+import de.joz.appcommander.domain.ScriptsRepository
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -93,5 +95,20 @@ class ScriptsRepositoryImplTest {
                 )
             ), scripts
         )
+    }
+
+    @Test
+    fun `should open script`() = runTest {
+        val processBuilder: ProcessBuilder = mockk(relaxed = true)
+
+        ScriptsRepositoryImpl(
+            fileDirectory = testFile.absolutePath,
+            processBuilder = processBuilder,
+        ).openScriptFile()
+
+        coVerify {
+            processBuilder.command("open", testFile.absolutePath)
+            processBuilder.start()
+        }
     }
 }

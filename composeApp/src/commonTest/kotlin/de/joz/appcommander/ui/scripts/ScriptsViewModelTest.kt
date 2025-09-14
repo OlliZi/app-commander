@@ -5,10 +5,10 @@ import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -24,10 +24,11 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ScriptsViewModelTest {
 
-    private val navControllerMock: NavController = mockk()
+    private val navControllerMock: NavController = mockk(relaxed = true)
     private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
     private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk()
     private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
+    private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
 
     @BeforeTest
     fun setUp() {
@@ -91,10 +92,6 @@ class ScriptsViewModelTest {
     fun `should navigate to settings when event 'OnNavigateToSettings' is fired`() = runTest {
         val viewModel = createViewModel()
 
-        every {
-            navControllerMock.navigate(NavigationScreens.SettingsScreen)
-        } returns Unit
-
         viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
         runCurrent()
 
@@ -149,6 +146,18 @@ class ScriptsViewModelTest {
                 script = script.originalScript,
                 selectedDevice = "p7",
             )
+        }
+    }
+
+    @Test
+    fun `should open script file when event 'OnOpenScriptFile' is fired`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
+        runCurrent()
+
+        coVerify {
+            openScriptFileUseCaseMock()
         }
     }
 
@@ -251,6 +260,7 @@ class ScriptsViewModelTest {
             getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
             executeScriptUseCase = executeScriptUseCaseMock,
             getUserScriptsUseCase = getUserScriptsUseCaseMock,
+            openScriptFileUseCase = openScriptFileUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
             dispatcherIO = Dispatchers.Unconfined,
         )
