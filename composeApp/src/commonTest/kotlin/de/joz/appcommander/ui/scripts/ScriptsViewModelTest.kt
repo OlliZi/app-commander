@@ -7,12 +7,14 @@ import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -29,6 +31,8 @@ class ScriptsViewModelTest {
     private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk()
     private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
     private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
+    private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
+        mockk(relaxed = true)
 
     @BeforeTest
     fun setUp() {
@@ -254,6 +258,75 @@ class ScriptsViewModelTest {
         assertFalse(viewModel.uiState.value.connectedDevices[2].isSelected)
     }
 
+    @Test
+    fun `should reload scripts automatically when script are changed in the file`() = runTest {
+        val mutableSharedFlow = MutableSharedFlow<List<ScriptsRepository.Script>>()
+        coEvery {
+            trackScriptsFileChangesUseCaseMock()
+        } returns mutableSharedFlow
+
+        coEvery {
+            getUserScriptsUseCaseMock()
+        } returns listOf(
+            ScriptsRepository.Script(
+                label = "my script",
+                script = "foo",
+                platform = ScriptsRepository.Platform.ANDROID,
+            ),
+        )
+
+        val viewModel = createViewModel()
+        runCurrent()
+
+        viewModel.onEvent(
+            event = ScriptsViewModel.Event.OnExpandScript(
+                viewModel.uiState.value.scripts.first()
+            )
+        )
+        runCurrent()
+
+        mutableSharedFlow.emit(
+            listOf(
+                ScriptsRepository.Script(
+                    label = "my script",
+                    script = "foo",
+                    platform = ScriptsRepository.Platform.ANDROID,
+                ),
+                ScriptsRepository.Script(
+                    label = "abc",
+                    script = "123",
+                    platform = ScriptsRepository.Platform.IOS,
+                )
+            )
+        )
+
+        assertEquals(
+            listOf(
+                ScriptsViewModel.Script(
+                    description = "my script",
+                    scriptText = "foo",
+                    isExpanded = true,
+                    originalScript = ScriptsRepository.Script(
+                        label = "my script",
+                        script = "foo",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    ),
+                ),
+                ScriptsViewModel.Script(
+                    description = "abc",
+                    scriptText = "123",
+                    isExpanded = false,
+                    originalScript = ScriptsRepository.Script(
+                        label = "abc",
+                        script = "123",
+                        platform = ScriptsRepository.Platform.IOS,
+                    ),
+                )
+            ),
+            viewModel.uiState.value.scripts,
+        )
+    }
+
     private fun createViewModel(): ScriptsViewModel {
         return ScriptsViewModel(
             navController = navControllerMock,
@@ -261,6 +334,7 @@ class ScriptsViewModelTest {
             executeScriptUseCase = executeScriptUseCaseMock,
             getUserScriptsUseCase = getUserScriptsUseCaseMock,
             openScriptFileUseCase = openScriptFileUseCaseMock,
+            trackScriptsFileChangesUseCase = trackScriptsFileChangesUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
             dispatcherIO = Dispatchers.Unconfined,
         )

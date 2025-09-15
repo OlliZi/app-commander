@@ -9,6 +9,7 @@ import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,7 @@ class ScriptsViewModel(
     private val executeScriptUseCase: ExecuteScriptUseCase,
     private val getUserScriptsUseCase: GetUserScriptsUseCase,
     private val openScriptFileUseCase: OpenScriptFileUseCase,
+    private val trackScriptsFileChangesUseCase: TrackScriptsFileChangesUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
@@ -36,7 +38,11 @@ class ScriptsViewModel(
     init {
         viewModelScope.launch(dispatcher) {
             onRefreshDevices()
-            onRefreshScripts()
+            onRefreshScripts(getUserScriptsUseCase())
+
+            trackScriptsFileChangesUseCase().collect { newEntries ->
+                onRefreshScripts(newEntries)
+            }
         }
     }
 
@@ -69,15 +75,18 @@ class ScriptsViewModel(
         }
     }
 
-    private suspend fun onRefreshScripts() {
+    private fun onRefreshScripts(scripts: List<ScriptsRepository.Script>) {
         _uiState.update { oldState ->
-            val scripts = getUserScriptsUseCase()
             oldState.copy(
-                scripts = scripts.map {
+                scripts = scripts.map { script ->
                     Script(
-                        description = it.label,
-                        scriptText = it.script,
-                        originalScript = it,
+                        description = script.label,
+                        scriptText = script.script,
+                        originalScript = script,
+                        isExpanded = _uiState.value.scripts.any {
+                            (it.description == script.label || it.scriptText == script.script)
+                                    && it.isExpanded
+                        },
                     )
                 }
             )

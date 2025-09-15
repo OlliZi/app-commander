@@ -25,7 +25,7 @@ is still maybe possible in future.
 - Code coverage
 - Terminal screen
 - Log screen
-- Unit-test for appended device id in ExecuteScriptUseCase
+- Unit-test for appended device id in ExecuteScriptUseCase + TrackScriptsFileChangesUseCaseTest
 
 # Installation/Run
 
