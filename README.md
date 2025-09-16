@@ -11,7 +11,7 @@ is still maybe possible in future.
 - Settings-screen
 - Save user preferences
 - Open script file to make changes
-- Auto refresh script list if file has changed
+- Automatically refresh scripts list all x seconds if file has changed
 - Code quality (UI-tests, Unit-tests, detekt)
 
 # TODOs
