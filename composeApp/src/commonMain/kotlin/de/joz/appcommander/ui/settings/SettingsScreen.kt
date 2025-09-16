@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,6 +19,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
+import de.joz.appcommander.ui.misc.Slider
 import de.joz.appcommander.ui.misc.TitleBar
 import org.jetbrains.compose.resources.stringResource
 
@@ -33,19 +36,27 @@ fun SettingsScreen(
         onToggleItem = { toggleItem, isChecked ->
             viewModel.onEvent(
                 event = SettingsViewModel.Event.OnToggleItem(
-                    toggleItem = toggleItem,
-                    isChecked = isChecked,
+                    toggleItem = toggleItem, isChecked = isChecked,
+                )
+            )
+        },
+        onSliderChangeItem = { sliderItem, value ->
+            viewModel.onEvent(
+                event = SettingsViewModel.Event.OnSliderItem(
+                    sliderItem = sliderItem, value = value,
                 )
             )
         }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsContent(
     uiState: SettingsViewModel.UiState,
     navController: NavController,
     onToggleItem: (SettingsViewModel.ToggleItem, Boolean) -> Unit,
+    onSliderChangeItem: (SettingsViewModel.SliderItem, Float) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -74,7 +85,17 @@ internal fun SettingsContent(
                         onToggleItem(toggleItem, isChecked)
                     }
                 )
+            }
 
+            HorizontalDivider()
+
+            uiState.sliderPreferences.forEach { sliderItem ->
+                Slider(
+                    sliderItem = sliderItem,
+                    onValueChange = { value ->
+                        onSliderChangeItem(sliderItem, value)
+                    }
+                )
             }
         }
     }
