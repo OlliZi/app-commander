@@ -3,17 +3,17 @@ package de.joz.appcommander.ui.welcome
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
-import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.DependencyInjection
+import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
@@ -22,7 +22,6 @@ import org.koin.dsl.module
 import org.koin.ksp.generated.*
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -87,7 +86,7 @@ class WelcomeScreenTest {
 
         assertTrue(
             preferencesRepositoryMock.get(
-                "HIDE_WELCOME_SCREEN_PREF_KEY",
+                "HIDE_WELCOME_SCREEN",
                 false,
             )
         )
@@ -112,16 +111,15 @@ class WelcomeScreenTest {
 
         assertFalse(
             preferencesRepositoryMock.get(
-                "HIDE_WELCOME_SCREEN_PREF_KEY",
+                "HIDE_WELCOME_SCREEN",
                 true,
             )
         )
     }
 
     @Test
-    @Ignore
     fun `should navigate to next screen when next button is clicked`() {
-        val navController: NavController = mockk()
+        val navController: NavController = mockk(relaxed = true)
         runComposeUiTest {
             setContent {
                 WelcomeScreen(
@@ -134,10 +132,9 @@ class WelcomeScreenTest {
 
             }
 
-            onNodeWithText("Los geht's!").performClick()
-            waitForIdle()
+            onNodeWithText("Let's go!").performClick()
 
-            waitUntilAtLeastOneExists(hasText("adb test"))
+            verify { navController.navigate(NavigationScreens.ScriptsScreen) }
         }
     }
 }
