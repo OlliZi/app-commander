@@ -15,13 +15,11 @@ import de.joz.appcommander.ui.settings.SettingsScreen
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.welcome.WelcomeScreen
 import de.joz.appcommander.ui.welcome.WelcomeViewModel
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-@Preview
 fun App(
     navHostController: NavHostController = rememberNavController(),
     getStartDestination: GetStartDestinationUseCase = koinInject(),
