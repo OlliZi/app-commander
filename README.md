@@ -19,13 +19,13 @@ is still maybe possible in future.
 
 - Fix detekt
 - Integrate ktlint
-- Unit-Tests for PreferencesRepositoryImpl
 - UI-tests
 - Theming (light and dark)
 - Code coverage
 - Terminal screen
 - Log screen
-- Unit-test for appended device id in ExecuteScriptUseCase + TrackScriptsFileChangesUseCaseTest
+- Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
+  TrackScriptsFileChangesUseCaseTest
 
 # Installation/Run
 
