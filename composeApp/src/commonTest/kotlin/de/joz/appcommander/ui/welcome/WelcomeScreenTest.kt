@@ -64,7 +64,7 @@ class WelcomeScreenTest {
 
             onNodeWithText("Welcome to \n'App-Commander'.").assertIsDisplayed()
             onNodeWithText("Execute your custom scripts for your apps on multiple devices.").assertIsDisplayed()
-            onNodeWithText("Let`s go!").assertIsDisplayed().assertHasClickAction()
+            onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
             onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
         }
     }

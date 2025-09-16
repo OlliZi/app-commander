@@ -43,7 +43,7 @@ fun LabelledSwitch(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth(0.8f),
         )
         Spacer(

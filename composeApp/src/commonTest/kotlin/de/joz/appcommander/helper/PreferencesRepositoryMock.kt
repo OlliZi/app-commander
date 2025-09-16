@@ -7,11 +7,11 @@ class PreferencesRepositoryMock() : PreferencesRepository {
     var lastStoredValues = mutableMapOf<String, Any>()
 
     override suspend fun get(key: String, defaultValue: Boolean): Boolean {
-        return lastStoredValues.get(key) as? Boolean ?: defaultValue
+        return lastStoredValues[key] as? Boolean ?: defaultValue
     }
 
     override suspend fun get(key: String, defaultValue: Int): Int {
-        return lastStoredValues.get(key) as? Int ?: defaultValue
+        return lastStoredValues[key] as? Int ?: defaultValue
     }
 
     override suspend fun <T> store(key: String, value: T) {
