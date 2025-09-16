@@ -41,8 +41,10 @@ import de.joz.appcommander.resources.welcome_do_not_show_again
 import de.joz.appcommander.resources.welcome_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
+import de.joz.appcommander.ui.welcome.bubble.FadingInBubblesStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun WelcomeScreen(
@@ -164,4 +166,15 @@ private fun DrawScope.renderBubbles(
             step = yOffset,
         )
     }
+}
+
+@Preview
+@Composable
+private fun PreviewWelcomeScreen() {
+    WelcomeContent(
+        bubblesStrategy = FadingInBubblesStrategy(),
+        onNavigateToScripts = {},
+        onDoNotShowWelcomeAgain = {},
+        isInTextExecution = false,
+    )
 }

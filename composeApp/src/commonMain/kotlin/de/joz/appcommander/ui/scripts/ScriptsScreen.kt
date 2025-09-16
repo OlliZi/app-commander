@@ -32,6 +32,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Settings
+import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
@@ -43,6 +44,7 @@ import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ScriptsScreen(
@@ -274,4 +276,53 @@ private fun BottomBar(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun PreviewScriptScreen() {
+    ScriptsContent(
+        uiState = ScriptsViewModel.UiState(
+            connectedDevices = listOf(
+                ScriptsViewModel.Device(
+                    label = "Pixel 9",
+                    isSelected = true,
+                    id = "1"
+                ),
+                ScriptsViewModel.Device(
+                    label = "Pixel 8",
+                    isSelected = false,
+                    id = "2"
+                )
+            ),
+            scripts = listOf(
+                Script(
+                    description = "my script",
+                    scriptText = "adb devices",
+                    isExpanded = false,
+                    originalScript = ScriptsRepository.Script(
+                        label = "",
+                        script = "",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    )
+                ),
+                Script(
+                    description = "my script",
+                    scriptText = "adb long long long long long long long long long long long long long long long  script",
+                    isExpanded = true,
+                    originalScript = ScriptsRepository.Script(
+                        label = "",
+                        script = "",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    )
+                )
+            )
+        ),
+        onExecuteScript = {},
+        onRefreshDevices = {},
+        onNavigateToSettings = {},
+        onExpand = {},
+        onOpenScriptFile = {},
+        onDeviceSelect = { devive -> },
+    )
 }

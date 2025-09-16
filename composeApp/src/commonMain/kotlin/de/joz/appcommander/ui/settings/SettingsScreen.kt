@@ -17,11 +17,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
+import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.misc.Slider
 import de.joz.appcommander.ui.misc.TitleBar
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SettingsScreen(
@@ -32,7 +34,9 @@ fun SettingsScreen(
 
     SettingsContent(
         uiState = uiState.value,
-        navController = navController,
+        onBackNavigation = {
+            navController.navigateUp()
+        },
         onToggleItem = { toggleItem, isChecked ->
             viewModel.onEvent(
                 event = SettingsViewModel.Event.OnToggleItem(
@@ -54,7 +58,7 @@ fun SettingsScreen(
 @Composable
 internal fun SettingsContent(
     uiState: SettingsViewModel.UiState,
-    navController: NavController,
+    onBackNavigation: () -> Unit,
     onToggleItem: (SettingsViewModel.ToggleItem, Boolean) -> Unit,
     onSliderChangeItem: (SettingsViewModel.SliderItem, Float) -> Unit,
 ) {
@@ -63,9 +67,7 @@ internal fun SettingsContent(
         topBar = {
             TitleBar(
                 title = stringResource(Res.string.settings_title),
-                onBackNavigation = {
-                    navController.navigateUp()
-                }
+                onBackNavigation = onBackNavigation,
             )
         }
     ) { paddingValues ->
@@ -99,4 +101,33 @@ internal fun SettingsContent(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun PreviewSettingsScreen() {
+    SettingsContent(
+        uiState = SettingsViewModel.UiState(
+            togglePreferences = listOf(
+                SettingsViewModel.ToggleItem(
+                    isChecked = true,
+                    label = Res.string.settings_preference_show_welcome_screen,
+                    key = "",
+                )
+            ),
+            sliderPreferences = listOf(
+                SettingsViewModel.SliderItem(
+                    label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                    value = 4f,
+                    key = "",
+                    minimum = 0f,
+                    maximum = 10f,
+                    steps = 10,
+                )
+            )
+        ),
+        onSliderChangeItem = { _, _ -> },
+        onToggleItem = { _, _ -> },
+        onBackNavigation = {},
+    )
 }

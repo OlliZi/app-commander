@@ -13,10 +13,10 @@ is still maybe possible in future.
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
 - Code quality (UI-tests, Unit-tests, detekt)
+- Previews for all screens and elements
 
 # TODOs
 
-- Previews for all screens and elements
 - Fix detekt
 - Integrate ktlint
 - Unit-Tests for PreferencesRepositoryImpl
