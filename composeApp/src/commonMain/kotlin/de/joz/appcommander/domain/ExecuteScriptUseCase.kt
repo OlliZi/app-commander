@@ -1,10 +1,12 @@
 package de.joz.appcommander.domain
 
+import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import org.koin.core.annotation.Factory
 import java.io.File
 
 @Factory
 class ExecuteScriptUseCase(
+    private val addLoggingUseCase: AddLoggingUseCase,
     private val workingDir: File = File("."),
     private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) {
@@ -13,7 +15,7 @@ class ExecuteScriptUseCase(
         selectedDevice: String = "",
     ): Result {
         val scriptForSelectedDevice = injectDeviceConfig(script, selectedDevice)
-        println("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice' ...")
+        addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice' ...")
 
         return runCatching {
             Result.Success(
@@ -23,11 +25,13 @@ class ExecuteScriptUseCase(
                     .inputReader()
                     .readText()
                     .also {
-                        println("Script executed: '$scriptForSelectedDevice'.")
+                        addLoggingUseCase("Script executed: '$scriptForSelectedDevice'.")
                     }
             )
         }.getOrElse {
-            Result.Error(message = it.message ?: "Unknown error")
+            val error = it.message ?: "Unknown error"
+            addLoggingUseCase(error)
+            Result.Error(error)
         }
     }
 
