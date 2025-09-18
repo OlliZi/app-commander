@@ -12,11 +12,13 @@ import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -179,6 +181,15 @@ class ScriptsViewModelTest {
         coVerify {
             clearLoggingUseCaseMock()
         }
+    }
+
+    @Test
+    fun `should add index to log`() = runTest {
+        every { getLoggingUseCaseMock() } returns flowOf(listOf("foo", "bar"))
+        
+        val viewModel = createViewModel()
+
+        assertEquals(listOf("1. foo", "2. bar"), viewModel.uiState.value.logging)
     }
 
     @Test

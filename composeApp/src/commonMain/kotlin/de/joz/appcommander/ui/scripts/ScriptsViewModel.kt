@@ -54,7 +54,7 @@ class ScriptsViewModel(
                 _uiState.update { oldState ->
                     oldState.copy(
                         logging = logging.mapIndexed { index, log ->
-                            "$index. $log"
+                            "${index + 1}. $log"
                         }
                     )
                 }

@@ -50,7 +50,7 @@ class ExecuteScriptUseCaseTest {
             result.message,
         )
         verify {
-            addLoggingUseCaseMock.invoke(any())
+            addLoggingUseCaseMock.invoke("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"): error=2, No such file or directory")
         }
     }
 }
