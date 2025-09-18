@@ -1,6 +1,7 @@
-# app-commander
+# What is the "App-Commander"?
 
-App-Commander: Execute your custom scripts for your apps on multiple devices.
+App-Commander: Your programmable multi-device execution helper. Execute scripts for your apps on
+multiple devices.
 This is a Kotlin Multiplatform project targeting Desktop (JVM). Android and iOS dont make sense but
 is still maybe possible in future.
 
