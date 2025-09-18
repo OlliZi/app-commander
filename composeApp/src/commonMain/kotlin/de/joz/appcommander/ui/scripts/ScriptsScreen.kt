@@ -38,10 +38,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowUp
+import compose.icons.feathericons.Heart
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
@@ -61,30 +63,21 @@ fun ScriptsScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    ScriptsContent(
-        uiState = uiState.value,
-        onDeviceSelect = { device ->
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-        },
-        onRefreshDevices = {
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-        },
-        onNavigateToSettings = {
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
-        },
-        onExecuteScript = { script ->
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
-        },
-        onExpand = { script ->
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
-        },
-        onOpenScriptFile = {
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
-        },
-        onClearLogging = {
-            viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
-        }
-    )
+    ScriptsContent(uiState = uiState.value, onDeviceSelect = { device ->
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
+    }, onRefreshDevices = {
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
+    }, onNavigateToSettings = {
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
+    }, onExecuteScript = { script ->
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
+    }, onExpand = { script ->
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
+    }, onOpenScriptFile = {
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
+    }, onClearLogging = {
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
+    })
 }
 
 @Composable
@@ -118,7 +111,8 @@ internal fun ScriptsContent(
         },
     ) { paddingValues ->
         Column(
-            Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
+            Modifier.fillMaxSize().padding(paddingValues)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             ConnectedDevices(
@@ -156,6 +150,10 @@ private fun ConnectedDevices(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
+            text = stringResource(Res.string.scripts_hint),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Text(
             text = stringResource(if (connectedDevices.isNotEmpty()) Res.string.scripts_hint_devices else Res.string.scripts_hint_no_devices),
         )
 
@@ -177,10 +175,20 @@ private fun ConnectedDevices(
                         onDeviceSelect(device)
                     },
                 ) {
-                    Text(
-                        text = device.label,
-                        fontWeight = FontWeight.Bold,
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Text(
+                            text = device.label,
+                            fontWeight = FontWeight.Bold,
+                        )
+
+                        Icon(
+                            imageVector = FeatherIcons.Heart,
+                            tint = if (device.isSelected) Color.Green.lighter(factor = 0.75f) else Color.LightGray,
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
         }
@@ -269,9 +277,10 @@ private fun LoggingSection(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Column(
-        modifier = modifier
-            .background(Color.LightGray.lighter(factor = 1.1f), shape = RoundedCornerShape(10.dp))
-            .padding(8.dp),
+        modifier = modifier.background(
+            Color.LightGray.lighter(factor = 1.1f),
+            shape = RoundedCornerShape(10.dp)
+        ).padding(8.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -330,11 +339,8 @@ private fun BottomBar(
     onOpenScriptFile: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .navigationBarsPadding()
-            .fillMaxWidth()
-            .background(Color.LightGray.lighter(factor = 1.1f))
-            .padding(16.dp),
+        modifier = Modifier.navigationBarsPadding().fillMaxWidth()
+            .background(Color.LightGray.lighter(factor = 1.1f)).padding(16.dp),
     ) {
         Button(
             onClick = onOpenScriptFile,
@@ -353,17 +359,11 @@ private fun PreviewScriptScreen() {
         uiState = ScriptsViewModel.UiState(
             connectedDevices = listOf(
                 ScriptsViewModel.Device(
-                    label = "Pixel 9",
-                    isSelected = true,
-                    id = "1"
-                ),
-                ScriptsViewModel.Device(
-                    label = "Pixel 8",
-                    isSelected = false,
-                    id = "2"
+                    label = "Pixel 9", isSelected = true, id = "1"
+                ), ScriptsViewModel.Device(
+                    label = "Pixel 8", isSelected = false, id = "2"
                 )
-            ),
-            scripts = listOf(
+            ), scripts = listOf(
                 Script(
                     description = "my script",
                     scriptText = "adb devices",
@@ -373,8 +373,7 @@ private fun PreviewScriptScreen() {
                         script = "",
                         platform = ScriptsRepository.Platform.ANDROID,
                     )
-                ),
-                Script(
+                ), Script(
                     description = "my script",
                     scriptText = "adb long long long long long long long long long long long long long long long  script",
                     isExpanded = true,
@@ -384,8 +383,7 @@ private fun PreviewScriptScreen() {
                         platform = ScriptsRepository.Platform.ANDROID,
                     )
                 )
-            ),
-            logging = listOf("log 1", "log 2", "log 3")
+            ), logging = listOf("log 1", "log 2", "log 3")
         ),
         onExecuteScript = {},
         onRefreshDevices = {},

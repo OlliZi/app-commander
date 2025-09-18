@@ -24,10 +24,12 @@ class ScriptsScreenTest {
                     onExpand = {},
                     onNavigateToSettings = {},
                     onOpenScriptFile = {},
+                    onClearLogging = {},
                 )
             }
 
             onNodeWithText("Your scripts").assertIsDisplayed()
+            onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
             onNodeWithText("Connect your devices over USB and click refresh.").assertIsDisplayed()
             onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
         }
@@ -53,9 +55,11 @@ class ScriptsScreenTest {
                     onExpand = {},
                     onNavigateToSettings = {},
                     onOpenScriptFile = {},
+                    onClearLogging = {},
                 )
             }
 
+            onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
             onNodeWithText("Your connected devices:").assertIsDisplayed()
             onNodeWithText("Device A").assertIsDisplayed()
             onNodeWithText("Refresh").performClick()
@@ -77,6 +81,7 @@ class ScriptsScreenTest {
                     onExpand = {},
                     onNavigateToSettings = {},
                     onOpenScriptFile = {},
+                    onClearLogging = {},
                 )
             }
 
@@ -98,6 +103,7 @@ class ScriptsScreenTest {
                     onRefreshDevices = {},
                     onExpand = {},
                     onNavigateToSettings = {},
+                    onClearLogging = {},
                     onOpenScriptFile = {
                         isOpenClicked++
                     },

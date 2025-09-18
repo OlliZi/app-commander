@@ -25,6 +25,7 @@ is still maybe possible in future.
 - Theming (light and dark)
 - Code coverage
 - Terminal screen
+- Enter new scripts screen
 - Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
   TrackScriptsFileChangesUseCaseTest
 

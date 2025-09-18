@@ -117,7 +117,7 @@ internal fun WelcomeContent(
                 style = MaterialTheme.typography.headlineSmall,
                 textAlign = TextAlign.Center,
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
             if (!isInTextExecution) { // does not work for screenshot testing
                 Image(
                     modifier = Modifier.size(380.dp),
@@ -125,7 +125,7 @@ internal fun WelcomeContent(
                     contentDescription = null,
                 )
             }
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
             Button(
                 onClick = onNavigateToScripts,
             ) {
