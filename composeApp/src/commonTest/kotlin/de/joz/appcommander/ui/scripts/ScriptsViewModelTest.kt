@@ -8,6 +8,8 @@ import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
+import de.joz.appcommander.domain.logging.ClearLoggingUseCase
+import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -31,6 +33,8 @@ class ScriptsViewModelTest {
     private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk()
     private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
     private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
+    private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
+    private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
     private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
         mockk(relaxed = true)
 
@@ -162,6 +166,18 @@ class ScriptsViewModelTest {
 
         coVerify {
             openScriptFileUseCaseMock()
+        }
+    }
+
+    @Test
+    fun `should clear log when event 'OnClearLogging' is fired`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
+        runCurrent()
+
+        coVerify {
+            clearLoggingUseCaseMock()
         }
     }
 
@@ -335,6 +351,8 @@ class ScriptsViewModelTest {
             getUserScriptsUseCase = getUserScriptsUseCaseMock,
             openScriptFileUseCase = openScriptFileUseCaseMock,
             trackScriptsFileChangesUseCase = trackScriptsFileChangesUseCaseMock,
+            clearLoggingUseCase = clearLoggingUseCaseMock,
+            getLoggingUseCase = getLoggingUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
             dispatcherIO = Dispatchers.Unconfined,
         )
