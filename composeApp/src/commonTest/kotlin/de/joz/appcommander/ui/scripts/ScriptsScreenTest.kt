@@ -30,7 +30,7 @@ class ScriptsScreenTest {
     }
 
     @Test
-    fun `should show log`() {
+    fun `should show log if expand button is clicked`() {
         runComposeUiTest {
             setTestContent(
                 uiState = ScriptsViewModel.UiState(
@@ -40,8 +40,7 @@ class ScriptsScreenTest {
 
             onNodeWithContentDescription(
                 label = "Expand button",
-            ).assertIsDisplayed()
-                .performClick()
+            ).assertIsDisplayed().performClick()
 
             onNodeWithText("Log abc").assertIsDisplayed()
             onNodeWithText("Log 123").assertIsDisplayed()
@@ -50,17 +49,48 @@ class ScriptsScreenTest {
 
     @Test
     fun `should clear log when clear button is executed`() {
+        runComposeUiTest {
+            var isClearClicked = 0
+            setTestContent(
+                uiState = ScriptsViewModel.UiState(
+                    logging = listOf("Log abc", "Log 123"),
+                ),
+                onClearLogging = {
+                    isClearClicked++
+                }
+            )
 
-    }
+            onNodeWithContentDescription(
+                label = "Clear logging",
+            ).assertIsDisplayed().performClick()
 
-    @Test
-    fun `should expand log when expand button is executed`() {
-
+            assertEquals(1, isClearClicked)
+        }
     }
 
     @Test
     fun `should collapse log when collapse button is executed`() {
+        runComposeUiTest {
+            setTestContent(
+                uiState = ScriptsViewModel.UiState(
+                    logging = listOf("Log abc", "Log 123"),
+                )
+            )
 
+            onNodeWithContentDescription(
+                label = "Expand button",
+            ).assertIsDisplayed().performClick()
+
+            onNodeWithText("Log abc").assertIsDisplayed().assertExists()
+            onNodeWithText("Log 123").assertIsDisplayed().assertExists()
+
+            onNodeWithContentDescription(
+                label = "Expand button",
+            ).assertIsDisplayed().performClick()
+
+            onNodeWithText("Log abc").assertDoesNotExist()
+            onNodeWithText("Log 123").assertDoesNotExist()
+        }
     }
 
     @Test
