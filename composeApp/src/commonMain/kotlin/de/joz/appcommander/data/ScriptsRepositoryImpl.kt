@@ -1,7 +1,6 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.domain.ScriptsRepository
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 import java.io.File
