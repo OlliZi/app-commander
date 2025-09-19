@@ -294,7 +294,7 @@ private fun LoggingSection(
             ) {
                 Icon(
                     imageVector = FeatherIcons.Trash,
-                    contentDescription = null,
+                    contentDescription = "Clear logging",
                 )
             }
             ExpandButton(
@@ -329,7 +329,7 @@ private fun ExpandButton(
     ) {
         Icon(
             imageVector = if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown,
-            contentDescription = null,
+            contentDescription = "Expand button",
         )
     }
 }

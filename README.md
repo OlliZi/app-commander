@@ -22,6 +22,7 @@ is still maybe possible in future.
 - Fix detekt
 - Integrate ktlint
 - UI-tests
+- Screenshot testing
 - Theming (light and dark)
 - Code coverage
 - Terminal screen
