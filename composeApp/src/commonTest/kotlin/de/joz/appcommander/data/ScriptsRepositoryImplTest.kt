@@ -4,7 +4,6 @@ import de.joz.appcommander.domain.ScriptsRepository
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.test.AfterTest

@@ -10,6 +10,8 @@ import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
+import de.joz.appcommander.domain.logging.ClearLoggingUseCase
+import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,8 @@ class ScriptsViewModel(
     private val getUserScriptsUseCase: GetUserScriptsUseCase,
     private val openScriptFileUseCase: OpenScriptFileUseCase,
     private val trackScriptsFileChangesUseCase: TrackScriptsFileChangesUseCase,
+    private val clearLoggingUseCase: ClearLoggingUseCase,
+    private val getLoggingUseCase: GetLoggingUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
     private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(), UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
@@ -44,6 +48,18 @@ class ScriptsViewModel(
                 onRefreshScripts(newEntries)
             }
         }
+
+        viewModelScope.launch(dispatcher) {
+            getLoggingUseCase().collect { logging ->
+                _uiState.update { oldState ->
+                    oldState.copy(
+                        logging = logging.mapIndexed { index, log ->
+                            "${index + 1}. $log"
+                        }
+                    )
+                }
+            }
+        }
     }
 
     override fun onEvent(event: Event) {
@@ -52,6 +68,7 @@ class ScriptsViewModel(
                 Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
                 Event.OnRefreshDevices -> onRefreshDevices()
                 Event.OnOpenScriptFile -> onOpenScriptFile()
+                Event.OnClearLogging -> onClearLogging()
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
                 is Event.OnExecuteScript -> onExecuteScript(script = event.script)
                 is Event.OnExpandScript -> onExpandScript(script = event.script)
@@ -139,10 +156,15 @@ class ScriptsViewModel(
         }
     }
 
+    private fun onClearLogging() {
+        clearLoggingUseCase()
+    }
+
     sealed interface Event {
         data object OnNavigateToSettings : Event
         data object OnRefreshDevices : Event
         data object OnOpenScriptFile : Event
+        data object OnClearLogging : Event
         data class OnDeviceSelected(val device: Device) : Event
         data class OnExecuteScript(val script: Script) : Event
         data class OnExpandScript(val script: Script) : Event
@@ -151,6 +173,7 @@ class ScriptsViewModel(
     data class UiState(
         val connectedDevices: List<Device> = emptyList(),
         val scripts: List<Script> = emptyList(),
+        val logging: List<String> = emptyList(),
     )
 
     data class Device(

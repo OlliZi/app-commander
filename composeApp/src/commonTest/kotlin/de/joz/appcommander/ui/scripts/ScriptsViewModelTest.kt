@@ -8,13 +8,17 @@ import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
+import de.joz.appcommander.domain.logging.ClearLoggingUseCase
+import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -31,6 +35,8 @@ class ScriptsViewModelTest {
     private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk()
     private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
     private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
+    private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
+    private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
     private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
         mockk(relaxed = true)
 
@@ -163,6 +169,27 @@ class ScriptsViewModelTest {
         coVerify {
             openScriptFileUseCaseMock()
         }
+    }
+
+    @Test
+    fun `should clear log when event 'OnClearLogging' is fired`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
+        runCurrent()
+
+        coVerify {
+            clearLoggingUseCaseMock()
+        }
+    }
+
+    @Test
+    fun `should add index to log`() = runTest {
+        every { getLoggingUseCaseMock() } returns flowOf(listOf("foo", "bar"))
+        
+        val viewModel = createViewModel()
+
+        assertEquals(listOf("1. foo", "2. bar"), viewModel.uiState.value.logging)
     }
 
     @Test
@@ -335,6 +362,8 @@ class ScriptsViewModelTest {
             getUserScriptsUseCase = getUserScriptsUseCaseMock,
             openScriptFileUseCase = openScriptFileUseCaseMock,
             trackScriptsFileChangesUseCase = trackScriptsFileChangesUseCaseMock,
+            clearLoggingUseCase = clearLoggingUseCaseMock,
+            getLoggingUseCase = getLoggingUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
             dispatcherIO = Dispatchers.Unconfined,
         )

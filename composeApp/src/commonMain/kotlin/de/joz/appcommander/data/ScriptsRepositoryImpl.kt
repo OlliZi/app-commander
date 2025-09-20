@@ -1,13 +1,10 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.domain.ScriptsRepository
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 import java.io.File
 
-@OptIn(ExperimentalSerializationApi::class)
 @Single
 class ScriptsRepositoryImpl(
     private val fileDirectory: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
@@ -20,7 +17,6 @@ class ScriptsRepositoryImpl(
         if (!jsonFile.exists()) {
             val prettyJson = Json {
                 prettyPrint = true
-                prettyPrintIndent = "    "
             }
             jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
         }

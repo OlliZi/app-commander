@@ -1,6 +1,7 @@
-# app-commander
+# What is the "App-Commander"?
 
-App-Commander: Execute your custom scripts for your apps on multiple devices.
+App-Commander: Your programmable multi-device execution helper. Execute scripts for your apps on
+multiple devices.
 This is a Kotlin Multiplatform project targeting Desktop (JVM). Android and iOS dont make sense but
 is still maybe possible in future.
 
@@ -9,6 +10,7 @@ is still maybe possible in future.
 - Welcome-screen
 - Script-screen
 - Settings-screen
+- Logging-Section
 - Save user preferences
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
@@ -19,13 +21,14 @@ is still maybe possible in future.
 
 - Fix detekt
 - Integrate ktlint
-- Unit-Tests for PreferencesRepositoryImpl
 - UI-tests
+- Screenshot testing
 - Theming (light and dark)
 - Code coverage
 - Terminal screen
-- Log screen
-- Unit-test for appended device id in ExecuteScriptUseCase + TrackScriptsFileChangesUseCaseTest
+- Enter new scripts screen
+- Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
+  TrackScriptsFileChangesUseCaseTest
 
 # Installation/Run
 
