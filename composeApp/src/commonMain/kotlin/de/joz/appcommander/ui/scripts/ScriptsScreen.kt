@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -111,12 +112,13 @@ internal fun ScriptsContent(
         },
     ) { paddingValues ->
         Column(
-            Modifier.fillMaxSize().padding(paddingValues)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            Modifier.fillMaxSize().padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ConnectedDevices(
                 connectedDevices = uiState.connectedDevices,
+                modifier = paddingInline,
                 onDeviceSelect = onDeviceSelect,
                 onRefreshDevices = onRefreshDevices,
             )
@@ -126,7 +128,7 @@ internal fun ScriptsContent(
             ScriptsSection(
                 scripts = uiState.scripts,
                 isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).then(paddingInline),
                 onExecuteScript = onExecuteScript,
                 onExpand = onExpand,
             )
@@ -144,9 +146,10 @@ private fun ConnectedDevices(
     connectedDevices: List<ScriptsViewModel.Device>,
     onDeviceSelect: (ScriptsViewModel.Device) -> Unit,
     onRefreshDevices: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
@@ -278,16 +281,16 @@ private fun LoggingSection(
     var isExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier.background(
-            Color.LightGray.lighter(factor = 1.1f),
-            shape = RoundedCornerShape(10.dp)
+            Color.LightGray,
         ).padding(8.dp),
     ) {
         Row(
+            modifier = Modifier.height(36.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(Res.string.scripts_logging_section_title),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             )
             IconButton(
                 onClick = onClearLogging,
