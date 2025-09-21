@@ -32,7 +32,7 @@ class ScriptsViewModelTest {
 
     private val navControllerMock: NavController = mockk(relaxed = true)
     private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
-    private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk()
+    private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
     private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
     private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
     private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
@@ -184,9 +184,33 @@ class ScriptsViewModelTest {
     }
 
     @Test
+    fun `should execute script when event 'OnExecuteScriptText' is fired`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onEvent(
+            event = ScriptsViewModel.Event.OnExecuteScriptText(
+                script = "echo",
+                platform = ScriptsRepository.Platform.ANDROID,
+            )
+        )
+        runCurrent()
+
+        coVerify {
+            executeScriptUseCaseMock(
+                script = ScriptsRepository.Script(
+                    label = "entered by terminal script",
+                    script = "echo",
+                    platform = ScriptsRepository.Platform.ANDROID,
+                ),
+                selectedDevice = "p7"
+            )
+        }
+    }
+
+    @Test
     fun `should add index to log`() = runTest {
         every { getLoggingUseCaseMock() } returns flowOf(listOf("foo", "bar"))
-        
+
         val viewModel = createViewModel()
 
         assertEquals(listOf("1. foo", "2. bar"), viewModel.uiState.value.logging)
