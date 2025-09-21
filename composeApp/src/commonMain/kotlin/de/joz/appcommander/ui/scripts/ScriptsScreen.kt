@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
+import compose.icons.feathericons.ArrowRight
 import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Heart
 import compose.icons.feathericons.Settings
@@ -64,21 +66,38 @@ fun ScriptsScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    ScriptsContent(uiState = uiState.value, onDeviceSelect = { device ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-    }, onRefreshDevices = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-    }, onNavigateToSettings = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
-    }, onExecuteScript = { script ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
-    }, onExpand = { script ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
-    }, onOpenScriptFile = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
-    }, onClearLogging = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
-    })
+    ScriptsContent(
+        uiState = uiState.value,
+        onDeviceSelect = { device ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
+        },
+        onRefreshDevices = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
+        },
+        onNavigateToSettings = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
+        },
+        onExecuteScript = { script ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
+        },
+        onExpand = { script ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
+        },
+        onOpenScriptFile = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
+        },
+        onClearLogging = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
+        },
+        onExecuteScriptText = {
+            viewModel.onEvent(
+                event = ScriptsViewModel.Event.OnExecuteScriptText(
+                    script = it,
+                    platform = ScriptsRepository.Platform.ANDROID
+                ),
+            )
+        },
+    )
 }
 
 @Composable
@@ -91,6 +110,7 @@ internal fun ScriptsContent(
     onExpand: (Script) -> Unit,
     onOpenScriptFile: () -> Unit,
     onClearLogging: () -> Unit,
+    onExecuteScriptText: (String) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -131,6 +151,10 @@ internal fun ScriptsContent(
                 modifier = Modifier.weight(1f).then(paddingInline),
                 onExecuteScript = onExecuteScript,
                 onExpand = onExpand,
+            )
+
+            TerminalSection(
+                onExecuteScriptText = onExecuteScriptText,
             )
 
             LoggingSection(
@@ -321,6 +345,41 @@ private fun LoggingSection(
 }
 
 @Composable
+private fun TerminalSection(
+    onExecuteScriptText: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var inputValue by remember { mutableStateOf("adb devices") }
+    Column(
+        modifier = Modifier.background(
+            Color.LightGray,
+        ).padding(8.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+
+            TextField(
+                value = inputValue,
+                modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+                onValueChange = {
+                    inputValue = it
+                },
+            )
+            // toggle BUTt
+            IconButton(
+                onClick = { onExecuteScriptText(inputValue) },
+            ) {
+                Icon(
+                    imageVector = FeatherIcons.ArrowRight,
+                    contentDescription = "Execute script text",
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun ExpandButton(
     isExpanded: Boolean,
     onClick: () -> Unit,
@@ -389,6 +448,7 @@ private fun PreviewScriptScreen() {
             ), logging = listOf("log 1", "log 2", "log 3")
         ),
         onExecuteScript = {},
+        onExecuteScriptText = {},
         onRefreshDevices = {},
         onNavigateToSettings = {},
         onExpand = {},

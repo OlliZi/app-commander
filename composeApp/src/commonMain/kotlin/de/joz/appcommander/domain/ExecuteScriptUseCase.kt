@@ -15,7 +15,7 @@ class ExecuteScriptUseCase(
         selectedDevice: String = "",
     ): Result {
         val scriptForSelectedDevice = injectDeviceConfig(script, selectedDevice)
-        addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice' ...")
+        addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice'.")
 
         return runCatching {
             Result.Success(
@@ -24,9 +24,6 @@ class ExecuteScriptUseCase(
                     .start()
                     .inputReader()
                     .readText()
-                    .also {
-                        addLoggingUseCase("Script executed: '$scriptForSelectedDevice'.")
-                    }
             )
         }.getOrElse {
             val error = it.message ?: "Unknown error"

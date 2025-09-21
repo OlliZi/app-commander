@@ -1,18 +1,21 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import kotlinx.serialization.json.Json
+import okio.FileNotFoundException
 import org.koin.core.annotation.Single
 import java.io.File
 
 @Single
 class ScriptsRepositoryImpl(
-    private val fileDirectory: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
+    private val addLoggingUseCase: AddLoggingUseCase,
+    private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
     private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
 
     override fun getScripts(): List<ScriptsRepository.Script> {
-        val jsonFile = File(fileDirectory)
+        val jsonFile = File(scriptFile)
 
         if (!jsonFile.exists()) {
             val prettyJson = Json {
@@ -28,10 +31,13 @@ class ScriptsRepositoryImpl(
 
     override fun openScriptFile() {
         runCatching {
-            processBuilder.command("open", fileDirectory)
+            if (File(scriptFile).exists().not()) {
+                throw FileNotFoundException(scriptFile)
+            }
+            processBuilder.command("open", scriptFile)
             processBuilder.start()
         }.onFailure {
-            println("Cannot open script file '$fileDirectory'. (Error: ${it.message})")
+            addLoggingUseCase("Cannot open script file '$scriptFile'. (Error: ${it.message})")
         }
     }
 

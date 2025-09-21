@@ -1,6 +1,7 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,6 +15,7 @@ import kotlin.test.assertTrue
 
 class ScriptsRepositoryImplTest {
 
+    private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
     private val testFile = File("./build", "test.json")
 
     @AfterTest
@@ -24,7 +26,8 @@ class ScriptsRepositoryImplTest {
     @Test
     fun `should return default scripts when file does not exist`() = runTest {
         val repository = ScriptsRepositoryImpl(
-            fileDirectory = testFile.absolutePath
+            scriptFile = testFile.absolutePath,
+            addLoggingUseCase = addLoggingUseCaseMock,
         )
 
         assertFalse(testFile.exists())
@@ -52,7 +55,6 @@ class ScriptsRepositoryImplTest {
     fun `should return custom scripts when file contains custom scripts`() = runTest {
         val prettyJson = Json {
             prettyPrint = true
-            prettyPrintIndent = "    "
         }
         testFile.writeText(
             text = prettyJson.encodeToString(
@@ -72,7 +74,8 @@ class ScriptsRepositoryImplTest {
         )
 
         val repository = ScriptsRepositoryImpl(
-            fileDirectory = testFile.absolutePath
+            scriptFile = testFile.absolutePath,
+            addLoggingUseCase = addLoggingUseCaseMock,
         )
 
         assertTrue(testFile.exists())
@@ -100,14 +103,32 @@ class ScriptsRepositoryImplTest {
     fun `should open script`() = runTest {
         val processBuilder: ProcessBuilder = mockk(relaxed = true)
 
+        testFile.writeText("")
+        
         ScriptsRepositoryImpl(
-            fileDirectory = testFile.absolutePath,
+            scriptFile = testFile.absolutePath,
             processBuilder = processBuilder,
+            addLoggingUseCase = addLoggingUseCaseMock,
         ).openScriptFile()
 
         coVerify {
             processBuilder.command("open", testFile.absolutePath)
             processBuilder.start()
+        }
+    }
+
+    @Test
+    fun `should log error when opening script fails`() = runTest {
+        val processBuilder: ProcessBuilder = mockk(relaxed = true)
+
+        ScriptsRepositoryImpl(
+            scriptFile = "unknown file",
+            processBuilder = processBuilder,
+            addLoggingUseCase = addLoggingUseCaseMock,
+        ).openScriptFile()
+
+        coVerify {
+            addLoggingUseCaseMock("Cannot open script file 'unknown file'. (Error: unknown file)")
         }
     }
 }
