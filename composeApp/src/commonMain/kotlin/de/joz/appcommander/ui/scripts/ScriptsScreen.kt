@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,7 @@ import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
+import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
 import de.joz.appcommander.ui.misc.TitleBar
@@ -133,7 +135,7 @@ internal fun ScriptsContent(
     ) { paddingValues ->
         Column(
             Modifier.fillMaxSize().padding(paddingValues),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ConnectedDevices(
@@ -347,32 +349,55 @@ private fun LoggingSection(
 @Composable
 private fun TerminalSection(
     onExecuteScriptText: (String) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    var inputValue by remember { mutableStateOf("adb devices") }
+    var inputValue by remember { mutableStateOf("") }
+    var isExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.background(
             Color.LightGray,
         ).padding(8.dp),
     ) {
         Row(
+            modifier = Modifier.height(36.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
-            TextField(
-                value = inputValue,
-                modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
-                onValueChange = {
-                    inputValue = it
-                },
+            Text(
+                text = stringResource(Res.string.scripts_terminal_section_title),
+                modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
             )
-            // toggle BUTt
-            IconButton(
-                onClick = { onExecuteScriptText(inputValue) },
+            ExpandButton(
+                isExpanded = isExpanded,
+                onClick = { isExpanded = !isExpanded },
+            )
+        }
+        AnimatedVisibility(visible = isExpanded) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(
-                    imageVector = FeatherIcons.ArrowRight,
-                    contentDescription = "Execute script text",
+                TextField(
+                    value = inputValue,
+                    modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                    ),
+                    onValueChange = {
+                        inputValue = it
+                    },
+                    placeholder = {
+                        Text(text = "adb devices")
+                    },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { onExecuteScriptText(inputValue) },
+                        ) {
+                            Icon(
+                                imageVector = FeatherIcons.ArrowRight,
+                                contentDescription = "Execute script text",
+                            )
+                        }
+                    },
                 )
             }
         }
