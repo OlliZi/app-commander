@@ -15,8 +15,8 @@ interface ScriptsRepository {
         val platform: Platform,
     )
 
-    enum class Platform {
-        ANDROID,
-        IOS,
+    enum class Platform(val label: String) {
+        ANDROID("Android"),
+        IOS("iOS"),
     }
 }

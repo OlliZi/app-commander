@@ -39,10 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.ArrowDown
-import compose.icons.feathericons.ArrowRight
-import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Heart
+import compose.icons.feathericons.Play
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
@@ -56,6 +54,8 @@ import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
+import de.joz.appcommander.ui.misc.ExpandButton
+import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
@@ -352,6 +352,7 @@ private fun TerminalSection(
 ) {
     var inputValue by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
+    var selectedPlatform by remember { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 
     Column(
         modifier = Modifier.background(
@@ -372,52 +373,53 @@ private fun TerminalSection(
             )
         }
         AnimatedVisibility(visible = isExpanded) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
+                modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
             ) {
-                TextField(
-                    value = inputValue,
-                    modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                    ),
-                    onValueChange = {
-                        inputValue = it
-                    },
-                    placeholder = {
-                        Text(text = "adb devices")
-                    },
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { onExecuteScriptText(inputValue) },
-                        ) {
-                            Icon(
-                                imageVector = FeatherIcons.ArrowRight,
-                                contentDescription = "Execute script text",
-                            )
-                        }
-                    },
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    TextField(
+                        value = inputValue,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                        ),
+                        onValueChange = {
+                            inputValue = it
+                        },
+                        placeholder = {
+                            Text(text = "adb devices")
+                        },
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { onExecuteScriptText(inputValue) },
+                            ) {
+                                Icon(
+                                    imageVector = FeatherIcons.Play,
+                                    contentDescription = "Execute script text",
+                                )
+                            }
+                        },
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    ScriptsRepository.Platform.entries.forEach { platform ->
+                        LabelledSwitch(
+                            label = platform.label,
+                            checked = selectedPlatform == platform,
+                            onCheckedChange = {
+                                selectedPlatform = platform
+                            }
+                        )
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun ExpandButton(
-    isExpanded: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    IconButton(
-        modifier = modifier,
-        onClick = onClick,
-    ) {
-        Icon(
-            imageVector = if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown,
-            contentDescription = "Expand button",
-        )
     }
 }
 

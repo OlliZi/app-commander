@@ -5,9 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -25,30 +22,28 @@ fun LabelledSwitch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Row(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    role = Role.Switch,
-                    onClick = {
-                        onCheckedChange(!checked)
-                    },
-                ),
+        modifier = modifier
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                role = Role.Switch,
+                onClick = {
+                    onCheckedChange(!checked)
+                },
+            ),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = label,
+            modifier = textModifier,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.fillMaxWidth(0.8f),
         )
-        Spacer(
-            modifier = Modifier.padding(start = 8.dp).weight(1f),
-        )
+
         Switch(
             modifier = Modifier.align(Alignment.CenterVertically),
             checked = checked,

@@ -81,6 +81,7 @@ internal fun SettingsContent(
         ) {
             uiState.togglePreferences.forEach { toggleItem ->
                 LabelledSwitch(
+                    textModifier = Modifier.weight(1f),
                     label = stringResource(Res.string.settings_preference_show_welcome_screen),
                     checked = toggleItem.isChecked,
                     onCheckedChange = { isChecked ->
