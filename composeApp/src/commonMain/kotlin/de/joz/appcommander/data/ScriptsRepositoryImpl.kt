@@ -13,19 +13,20 @@ class ScriptsRepositoryImpl(
     private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
     private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
+    private val prettyJson = Json {
+        prettyPrint = true
+        ignoreUnknownKeys = true
+    }
 
     override fun getScripts(): List<ScriptsRepository.Script> {
         val jsonFile = File(scriptFile)
 
         if (!jsonFile.exists()) {
-            val prettyJson = Json {
-                prettyPrint = true
-            }
             jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
         }
 
         return runCatching {
-            Json.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
+            prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
         }.getOrDefault(DEFAULT_SCRIPTS)
     }
 
