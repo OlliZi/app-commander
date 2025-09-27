@@ -29,7 +29,7 @@ is still maybe possible in future.
 - Enter new scripts screen
 - Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
   TrackScriptsFileChangesUseCaseTest
-- use other test lib (droidcon)
+- use other test lib (droidcon) https://github.com/lupuuss/Mokkery
 - Open-Icons für Logging and Terminal unten rechts?
 
 # Installation/Run

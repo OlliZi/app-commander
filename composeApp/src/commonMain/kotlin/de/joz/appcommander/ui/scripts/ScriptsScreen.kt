@@ -320,13 +320,15 @@ private fun LoggingSection(
                 text = stringResource(Res.string.scripts_logging_section_title),
                 modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             )
-            IconButton(
-                onClick = onClearLogging,
-            ) {
-                Icon(
-                    imageVector = FeatherIcons.Trash,
-                    contentDescription = "Clear logging",
-                )
+            AnimatedVisibility(visible = isExpanded) {
+                IconButton(
+                    onClick = onClearLogging,
+                ) {
+                    Icon(
+                        imageVector = FeatherIcons.Trash,
+                        contentDescription = "Clear logging",
+                    )
+                }
             }
             ExpandButton(
                 modifier = Modifier.testTag("expand_button_logging"),
