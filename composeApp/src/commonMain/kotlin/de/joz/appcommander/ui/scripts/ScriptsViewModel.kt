@@ -71,6 +71,11 @@ class ScriptsViewModel(
                 Event.OnClearLogging -> onClearLogging()
                 is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
                 is Event.OnExecuteScript -> onExecuteScript(script = event.script)
+                is Event.OnExecuteScriptText -> onExecuteScriptText(
+                    script = event.script,
+                    platform = event.platform,
+                )
+
                 is Event.OnExpandScript -> onExpandScript(script = event.script)
             }
         }
@@ -128,8 +133,24 @@ class ScriptsViewModel(
             _uiState.value.connectedDevices.filter {
                 it.isSelected
             }.forEach { device ->
-                println(device)
                 executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
+            }
+        }
+    }
+
+    private fun onExecuteScriptText(script: String, platform: ScriptsRepository.Platform) {
+        viewModelScope.launch(dispatcherIO) {
+            _uiState.value.connectedDevices.filter {
+                it.isSelected
+            }.forEach { device ->
+                executeScriptUseCase(
+                    script = ScriptsRepository.Script(
+                        label = "entered by terminal script",
+                        script = script,
+                        platform = platform,
+                    ),
+                    selectedDevice = device.id,
+                )
             }
         }
     }
@@ -167,6 +188,11 @@ class ScriptsViewModel(
         data object OnClearLogging : Event
         data class OnDeviceSelected(val device: Device) : Event
         data class OnExecuteScript(val script: Script) : Event
+        data class OnExecuteScriptText(
+            val script: String,
+            val platform: ScriptsRepository.Platform
+        ) : Event
+
         data class OnExpandScript(val script: Script) : Event
     }
 

@@ -9,8 +9,9 @@ is still maybe possible in future.
 
 - Welcome-screen
 - Script-screen
+- Terminal-screen
+- Logging-section
 - Settings-screen
-- Logging-Section
 - Save user preferences
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
@@ -25,10 +26,11 @@ is still maybe possible in future.
 - Screenshot testing
 - Theming (light and dark)
 - Code coverage
-- Terminal screen
 - Enter new scripts screen
 - Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
   TrackScriptsFileChangesUseCaseTest
+- use other test lib (droidcon) https://github.com/lupuuss/Mokkery
+- Open-Icons für Logging and Terminal unten rechts?
 
 # Installation/Run
 

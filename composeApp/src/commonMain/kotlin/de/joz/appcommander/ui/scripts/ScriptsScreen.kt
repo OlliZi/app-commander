@@ -23,6 +23,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,14 +34,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.ArrowDown
-import compose.icons.feathericons.ArrowUp
 import compose.icons.feathericons.Heart
+import compose.icons.feathericons.Play
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
@@ -50,8 +52,12 @@ import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
+import de.joz.appcommander.resources.scripts_terminal_placeholder
+import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
+import de.joz.appcommander.ui.misc.ExpandButton
+import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
@@ -64,21 +70,38 @@ fun ScriptsScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    ScriptsContent(uiState = uiState.value, onDeviceSelect = { device ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-    }, onRefreshDevices = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-    }, onNavigateToSettings = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
-    }, onExecuteScript = { script ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
-    }, onExpand = { script ->
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
-    }, onOpenScriptFile = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
-    }, onClearLogging = {
-        viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
-    })
+    ScriptsContent(
+        uiState = uiState.value,
+        onDeviceSelect = { device ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
+        },
+        onRefreshDevices = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
+        },
+        onNavigateToSettings = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
+        },
+        onExecuteScript = { script ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
+        },
+        onExpand = { script ->
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
+        },
+        onOpenScriptFile = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
+        },
+        onClearLogging = {
+            viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
+        },
+        onExecuteScriptText = { scriptText, platform ->
+            viewModel.onEvent(
+                event = ScriptsViewModel.Event.OnExecuteScriptText(
+                    script = scriptText,
+                    platform = platform,
+                ),
+            )
+        },
+    )
 }
 
 @Composable
@@ -91,6 +114,7 @@ internal fun ScriptsContent(
     onExpand: (Script) -> Unit,
     onOpenScriptFile: () -> Unit,
     onClearLogging: () -> Unit,
+    onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -113,7 +137,7 @@ internal fun ScriptsContent(
     ) { paddingValues ->
         Column(
             Modifier.fillMaxSize().padding(paddingValues),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ConnectedDevices(
@@ -131,6 +155,10 @@ internal fun ScriptsContent(
                 modifier = Modifier.weight(1f).then(paddingInline),
                 onExecuteScript = onExecuteScript,
                 onExpand = onExpand,
+            )
+
+            TerminalSection(
+                onExecuteScriptText = onExecuteScriptText,
             )
 
             LoggingSection(
@@ -292,15 +320,18 @@ private fun LoggingSection(
                 text = stringResource(Res.string.scripts_logging_section_title),
                 modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
             )
-            IconButton(
-                onClick = onClearLogging,
-            ) {
-                Icon(
-                    imageVector = FeatherIcons.Trash,
-                    contentDescription = "Clear logging",
-                )
+            AnimatedVisibility(visible = isExpanded) {
+                IconButton(
+                    onClick = onClearLogging,
+                ) {
+                    Icon(
+                        imageVector = FeatherIcons.Trash,
+                        contentDescription = "Clear logging",
+                    )
+                }
             }
             ExpandButton(
+                modifier = Modifier.testTag("expand_button_logging"),
                 isExpanded = isExpanded,
                 onClick = { isExpanded = !isExpanded },
             )
@@ -321,19 +352,84 @@ private fun LoggingSection(
 }
 
 @Composable
-private fun ExpandButton(
-    isExpanded: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+private fun TerminalSection(
+    onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
-    IconButton(
-        modifier = modifier,
-        onClick = onClick,
+    var inputValue by remember { mutableStateOf("") }
+    var isExpanded by remember { mutableStateOf(false) }
+    var selectedPlatform by remember { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
+
+    Column(
+        modifier = Modifier.background(
+            Color.LightGray,
+        ).padding(8.dp),
     ) {
-        Icon(
-            imageVector = if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown,
-            contentDescription = "Expand button",
-        )
+        Row(
+            modifier = Modifier.height(36.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(Res.string.scripts_terminal_section_title),
+                modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
+            )
+            ExpandButton(
+                isExpanded = isExpanded,
+                modifier = Modifier.testTag("expand_button_terminal"),
+                onClick = { isExpanded = !isExpanded },
+            )
+        }
+        AnimatedVisibility(visible = isExpanded) {
+            Column(
+                modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    TextField(
+                        value = inputValue,
+                        modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
+                        onValueChange = {
+                            inputValue = it
+                        },
+                        placeholder = {
+                            Text(text = stringResource(Res.string.scripts_terminal_placeholder))
+                        },
+                        trailingIcon = {
+                            IconButton(
+                                onClick = {
+                                    onExecuteScriptText(inputValue, selectedPlatform)
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = FeatherIcons.Play,
+                                    contentDescription = "Execute script text",
+                                )
+                            }
+                        },
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    ScriptsRepository.Platform.entries.forEach { platform ->
+                        LabelledSwitch(
+                            label = platform.label,
+                            checked = selectedPlatform == platform,
+                            onCheckedChange = {
+                                selectedPlatform = platform
+                            }
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -389,6 +485,7 @@ private fun PreviewScriptScreen() {
             ), logging = listOf("log 1", "log 2", "log 3")
         ),
         onExecuteScript = {},
+        onExecuteScriptText = { _, _ -> },
         onRefreshDevices = {},
         onNavigateToSettings = {},
         onExpand = {},

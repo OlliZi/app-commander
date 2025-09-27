@@ -27,8 +27,7 @@ class ExecuteScriptUseCaseTest {
 
         assertTrue(result is ExecuteScriptUseCase.Result.Success)
         assertEquals("foo\n", result.output)
-        verify { addLoggingUseCaseMock.invoke("Execute script: 'echo foo' on device 'Pixel7' ...") }
-        verify { addLoggingUseCaseMock.invoke("Script executed: 'echo foo'.") }
+        verify { addLoggingUseCaseMock.invoke("Execute script: 'echo foo' on device 'Pixel7'.") }
     }
 
     @Test
