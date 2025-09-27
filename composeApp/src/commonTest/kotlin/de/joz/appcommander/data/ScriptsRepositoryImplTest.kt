@@ -47,7 +47,8 @@ class ScriptsRepositoryImplTest {
                     script = "adb shell cmd uimode night no",
                     platform = ScriptsRepository.Platform.ANDROID,
                 )
-            ), scripts
+            ),
+            scripts,
         )
     }
 
@@ -95,16 +96,64 @@ class ScriptsRepositoryImplTest {
                     script = "bar",
                     platform = ScriptsRepository.Platform.IOS,
                 )
-            ), scripts
+            ),
+            scripts,
         )
     }
+
+    @Test
+    fun `should return custom scripts when file contains custom scripts but with unknown fields`() =
+        runTest {
+            testFile.writeText(
+                text = "[\n" +
+                        "    {\n" +
+                        "        \"unknown\": \"null\",\n" +
+                        "        \"label\": \"my script\",\n" +
+                        "        \"script\": \"foo\",\n" +
+                        "        \"platform\": \"ANDROID\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"unknown\": \"\",\n" +
+                        "        \"label\": \"my script abc\",\n" +
+                        "        \"script\": \"bar\",\n" +
+                        "        \"platform\": \"IOS\"\n" +
+                        "    }\n" +
+                        "]"
+            )
+
+            val repository = ScriptsRepositoryImpl(
+                scriptFile = testFile.absolutePath,
+                addLoggingUseCase = addLoggingUseCaseMock,
+            )
+
+            assertTrue(testFile.exists())
+
+            val scripts = repository.getScripts()
+
+            assertTrue(testFile.exists())
+            assertEquals(
+                listOf(
+                    ScriptsRepository.Script(
+                        label = "my script",
+                        script = "foo",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    ),
+                    ScriptsRepository.Script(
+                        label = "my script abc",
+                        script = "bar",
+                        platform = ScriptsRepository.Platform.IOS,
+                    )
+                ),
+                scripts
+            )
+        }
 
     @Test
     fun `should open script`() = runTest {
         val processBuilder: ProcessBuilder = mockk(relaxed = true)
 
         testFile.writeText("")
-        
+
         ScriptsRepositoryImpl(
             scriptFile = testFile.absolutePath,
             processBuilder = processBuilder,
