@@ -391,6 +391,8 @@ private fun TerminalSection(
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
                         ),
                         onValueChange = {
                             inputValue = it
