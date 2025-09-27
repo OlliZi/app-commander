@@ -5,6 +5,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -38,8 +39,8 @@ class ScriptsScreenTest {
                 )
             )
 
-            onNodeWithContentDescription(
-                label = "Expand button",
+            onNodeWithTag(
+                testTag = "expand_button_logging",
             ).assertIsDisplayed().performClick()
 
             onNodeWithText("Log abc").assertIsDisplayed()
@@ -77,15 +78,15 @@ class ScriptsScreenTest {
                 )
             )
 
-            onNodeWithContentDescription(
-                label = "Expand button",
+            onNodeWithTag(
+                testTag = "expand_button_logging",
             ).assertIsDisplayed().performClick()
 
             onNodeWithText("Log abc").assertIsDisplayed().assertExists()
             onNodeWithText("Log 123").assertIsDisplayed().assertExists()
 
-            onNodeWithContentDescription(
-                label = "Expand button",
+            onNodeWithTag(
+                testTag = "expand_button_logging",
             ).assertIsDisplayed().performClick()
 
             onNodeWithText("Log abc").assertDoesNotExist()

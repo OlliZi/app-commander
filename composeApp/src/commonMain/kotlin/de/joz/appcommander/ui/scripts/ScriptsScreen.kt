@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -327,6 +328,7 @@ private fun LoggingSection(
                 )
             }
             ExpandButton(
+                modifier = Modifier.testTag("expand_button_logging"),
                 isExpanded = isExpanded,
                 onClick = { isExpanded = !isExpanded },
             )
@@ -369,6 +371,7 @@ private fun TerminalSection(
             )
             ExpandButton(
                 isExpanded = isExpanded,
+                modifier = Modifier.testTag("expand_button_terminal"),
                 onClick = { isExpanded = !isExpanded },
             )
         }
