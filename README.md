@@ -15,8 +15,6 @@ is still maybe possible in future.
 - Save user preferences
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
-- Code quality (UI-tests, Unit-tests, detekt)
-- Previews for all screens and elements
 
 # TODOs
 
@@ -46,3 +44,5 @@ is still maybe possible in future.
 - Preferences by datastore
 - Integrate library update tooling
 - Integrate detekt plugin + baseline
+- Code quality (UI-tests, Unit-tests, detekt)
+- Previews for all screens and elements
