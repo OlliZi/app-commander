@@ -8,7 +8,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
+import de.joz.appcommander.domain.ScriptsRepository
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,6 +28,7 @@ class ScriptsScreenTest {
             onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
             onNodeWithText("Connect your devices over USB and click refresh.").assertIsDisplayed()
             onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
+            onNodeWithText("Terminal").assertIsDisplayed()
             onNodeWithText("Logging").assertIsDisplayed()
         }
     }
@@ -150,11 +153,64 @@ class ScriptsScreenTest {
         }
     }
 
+    @Test
+    fun `should show terminal screen when open button is clicked`() {
+        runComposeUiTest {
+            setTestContent(
+                uiState = ScriptsViewModel.UiState(),
+                onOpenScriptFile = {},
+            )
+
+            onNodeWithTag(
+                testTag = "expand_button_terminal",
+            ).assertIsDisplayed().performClick()
+
+            onNodeWithText("adb devices").assertIsDisplayed()
+            onNodeWithContentDescription("Execute script text").assertIsDisplayed()
+
+            ScriptsRepository.Platform.entries.forEach {
+                onNodeWithText(it.label).assertIsDisplayed()
+            }
+        }
+    }
+
+    @Test
+    fun `should execute script when executed in terminal`() {
+        runComposeUiTest {
+            var selectedScriptText = ""
+            var selectedPlatform: ScriptsRepository.Platform? = null
+            setTestContent(
+                uiState = ScriptsViewModel.UiState(),
+                onExecuteScriptText = { scriptText, platform ->
+                    selectedScriptText = scriptText
+                    selectedPlatform = platform
+                },
+            )
+
+            onNodeWithTag(
+                testTag = "expand_button_terminal",
+            ).assertIsDisplayed().performClick()
+
+            onNodeWithTag(testTag = "text_field_script_text").performTextInput(
+                "foo bar"
+            )
+
+            onNodeWithText(
+                text = ScriptsRepository.Platform.IOS.label,
+            ).assertIsDisplayed().performClick()
+
+            onNodeWithContentDescription(label = "Execute script text").performClick()
+
+            assertEquals("foo bar", selectedScriptText)
+            assertEquals(ScriptsRepository.Platform.IOS, selectedPlatform)
+        }
+    }
+
     private fun ComposeUiTest.setTestContent(
         uiState: ScriptsViewModel.UiState,
         onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},
         onExecuteScript: (ScriptsViewModel.Script) -> Unit = {},
-        onExecuteScriptText: (String) -> Unit = {},
+        onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit = { _, _ -> },
         onRefreshDevices: () -> Unit = {},
         onExpand: (ScriptsViewModel.Script) -> Unit = {},
         onNavigateToSettings: () -> Unit = {},

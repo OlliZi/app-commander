@@ -52,6 +52,7 @@ import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
+import de.joz.appcommander.resources.scripts_terminal_placeholder
 import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
@@ -92,11 +93,11 @@ fun ScriptsScreen(
         onClearLogging = {
             viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
         },
-        onExecuteScriptText = {
+        onExecuteScriptText = { scriptText, platform ->
             viewModel.onEvent(
                 event = ScriptsViewModel.Event.OnExecuteScriptText(
-                    script = it,
-                    platform = ScriptsRepository.Platform.ANDROID
+                    script = scriptText,
+                    platform = platform,
                 ),
             )
         },
@@ -113,7 +114,7 @@ internal fun ScriptsContent(
     onExpand: (Script) -> Unit,
     onOpenScriptFile: () -> Unit,
     onClearLogging: () -> Unit,
-    onExecuteScriptText: (String) -> Unit,
+    onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -350,7 +351,7 @@ private fun LoggingSection(
 
 @Composable
 private fun TerminalSection(
-    onExecuteScriptText: (String) -> Unit,
+    onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
     var inputValue by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
@@ -384,7 +385,7 @@ private fun TerminalSection(
                 ) {
                     TextField(
                         value = inputValue,
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
                             focusedContainerColor = Color.White,
@@ -393,11 +394,13 @@ private fun TerminalSection(
                             inputValue = it
                         },
                         placeholder = {
-                            Text(text = "adb devices")
+                            Text(text = stringResource(Res.string.scripts_terminal_placeholder))
                         },
                         trailingIcon = {
                             IconButton(
-                                onClick = { onExecuteScriptText(inputValue) },
+                                onClick = {
+                                    onExecuteScriptText(inputValue, selectedPlatform)
+                                },
                             ) {
                                 Icon(
                                     imageVector = FeatherIcons.Play,
@@ -478,7 +481,7 @@ private fun PreviewScriptScreen() {
             ), logging = listOf("log 1", "log 2", "log 3")
         ),
         onExecuteScript = {},
-        onExecuteScriptText = {},
+        onExecuteScriptText = { _, _ -> },
         onRefreshDevices = {},
         onNavigateToSettings = {},
         onExpand = {},
