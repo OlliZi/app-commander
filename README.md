@@ -12,6 +12,7 @@ is still maybe possible in future.
 - Terminal-screen
 - Logging-section
 - Settings-screen
+- Light and dark mode
 - Save user preferences
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
@@ -22,7 +23,6 @@ is still maybe possible in future.
 - Integrate ktlint
 - UI-tests
 - Screenshot testing
-- Theming (light and dark)
 - Code coverage
 - Enter new scripts screen
 - Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
