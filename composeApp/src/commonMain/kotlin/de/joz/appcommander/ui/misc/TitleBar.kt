@@ -32,6 +32,7 @@ fun TitleBar(
                 Icon(
                     imageVector = FeatherIcons.ArrowLeft,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -43,6 +44,7 @@ fun TitleBar(
                 Icon(
                     imageVector = actionItem.icon,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }

@@ -36,6 +36,7 @@ fun ExpandButton(
                 }
             },
             contentDescription = "Expand button",
+            tint = MaterialTheme.colorScheme.primary,
         )
     }
 }
