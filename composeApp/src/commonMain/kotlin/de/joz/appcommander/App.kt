@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.domain.GetStartDestinationUseCase
-import de.joz.appcommander.domain.ManageUiModeUseCase
+import de.joz.appcommander.domain.ManageUiSAppearanceUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
@@ -27,15 +27,15 @@ import org.koin.core.parameter.parametersOf
 fun App(
     navHostController: NavHostController = rememberNavController(),
     getStartDestination: GetStartDestinationUseCase = koinInject(),
-    manageUiModeUseCase: ManageUiModeUseCase = koinInject(),
+    manageUiSAppearanceUseCase: ManageUiSAppearanceUseCase = koinInject(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val uiMode = manageUiModeUseCase.uiModeType.collectAsStateWithLifecycle(
-        initialValue = ManageUiModeUseCase.DEFAULT_SYSTEM_UI_MODE,
+    val uiAppearanceType = manageUiSAppearanceUseCase.uiAppearanceType.collectAsStateWithLifecycle(
+        initialValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE,
     )
 
     AppCommanderTheme(
-        darkTheme = isDarkThemeEnabled(uiMode.value),
+        darkTheme = isDarkThemeEnabled(uiAppearanceType.value),
     ) {
         NavHost(
             navController = navHostController,
@@ -74,10 +74,10 @@ fun App(
 
 @Composable
 @ReadOnlyComposable
-private fun isDarkThemeEnabled(uiMode: ManageUiModeUseCase.UiMode): Boolean {
-    return when (uiMode) {
-        ManageUiModeUseCase.UiMode.DARK_MODE -> true
-        ManageUiModeUseCase.UiMode.LIGHT_MODE -> false
-        ManageUiModeUseCase.UiMode.SYSTEM_MODE -> isSystemInDarkTheme()
+private fun isDarkThemeEnabled(uiAppearance: ManageUiSAppearanceUseCase.UiAppearance): Boolean {
+    return when (uiAppearance) {
+        ManageUiSAppearanceUseCase.UiAppearance.DARK -> true
+        ManageUiSAppearanceUseCase.UiAppearance.LIGHT -> false
+        ManageUiSAppearanceUseCase.UiAppearance.SYSTEM -> isSystemInDarkTheme()
     }
 }

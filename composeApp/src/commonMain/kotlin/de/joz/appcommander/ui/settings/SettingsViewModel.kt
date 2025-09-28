@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.joz.appcommander.domain.GetPreferenceUseCase
-import de.joz.appcommander.domain.ManageUiModeUseCase
+import de.joz.appcommander.domain.ManageUiSAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
@@ -26,7 +26,7 @@ import org.koin.android.annotation.KoinViewModel
 class SettingsViewModel(
     private val savePreferenceUseCase: SavePreferenceUseCase,
     private val getPreferenceUseCase: GetPreferenceUseCase,
-    private val manageUiModeUseCase: ManageUiModeUseCase,
+    private val manageUiSAppearanceUseCase: ManageUiSAppearanceUseCase,
 ) : ViewModel(),
     UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
 
@@ -60,26 +60,35 @@ class SettingsViewModel(
                             key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
                         ),
                         SliderItem(
-                            maximum = ManageUiModeUseCase.UiMode.entries.maxOf { it.optionIndex }
+                            maximum = ManageUiSAppearanceUseCase.UiAppearance.entries.maxOf { it.optionIndex }
                                 .toFloat(),
-                            minimum = ManageUiModeUseCase.UiMode.entries.minOf { it.optionIndex }
+                            minimum = ManageUiSAppearanceUseCase.UiAppearance.entries.minOf { it.optionIndex }
                                 .toFloat(),
                             steps = 1,
                             sliderValue = getPreferenceUseCase.get(
-                                key = ManageUiModeUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                                defaultValue = ManageUiModeUseCase.DEFAULT_SYSTEM_UI_MODE.optionIndex,
+                                key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                                defaultValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
                             ).toFloat(),
                             label = Res.string.settings_preference_ui_appearance_label,
-                            key = ManageUiModeUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                            key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
                             labelValue = { sliderValue ->
-                                val uiMode = ManageUiModeUseCase.UiMode.entries.firstOrNull {
-                                    it.optionIndex == sliderValue.toInt()
-                                } ?: ManageUiModeUseCase.DEFAULT_SYSTEM_UI_MODE
+                                val uiAppearance =
+                                    ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
+                                        it.optionIndex == sliderValue.toInt()
+                                    } ?: ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
 
-                                when (uiMode) {
-                                    ManageUiModeUseCase.UiMode.SYSTEM_MODE -> stringResource(Res.string.settings_preference_ui_appearance_system)
-                                    ManageUiModeUseCase.UiMode.DARK_MODE -> stringResource(Res.string.settings_preference_ui_appearance_dark)
-                                    ManageUiModeUseCase.UiMode.LIGHT_MODE -> stringResource(Res.string.settings_preference_ui_appearance_light)
+                                when (uiAppearance) {
+                                    ManageUiSAppearanceUseCase.UiAppearance.SYSTEM -> stringResource(
+                                        Res.string.settings_preference_ui_appearance_system
+                                    )
+
+                                    ManageUiSAppearanceUseCase.UiAppearance.DARK -> stringResource(
+                                        Res.string.settings_preference_ui_appearance_dark
+                                    )
+
+                                    ManageUiSAppearanceUseCase.UiAppearance.LIGHT -> stringResource(
+                                        Res.string.settings_preference_ui_appearance_light
+                                    )
                                 }
                             }
                         ),
@@ -128,11 +137,11 @@ class SettingsViewModel(
             )
         }
 
-        if (event.sliderItem.key == ManageUiModeUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
-            manageUiModeUseCase(
-                ManageUiModeUseCase.UiMode.entries.firstOrNull {
+        if (event.sliderItem.key == ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+            manageUiSAppearanceUseCase(
+                ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
                     it.optionIndex == event.value.toInt()
-                } ?: ManageUiModeUseCase.UiMode.SYSTEM_MODE
+                } ?: ManageUiSAppearanceUseCase.UiAppearance.SYSTEM
             )
         } else {
             savePreferenceUseCase(event.sliderItem.key, event.value.toInt())
