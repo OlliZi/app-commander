@@ -20,7 +20,7 @@ fun ExpandButton(
     isExpanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    direction: ExpandButtonDirection = ExpandButtonDirection.BOTTOM_TO_TOP
+    direction: ExpandButtonDirection = ExpandButtonDirection.BOTTOM_TO_TOP,
 ) {
     IconButton(
         modifier = modifier,
