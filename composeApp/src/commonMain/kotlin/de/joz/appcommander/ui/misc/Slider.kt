@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.ui.settings.SettingsViewModel
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -43,8 +44,34 @@ fun Slider(
 
 @Preview
 @Composable
-private fun PreviewSlider() {
-    MaterialTheme {
+private fun PreviewSlider_Dark() {
+    AppCommanderTheme(
+        darkTheme = true
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Slider(
+                sliderItem = SettingsViewModel.SliderItem(
+                    value = 5f,
+                    maximum = 10f,
+                    minimum = 0f,
+                    steps = 20,
+                    label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                    key = "",
+                ),
+                onValueChange = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSlider_Light() {
+    AppCommanderTheme(
+        darkTheme = false
+    ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -36,7 +37,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -205,14 +205,9 @@ private fun ConnectedDevices(
                         onDeviceSelect(device)
                     },
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Text(
-                            text = device.label,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
+                    Text(
+                        text = device.label,
+                    )
                 }
             }
         }
@@ -257,6 +252,12 @@ private fun ScriptsSection(
                             )
                         }
                         ExpandButton(
+                            modifier = Modifier.then(
+                                if (isAtMinimumOneDeviceSelected) Modifier.background(
+                                    Color.White,
+                                    CircleShape
+                                ) else Modifier
+                            ),
                             isExpanded = true,
                             onClick = { onExpand(script) },
                         )
@@ -283,6 +284,12 @@ private fun ScriptsSection(
                             style = MaterialTheme.typography.bodySmall,
                         )
                         ExpandButton(
+                            modifier = Modifier.then(
+                                if (isAtMinimumOneDeviceSelected) Modifier.background(
+                                    Color.White,
+                                    CircleShape
+                                ) else Modifier
+                            ),
                             isExpanded = false,
                             onClick = { onExpand(script) },
                         )

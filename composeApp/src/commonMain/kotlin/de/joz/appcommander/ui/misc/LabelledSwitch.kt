@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -62,8 +63,33 @@ fun LabelledSwitch(
 
 @Preview
 @Composable
-private fun PreviewLabelledSwitch() {
-    MaterialTheme {
+private fun PreviewLabelledSwitch_Dark() {
+    AppCommanderTheme(
+        darkTheme = true
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            LabelledSwitch(
+                label = "some switch",
+                checked = true,
+                onCheckedChange = {},
+            )
+            LabelledSwitch(
+                label = "some switch",
+                checked = false,
+                onCheckedChange = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewLabelledSwitch_Light() {
+    AppCommanderTheme(
+        darkTheme = false
+    ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
