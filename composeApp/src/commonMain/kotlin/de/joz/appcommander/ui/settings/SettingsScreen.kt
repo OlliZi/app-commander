@@ -17,7 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
-import de.joz.appcommander.resources.settings_preference_theme_mode_label
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
@@ -117,16 +116,11 @@ private fun PreviewSettingsScreen() {
                     label = Res.string.settings_preference_show_welcome_screen,
                     key = "",
                 ),
-                SettingsViewModel.ToggleItem(
-                    isChecked = false,
-                    label = Res.string.settings_preference_theme_mode_label,
-                    key = "",
-                )
             ),
             sliderPreferences = listOf(
                 SettingsViewModel.SliderItem(
                     label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                    value = 4f,
+                    sliderValue = 4f,
                     key = "",
                     minimum = 0f,
                     maximum = 10f,

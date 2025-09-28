@@ -27,16 +27,14 @@ fun Slider(
         modifier = Modifier.padding(vertical = 12.dp),
     ) {
         Text(
-            text = stringResource(sliderItem.label, sliderItem.value.toInt()),
+            text = stringResource(sliderItem.label, sliderItem.labelValue(sliderItem.sliderValue)),
             style = MaterialTheme.typography.bodyLarge,
         )
         Slider(
-            value = sliderItem.value,
+            value = sliderItem.sliderValue,
             steps = sliderItem.steps,
             valueRange = sliderItem.minimum..sliderItem.maximum,
-            onValueChange = {
-                onValueChange(it)
-            },
+            onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -53,7 +51,7 @@ private fun PreviewSlider_Dark() {
         ) {
             Slider(
                 sliderItem = SettingsViewModel.SliderItem(
-                    value = 5f,
+                    sliderValue = 5f,
                     maximum = 10f,
                     minimum = 0f,
                     steps = 20,
@@ -77,7 +75,7 @@ private fun PreviewSlider_Light() {
         ) {
             Slider(
                 sliderItem = SettingsViewModel.SliderItem(
-                    value = 5f,
+                    sliderValue = 5f,
                     maximum = 10f,
                     minimum = 0f,
                     steps = 20,

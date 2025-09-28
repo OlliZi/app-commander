@@ -16,28 +16,28 @@ class ManageUiModeUseCase(
     }
 
     suspend operator fun invoke(uiMode: UiMode) {
-        preferencesRepository.store(STORE_KEY_FOR_SYSTEM_UI_MODE, uiMode.ordinal)
+        preferencesRepository.store(STORE_KEY_FOR_SYSTEM_UI_APPEARANCE, uiMode.optionIndex)
         updateUiModeState()
     }
 
     private suspend fun updateUiModeState() {
         _uiModeType.update { oldState ->
             val savedUiMode = preferencesRepository.get(
-                key = STORE_KEY_FOR_SYSTEM_UI_MODE,
-                defaultValue = DEFAULT_SYSTEM_UI_MODE.ordinal
+                key = STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                defaultValue = DEFAULT_SYSTEM_UI_MODE.optionIndex
             )
-            UiMode.entries.find { it.ordinal == savedUiMode } ?: DEFAULT_SYSTEM_UI_MODE
+            UiMode.entries.find { it.optionIndex == savedUiMode } ?: DEFAULT_SYSTEM_UI_MODE
         }
     }
 
-    enum class UiMode {
-        DARK_MODE,
-        LIGHT_MODE,
-        SYSTEM_MODE,
+    enum class UiMode(val optionIndex: Int) {
+        SYSTEM_MODE(optionIndex = 0),
+        DARK_MODE(optionIndex = 1),
+        LIGHT_MODE(optionIndex = 2),
     }
 
     companion object Companion {
-        private const val STORE_KEY_FOR_SYSTEM_UI_MODE = "STORE_KEY_FOR_SYSTEM_UI_MODE"
-        val DEFAULT_SYSTEM_UI_MODE = UiMode.DARK_MODE
+        const val STORE_KEY_FOR_SYSTEM_UI_APPEARANCE = "STORE_KEY_FOR_SYSTEM_UI_APPEARANCE"
+        val DEFAULT_SYSTEM_UI_MODE = UiMode.SYSTEM_MODE
     }
 }

@@ -1,5 +1,6 @@
 package de.joz.appcommander.ui.settings
 
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.joz.appcommander.domain.GetPreferenceUseCase
@@ -7,14 +8,18 @@ import de.joz.appcommander.domain.ManageUiModeUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
-import de.joz.appcommander.resources.settings_preference_theme_mode_label
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_dark
+import de.joz.appcommander.resources.settings_preference_ui_appearance_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_light
+import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -40,14 +45,6 @@ class SettingsViewModel(
                                 key = HIDE_WELCOME_SCREEN_PREF_KEY,
                                 defaultValue = false,
                             )
-                        ),
-                        ToggleItem(
-                            label = Res.string.settings_preference_theme_mode_label,
-                            key = DARK_THEME_PREF_KEY,
-                            isChecked = getPreferenceUseCase.get(
-                                key = DARK_THEME_PREF_KEY,
-                                defaultValue = true,
-                            )
                         )
                     ),
                     sliderPreferences = listOf(
@@ -55,13 +52,37 @@ class SettingsViewModel(
                             maximum = 10f,
                             minimum = 1f,
                             steps = 8,
-                            value = getPreferenceUseCase.get(
+                            sliderValue = getPreferenceUseCase.get(
                                 key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
                                 defaultValue = 5,
                             ).toFloat(),
                             label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
                             key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-                        )
+                        ),
+                        SliderItem(
+                            maximum = ManageUiModeUseCase.UiMode.entries.maxOf { it.optionIndex }
+                                .toFloat(),
+                            minimum = ManageUiModeUseCase.UiMode.entries.minOf { it.optionIndex }
+                                .toFloat(),
+                            steps = 1,
+                            sliderValue = getPreferenceUseCase.get(
+                                key = ManageUiModeUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                                defaultValue = ManageUiModeUseCase.DEFAULT_SYSTEM_UI_MODE.optionIndex,
+                            ).toFloat(),
+                            label = Res.string.settings_preference_ui_appearance_label,
+                            key = ManageUiModeUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                            labelValue = { sliderValue ->
+                                val uiMode = ManageUiModeUseCase.UiMode.entries.firstOrNull {
+                                    it.optionIndex == sliderValue.toInt()
+                                } ?: ManageUiModeUseCase.DEFAULT_SYSTEM_UI_MODE
+
+                                when (uiMode) {
+                                    ManageUiModeUseCase.UiMode.SYSTEM_MODE -> stringResource(Res.string.settings_preference_ui_appearance_system)
+                                    ManageUiModeUseCase.UiMode.DARK_MODE -> stringResource(Res.string.settings_preference_ui_appearance_dark)
+                                    ManageUiModeUseCase.UiMode.LIGHT_MODE -> stringResource(Res.string.settings_preference_ui_appearance_light)
+                                }
+                            }
+                        ),
                     ),
                 )
             }
@@ -90,31 +111,31 @@ class SettingsViewModel(
                 }
             )
         }
-
-        if (event.toggleItem.key == DARK_THEME_PREF_KEY) {
-            manageUiModeUseCase(
-                if (event.isChecked) {
-                    ManageUiModeUseCase.UiMode.DARK_MODE
-                } else {
-                    ManageUiModeUseCase.UiMode.LIGHT_MODE
-                }
-            )
-        }
     }
 
     private suspend fun sliderItem(event: Event.OnSliderItem) {
-        savePreferenceUseCase(event.sliderItem.key, event.value.toInt())
         _uiState.update { oldState ->
             oldState.copy(
                 sliderPreferences = oldState.sliderPreferences.map {
                     if (event.sliderItem == it) {
-                        it.copy(value = event.value)
+                        it.copy(
+                            sliderValue = event.value
+                        )
                     } else {
                         it
                     }
                 }
             )
+        }
 
+        if (event.sliderItem.key == ManageUiModeUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+            manageUiModeUseCase(
+                ManageUiModeUseCase.UiMode.entries.firstOrNull {
+                    it.optionIndex == event.value.toInt()
+                } ?: ManageUiModeUseCase.UiMode.SYSTEM_MODE
+            )
+        } else {
+            savePreferenceUseCase(event.sliderItem.key, event.value.toInt())
         }
     }
 
@@ -142,17 +163,17 @@ class SettingsViewModel(
     )
 
     data class SliderItem(
-        val label: StringResource,
         val key: String,
-        val value: Float,
+        val sliderValue: Float,
+        val label: StringResource,
         val steps: Int,
         val minimum: Float = 0f,
         val maximum: Float = 100f,
+        val labelValue: @Composable (Float) -> String = { sliderValue.toInt().toString() }
     )
 
     companion object {
         const val HIDE_WELCOME_SCREEN_PREF_KEY = "HIDE_WELCOME_SCREEN"
-        const val DARK_THEME_PREF_KEY = "DARK_THEME"
         const val TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY = "TRACK_SCRIPTS_FILE_DELAY_SLIDER"
     }
 }
