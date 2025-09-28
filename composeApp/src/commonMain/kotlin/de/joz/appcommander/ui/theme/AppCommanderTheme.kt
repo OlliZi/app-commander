@@ -6,9 +6,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-object AppColors {
-    val GREEN_MAIN = Color(0xFF6ab090)
-}
+private val BRAND_COLOR = Color(0xFF6ab090)
 
 val darkColorScheme =
     darkColorScheme(
@@ -16,7 +14,7 @@ val darkColorScheme =
         onPrimary = Color.White,
         surface = Color.Black,
         onSurface = Color.White,
-        primary = AppColors.GREEN_MAIN,
+        primary = BRAND_COLOR,
     )
 
 val lightColorScheme =
@@ -25,7 +23,7 @@ val lightColorScheme =
         onPrimary = Color.Black,
         surface = Color.White,
         onSurface = Color.Black,
-        primary = AppColors.GREEN_MAIN,
+        primary = BRAND_COLOR,
     )
 
 @Composable
