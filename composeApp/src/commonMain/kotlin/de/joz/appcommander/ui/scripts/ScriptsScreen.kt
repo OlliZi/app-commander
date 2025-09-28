@@ -339,7 +339,7 @@ private fun LoggingSection(
         }
         AnimatedVisibility(visible = isExpanded) {
             LazyColumn(
-                modifier = modifier.heightIn(max = 300.dp).wrapContentHeight(),
+                modifier = modifier.heightIn(max = 250.dp).wrapContentHeight(),
             ) {
                 items(logging) { item ->
                     Text(
