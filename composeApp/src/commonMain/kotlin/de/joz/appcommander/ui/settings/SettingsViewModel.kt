@@ -3,9 +3,11 @@ package de.joz.appcommander.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.joz.appcommander.domain.GetPreferenceUseCase
+import de.joz.appcommander.domain.ManageUiModeUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
+import de.joz.appcommander.resources.settings_preference_theme_mode_label
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,7 @@ import org.koin.android.annotation.KoinViewModel
 class SettingsViewModel(
     private val savePreferenceUseCase: SavePreferenceUseCase,
     private val getPreferenceUseCase: GetPreferenceUseCase,
+    private val manageUiModeUseCase: ManageUiModeUseCase,
 ) : ViewModel(),
     UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
 
@@ -36,6 +39,14 @@ class SettingsViewModel(
                             isChecked = getPreferenceUseCase.get(
                                 key = HIDE_WELCOME_SCREEN_PREF_KEY,
                                 defaultValue = false,
+                            )
+                        ),
+                        ToggleItem(
+                            label = Res.string.settings_preference_theme_mode_label,
+                            key = DARK_THEME_PREF_KEY,
+                            isChecked = getPreferenceUseCase.get(
+                                key = DARK_THEME_PREF_KEY,
+                                defaultValue = true,
                             )
                         )
                     ),
@@ -78,7 +89,16 @@ class SettingsViewModel(
                     }
                 }
             )
+        }
 
+        if (event.toggleItem.key == DARK_THEME_PREF_KEY) {
+            manageUiModeUseCase(
+                if (event.isChecked) {
+                    ManageUiModeUseCase.UiMode.DARK_MODE
+                } else {
+                    ManageUiModeUseCase.UiMode.LIGHT_MODE
+                }
+            )
         }
     }
 
@@ -132,6 +152,7 @@ class SettingsViewModel(
 
     companion object {
         const val HIDE_WELCOME_SCREEN_PREF_KEY = "HIDE_WELCOME_SCREEN"
+        const val DARK_THEME_PREF_KEY = "DARK_THEME"
         const val TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY = "TRACK_SCRIPTS_FILE_DELAY_SLIDER"
     }
 }

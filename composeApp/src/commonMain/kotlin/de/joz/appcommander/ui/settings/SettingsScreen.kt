@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
+import de.joz.appcommander.resources.settings_preference_theme_mode_label
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
@@ -47,7 +48,8 @@ fun SettingsScreen(
         onSliderChangeItem = { sliderItem, value ->
             viewModel.onEvent(
                 event = SettingsViewModel.Event.OnSliderItem(
-                    sliderItem = sliderItem, value = value,
+                    sliderItem = sliderItem,
+                    value = value,
                 )
             )
         }
@@ -82,7 +84,7 @@ internal fun SettingsContent(
             uiState.togglePreferences.forEach { toggleItem ->
                 LabelledSwitch(
                     textModifier = Modifier.weight(1f),
-                    label = stringResource(Res.string.settings_preference_show_welcome_screen),
+                    label = stringResource(toggleItem.label),
                     checked = toggleItem.isChecked,
                     onCheckedChange = { isChecked ->
                         onToggleItem(toggleItem, isChecked)
@@ -90,7 +92,7 @@ internal fun SettingsContent(
                 )
             }
 
-            HorizontalDivider()
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             uiState.sliderPreferences.forEach { sliderItem ->
                 Slider(
@@ -113,6 +115,11 @@ private fun PreviewSettingsScreen() {
                 SettingsViewModel.ToggleItem(
                     isChecked = true,
                     label = Res.string.settings_preference_show_welcome_screen,
+                    key = "",
+                ),
+                SettingsViewModel.ToggleItem(
+                    isChecked = false,
+                    label = Res.string.settings_preference_theme_mode_label,
                     key = "",
                 )
             ),

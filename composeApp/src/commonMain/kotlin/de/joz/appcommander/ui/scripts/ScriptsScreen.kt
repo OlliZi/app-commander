@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,7 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Heart
 import compose.icons.feathericons.Play
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
@@ -196,7 +196,6 @@ private fun ConnectedDevices(
             ) {
                 Text(
                     text = stringResource(Res.string.scripts_hint_no_devices_refresh),
-                    fontWeight = FontWeight.Bold,
                 )
             }
             connectedDevices.forEach { device ->
@@ -212,12 +211,6 @@ private fun ConnectedDevices(
                         Text(
                             text = device.label,
                             fontWeight = FontWeight.Bold,
-                        )
-
-                        Icon(
-                            imageVector = FeatherIcons.Heart,
-                            tint = if (device.isSelected) Color.Green.lighter(factor = 0.75f) else Color.LightGray,
-                            contentDescription = null,
                         )
                     }
                 }
@@ -309,7 +302,7 @@ private fun LoggingSection(
     var isExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier.background(
-            Color.LightGray,
+            MaterialTheme.colorScheme.background,
         ).padding(8.dp),
     ) {
         Row(
@@ -327,6 +320,7 @@ private fun LoggingSection(
                     Icon(
                         imageVector = FeatherIcons.Trash,
                         contentDescription = "Clear logging",
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -361,7 +355,7 @@ private fun TerminalSection(
 
     Column(
         modifier = Modifier.background(
-            Color.LightGray,
+            MaterialTheme.colorScheme.background,
         ).padding(8.dp),
     ) {
         Row(
@@ -394,11 +388,17 @@ private fun TerminalSection(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                         ),
+                        textStyle = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.background
+                        ),
                         onValueChange = {
                             inputValue = it
                         },
                         placeholder = {
-                            Text(text = stringResource(Res.string.scripts_terminal_placeholder))
+                            Text(
+                                text = stringResource(Res.string.scripts_terminal_placeholder),
+                                color = MaterialTheme.colorScheme.background,
+                            )
                         },
                         trailingIcon = {
                             IconButton(
@@ -408,6 +408,7 @@ private fun TerminalSection(
                             ) {
                                 Icon(
                                     imageVector = FeatherIcons.Play,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     contentDescription = "Execute script text",
                                 )
                             }
@@ -439,7 +440,7 @@ private fun BottomBar(
 ) {
     Row(
         modifier = Modifier.navigationBarsPadding().fillMaxWidth()
-            .background(Color.LightGray.lighter(factor = 1.1f)).padding(16.dp),
+            .background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f)).padding(16.dp),
     ) {
         Button(
             onClick = onOpenScriptFile,

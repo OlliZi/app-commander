@@ -43,7 +43,7 @@ fun ExpandButton(
 
 enum class ExpandButtonDirection {
     BOTTOM_TO_TOP,
-    LEFT_TO_RIGHT
+    LEFT_TO_RIGHT,
 }
 
 @Preview
