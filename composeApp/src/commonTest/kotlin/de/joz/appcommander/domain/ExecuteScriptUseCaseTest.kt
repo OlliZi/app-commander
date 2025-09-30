@@ -52,4 +52,25 @@ class ExecuteScriptUseCaseTest {
             addLoggingUseCaseMock.invoke("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"): error=2, No such file or directory")
         }
     }
+
+    @Test
+    fun `should append device id in script execution`() = runTest {
+        val executeScriptUseCase = ExecuteScriptUseCase(
+            addLoggingUseCase = addLoggingUseCaseMock,
+        )
+
+        val script = ScriptsRepository.Script(
+            label = "Test",
+            script = "adb devices",
+            platform = ScriptsRepository.Platform.ANDROID,
+        )
+
+        val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
+
+        assertTrue(result is ExecuteScriptUseCase.Result.Success)
+        assertEquals(
+            listOf("adb", "-s", "Pixel7", "devices"),
+            result.commands,
+        )
+    }
 }

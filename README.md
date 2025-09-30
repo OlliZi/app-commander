@@ -25,8 +25,7 @@ is still maybe possible in future.
 - Screenshot testing
 - Code coverage
 - Enter new scripts screen
-- Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
-  TrackScriptsFileChangesUseCaseTest
+- Unit-test for appended device id in PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Open-Icons für Logging and Terminal unten rechts?
 
 # Installation/Run

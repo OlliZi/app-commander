@@ -15,15 +15,17 @@ class ExecuteScriptUseCase(
         selectedDevice: String = "",
     ): Result {
         val scriptForSelectedDevice = injectDeviceConfig(script, selectedDevice)
+        val commands = scriptForSelectedDevice.split(" ")
         addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice'.")
 
         return runCatching {
-            Result.Success(
-                output = processBuilder.command(scriptForSelectedDevice.split(" "))
-                    .directory(workingDir)
-                    .start()
-                    .inputReader()
+            val output =
+                processBuilder.command(commands).directory(workingDir).start().inputReader()
                     .readText()
+
+            Result.Success(
+                output = output,
+                commands = commands,
             )
         }.getOrElse {
             val error = it.message ?: "Unknown error"
@@ -52,7 +54,11 @@ class ExecuteScriptUseCase(
     }
 
     sealed interface Result {
-        data class Success(val output: String) : Result
+        data class Success(
+            val output: String,
+            val commands: List<String>,
+        ) : Result
+
         data class Error(val message: String) : Result
     }
 }
