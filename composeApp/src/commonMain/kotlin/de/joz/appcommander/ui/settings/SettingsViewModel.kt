@@ -49,44 +49,38 @@ class SettingsViewModel(
                         )
                     ),
                     sliderPreferences = listOf(
-                        SliderItem(
-                            maximum = 10f,
-                            minimum = 1f,
-                            steps = 8,
-                            sliderValue = getPreferenceUseCase.get(
-                                key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-                                defaultValue = 5,
-                            ).toFloat(),
-                            labelValue = LabelValue.IntRes(
-                                getPreferenceUseCase.get(
-                                    key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-                                    defaultValue = 5,
-                                )
-                            ),
-                            label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                        getPreferenceUseCase.get(
                             key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-                        ),
-                        SliderItem(
-                            maximum = ManageUiSAppearanceUseCase.UiAppearance.entries.maxOf { it.optionIndex }
-                                .toFloat(),
-                            minimum = ManageUiSAppearanceUseCase.UiAppearance.entries.minOf { it.optionIndex }
-                                .toFloat(),
-                            steps = 1,
-                            sliderValue = getPreferenceUseCase.get(
-                                key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                                defaultValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
-                            ).toFloat(),
-                            label = Res.string.settings_preference_ui_appearance_label,
+                            defaultValue = 5,
+                        ).let { sliderValue ->
+                            SliderItem(
+                                maximum = 10f,
+                                minimum = 1f,
+                                steps = 8,
+                                sliderValue = sliderValue.toFloat(),
+                                labelValue = LabelValue.IntRes(sliderValue),
+                                label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                                key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
+                            )
+                        },
+                        getPreferenceUseCase.get(
                             key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                            labelValue = LabelValue.StringRes(
-                                mapUiAppearance(
-                                    getPreferenceUseCase.get(
-                                        key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                                        defaultValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
-                                    ).toFloat()
-                                )
-                            ),
-                        ),
+                            defaultValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
+                        ).toFloat().let { mapUiAppearance ->
+                            SliderItem(
+                                maximum = ManageUiSAppearanceUseCase.UiAppearance.entries.maxOf { it.optionIndex }
+                                    .toFloat(),
+                                minimum = ManageUiSAppearanceUseCase.UiAppearance.entries.minOf { it.optionIndex }
+                                    .toFloat(),
+                                steps = 1,
+                                sliderValue = mapUiAppearance,
+                                labelValue = LabelValue.StringRes(
+                                    mapUiAppearance(mapUiAppearance)
+                                ),
+                                label = Res.string.settings_preference_ui_appearance_label,
+                                key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                            )
+                        }
                     ),
                 )
             }
