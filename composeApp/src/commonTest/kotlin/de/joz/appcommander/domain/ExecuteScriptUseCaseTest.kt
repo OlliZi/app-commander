@@ -9,7 +9,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ExecuteScriptUseCaseTest {
-
     private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
 
     @Test

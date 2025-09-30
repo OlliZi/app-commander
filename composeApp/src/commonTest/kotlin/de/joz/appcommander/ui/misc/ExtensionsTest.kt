@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ExtensionsTest {
-
     @Test
     fun `should light color`() {
         val testColor = Color(

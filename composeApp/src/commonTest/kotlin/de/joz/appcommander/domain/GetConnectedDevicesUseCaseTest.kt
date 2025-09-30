@@ -8,7 +8,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GetConnectedDevicesUseCaseTest {
-
     @Test
     fun `should return connected android devices when use case is executed`() = runTest {
         val executeScriptUseCase: ExecuteScriptUseCase = mockk()

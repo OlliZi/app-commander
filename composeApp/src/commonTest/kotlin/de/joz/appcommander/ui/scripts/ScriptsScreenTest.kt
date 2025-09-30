@@ -16,7 +16,6 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ScriptsScreenTest {
-
     @Test
     fun `should show default label when no devices are connected`() {
         runComposeUiTest {

@@ -5,7 +5,6 @@ import io.mockk.verify
 import kotlin.test.Test
 
 class AddLoggingUseCaseTest {
-
     @Test
     fun `should log to repository`() {
         val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)

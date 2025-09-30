@@ -29,7 +29,6 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ScriptsViewModelTest {
-
     private val navControllerMock: NavController = mockk(relaxed = true)
     private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
     private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)

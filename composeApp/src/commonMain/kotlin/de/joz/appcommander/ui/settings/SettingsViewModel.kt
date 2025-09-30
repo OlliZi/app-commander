@@ -75,24 +75,7 @@ class SettingsViewModel(
                             label = Res.string.settings_preference_ui_appearance_label,
                             key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
                             labelValue = { sliderValue ->
-                                val uiAppearance =
-                                    ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
-                                        it.optionIndex == sliderValue.toInt()
-                                    } ?: ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
-
-                                when (uiAppearance) {
-                                    ManageUiSAppearanceUseCase.UiAppearance.SYSTEM -> stringResource(
-                                        Res.string.settings_preference_ui_appearance_system
-                                    )
-
-                                    ManageUiSAppearanceUseCase.UiAppearance.DARK -> stringResource(
-                                        Res.string.settings_preference_ui_appearance_dark
-                                    )
-
-                                    ManageUiSAppearanceUseCase.UiAppearance.LIGHT -> stringResource(
-                                        Res.string.settings_preference_ui_appearance_light
-                                    )
-                                }
+                                mapUiAppearance(sliderValue)
                             }
                         ),
                     ),
@@ -148,6 +131,28 @@ class SettingsViewModel(
             )
         } else {
             savePreferenceUseCase(event.sliderItem.key, event.value.toInt())
+        }
+    }
+
+    @Composable
+    private fun mapUiAppearance(sliderValue: Float): String {
+        val uiAppearance =
+            ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
+                it.optionIndex == sliderValue.toInt()
+            } ?: ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
+
+        return when (uiAppearance) {
+            ManageUiSAppearanceUseCase.UiAppearance.SYSTEM -> stringResource(
+                Res.string.settings_preference_ui_appearance_system
+            )
+
+            ManageUiSAppearanceUseCase.UiAppearance.DARK -> stringResource(
+                Res.string.settings_preference_ui_appearance_dark
+            )
+
+            ManageUiSAppearanceUseCase.UiAppearance.LIGHT -> stringResource(
+                Res.string.settings_preference_ui_appearance_light
+            )
         }
     }
 

@@ -9,6 +9,21 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ManageUiSAppearanceUseCaseTest {
+    @Test
+    fun `should return default ui appearance`() {
+        assertEquals(
+            ManageUiSAppearanceUseCase.UiAppearance.SYSTEM,
+            ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
+        )
+    }
+
+    @Test
+    fun `should return none empty key for STORE_KEY_FOR_SYSTEM_UI_APPEARANCE`() {
+        assertEquals(
+            "STORE_KEY_FOR_SYSTEM_UI_APPEARANCE",
+            ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+        )
+    }
 
     @Test
     fun `should retorn default ui appearance when no value was saved`() = runTest {
