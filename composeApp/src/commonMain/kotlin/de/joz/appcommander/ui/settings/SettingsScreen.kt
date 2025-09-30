@@ -125,6 +125,7 @@ private fun PreviewSettingsScreen() {
                     minimum = 0f,
                     maximum = 10f,
                     steps = 10,
+                    labelValue = SettingsViewModel.LabelValue.IntRes(5),
                 )
             )
         ),

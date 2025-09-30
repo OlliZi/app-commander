@@ -1,6 +1,5 @@
 package de.joz.appcommander.ui.settings
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.joz.appcommander.domain.GetPreferenceUseCase
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -59,6 +57,12 @@ class SettingsViewModel(
                                 key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
                                 defaultValue = 5,
                             ).toFloat(),
+                            labelValue = LabelValue.IntRes(
+                                getPreferenceUseCase.get(
+                                    key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
+                                    defaultValue = 5,
+                                )
+                            ),
                             label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
                             key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
                         ),
@@ -74,9 +78,14 @@ class SettingsViewModel(
                             ).toFloat(),
                             label = Res.string.settings_preference_ui_appearance_label,
                             key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                            labelValue = { sliderValue ->
-                                mapUiAppearance(sliderValue)
-                            }
+                            labelValue = LabelValue.StringRes(
+                                mapUiAppearance(
+                                    getPreferenceUseCase.get(
+                                        key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                                        defaultValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
+                                    ).toFloat()
+                                )
+                            ),
                         ),
                     ),
                 )
@@ -114,7 +123,13 @@ class SettingsViewModel(
                 sliderPreferences = oldState.sliderPreferences.map {
                     if (event.sliderItem == it) {
                         it.copy(
-                            sliderValue = event.value
+                            sliderValue = event.value,
+                            labelValue = when (event.sliderItem.labelValue) {
+                                is LabelValue.IntRes -> LabelValue.IntRes(event.value.toInt())
+                                is LabelValue.StringRes -> LabelValue.StringRes(
+                                    mapUiAppearance(event.value)
+                                )
+                            }
                         )
                     } else {
                         it
@@ -134,25 +149,21 @@ class SettingsViewModel(
         }
     }
 
-    @Composable
-    private fun mapUiAppearance(sliderValue: Float): String {
+    private fun mapUiAppearance(sliderValue: Float): StringResource {
         val uiAppearance =
             ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
                 it.optionIndex == sliderValue.toInt()
             } ?: ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
 
         return when (uiAppearance) {
-            ManageUiSAppearanceUseCase.UiAppearance.SYSTEM -> stringResource(
+            ManageUiSAppearanceUseCase.UiAppearance.SYSTEM ->
                 Res.string.settings_preference_ui_appearance_system
-            )
 
-            ManageUiSAppearanceUseCase.UiAppearance.DARK -> stringResource(
+            ManageUiSAppearanceUseCase.UiAppearance.DARK ->
                 Res.string.settings_preference_ui_appearance_dark
-            )
 
-            ManageUiSAppearanceUseCase.UiAppearance.LIGHT -> stringResource(
+            ManageUiSAppearanceUseCase.UiAppearance.LIGHT ->
                 Res.string.settings_preference_ui_appearance_light
-            )
         }
     }
 
@@ -183,11 +194,16 @@ class SettingsViewModel(
         val key: String,
         val sliderValue: Float,
         val label: StringResource,
+        val labelValue: LabelValue,
         val steps: Int,
         val minimum: Float = 0f,
         val maximum: Float = 100f,
-        val labelValue: @Composable (Float) -> String = { sliderValue.toInt().toString() }
     )
+
+    sealed interface LabelValue {
+        data class StringRes(val value: StringResource) : LabelValue
+        data class IntRes(val value: Int) : LabelValue
+    }
 
     companion object {
         const val HIDE_WELCOME_SCREEN_PREF_KEY = "HIDE_WELCOME_SCREEN"

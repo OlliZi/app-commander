@@ -7,6 +7,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +74,7 @@ class SettingsViewModelTest {
                 sliderValue = 0f,
                 label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
                 key = SettingsViewModel.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
+                labelValue = SettingsViewModel.LabelValue.IntRes(0)
             ),
             uiState.sliderPreferences[0],
         )
@@ -85,6 +87,7 @@ class SettingsViewModelTest {
                 sliderValue = 0f,
                 label = Res.string.settings_preference_ui_appearance_label,
                 key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                labelValue = SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_system)
             ),
             uiState.sliderPreferences[1],
         )
