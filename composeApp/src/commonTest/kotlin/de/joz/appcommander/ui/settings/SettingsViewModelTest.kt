@@ -9,6 +9,7 @@ import de.joz.appcommander.resources.settings_preference_track_scripts_file_dela
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,6 +17,8 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
@@ -91,6 +94,53 @@ class SettingsViewModelTest {
             ),
             uiState.sliderPreferences[1],
         )
+    }
+
+    @Test
+    fun `should toggle item when event OnToggleItem is fired`() = runTest {
+        coEvery {
+            getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
+        } returns false
+
+        coEvery {
+            getPreferenceUseCaseMock.get(any<String>(), any<Int>())
+        } returns 0
+
+        val viewModel = createViewModel()
+        runCurrent()
+
+        viewModel.uiState.value.togglePreferences.forEach {
+            viewModel.onEvent(
+                event = SettingsViewModel.Event.OnToggleItem(
+                    isChecked = true,
+                    toggleItem = it,
+                )
+            )
+            runCurrent()
+        }
+
+        coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
+            savePreferenceUseCaseMock.invoke(any(), true)
+        }
+
+        assertTrue(viewModel.uiState.value.togglePreferences.all { it.isChecked })
+
+        viewModel.uiState.value.togglePreferences.forEach {
+            viewModel.onEvent(
+                event = SettingsViewModel.Event.OnToggleItem(
+                    isChecked = false,
+                    toggleItem = it,
+                )
+            )
+            runCurrent()
+        }
+
+
+        coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
+            savePreferenceUseCaseMock.invoke(any(), false)
+        }
+
+        assertFalse(viewModel.uiState.value.togglePreferences.all { it.isChecked })
     }
 
     private fun createViewModel(): SettingsViewModel {
