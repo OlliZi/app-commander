@@ -14,6 +14,8 @@ import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,9 +26,10 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class SettingsViewModel(
+    getPreferenceUseCase: GetPreferenceUseCase,
     private val savePreferenceUseCase: SavePreferenceUseCase,
-    private val getPreferenceUseCase: GetPreferenceUseCase,
     private val manageUiSAppearanceUseCase: ManageUiSAppearanceUseCase,
+    dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel(),
     UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
 
@@ -34,7 +37,7 @@ class SettingsViewModel(
     override val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             _uiState.update { oldState ->
                 oldState.copy(
                     togglePreferences = listOf(
