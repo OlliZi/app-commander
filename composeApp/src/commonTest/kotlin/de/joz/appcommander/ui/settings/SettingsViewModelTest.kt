@@ -1,7 +1,7 @@
 package de.joz.appcommander.ui.settings
 
 import de.joz.appcommander.domain.GetPreferenceUseCase
-import de.joz.appcommander.domain.ManageUiSAppearanceUseCase
+import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
@@ -18,13 +18,14 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SettingsViewModelTest {
     private val savePreferenceUseCaseMock: SavePreferenceUseCase = mockk(relaxed = true)
     private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
-    private val manageUiSAppearanceUseCaseMock: ManageUiSAppearanceUseCase = mockk(relaxed = true)
+    private val manageUiAppearanceUseCaseMock: ManageUiAppearanceUseCase = mockk(relaxed = true)
 
     @Test
     fun `should return none empty key for HIDE_WELCOME_SCREEN_PREF_KEY`() {
@@ -89,7 +90,7 @@ class SettingsViewModelTest {
                 steps = 1,
                 sliderValue = 0f,
                 label = Res.string.settings_preference_ui_appearance_label,
-                key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
                 labelValue = SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_system)
             ),
             uiState.sliderPreferences[1],
@@ -139,7 +140,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `should toggle item when event OnSliderItem is fired`() = runTest {
+    fun `should change slider item when event OnSliderItem is fired`() = runTest {
         coEvery {
             getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
         } returns false
@@ -160,9 +161,9 @@ class SettingsViewModelTest {
             )
             runCurrent()
 
-            if (it.key == ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+            if (it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
                 coVerify {
-                    manageUiSAppearanceUseCaseMock.invoke(any())
+                    manageUiAppearanceUseCaseMock.invoke(any())
                 }
             } else {
                 coVerify {
@@ -174,11 +175,52 @@ class SettingsViewModelTest {
         assertTrue(viewModel.uiState.value.sliderPreferences.all { it.maximum == it.sliderValue })
     }
 
+    //@Test
+    fun `should change ui appearance when event OnSliderItem of type 'ui appearance' is fired`() =
+        runTest {
+            coEvery {
+                getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
+            } returns false
+
+            coEvery {
+                getPreferenceUseCaseMock.get(any<String>(), any<Int>())
+            } returns 0
+
+            val viewModel = createViewModel()
+            runCurrent()
+
+            val uiAppearanceSlider = viewModel.uiState.value.sliderPreferences.find {
+                it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+            }
+            assertNotNull(uiAppearanceSlider)
+            (uiAppearanceSlider.minimum.toInt()..uiAppearanceSlider.maximum.toInt()).forEach { sliderValue ->
+                viewModel.onEvent(
+                    event = SettingsViewModel.Event.OnSliderItem(
+                        value = sliderValue.toFloat(),
+                        sliderItem = uiAppearanceSlider,
+                    )
+                )
+                runCurrent()
+
+                coVerify {
+                    val expectedUiAppearance =
+                        ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull() {
+                            it.optionIndex == sliderValue
+                        }
+                    if (expectedUiAppearance == null) {
+                        print("")
+                    }
+
+                    //manageUiAppearanceUseCaseMock.invoke(expectedUiAppearance!!)
+                }
+            }
+        }
+
     private fun createViewModel(): SettingsViewModel {
         return SettingsViewModel(
             savePreferenceUseCase = savePreferenceUseCaseMock,
             getPreferenceUseCase = getPreferenceUseCaseMock,
-            manageUiSAppearanceUseCase = manageUiSAppearanceUseCaseMock,
+            manageUiAppearanceUseCase = manageUiAppearanceUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
         )
     }

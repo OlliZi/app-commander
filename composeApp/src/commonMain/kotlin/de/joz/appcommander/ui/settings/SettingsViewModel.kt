@@ -3,7 +3,7 @@ package de.joz.appcommander.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.joz.appcommander.domain.GetPreferenceUseCase
-import de.joz.appcommander.domain.ManageUiSAppearanceUseCase
+import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
@@ -26,7 +26,7 @@ import org.koin.android.annotation.KoinViewModel
 class SettingsViewModel(
     getPreferenceUseCase: GetPreferenceUseCase,
     private val savePreferenceUseCase: SavePreferenceUseCase,
-    private val manageUiSAppearanceUseCase: ManageUiSAppearanceUseCase,
+    private val manageUiAppearanceUseCase: ManageUiAppearanceUseCase,
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel(),
     UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
@@ -64,13 +64,13 @@ class SettingsViewModel(
                             )
                         },
                         getPreferenceUseCase.get(
-                            key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                            defaultValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
+                            key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                            defaultValue = ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
                         ).toFloat().let { mapUiAppearance ->
                             SliderItem(
-                                maximum = ManageUiSAppearanceUseCase.UiAppearance.entries.maxOf { it.optionIndex }
+                                maximum = ManageUiAppearanceUseCase.UiAppearance.entries.maxOf { it.optionIndex }
                                     .toFloat(),
-                                minimum = ManageUiSAppearanceUseCase.UiAppearance.entries.minOf { it.optionIndex }
+                                minimum = ManageUiAppearanceUseCase.UiAppearance.entries.minOf { it.optionIndex }
                                     .toFloat(),
                                 steps = 1,
                                 sliderValue = mapUiAppearance,
@@ -78,7 +78,7 @@ class SettingsViewModel(
                                     mapUiAppearance(mapUiAppearance)
                                 ),
                                 label = Res.string.settings_preference_ui_appearance_label,
-                                key = ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                                key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
                             )
                         }
                     ),
@@ -132,12 +132,11 @@ class SettingsViewModel(
             )
         }
 
-        if (event.sliderItem.key == ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
-            manageUiSAppearanceUseCase(
-                ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
-                    it.optionIndex == event.value.toInt()
-                } ?: ManageUiSAppearanceUseCase.UiAppearance.SYSTEM
-            )
+        if (event.sliderItem.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+            val uiAppearance = ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
+                it.optionIndex == event.value.toInt()
+            } ?: ManageUiAppearanceUseCase.UiAppearance.SYSTEM
+            manageUiAppearanceUseCase(uiAppearance)
         } else {
             savePreferenceUseCase(event.sliderItem.key, event.value.toInt())
         }
@@ -145,18 +144,18 @@ class SettingsViewModel(
 
     private fun mapUiAppearance(sliderValue: Float): StringResource {
         val uiAppearance =
-            ManageUiSAppearanceUseCase.UiAppearance.entries.firstOrNull {
+            ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
                 it.optionIndex == sliderValue.toInt()
-            } ?: ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
+            } ?: ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
 
         return when (uiAppearance) {
-            ManageUiSAppearanceUseCase.UiAppearance.SYSTEM ->
+            ManageUiAppearanceUseCase.UiAppearance.SYSTEM ->
                 Res.string.settings_preference_ui_appearance_system
 
-            ManageUiSAppearanceUseCase.UiAppearance.DARK ->
+            ManageUiAppearanceUseCase.UiAppearance.DARK ->
                 Res.string.settings_preference_ui_appearance_dark
 
-            ManageUiSAppearanceUseCase.UiAppearance.LIGHT ->
+            ManageUiAppearanceUseCase.UiAppearance.LIGHT ->
                 Res.string.settings_preference_ui_appearance_light
         }
     }

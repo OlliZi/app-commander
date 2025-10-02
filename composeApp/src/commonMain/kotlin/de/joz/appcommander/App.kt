@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.domain.GetStartDestinationUseCase
-import de.joz.appcommander.domain.ManageUiSAppearanceUseCase
+import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
@@ -27,11 +27,11 @@ import org.koin.core.parameter.parametersOf
 fun App(
     navHostController: NavHostController = rememberNavController(),
     getStartDestination: GetStartDestinationUseCase = koinInject(),
-    manageUiSAppearanceUseCase: ManageUiSAppearanceUseCase = koinInject(),
+    manageUiAppearanceUseCase: ManageUiAppearanceUseCase = koinInject(),
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val uiAppearanceType = manageUiSAppearanceUseCase.uiAppearanceType.collectAsStateWithLifecycle(
-        initialValue = ManageUiSAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE,
+    val uiAppearanceType = manageUiAppearanceUseCase.uiAppearanceType.collectAsStateWithLifecycle(
+        initialValue = ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE,
     )
 
     AppCommanderTheme(
@@ -74,10 +74,10 @@ fun App(
 
 @Composable
 @ReadOnlyComposable
-private fun isDarkThemeEnabled(uiAppearance: ManageUiSAppearanceUseCase.UiAppearance): Boolean {
+private fun isDarkThemeEnabled(uiAppearance: ManageUiAppearanceUseCase.UiAppearance): Boolean {
     return when (uiAppearance) {
-        ManageUiSAppearanceUseCase.UiAppearance.DARK -> true
-        ManageUiSAppearanceUseCase.UiAppearance.LIGHT -> false
-        ManageUiSAppearanceUseCase.UiAppearance.SYSTEM -> isSystemInDarkTheme()
+        ManageUiAppearanceUseCase.UiAppearance.DARK -> true
+        ManageUiAppearanceUseCase.UiAppearance.LIGHT -> false
+        ManageUiAppearanceUseCase.UiAppearance.SYSTEM -> isSystemInDarkTheme()
     }
 }
