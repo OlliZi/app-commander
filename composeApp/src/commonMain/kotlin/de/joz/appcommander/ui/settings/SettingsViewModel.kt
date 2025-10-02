@@ -27,7 +27,7 @@ class SettingsViewModel(
     getPreferenceUseCase: GetPreferenceUseCase,
     private val savePreferenceUseCase: SavePreferenceUseCase,
     private val manageUiAppearanceUseCase: ManageUiAppearanceUseCase,
-    dispatcher: CoroutineDispatcher = Dispatchers.Main,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : ViewModel(),
     UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
 
@@ -88,7 +88,7 @@ class SettingsViewModel(
     }
 
     override fun onEvent(event: Event) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             when (event) {
                 is Event.OnToggleItem -> toggleItem(event)
                 is Event.OnSliderItem -> sliderItem(event)
@@ -115,7 +115,7 @@ class SettingsViewModel(
         _uiState.update { oldState ->
             oldState.copy(
                 sliderPreferences = oldState.sliderPreferences.map {
-                    if (event.sliderItem == it) {
+                    if (event.sliderItem.key == it.key) {
                         it.copy(
                             sliderValue = event.value,
                             labelValue = when (event.sliderItem.labelValue) {
