@@ -118,11 +118,9 @@ class SettingsViewModelTest {
             )
             runCurrent()
         }
-
         coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
             savePreferenceUseCaseMock.invoke(any(), true)
         }
-
         assertTrue(viewModel.uiState.value.togglePreferences.all { it.isChecked })
 
         viewModel.uiState.value.togglePreferences.forEach {
@@ -134,13 +132,46 @@ class SettingsViewModelTest {
             )
             runCurrent()
         }
-
-
         coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
             savePreferenceUseCaseMock.invoke(any(), false)
         }
-
         assertFalse(viewModel.uiState.value.togglePreferences.all { it.isChecked })
+    }
+
+    @Test
+    fun `should toggle item when event OnSliderItem is fired`() = runTest {
+        coEvery {
+            getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
+        } returns false
+
+        coEvery {
+            getPreferenceUseCaseMock.get(any<String>(), any<Int>())
+        } returns 0
+
+        val viewModel = createViewModel()
+        runCurrent()
+
+        viewModel.uiState.value.sliderPreferences.forEach {
+            viewModel.onEvent(
+                event = SettingsViewModel.Event.OnSliderItem(
+                    value = it.maximum,
+                    sliderItem = it,
+                )
+            )
+            runCurrent()
+
+            if (it.key == ManageUiSAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+                coVerify {
+                    manageUiSAppearanceUseCaseMock.invoke(any())
+                }
+            } else {
+                coVerify {
+                    savePreferenceUseCaseMock.invoke(any(), any<Int>())
+                }
+            }
+        }
+
+        assertTrue(viewModel.uiState.value.sliderPreferences.all { it.maximum == it.sliderValue })
     }
 
     private fun createViewModel(): SettingsViewModel {
