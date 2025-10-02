@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -29,6 +30,16 @@ class SettingsViewModelTest {
     private val savePreferenceUseCaseMock: SavePreferenceUseCase = mockk(relaxed = true)
     private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
     private val manageUiAppearanceUseCaseMock: ManageUiAppearanceUseCase = mockk(relaxed = true)
+
+    @BeforeTest
+    fun setUp() {
+        coEvery {
+            getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
+        } returns false
+        coEvery {
+            getPreferenceUseCaseMock.get(any<String>(), any<Int>())
+        } returns 0
+    }
 
     @Test
     fun `should return none empty key for HIDE_WELCOME_SCREEN_PREF_KEY`() {
@@ -48,14 +59,6 @@ class SettingsViewModelTest {
 
     @Test
     fun `should return default state when viewmodel is initialized`() = runTest {
-        coEvery {
-            getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
-        } returns false
-
-        coEvery {
-            getPreferenceUseCaseMock.get(any<String>(), any<Int>())
-        } returns 0
-
         val viewModel = createViewModel()
         runCurrent()
 
@@ -102,14 +105,6 @@ class SettingsViewModelTest {
 
     @Test
     fun `should toggle item when event OnToggleItem is fired`() = runTest {
-        coEvery {
-            getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
-        } returns false
-
-        coEvery {
-            getPreferenceUseCaseMock.get(any<String>(), any<Int>())
-        } returns 0
-
         val viewModel = createViewModel()
         runCurrent()
 
@@ -144,14 +139,6 @@ class SettingsViewModelTest {
 
     @Test
     fun `should change slider item when event OnSliderItem is fired`() = runTest {
-        coEvery {
-            getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
-        } returns false
-
-        coEvery {
-            getPreferenceUseCaseMock.get(any<String>(), any<Int>())
-        } returns 0
-
         val viewModel = createViewModel()
         runCurrent()
 
@@ -201,14 +188,6 @@ class SettingsViewModelTest {
     @Test
     fun `should change ui appearance when event OnSliderItem of type 'ui appearance' is fired`() =
         runTest {
-            coEvery {
-                getPreferenceUseCaseMock.get(any<String>(), any<Boolean>())
-            } returns false
-
-            coEvery {
-                getPreferenceUseCaseMock.get(any<String>(), any<Int>())
-            } returns 0
-
             val viewModel = createViewModel()
             runCurrent()
 
