@@ -26,7 +26,7 @@ is still maybe possible in future.
 - Code coverage
 - Enter new scripts screen
 - Unit-test for appended device id in PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
-- Open-Icons für Logging and Terminal unten rechts?
+- Open-Icons für Logging and Terminal unten rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
 
