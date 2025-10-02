@@ -6,8 +6,11 @@ import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_dark
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
+import de.joz.appcommander.ui.settings.SettingsViewModel.LabelValue.StringRes
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -91,7 +94,7 @@ class SettingsViewModelTest {
                 sliderValue = 0f,
                 label = Res.string.settings_preference_ui_appearance_label,
                 key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                labelValue = SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_system)
+                labelValue = StringRes(Res.string.settings_preference_ui_appearance_system)
             ),
             uiState.sliderPreferences[1],
         )
@@ -171,11 +174,31 @@ class SettingsViewModelTest {
                 }
             }
         }
-
         assertTrue(viewModel.uiState.value.sliderPreferences.all { it.maximum == it.sliderValue })
+
+        viewModel.uiState.value.sliderPreferences.forEach {
+            viewModel.onEvent(
+                event = SettingsViewModel.Event.OnSliderItem(
+                    value = it.minimum,
+                    sliderItem = it,
+                )
+            )
+            runCurrent()
+
+            if (it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+                coVerify {
+                    manageUiAppearanceUseCaseMock.invoke(any())
+                }
+            } else {
+                coVerify {
+                    savePreferenceUseCaseMock.invoke(any(), any<Int>())
+                }
+            }
+        }
+        assertTrue(viewModel.uiState.value.sliderPreferences.all { it.minimum == it.sliderValue })
     }
 
-    //@Test
+    @Test
     fun `should change ui appearance when event OnSliderItem of type 'ui appearance' is fired`() =
         runTest {
             coEvery {
@@ -193,6 +216,7 @@ class SettingsViewModelTest {
                 it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
             }
             assertNotNull(uiAppearanceSlider)
+
             (uiAppearanceSlider.minimum.toInt()..uiAppearanceSlider.maximum.toInt()).forEach { sliderValue ->
                 viewModel.onEvent(
                     event = SettingsViewModel.Event.OnSliderItem(
@@ -202,16 +226,28 @@ class SettingsViewModelTest {
                 )
                 runCurrent()
 
-                coVerify {
-                    val expectedUiAppearance =
-                        ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull() {
-                            it.optionIndex == sliderValue
-                        }
-                    if (expectedUiAppearance == null) {
-                        print("")
+                val slider = viewModel.uiState.value.sliderPreferences.find {
+                    it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+                }
+                assertEquals(sliderValue.toFloat(), slider?.sliderValue)
+
+                val expectedUiAppearance =
+                    ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
+                        it.optionIndex == sliderValue
                     }
 
-                    //manageUiAppearanceUseCaseMock.invoke(expectedUiAppearance!!)
+                assertEquals(
+                    when (expectedUiAppearance) {
+                        ManageUiAppearanceUseCase.UiAppearance.SYSTEM -> StringRes(Res.string.settings_preference_ui_appearance_system)
+                        ManageUiAppearanceUseCase.UiAppearance.DARK -> StringRes(Res.string.settings_preference_ui_appearance_dark)
+                        ManageUiAppearanceUseCase.UiAppearance.LIGHT -> StringRes(Res.string.settings_preference_ui_appearance_light)
+                        null -> throw IllegalStateException("Fix test.")
+                    },
+                    slider?.labelValue,
+                )
+
+                coVerify {
+                    manageUiAppearanceUseCaseMock.invoke(expectedUiAppearance)
                 }
             }
         }
