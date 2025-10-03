@@ -10,10 +10,7 @@ import org.koin.core.annotation.Single
 class ManageUiAppearanceUseCase(
     private val preferencesRepository: PreferencesRepository,
 ) {
-    private val _uiAppearanceType =
-        MutableStateFlow<UiAppearance>(
-            DEFAULT_SYSTEM_UI_APPEARANCE
-        )
+    private val _uiAppearanceType = MutableStateFlow<UiAppearance>(DEFAULT_SYSTEM_UI_APPEARANCE)
     val uiAppearanceType: Flow<UiAppearance> = _uiAppearanceType.onStart {
         updateUiAppearance()
     }
