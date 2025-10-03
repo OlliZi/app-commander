@@ -13,7 +13,7 @@ class ManageUiAppearanceUseCaseTest {
     fun `should return default ui appearance`() {
         assertEquals(
             ManageUiAppearanceUseCase.UiAppearance.SYSTEM,
-            ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
+            ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE,
         )
     }
 
@@ -21,12 +21,12 @@ class ManageUiAppearanceUseCaseTest {
     fun `should return none empty key for STORE_KEY_FOR_SYSTEM_UI_APPEARANCE`() {
         assertEquals(
             "STORE_KEY_FOR_SYSTEM_UI_APPEARANCE",
-            ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+            ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
         )
     }
 
     @Test
-    fun `should retorn default ui appearance when no value was saved`() = runTest {
+    fun `should return default ui appearance when no value was saved`() = runTest {
         val preferencesRepositoryMock: PreferencesRepository = mockk()
 
         coEvery {
@@ -47,7 +47,7 @@ class ManageUiAppearanceUseCaseTest {
     }
 
     @Test
-    fun `should retorn ui appearance when value was saved`() = runTest {
+    fun `should return ui appearance when value was saved`() = runTest {
         val preferencesRepositoryMock: PreferencesRepository = mockk()
 
         coEvery {
