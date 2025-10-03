@@ -9,7 +9,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GetPreferenceUseCaseTest {
-
     @Test
     fun `should execute repository for integer when use case is executed`() = runTest {
         val preferencesRepositoryMock: PreferencesRepository = mockk()

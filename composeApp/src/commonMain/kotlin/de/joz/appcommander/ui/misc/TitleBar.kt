@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Settings
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,6 +33,7 @@ fun TitleBar(
                 Icon(
                     imageVector = FeatherIcons.ArrowLeft,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -43,6 +45,7 @@ fun TitleBar(
                 Icon(
                     imageVector = actionItem.icon,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -56,8 +59,40 @@ data class Action(
 
 @Preview
 @Composable
-private fun PreviewTitleBar() {
-    MaterialTheme {
+private fun PreviewTitleBar_Dark() {
+    AppCommanderTheme(
+        darkTheme = true
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            TitleBar(
+                title = "Title bar (plain)",
+            )
+            TitleBar(
+                title = "Title bar with back",
+                onBackNavigation = {},
+            )
+            TitleBar(
+                title = "Title bar with back + actions",
+                onBackNavigation = {},
+                actions = listOf(
+                    Action(
+                        action = {},
+                        icon = FeatherIcons.Settings,
+                    )
+                ),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewTitleBar_Light() {
+    AppCommanderTheme(
+        darkTheme = false
+    ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {

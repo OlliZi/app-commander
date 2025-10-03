@@ -6,7 +6,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class LoggingRepositoryImplTest {
-
     @Test
     fun `should empty after startup`() = runTest {
         val repository = createRepository()

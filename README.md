@@ -12,11 +12,10 @@ is still maybe possible in future.
 - Terminal-screen
 - Logging-section
 - Settings-screen
+- Light and dark mode
 - Save user preferences
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
-- Code quality (UI-tests, Unit-tests, detekt)
-- Previews for all screens and elements
 
 # TODOs
 
@@ -24,13 +23,10 @@ is still maybe possible in future.
 - Integrate ktlint
 - UI-tests
 - Screenshot testing
-- Theming (light and dark)
 - Code coverage
 - Enter new scripts screen
-- Unit-test for appended device id in ExecuteScriptUseCase + PreferencesRepositoryImpl +
-  TrackScriptsFileChangesUseCaseTest
-- use other test lib (droidcon) https://github.com/lupuuss/Mokkery
-- Open-Icons für Logging and Terminal unten rechts?
+- Unit-test for appended device id in PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
+- Open-Icons für Logging and Terminal unten rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
 
@@ -46,3 +42,5 @@ is still maybe possible in future.
 - Preferences by datastore
 - Integrate library update tooling
 - Integrate detekt plugin + baseline
+- Code quality (UI-tests, Unit-tests, detekt)
+- Previews for all screens and elements

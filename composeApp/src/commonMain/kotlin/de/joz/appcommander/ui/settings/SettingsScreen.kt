@@ -47,7 +47,8 @@ fun SettingsScreen(
         onSliderChangeItem = { sliderItem, value ->
             viewModel.onEvent(
                 event = SettingsViewModel.Event.OnSliderItem(
-                    sliderItem = sliderItem, value = value,
+                    sliderItem = sliderItem,
+                    value = value,
                 )
             )
         }
@@ -82,7 +83,7 @@ internal fun SettingsContent(
             uiState.togglePreferences.forEach { toggleItem ->
                 LabelledSwitch(
                     textModifier = Modifier.weight(1f),
-                    label = stringResource(Res.string.settings_preference_show_welcome_screen),
+                    label = stringResource(toggleItem.label),
                     checked = toggleItem.isChecked,
                     onCheckedChange = { isChecked ->
                         onToggleItem(toggleItem, isChecked)
@@ -90,7 +91,7 @@ internal fun SettingsContent(
                 )
             }
 
-            HorizontalDivider()
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             uiState.sliderPreferences.forEach { sliderItem ->
                 Slider(
@@ -114,16 +115,17 @@ private fun PreviewSettingsScreen() {
                     isChecked = true,
                     label = Res.string.settings_preference_show_welcome_screen,
                     key = "",
-                )
+                ),
             ),
             sliderPreferences = listOf(
                 SettingsViewModel.SliderItem(
                     label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                    value = 4f,
+                    sliderValue = 4f,
                     key = "",
                     minimum = 0f,
                     maximum = 10f,
                     steps = 10,
+                    labelValue = SettingsViewModel.LabelValue.IntRes(5),
                 )
             )
         ),

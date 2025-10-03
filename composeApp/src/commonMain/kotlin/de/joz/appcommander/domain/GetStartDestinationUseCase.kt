@@ -9,7 +9,6 @@ import org.koin.core.annotation.Factory
 class GetStartDestinationUseCase(
     private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
-
     operator fun invoke(scope: CoroutineScope): NavigationScreens {
         return runBlocking {
             getStartDestination()

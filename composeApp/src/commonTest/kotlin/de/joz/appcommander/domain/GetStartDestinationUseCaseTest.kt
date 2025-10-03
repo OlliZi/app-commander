@@ -12,7 +12,6 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetStartDestinationUseCaseTest {
-
     @Test
     fun `should navigate to welcome screen when nothing is saved in preferences`() = runTest {
         val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()

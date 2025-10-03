@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,12 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Heart
 import compose.icons.feathericons.Play
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
@@ -196,7 +196,6 @@ private fun ConnectedDevices(
             ) {
                 Text(
                     text = stringResource(Res.string.scripts_hint_no_devices_refresh),
-                    fontWeight = FontWeight.Bold,
                 )
             }
             connectedDevices.forEach { device ->
@@ -206,20 +205,9 @@ private fun ConnectedDevices(
                         onDeviceSelect(device)
                     },
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Text(
-                            text = device.label,
-                            fontWeight = FontWeight.Bold,
-                        )
-
-                        Icon(
-                            imageVector = FeatherIcons.Heart,
-                            tint = if (device.isSelected) Color.Green.lighter(factor = 0.75f) else Color.LightGray,
-                            contentDescription = null,
-                        )
-                    }
+                    Text(
+                        text = device.label,
+                    )
                 }
             }
         }
@@ -264,6 +252,12 @@ private fun ScriptsSection(
                             )
                         }
                         ExpandButton(
+                            modifier = Modifier.then(
+                                if (isAtMinimumOneDeviceSelected) Modifier.background(
+                                    Color.White,
+                                    CircleShape
+                                ) else Modifier
+                            ),
                             isExpanded = true,
                             onClick = { onExpand(script) },
                         )
@@ -290,6 +284,12 @@ private fun ScriptsSection(
                             style = MaterialTheme.typography.bodySmall,
                         )
                         ExpandButton(
+                            modifier = Modifier.then(
+                                if (isAtMinimumOneDeviceSelected) Modifier.background(
+                                    Color.White,
+                                    CircleShape
+                                ) else Modifier
+                            ),
                             isExpanded = false,
                             onClick = { onExpand(script) },
                         )
@@ -309,7 +309,7 @@ private fun LoggingSection(
     var isExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier.background(
-            Color.LightGray,
+            MaterialTheme.colorScheme.background,
         ).padding(8.dp),
     ) {
         Row(
@@ -327,6 +327,7 @@ private fun LoggingSection(
                     Icon(
                         imageVector = FeatherIcons.Trash,
                         contentDescription = "Clear logging",
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -338,7 +339,7 @@ private fun LoggingSection(
         }
         AnimatedVisibility(visible = isExpanded) {
             LazyColumn(
-                modifier = modifier.heightIn(max = 300.dp).wrapContentHeight(),
+                modifier = modifier.heightIn(max = 250.dp).wrapContentHeight(),
             ) {
                 items(logging) { item ->
                     Text(
@@ -361,7 +362,7 @@ private fun TerminalSection(
 
     Column(
         modifier = Modifier.background(
-            Color.LightGray,
+            MaterialTheme.colorScheme.background,
         ).padding(8.dp),
     ) {
         Row(
@@ -394,11 +395,17 @@ private fun TerminalSection(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                         ),
+                        textStyle = LocalTextStyle.current.copy(
+                            color = MaterialTheme.colorScheme.background
+                        ),
                         onValueChange = {
                             inputValue = it
                         },
                         placeholder = {
-                            Text(text = stringResource(Res.string.scripts_terminal_placeholder))
+                            Text(
+                                text = stringResource(Res.string.scripts_terminal_placeholder),
+                                color = MaterialTheme.colorScheme.background,
+                            )
                         },
                         trailingIcon = {
                             IconButton(
@@ -408,6 +415,7 @@ private fun TerminalSection(
                             ) {
                                 Icon(
                                     imageVector = FeatherIcons.Play,
+                                    tint = MaterialTheme.colorScheme.primary,
                                     contentDescription = "Execute script text",
                                 )
                             }
@@ -439,7 +447,7 @@ private fun BottomBar(
 ) {
     Row(
         modifier = Modifier.navigationBarsPadding().fillMaxWidth()
-            .background(Color.LightGray.lighter(factor = 1.1f)).padding(16.dp),
+            .background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f)).padding(16.dp),
     ) {
         Button(
             onClick = onOpenScriptFile,

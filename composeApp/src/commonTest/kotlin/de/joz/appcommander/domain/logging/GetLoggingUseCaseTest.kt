@@ -6,7 +6,6 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class GetLoggingUseCaseTest {
-
     @Test
     fun `should get logs from repository`() = runTest {
         val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)

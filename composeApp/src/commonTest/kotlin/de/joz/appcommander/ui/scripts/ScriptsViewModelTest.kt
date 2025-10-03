@@ -29,7 +29,6 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ScriptsViewModelTest {
-
     private val navControllerMock: NavController = mockk(relaxed = true)
     private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
     private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
@@ -146,7 +145,7 @@ class ScriptsViewModelTest {
                 script = script.originalScript,
                 selectedDevice = "p7",
             )
-        } returns ExecuteScriptUseCase.Result.Success(output = "")
+        } returns ExecuteScriptUseCase.Result.Success(output = "", emptyList())
 
         viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
         runCurrent()
@@ -237,13 +236,13 @@ class ScriptsViewModelTest {
                     script = testScript,
                     selectedDevice = "1",
                 )
-            } returns ExecuteScriptUseCase.Result.Success(output = "")
+            } returns ExecuteScriptUseCase.Result.Success(output = "", emptyList())
             coEvery {
                 executeScriptUseCaseMock(
                     script = testScript,
                     selectedDevice = "3",
                 )
-            } returns ExecuteScriptUseCase.Result.Success(output = "")
+            } returns ExecuteScriptUseCase.Result.Success(output = "", emptyList())
 
             val viewModel = createViewModel()
 

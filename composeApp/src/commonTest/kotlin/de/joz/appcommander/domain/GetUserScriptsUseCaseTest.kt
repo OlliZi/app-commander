@@ -8,7 +8,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GetUserScriptsUseCaseTest {
-
     @Test
     fun `should return scripts from repository`() = runTest {
         val scriptsRepositoryMock: ScriptsRepository = mockk()

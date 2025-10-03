@@ -14,7 +14,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ScriptsRepositoryImplTest {
-
     private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
     private val testFile = File("./build", "test.json")
 
