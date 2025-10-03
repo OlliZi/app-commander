@@ -43,6 +43,15 @@ fun Slider(
     }
 }
 
+@Composable
+@NonSkippableComposable
+private fun SettingsViewModel.LabelValue.toUiString(): String {
+    return when (this) {
+        is SettingsViewModel.LabelValue.IntRes -> value.toString()
+        is SettingsViewModel.LabelValue.StringRes -> stringResource(value)
+    }
+}
+
 @Preview
 @Composable
 private fun PreviewSlider_Dark() {
@@ -114,14 +123,5 @@ private fun PreviewSlider_Light() {
                 onValueChange = {},
             )
         }
-    }
-}
-
-@Composable
-@NonSkippableComposable
-private fun SettingsViewModel.LabelValue.toUiString(): String {
-    return when (this) {
-        is SettingsViewModel.LabelValue.IntRes -> value.toString()
-        is SettingsViewModel.LabelValue.StringRes -> stringResource(value)
     }
 }
