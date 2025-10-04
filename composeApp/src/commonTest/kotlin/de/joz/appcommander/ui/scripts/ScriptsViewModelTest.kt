@@ -44,23 +44,23 @@ class ScriptsViewModelTest {
         coEvery {
             getConnectedDevicesUseCaseMock()
         } returns
-                listOf(
-                    GetConnectedDevicesUseCase.ConnectedDevice(
-                        id = "p7",
-                        label = "pixel 7",
-                    ),
-                )
+            listOf(
+                GetConnectedDevicesUseCase.ConnectedDevice(
+                    id = "p7",
+                    label = "pixel 7",
+                ),
+            )
 
         coEvery {
             getUserScriptsUseCaseMock()
         } returns
-                listOf(
-                    ScriptsRepository.Script(
-                        label = "my script",
-                        script = "foo",
-                        platform = ScriptsRepository.Platform.ANDROID,
-                    ),
-                )
+            listOf(
+                ScriptsRepository.Script(
+                    label = "my script",
+                    script = "foo",
+                    platform = ScriptsRepository.Platform.ANDROID,
+                ),
+            )
     }
 
     @Test
@@ -257,11 +257,11 @@ class ScriptsViewModelTest {
             coEvery {
                 getConnectedDevicesUseCaseMock()
             } returns
-                    listOf(
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-                    )
+                listOf(
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
+                )
             coEvery {
                 executeScriptUseCaseMock(
                     script = testScript,
@@ -327,10 +327,10 @@ class ScriptsViewModelTest {
             coEvery {
                 getConnectedDevicesUseCaseMock()
             } returns
-                    listOf(
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-                    )
+                listOf(
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+                )
             val viewModel = createViewModel()
 
             viewModel.onEvent(
@@ -344,11 +344,11 @@ class ScriptsViewModelTest {
             coEvery {
                 getConnectedDevicesUseCaseMock()
             } returns
-                    listOf(
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-                        GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-                    )
+                listOf(
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+                    GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
+                )
 
             viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
             runCurrent()
@@ -378,13 +378,13 @@ class ScriptsViewModelTest {
             coEvery {
                 getUserScriptsUseCaseMock()
             } returns
-                    listOf(
-                        ScriptsRepository.Script(
-                            label = "my script",
-                            script = "foo",
-                            platform = ScriptsRepository.Platform.ANDROID,
-                        ),
-                    )
+                listOf(
+                    ScriptsRepository.Script(
+                        label = "my script",
+                        script = "foo",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    ),
+                )
 
             val viewModel = createViewModel()
             runCurrent()

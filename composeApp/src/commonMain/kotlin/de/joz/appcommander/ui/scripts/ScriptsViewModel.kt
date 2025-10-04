@@ -94,7 +94,7 @@ class ScriptsViewModel(
                             label = device.label,
                             isSelected =
                                 devices.size == 1 ||
-                                        oldState.connectedDevices.any { it.id == device.id && it.isSelected },
+                                    oldState.connectedDevices.any { it.id == device.id && it.isSelected },
                         )
                     },
             )
@@ -113,7 +113,7 @@ class ScriptsViewModel(
                             isExpanded =
                                 _uiState.value.scripts.any {
                                     (it.description == script.label || it.scriptText == script.script) &&
-                                            it.isExpanded
+                                        it.isExpanded
                                 },
                         )
                     },

@@ -38,9 +38,9 @@ class WelcomeScreenTest {
             startKoin {
                 modules(
                     DependencyInjection().module +
-                            module {
-                                single<PreferencesRepository> { preferencesRepositoryMock }
-                            },
+                        module {
+                            single<PreferencesRepository> { preferencesRepositoryMock }
+                        },
                 )
             }.koin
     }

@@ -15,13 +15,13 @@ class GetUserScriptsUseCaseTest {
             coEvery {
                 scriptsRepositoryMock.getScripts()
             } returns
-                    listOf(
-                        ScriptsRepository.Script(
-                            label = "foo",
-                            script = "echo",
-                            platform = ScriptsRepository.Platform.ANDROID,
-                        ),
-                    )
+                listOf(
+                    ScriptsRepository.Script(
+                        label = "foo",
+                        script = "echo",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    ),
+                )
 
             val getUserScriptsUseCase =
                 GetUserScriptsUseCase(

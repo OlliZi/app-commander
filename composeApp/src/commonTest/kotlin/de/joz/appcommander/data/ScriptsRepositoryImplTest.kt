@@ -124,7 +124,7 @@ class ScriptsRepositoryImplTest {
                         "        \"script\": \"bar\",\n" +
                         "        \"platform\": \"IOS\"\n" +
                         "    }\n" +
-                            "]",
+                        "]",
             )
 
             val repository =
