@@ -7,15 +7,17 @@ import kotlin.test.Test
 
 class GetLoggingUseCaseTest {
     @Test
-    fun `should get logs from repository`() = runTest {
-        val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
+    fun `should get logs from repository`() =
+        runTest {
+            val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
 
-        val useCase = GetLoggingUseCase(
-            loggingRepository = loggingRepositoryMock,
-        )
+            val useCase =
+                GetLoggingUseCase(
+                    loggingRepository = loggingRepositoryMock,
+                )
 
-        useCase().collect { }
+            useCase().collect { }
 
-        verify { loggingRepositoryMock.logging }
-    }
+            verify { loggingRepositoryMock.logging }
+        }
 }

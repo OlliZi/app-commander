@@ -13,10 +13,11 @@ class ScriptsRepositoryImpl(
     private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
     private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
-    private val prettyJson = Json {
-        prettyPrint = true
-        ignoreUnknownKeys = true
-    }
+    private val prettyJson =
+        Json {
+            prettyPrint = true
+            ignoreUnknownKeys = true
+        }
 
     override fun getScripts(): List<ScriptsRepository.Script> {
         val jsonFile = File(scriptFile)
@@ -43,18 +44,19 @@ class ScriptsRepositoryImpl(
     }
 
     companion object {
-        private val DEFAULT_SCRIPTS = listOf(
-            ScriptsRepository.Script(
-                label = "Dark mode",
-                script = "adb shell cmd uimode night yes",
-                platform = ScriptsRepository.Platform.ANDROID,
-            ),
-            ScriptsRepository.Script(
-                label = "Light mode",
-                script = "adb shell cmd uimode night no",
-                platform = ScriptsRepository.Platform.ANDROID,
+        private val DEFAULT_SCRIPTS =
+            listOf(
+                ScriptsRepository.Script(
+                    label = "Dark mode",
+                    script = "adb shell cmd uimode night yes",
+                    platform = ScriptsRepository.Platform.ANDROID,
+                ),
+                ScriptsRepository.Script(
+                    label = "Light mode",
+                    script = "adb shell cmd uimode night no",
+                    platform = ScriptsRepository.Platform.ANDROID,
+                ),
             )
-        )
 
         internal const val JSON_FILE_NAME = "scripts.json"
     }

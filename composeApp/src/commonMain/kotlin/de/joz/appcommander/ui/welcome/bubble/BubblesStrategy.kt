@@ -23,8 +23,8 @@ interface BubblesStrategy {
         private val BUBBLE_COLOR = Color.Green.copy(green = 0.5f)
         private val RANDOM = Random(1)
 
-        fun createRandomBubbles(color: Color = BUBBLE_COLOR): List<Bubble> {
-            return List(BUBBLE_COUNT) {
+        fun createRandomBubbles(color: Color = BUBBLE_COLOR): List<Bubble> =
+            List(BUBBLE_COUNT) {
                 Bubble(
                     color =
                         color.copy(
@@ -34,7 +34,7 @@ interface BubblesStrategy {
                                     max(
                                         MIN_BUBBLE_COLOR_ALPHA,
                                         RANDOM.nextFloat(),
-                                    )
+                                    ),
                                 ),
                         ),
                     size = max(MIN_SIZE, RANDOM.nextFloat() * MAX_SIZE),
@@ -42,7 +42,6 @@ interface BubblesStrategy {
                     y = RANDOM.nextFloat(),
                 )
             }
-        }
     }
 }
 

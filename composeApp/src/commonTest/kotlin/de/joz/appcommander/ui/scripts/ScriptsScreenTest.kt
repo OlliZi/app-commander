@@ -36,9 +36,10 @@ class ScriptsScreenTest {
     fun `should show log if expand button is clicked`() {
         runComposeUiTest {
             setTestContent(
-                uiState = ScriptsViewModel.UiState(
-                    logging = listOf("Log abc", "Log 123"),
-                )
+                uiState =
+                    ScriptsViewModel.UiState(
+                        logging = listOf("Log abc", "Log 123"),
+                    ),
             )
 
             onNodeWithTag(
@@ -55,12 +56,13 @@ class ScriptsScreenTest {
         runComposeUiTest {
             var isClearClicked = 0
             setTestContent(
-                uiState = ScriptsViewModel.UiState(
-                    logging = listOf("Log abc", "Log 123"),
-                ),
+                uiState =
+                    ScriptsViewModel.UiState(
+                        logging = listOf("Log abc", "Log 123"),
+                    ),
                 onClearLogging = {
                     isClearClicked++
-                }
+                },
             )
 
             onNodeWithContentDescription(
@@ -81,9 +83,10 @@ class ScriptsScreenTest {
     fun `should collapse log when collapse button is executed`() {
         runComposeUiTest {
             setTestContent(
-                uiState = ScriptsViewModel.UiState(
-                    logging = listOf("Log abc", "Log 123"),
-                )
+                uiState =
+                    ScriptsViewModel.UiState(
+                        logging = listOf("Log abc", "Log 123"),
+                    ),
             )
 
             onNodeWithTag(
@@ -106,15 +109,17 @@ class ScriptsScreenTest {
     fun `should show connected devices`() {
         runComposeUiTest {
             setTestContent(
-                uiState = ScriptsViewModel.UiState(
-                    connectedDevices = listOf(
-                        ScriptsViewModel.Device(
-                            label = "Device A",
-                            id = "1",
-                            isSelected = true,
-                        ),
-                    )
-                )
+                uiState =
+                    ScriptsViewModel.UiState(
+                        connectedDevices =
+                            listOf(
+                                ScriptsViewModel.Device(
+                                    label = "Device A",
+                                    id = "1",
+                                    isSelected = true,
+                                ),
+                            ),
+                    ),
             )
 
             onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
@@ -132,7 +137,7 @@ class ScriptsScreenTest {
                 uiState = ScriptsViewModel.UiState(),
                 onRefreshDevices = {
                     isRefreshClicked++
-                }
+                },
             )
 
             onNodeWithText("Refresh").performClick()
@@ -197,7 +202,7 @@ class ScriptsScreenTest {
             ).assertIsDisplayed().performClick()
 
             onNodeWithTag(testTag = "text_field_script_text").performTextInput(
-                "foo bar"
+                "foo bar",
             )
 
             onNodeWithText(

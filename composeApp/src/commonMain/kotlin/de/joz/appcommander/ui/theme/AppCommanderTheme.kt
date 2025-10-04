@@ -8,21 +8,23 @@ import androidx.compose.ui.graphics.Color
 
 private val BRAND_COLOR = Color(0xFF57B9FF)
 
-val darkColorScheme = darkColorScheme(
-    onBackground = Color.White,
-    onPrimary = Color.White,
-    surface = Color.Black,
-    onSurface = Color.White,
-    primary = BRAND_COLOR,
-)
+val darkColorScheme =
+    darkColorScheme(
+        onBackground = Color.White,
+        onPrimary = Color.White,
+        surface = Color.Black,
+        onSurface = Color.White,
+        primary = BRAND_COLOR,
+    )
 
-val lightColorScheme = lightColorScheme(
-    onBackground = Color.Black,
-    onPrimary = Color.Black,
-    surface = Color.White,
-    onSurface = Color.Black,
-    primary = BRAND_COLOR,
-)
+val lightColorScheme =
+    lightColorScheme(
+        onBackground = Color.Black,
+        onPrimary = Color.Black,
+        surface = Color.White,
+        onSurface = Color.Black,
+        primary = BRAND_COLOR,
+    )
 
 @Composable
 internal fun AppCommanderTheme(

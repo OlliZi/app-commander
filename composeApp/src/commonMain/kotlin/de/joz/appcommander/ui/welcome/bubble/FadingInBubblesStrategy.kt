@@ -38,8 +38,8 @@ class FadingInBubblesStrategy : BubblesStrategy {
     private fun createHexagon(
         bubble: Bubble,
         step: Float,
-    ): Path {
-        return Path().apply {
+    ): Path =
+        Path().apply {
             (0..6).forEach {
                 val r = bubble.size / 2 * max(0f, step)
                 val x = bubble.x + r * cos(RADIANT * it).toFloat()
@@ -52,7 +52,6 @@ class FadingInBubblesStrategy : BubblesStrategy {
             }
             close()
         }
-    }
 
     companion object {
         private const val RADIANT = 2 * PI / 6

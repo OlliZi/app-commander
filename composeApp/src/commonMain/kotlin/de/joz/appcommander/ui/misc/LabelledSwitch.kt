@@ -29,15 +29,16 @@ fun LabelledSwitch(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Row(
-        modifier = modifier
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                role = Role.Switch,
-                onClick = {
-                    onCheckedChange(!checked)
-                },
-            ),
+        modifier =
+            modifier
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    role = Role.Switch,
+                    onClick = {
+                        onCheckedChange(!checked)
+                    },
+                ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -48,10 +49,11 @@ fun LabelledSwitch(
         )
 
         Switch(
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.primary,
-                checkedTrackColor = Color.LightGray,
-            ),
+            colors =
+                SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = Color.LightGray,
+                ),
             modifier = Modifier.align(Alignment.CenterVertically),
             checked = checked,
             onCheckedChange = {
@@ -65,7 +67,7 @@ fun LabelledSwitch(
 @Composable
 private fun PreviewLabelledSwitch_Dark() {
     AppCommanderTheme(
-        darkTheme = true
+        darkTheme = true,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -88,7 +90,7 @@ private fun PreviewLabelledSwitch_Dark() {
 @Composable
 private fun PreviewLabelledSwitch_Light() {
     AppCommanderTheme(
-        darkTheme = false
+        darkTheme = false,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,

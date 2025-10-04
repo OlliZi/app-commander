@@ -18,24 +18,23 @@ expect fun getPreferenceFileStorePath(fileName: String): String
 internal class PreferencesRepositoryImpl(
     private val dataStore: DataStore<Preferences> = createDataStore(),
 ) : PreferencesRepository {
-
     override suspend fun get(
         key: String,
         defaultValue: Boolean,
-    ): Boolean {
-        return dataStore.data.map { preferences ->
-            preferences[booleanPreferencesKey(key)] ?: defaultValue
-        }.first()
-    }
+    ): Boolean =
+        dataStore.data
+            .map { preferences ->
+                preferences[booleanPreferencesKey(key)] ?: defaultValue
+            }.first()
 
     override suspend fun get(
         key: String,
         defaultValue: Int,
-    ): Int {
-        return dataStore.data.map { preferences ->
-            preferences[intPreferencesKey(key)] ?: defaultValue
-        }.first()
-    }
+    ): Int =
+        dataStore.data
+            .map { preferences ->
+                preferences[intPreferencesKey(key)] ?: defaultValue
+            }.first()
 
     override suspend fun <T> store(
         key: String,
@@ -51,12 +50,13 @@ internal class PreferencesRepositoryImpl(
     }
 }
 
-private fun createDataStore(): DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(
-    corruptionHandler = null,
-    migrations = emptyList(),
-    produceFile = {
-        getPreferenceFileStorePath(fileName = SIMPLE_PREF_FILE_NAME).toPath()
-    },
-)
+private fun createDataStore(): DataStore<Preferences> =
+    PreferenceDataStoreFactory.createWithPath(
+        corruptionHandler = null,
+        migrations = emptyList(),
+        produceFile = {
+            getPreferenceFileStorePath(fileName = SIMPLE_PREF_FILE_NAME).toPath()
+        },
+    )
 
 internal const val SIMPLE_PREF_FILE_NAME = "userprefs.preferences_pb"

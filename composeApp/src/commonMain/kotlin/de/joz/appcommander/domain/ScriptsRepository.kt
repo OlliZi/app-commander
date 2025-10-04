@@ -3,7 +3,6 @@ package de.joz.appcommander.domain
 import kotlinx.serialization.Serializable
 
 interface ScriptsRepository {
-
     fun getScripts(): List<Script>
 
     fun openScriptFile()
@@ -15,7 +14,9 @@ interface ScriptsRepository {
         val platform: Platform,
     )
 
-    enum class Platform(val label: String) {
+    enum class Platform(
+        val label: String,
+    ) {
         ANDROID("Android"),
         IOS("iOS"),
     }

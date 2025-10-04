@@ -8,7 +8,6 @@ import org.koin.core.annotation.Single
 
 @Single
 class LoggingRepositoryImpl : LoggingRepository {
-
     private val _logging = MutableStateFlow(listOf<String>())
     override val logging = _logging.asStateFlow()
 

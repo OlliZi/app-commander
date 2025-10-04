@@ -39,19 +39,22 @@ fun SettingsScreen(
         },
         onToggleItem = { toggleItem, isChecked ->
             viewModel.onEvent(
-                event = SettingsViewModel.Event.OnToggleItem(
-                    toggleItem = toggleItem, isChecked = isChecked,
-                )
+                event =
+                    SettingsViewModel.Event.OnToggleItem(
+                        toggleItem = toggleItem,
+                        isChecked = isChecked,
+                    ),
             )
         },
         onSliderChangeItem = { sliderItem, value ->
             viewModel.onEvent(
-                event = SettingsViewModel.Event.OnSliderItem(
-                    sliderItem = sliderItem,
-                    value = value,
-                )
+                event =
+                    SettingsViewModel.Event.OnSliderItem(
+                        sliderItem = sliderItem,
+                        value = value,
+                    ),
             )
-        }
+        },
     )
 }
 
@@ -70,7 +73,7 @@ internal fun SettingsContent(
                 title = stringResource(Res.string.settings_title),
                 onBackNavigation = onBackNavigation,
             )
-        }
+        },
     ) { paddingValues ->
         Column(
             Modifier
@@ -87,7 +90,7 @@ internal fun SettingsContent(
                     checked = toggleItem.isChecked,
                     onCheckedChange = { isChecked ->
                         onToggleItem(toggleItem, isChecked)
-                    }
+                    },
                 )
             }
 
@@ -98,7 +101,7 @@ internal fun SettingsContent(
                     sliderItem = sliderItem,
                     onValueChange = { value ->
                         onSliderChangeItem(sliderItem, value)
-                    }
+                    },
                 )
             }
         }
@@ -109,26 +112,29 @@ internal fun SettingsContent(
 @Composable
 private fun PreviewSettingsScreen() {
     SettingsContent(
-        uiState = SettingsViewModel.UiState(
-            togglePreferences = listOf(
-                SettingsViewModel.ToggleItem(
-                    isChecked = true,
-                    label = Res.string.settings_preference_show_welcome_screen,
-                    key = "",
-                ),
+        uiState =
+            SettingsViewModel.UiState(
+                togglePreferences =
+                    listOf(
+                        SettingsViewModel.ToggleItem(
+                            isChecked = true,
+                            label = Res.string.settings_preference_show_welcome_screen,
+                            key = "",
+                        ),
+                    ),
+                sliderPreferences =
+                    listOf(
+                        SettingsViewModel.SliderItem(
+                            label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                            sliderValue = 4f,
+                            key = "",
+                            minimum = 0f,
+                            maximum = 10f,
+                            steps = 10,
+                            labelValue = SettingsViewModel.LabelValue.IntRes(5),
+                        ),
+                    ),
             ),
-            sliderPreferences = listOf(
-                SettingsViewModel.SliderItem(
-                    label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                    sliderValue = 4f,
-                    key = "",
-                    minimum = 0f,
-                    maximum = 10f,
-                    steps = 10,
-                    labelValue = SettingsViewModel.LabelValue.IntRes(5),
-                )
-            )
-        ),
         onSliderChangeItem = { _, _ -> },
         onToggleItem = { _, _ -> },
         onBackNavigation = {},

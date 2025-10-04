@@ -6,12 +6,10 @@ import org.koin.core.annotation.Factory
 class GetConnectedDevicesUseCase(
     private val executeScriptUseCase: ExecuteScriptUseCase,
 ) {
-    suspend operator fun invoke(): List<ConnectedDevice> {
-        return getConnectedAndroidDevices() + getConnectedIOSDevices()
-    }
+    suspend operator fun invoke(): List<ConnectedDevice> = getConnectedAndroidDevices() + getConnectedIOSDevices()
 
-    private suspend fun getConnectedAndroidDevices(): List<ConnectedDevice> {
-        return when (val result = executeScriptUseCase(script = ANDROID_GET_DEVICES_SCRIPT)) {
+    private suspend fun getConnectedAndroidDevices(): List<ConnectedDevice> =
+        when (val result = executeScriptUseCase(script = ANDROID_GET_DEVICES_SCRIPT)) {
             is ExecuteScriptUseCase.Result.Error -> emptyList()
             is ExecuteScriptUseCase.Result.Success -> {
                 result.output
@@ -26,7 +24,6 @@ class GetConnectedDevicesUseCase(
                     }
             }
         }
-    }
 
     private suspend fun getConnectedIOSDevices(): List<ConnectedDevice> {
         // TODO
@@ -53,15 +50,17 @@ class GetConnectedDevicesUseCase(
     )
 
     companion object {
-        val ANDROID_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
-            label = "Get connected Android devices",
-            script = "adb devices",
-            platform = ScriptsRepository.Platform.ANDROID,
-        )
-        val IOS_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
-            label = "Get connected iOS devices",
-            script = "TODO for iOS",
-            platform = ScriptsRepository.Platform.IOS,
-        )
+        val ANDROID_GET_DEVICES_SCRIPT =
+            ScriptsRepository.Script(
+                label = "Get connected Android devices",
+                script = "adb devices",
+                platform = ScriptsRepository.Platform.ANDROID,
+            )
+        val IOS_GET_DEVICES_SCRIPT =
+            ScriptsRepository.Script(
+                label = "Get connected iOS devices",
+                script = "TODO for iOS",
+                platform = ScriptsRepository.Platform.IOS,
+            )
     }
 }

@@ -6,7 +6,5 @@ import org.koin.core.annotation.Factory
 class GetUserScriptsUseCase(
     private val scriptsRepository: ScriptsRepository,
 ) {
-    suspend operator fun invoke(): List<ScriptsRepository.Script> {
-        return scriptsRepository.getScripts()
-    }
+    suspend operator fun invoke(): List<ScriptsRepository.Script> = scriptsRepository.getScripts()
 }

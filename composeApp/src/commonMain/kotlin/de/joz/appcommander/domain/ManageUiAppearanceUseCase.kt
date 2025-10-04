@@ -11,9 +11,10 @@ class ManageUiAppearanceUseCase(
     private val preferencesRepository: PreferencesRepository,
 ) {
     private val _uiAppearanceType = MutableStateFlow<UiAppearance>(DEFAULT_SYSTEM_UI_APPEARANCE)
-    val uiAppearanceType: Flow<UiAppearance> = _uiAppearanceType.onStart {
-        updateUiAppearance()
-    }
+    val uiAppearanceType: Flow<UiAppearance> =
+        _uiAppearanceType.onStart {
+            updateUiAppearance()
+        }
 
     suspend operator fun invoke(uiAppearance: UiAppearance) {
         preferencesRepository.store(STORE_KEY_FOR_SYSTEM_UI_APPEARANCE, uiAppearance.optionIndex)
@@ -22,16 +23,19 @@ class ManageUiAppearanceUseCase(
 
     private suspend fun updateUiAppearance() {
         _uiAppearanceType.update { oldState ->
-            val savedUiAppearance = preferencesRepository.get(
-                key = STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                defaultValue = DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex
-            )
+            val savedUiAppearance =
+                preferencesRepository.get(
+                    key = STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                    defaultValue = DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
+                )
             UiAppearance.entries.find { it.optionIndex == savedUiAppearance }
                 ?: DEFAULT_SYSTEM_UI_APPEARANCE
         }
     }
 
-    enum class UiAppearance(val optionIndex: Int) {
+    enum class UiAppearance(
+        val optionIndex: Int,
+    ) {
         SYSTEM(optionIndex = 0),
         DARK(optionIndex = 1),
         LIGHT(optionIndex = 2),

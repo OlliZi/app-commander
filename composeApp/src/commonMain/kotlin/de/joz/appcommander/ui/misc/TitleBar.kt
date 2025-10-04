@@ -61,7 +61,7 @@ data class Action(
 @Composable
 private fun PreviewTitleBar_Dark() {
     AppCommanderTheme(
-        darkTheme = true
+        darkTheme = true,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -76,12 +76,13 @@ private fun PreviewTitleBar_Dark() {
             TitleBar(
                 title = "Title bar with back + actions",
                 onBackNavigation = {},
-                actions = listOf(
-                    Action(
-                        action = {},
-                        icon = FeatherIcons.Settings,
-                    )
-                ),
+                actions =
+                    listOf(
+                        Action(
+                            action = {},
+                            icon = FeatherIcons.Settings,
+                        ),
+                    ),
             )
         }
     }
@@ -91,7 +92,7 @@ private fun PreviewTitleBar_Dark() {
 @Composable
 private fun PreviewTitleBar_Light() {
     AppCommanderTheme(
-        darkTheme = false
+        darkTheme = false,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -106,12 +107,13 @@ private fun PreviewTitleBar_Light() {
             TitleBar(
                 title = "Title bar with back + actions",
                 onBackNavigation = {},
-                actions = listOf(
-                    Action(
-                        action = {},
-                        icon = FeatherIcons.Settings,
-                    )
-                ),
+                actions =
+                    listOf(
+                        Action(
+                            action = {},
+                            icon = FeatherIcons.Settings,
+                        ),
+                    ),
             )
         }
     }
