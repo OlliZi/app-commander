@@ -1,10 +1,8 @@
-build:
-  excludes: '**/generated/**'
-
 complexity:
   LongMethod:
     active: true
-    threshold: 166
+    excludes: '**/generated/**'
+    threshold: 150
     ignoreAnnotated: [ 'Composable' ]
   LongParameterList:
     ignoreDefaultParameters: true
@@ -19,7 +17,16 @@ style:
     ignoreEnums: true
     ignoreAnnotated: [ 'Composable' ]
     ignorePropertyDeclaration: true
+  NewLineAtEndOfFile:
+    active: true
+    excludes: '**/generated/**'
+  MaxLineLength:
+    active: true
+    excludes: '**/generated/**'
 
 naming:
+  ClassNaming:
+    excludes: '**/generated/**'
   FunctionNaming:
     ignoreAnnotated: [ 'Composable' ]
+    excludes: '**/generated/**'

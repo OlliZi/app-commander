@@ -29,5 +29,5 @@ allprojects {
 
 // format code before build
 subprojects {
-	tasks.getByPath(":${project.name}:build").dependsOn("ktlintFormat")
+	tasks.getByPath(":${project.name}:build").dependsOn("ktlintFormat").dependsOn("detektJvmMain")
 }

@@ -19,7 +19,6 @@ is still maybe possible in future.
 
 # TODOs
 
-- Fix detekt
 - UI-tests
 - Screenshot testing
 - Code coverage
