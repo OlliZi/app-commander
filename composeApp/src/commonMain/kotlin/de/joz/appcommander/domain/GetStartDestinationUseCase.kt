@@ -7,21 +7,21 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class GetStartDestinationUseCase(
-    private val getPreferenceUseCase: GetPreferenceUseCase,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
-    operator fun invoke(scope: CoroutineScope): NavigationScreens =
-        runBlocking {
-            getStartDestination()
-        }
+	operator fun invoke(scope: CoroutineScope): NavigationScreens =
+		runBlocking {
+			getStartDestination()
+		}
 
-    private suspend fun getStartDestination(): NavigationScreens =
-        if (getPreferenceUseCase.get(
-                key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
-                defaultValue = false,
-            )
-        ) {
-            NavigationScreens.ScriptsScreen
-        } else {
-            NavigationScreens.WelcomeScreen
-        }
+	private suspend fun getStartDestination(): NavigationScreens =
+		if (getPreferenceUseCase.get(
+				key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+				defaultValue = false,
+			)
+		) {
+			NavigationScreens.ScriptsScreen
+		} else {
+			NavigationScreens.WelcomeScreen
+		}
 }

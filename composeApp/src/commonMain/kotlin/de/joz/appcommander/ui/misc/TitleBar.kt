@@ -19,102 +19,102 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TitleBar(
-    title: String,
-    onBackNavigation: (() -> Unit)? = null,
-    actions: List<Action> = emptyList(),
+	title: String,
+	onBackNavigation: (() -> Unit)? = null,
+	actions: List<Action> = emptyList(),
 ) {
-    TopAppBar(title = {
-        Text(text = title)
-    }, navigationIcon = {
-        if (onBackNavigation != null) {
-            IconButton(
-                onClick = onBackNavigation,
-            ) {
-                Icon(
-                    imageVector = FeatherIcons.ArrowLeft,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-    }, actions = {
-        actions.forEach { actionItem ->
-            IconButton(
-                onClick = actionItem.action,
-            ) {
-                Icon(
-                    imageVector = actionItem.icon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-    })
+	TopAppBar(title = {
+		Text(text = title)
+	}, navigationIcon = {
+		if (onBackNavigation != null) {
+			IconButton(
+				onClick = onBackNavigation,
+			) {
+				Icon(
+					imageVector = FeatherIcons.ArrowLeft,
+					contentDescription = null,
+					tint = MaterialTheme.colorScheme.primary,
+				)
+			}
+		}
+	}, actions = {
+		actions.forEach { actionItem ->
+			IconButton(
+				onClick = actionItem.action,
+			) {
+				Icon(
+					imageVector = actionItem.icon,
+					contentDescription = null,
+					tint = MaterialTheme.colorScheme.primary,
+				)
+			}
+		}
+	})
 }
 
 data class Action(
-    val icon: ImageVector,
-    val action: () -> Unit,
+	val icon: ImageVector,
+	val action: () -> Unit,
 )
 
 @Preview
 @Composable
 private fun PreviewTitleBar_Dark() {
-    AppCommanderTheme(
-        darkTheme = true,
-    ) {
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            TitleBar(
-                title = "Title bar (plain)",
-            )
-            TitleBar(
-                title = "Title bar with back",
-                onBackNavigation = {},
-            )
-            TitleBar(
-                title = "Title bar with back + actions",
-                onBackNavigation = {},
-                actions =
-                    listOf(
-                        Action(
-                            action = {},
-                            icon = FeatherIcons.Settings,
-                        ),
-                    ),
-            )
-        }
-    }
+	AppCommanderTheme(
+		darkTheme = true,
+	) {
+		Column(
+			verticalArrangement = Arrangement.SpaceBetween,
+		) {
+			TitleBar(
+				title = "Title bar (plain)",
+			)
+			TitleBar(
+				title = "Title bar with back",
+				onBackNavigation = {},
+			)
+			TitleBar(
+				title = "Title bar with back + actions",
+				onBackNavigation = {},
+				actions =
+					listOf(
+						Action(
+							action = {},
+							icon = FeatherIcons.Settings,
+						),
+					),
+			)
+		}
+	}
 }
 
 @Preview
 @Composable
 private fun PreviewTitleBar_Light() {
-    AppCommanderTheme(
-        darkTheme = false,
-    ) {
-        Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            TitleBar(
-                title = "Title bar (plain)",
-            )
-            TitleBar(
-                title = "Title bar with back",
-                onBackNavigation = {},
-            )
-            TitleBar(
-                title = "Title bar with back + actions",
-                onBackNavigation = {},
-                actions =
-                    listOf(
-                        Action(
-                            action = {},
-                            icon = FeatherIcons.Settings,
-                        ),
-                    ),
-            )
-        }
-    }
+	AppCommanderTheme(
+		darkTheme = false,
+	) {
+		Column(
+			verticalArrangement = Arrangement.SpaceBetween,
+		) {
+			TitleBar(
+				title = "Title bar (plain)",
+			)
+			TitleBar(
+				title = "Title bar with back",
+				onBackNavigation = {},
+			)
+			TitleBar(
+				title = "Title bar with back + actions",
+				onBackNavigation = {},
+				actions =
+					listOf(
+						Action(
+							action = {},
+							icon = FeatherIcons.Settings,
+						),
+					),
+			)
+		}
+	}
 }

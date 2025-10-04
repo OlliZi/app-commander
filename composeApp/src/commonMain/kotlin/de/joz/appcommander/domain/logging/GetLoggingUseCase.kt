@@ -5,7 +5,7 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class GetLoggingUseCase(
-    private val loggingRepository: LoggingRepository,
+	private val loggingRepository: LoggingRepository,
 ) {
-    operator fun invoke(): Flow<List<String>> = loggingRepository.logging
+	operator fun invoke(): Flow<List<String>> = loggingRepository.logging
 }

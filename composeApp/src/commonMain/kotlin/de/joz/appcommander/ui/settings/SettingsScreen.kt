@@ -27,116 +27,116 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel,
-    navController: NavController,
+	viewModel: SettingsViewModel,
+	navController: NavController,
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    SettingsContent(
-        uiState = uiState.value,
-        onBackNavigation = {
-            navController.navigateUp()
-        },
-        onToggleItem = { toggleItem, isChecked ->
-            viewModel.onEvent(
-                event =
-                    SettingsViewModel.Event.OnToggleItem(
-                        toggleItem = toggleItem,
-                        isChecked = isChecked,
-                    ),
-            )
-        },
-        onSliderChangeItem = { sliderItem, value ->
-            viewModel.onEvent(
-                event =
-                    SettingsViewModel.Event.OnSliderItem(
-                        sliderItem = sliderItem,
-                        value = value,
-                    ),
-            )
-        },
-    )
+	SettingsContent(
+		uiState = uiState.value,
+		onBackNavigation = {
+			navController.navigateUp()
+		},
+		onToggleItem = { toggleItem, isChecked ->
+			viewModel.onEvent(
+				event =
+					SettingsViewModel.Event.OnToggleItem(
+						toggleItem = toggleItem,
+						isChecked = isChecked,
+					),
+			)
+		},
+		onSliderChangeItem = { sliderItem, value ->
+			viewModel.onEvent(
+				event =
+					SettingsViewModel.Event.OnSliderItem(
+						sliderItem = sliderItem,
+						value = value,
+					),
+			)
+		},
+	)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsContent(
-    uiState: SettingsViewModel.UiState,
-    onBackNavigation: () -> Unit,
-    onToggleItem: (SettingsViewModel.ToggleItem, Boolean) -> Unit,
-    onSliderChangeItem: (SettingsViewModel.SliderItem, Float) -> Unit,
+	uiState: SettingsViewModel.UiState,
+	onBackNavigation: () -> Unit,
+	onToggleItem: (SettingsViewModel.ToggleItem, Boolean) -> Unit,
+	onSliderChangeItem: (SettingsViewModel.SliderItem, Float) -> Unit,
 ) {
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface,
-        topBar = {
-            TitleBar(
-                title = stringResource(Res.string.settings_title),
-                onBackNavigation = onBackNavigation,
-            )
-        },
-    ) { paddingValues ->
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-        ) {
-            uiState.togglePreferences.forEach { toggleItem ->
-                LabelledSwitch(
-                    textModifier = Modifier.weight(1f),
-                    label = stringResource(toggleItem.label),
-                    checked = toggleItem.isChecked,
-                    onCheckedChange = { isChecked ->
-                        onToggleItem(toggleItem, isChecked)
-                    },
-                )
-            }
+	Scaffold(
+		containerColor = MaterialTheme.colorScheme.surface,
+		topBar = {
+			TitleBar(
+				title = stringResource(Res.string.settings_title),
+				onBackNavigation = onBackNavigation,
+			)
+		},
+	) { paddingValues ->
+		Column(
+			Modifier
+				.fillMaxSize()
+				.padding(paddingValues)
+				.padding(16.dp)
+				.verticalScroll(rememberScrollState()),
+			verticalArrangement = Arrangement.Top,
+		) {
+			uiState.togglePreferences.forEach { toggleItem ->
+				LabelledSwitch(
+					textModifier = Modifier.weight(1f),
+					label = stringResource(toggleItem.label),
+					checked = toggleItem.isChecked,
+					onCheckedChange = { isChecked ->
+						onToggleItem(toggleItem, isChecked)
+					},
+				)
+			}
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+			HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
-            uiState.sliderPreferences.forEach { sliderItem ->
-                Slider(
-                    sliderItem = sliderItem,
-                    onValueChange = { value ->
-                        onSliderChangeItem(sliderItem, value)
-                    },
-                )
-            }
-        }
-    }
+			uiState.sliderPreferences.forEach { sliderItem ->
+				Slider(
+					sliderItem = sliderItem,
+					onValueChange = { value ->
+						onSliderChangeItem(sliderItem, value)
+					},
+				)
+			}
+		}
+	}
 }
 
 @Preview
 @Composable
 private fun PreviewSettingsScreen() {
-    SettingsContent(
-        uiState =
-            SettingsViewModel.UiState(
-                togglePreferences =
-                    listOf(
-                        SettingsViewModel.ToggleItem(
-                            isChecked = true,
-                            label = Res.string.settings_preference_show_welcome_screen,
-                            key = "",
-                        ),
-                    ),
-                sliderPreferences =
-                    listOf(
-                        SettingsViewModel.SliderItem(
-                            label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                            sliderValue = 4f,
-                            key = "",
-                            minimum = 0f,
-                            maximum = 10f,
-                            steps = 10,
-                            labelValue = SettingsViewModel.LabelValue.IntRes(5),
-                        ),
-                    ),
-            ),
-        onSliderChangeItem = { _, _ -> },
-        onToggleItem = { _, _ -> },
-        onBackNavigation = {},
-    )
+	SettingsContent(
+		uiState =
+			SettingsViewModel.UiState(
+				togglePreferences =
+					listOf(
+						SettingsViewModel.ToggleItem(
+							isChecked = true,
+							label = Res.string.settings_preference_show_welcome_screen,
+							key = "",
+						),
+					),
+				sliderPreferences =
+					listOf(
+						SettingsViewModel.SliderItem(
+							label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+							sliderValue = 4f,
+							key = "",
+							minimum = 0f,
+							maximum = 10f,
+							steps = 10,
+							labelValue = SettingsViewModel.LabelValue.IntRes(5),
+						),
+					),
+			),
+		onSliderChangeItem = { _, _ -> },
+		onToggleItem = { _, _ -> },
+		onBackNavigation = {},
+	)
 }

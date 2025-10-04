@@ -1,18 +1,18 @@
 package de.joz.appcommander.domain
 
 interface PreferencesRepository {
-    suspend fun get(
-        key: String,
-        defaultValue: Boolean,
-    ): Boolean
+	suspend fun get(
+		key: String,
+		defaultValue: Boolean,
+	): Boolean
 
-    suspend fun get(
-        key: String,
-        defaultValue: Int,
-    ): Int
+	suspend fun get(
+		key: String,
+		defaultValue: Int,
+	): Int
 
-    suspend fun <T> store(
-        key: String,
-        value: T,
-    )
+	suspend fun <T> store(
+		key: String,
+		value: T,
+	)
 }

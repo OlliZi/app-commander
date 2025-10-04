@@ -15,35 +15,35 @@ import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class WelcomeViewModel(
-    @InjectedParam private val navController: NavController,
-    private val savePreferenceUseCase: SavePreferenceUseCase,
+	@InjectedParam private val navController: NavController,
+	private val savePreferenceUseCase: SavePreferenceUseCase,
 ) : ViewModel(),
-    UnidirectionalDataFlowViewModel<Unit, WelcomeViewModel.Event> {
-    private val _uiState = MutableStateFlow(Unit)
-    override val uiState = _uiState.asStateFlow()
+	UnidirectionalDataFlowViewModel<Unit, WelcomeViewModel.Event> {
+	private val _uiState = MutableStateFlow(Unit)
+	override val uiState = _uiState.asStateFlow()
 
-    override fun onEvent(event: Event) {
-        viewModelScope.launch {
-            when (event) {
-                Event.OnNavigateToScripts -> {
-                    navController.navigate(NavigationScreens.ScriptsScreen)
-                }
+	override fun onEvent(event: Event) {
+		viewModelScope.launch {
+			when (event) {
+				Event.OnNavigateToScripts -> {
+					navController.navigate(NavigationScreens.ScriptsScreen)
+				}
 
-                is Event.OnDoNotShowWelcomeAgain -> {
-                    savePreferenceUseCase(
-                        SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
-                        value = event.value,
-                    )
-                }
-            }
-        }
-    }
+				is Event.OnDoNotShowWelcomeAgain -> {
+					savePreferenceUseCase(
+						SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+						value = event.value,
+					)
+				}
+			}
+		}
+	}
 
-    sealed interface Event {
-        object OnNavigateToScripts : Event
+	sealed interface Event {
+		object OnNavigateToScripts : Event
 
-        data class OnDoNotShowWelcomeAgain(
-            val value: Boolean,
-        ) : Event
-    }
+		data class OnDoNotShowWelcomeAgain(
+			val value: Boolean,
+		) : Event
+	}
 }

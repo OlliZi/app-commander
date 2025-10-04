@@ -1,10 +1,11 @@
 root = true
 
 [*.{kt,kts}]
+indent_size = 4
+indent_style = tab
 max_line_length = 120
 ktlint_code_style = ktlint_official
 ktlint_function_naming_ignore_when_annotated_with = Composable
-end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 

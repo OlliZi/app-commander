@@ -5,17 +5,17 @@ import io.mockk.verify
 import kotlin.test.Test
 
 class AddLoggingUseCaseTest {
-    @Test
-    fun `should log to repository`() {
-        val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
+	@Test
+	fun `should log to repository`() {
+		val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
 
-        val useCase =
-            AddLoggingUseCase(
-                loggingRepository = loggingRepositoryMock,
-            )
+		val useCase =
+			AddLoggingUseCase(
+				loggingRepository = loggingRepositoryMock,
+			)
 
-        useCase(log = "foo")
+		useCase(log = "foo")
 
-        verify { loggingRepositoryMock.add(log = "foo") }
-    }
+		verify { loggingRepositoryMock.add(log = "foo") }
+	}
 }

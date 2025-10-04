@@ -16,47 +16,47 @@ expect fun getPreferenceFileStorePath(fileName: String): String
 
 @Single
 internal class PreferencesRepositoryImpl(
-    private val dataStore: DataStore<Preferences> = createDataStore(),
+	private val dataStore: DataStore<Preferences> = createDataStore(),
 ) : PreferencesRepository {
-    override suspend fun get(
-        key: String,
-        defaultValue: Boolean,
-    ): Boolean =
-        dataStore.data
-            .map { preferences ->
-                preferences[booleanPreferencesKey(key)] ?: defaultValue
-            }.first()
+	override suspend fun get(
+		key: String,
+		defaultValue: Boolean,
+	): Boolean =
+		dataStore.data
+			.map { preferences ->
+				preferences[booleanPreferencesKey(key)] ?: defaultValue
+			}.first()
 
-    override suspend fun get(
-        key: String,
-        defaultValue: Int,
-    ): Int =
-        dataStore.data
-            .map { preferences ->
-                preferences[intPreferencesKey(key)] ?: defaultValue
-            }.first()
+	override suspend fun get(
+		key: String,
+		defaultValue: Int,
+	): Int =
+		dataStore.data
+			.map { preferences ->
+				preferences[intPreferencesKey(key)] ?: defaultValue
+			}.first()
 
-    override suspend fun <T> store(
-        key: String,
-        value: T,
-    ) {
-        dataStore.edit { preferences ->
-            when (value) {
-                is Boolean -> preferences[booleanPreferencesKey(key)] = value
-                is Int -> preferences[intPreferencesKey(key)] = value
-                else -> throw IllegalArgumentException("Unsupported type")
-            }
-        }
-    }
+	override suspend fun <T> store(
+		key: String,
+		value: T,
+	) {
+		dataStore.edit { preferences ->
+			when (value) {
+				is Boolean -> preferences[booleanPreferencesKey(key)] = value
+				is Int -> preferences[intPreferencesKey(key)] = value
+				else -> throw IllegalArgumentException("Unsupported type")
+			}
+		}
+	}
 }
 
 private fun createDataStore(): DataStore<Preferences> =
-    PreferenceDataStoreFactory.createWithPath(
-        corruptionHandler = null,
-        migrations = emptyList(),
-        produceFile = {
-            getPreferenceFileStorePath(fileName = SIMPLE_PREF_FILE_NAME).toPath()
-        },
-    )
+	PreferenceDataStoreFactory.createWithPath(
+		corruptionHandler = null,
+		migrations = emptyList(),
+		produceFile = {
+			getPreferenceFileStorePath(fileName = SIMPLE_PREF_FILE_NAME).toPath()
+		},
+	)
 
 internal const val SIMPLE_PREF_FILE_NAME = "userprefs.preferences_pb"
