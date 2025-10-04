@@ -1,6 +1,7 @@
 package de.joz.appcommander
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -62,6 +63,9 @@ fun App(
 				ScriptsScreen(
 					viewModel = viewModel,
 				)
+			}
+			composable<NavigationScreens.NewScriptScreen> {
+				Text("sdfd")
 			}
 			composable<NavigationScreens.SettingsScreen> {
 				val viewModel: SettingsViewModel = koinViewModel()

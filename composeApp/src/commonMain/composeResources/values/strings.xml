@@ -12,6 +12,7 @@
     <string name="scripts_hint_no_devices">Connect your devices over USB and click refresh.</string>
     <string name="scripts_hint_no_devices_refresh">Refresh</string>
     <string name="scripts_open_script_file">Open script file</string>
+    <string name="scripts_add_new_script">Add new script</string>
     <string name="scripts_logging_section_title">Logging</string>
     <string name="scripts_terminal_section_title">Terminal</string>
     <string name="scripts_terminal_placeholder">adb devices</string>
