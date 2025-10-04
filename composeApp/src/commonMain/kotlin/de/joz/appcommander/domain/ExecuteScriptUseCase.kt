@@ -20,7 +20,11 @@ class ExecuteScriptUseCase(
 
         return runCatching {
             val output =
-                processBuilder.command(commands).directory(workingDir).start().inputReader()
+                processBuilder
+                    .command(commands)
+                    .directory(workingDir)
+                    .start()
+                    .inputReader()
                     .readText()
 
             Result.Success(
@@ -43,10 +47,11 @@ class ExecuteScriptUseCase(
         }
 
         return when (script.platform) {
-            ScriptsRepository.Platform.ANDROID -> script.script.replace(
-                "adb",
-                "adb -s $selectedDevice",
-            )
+            ScriptsRepository.Platform.ANDROID ->
+                script.script.replace(
+                    "adb",
+                    "adb -s $selectedDevice",
+                )
 
             // TODO
             ScriptsRepository.Platform.IOS -> script.script
@@ -59,6 +64,8 @@ class ExecuteScriptUseCase(
             val commands: List<String>,
         ) : Result
 
-        data class Error(val message: String) : Result
+        data class Error(
+            val message: String,
+        ) : Result
     }
 }

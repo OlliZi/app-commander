@@ -45,44 +45,48 @@ fun Slider(
 
 @Composable
 @NonSkippableComposable
-private fun SettingsViewModel.LabelValue.toUiString(): String {
-    return when (this) {
+private fun SettingsViewModel.LabelValue.toUiString(): String =
+    when (this) {
         is SettingsViewModel.LabelValue.IntRes -> value.toString()
         is SettingsViewModel.LabelValue.StringRes -> stringResource(value)
     }
-}
 
 @Preview
 @Composable
 private fun PreviewSlider_Dark() {
     AppCommanderTheme(
-        darkTheme = true
+        darkTheme = true,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Slider(
-                sliderItem = SettingsViewModel.SliderItem(
-                    sliderValue = 5f,
-                    maximum = 10f,
-                    minimum = 0f,
-                    steps = 20,
-                    label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                    labelValue = SettingsViewModel.LabelValue.IntRes(5),
-                    key = "",
-                ),
+                sliderItem =
+                    SettingsViewModel.SliderItem(
+                        sliderValue = 5f,
+                        maximum = 10f,
+                        minimum = 0f,
+                        steps = 20,
+                        label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                        labelValue = SettingsViewModel.LabelValue.IntRes(5),
+                        key = "",
+                    ),
                 onValueChange = {},
             )
             Slider(
-                sliderItem = SettingsViewModel.SliderItem(
-                    sliderValue = 5f,
-                    maximum = 10f,
-                    minimum = 0f,
-                    steps = 20,
-                    label = Res.string.settings_preference_ui_appearance_label,
-                    labelValue = SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_system),
-                    key = "",
-                ),
+                sliderItem =
+                    SettingsViewModel.SliderItem(
+                        sliderValue = 5f,
+                        maximum = 10f,
+                        minimum = 0f,
+                        steps = 20,
+                        label = Res.string.settings_preference_ui_appearance_label,
+                        labelValue =
+                            SettingsViewModel.LabelValue.StringRes(
+                                Res.string.settings_preference_ui_appearance_system,
+                            ),
+                        key = "",
+                    ),
                 onValueChange = {},
             )
         }
@@ -93,33 +97,38 @@ private fun PreviewSlider_Dark() {
 @Composable
 private fun PreviewSlider_Light() {
     AppCommanderTheme(
-        darkTheme = false
+        darkTheme = false,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Slider(
-                sliderItem = SettingsViewModel.SliderItem(
-                    sliderValue = 5f,
-                    maximum = 10f,
-                    minimum = 0f,
-                    steps = 20,
-                    label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                    labelValue = SettingsViewModel.LabelValue.IntRes(5),
-                    key = "",
-                ),
+                sliderItem =
+                    SettingsViewModel.SliderItem(
+                        sliderValue = 5f,
+                        maximum = 10f,
+                        minimum = 0f,
+                        steps = 20,
+                        label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                        labelValue = SettingsViewModel.LabelValue.IntRes(5),
+                        key = "",
+                    ),
                 onValueChange = {},
             )
             Slider(
-                sliderItem = SettingsViewModel.SliderItem(
-                    sliderValue = 5f,
-                    maximum = 10f,
-                    minimum = 0f,
-                    steps = 20,
-                    label = Res.string.settings_preference_ui_appearance_label,
-                    labelValue = SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_system),
-                    key = "",
-                ),
+                sliderItem =
+                    SettingsViewModel.SliderItem(
+                        sliderValue = 5f,
+                        maximum = 10f,
+                        minimum = 0f,
+                        steps = 20,
+                        label = Res.string.settings_preference_ui_appearance_label,
+                        labelValue =
+                            SettingsViewModel.LabelValue.StringRes(
+                                Res.string.settings_preference_ui_appearance_system,
+                            ),
+                        key = "",
+                    ),
                 onValueChange = {},
             )
         }

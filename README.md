@@ -20,13 +20,14 @@ is still maybe possible in future.
 # TODOs
 
 - Fix detekt
-- Integrate ktlint
 - UI-tests
 - Screenshot testing
 - Code coverage
 - Enter new scripts screen
 - Unit-test for appended device id in PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
-- Open-Icons für Logging and Terminal unten rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
+- Fix test "should append device id in script ..." in ExecuteScriptUseCaseTest
+- Open-Icons für Logging and Terminal unten
+  rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
 
@@ -42,5 +43,5 @@ is still maybe possible in future.
 - Preferences by datastore
 - Integrate library update tooling
 - Integrate detekt plugin + baseline
-- Code quality (UI-tests, Unit-tests, detekt)
+- Code quality (UI-tests, Unit-tests, detekt & ktlint)
 - Previews for all screens and elements

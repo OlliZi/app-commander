@@ -7,15 +7,16 @@ import kotlin.test.Test
 
 class OpenScriptFileUseCaseTest {
     @Test
-    fun `should call repository when use case is executed`() = runTest {
-        val scriptsRepository: ScriptsRepository = mockk(relaxed = true)
+    fun `should call repository when use case is executed`() =
+        runTest {
+            val scriptsRepository: ScriptsRepository = mockk(relaxed = true)
 
-        OpenScriptFileUseCase(
-            scriptsRepository = scriptsRepository,
-        ).invoke()
+            OpenScriptFileUseCase(
+                scriptsRepository = scriptsRepository,
+            ).invoke()
 
-        coVerify {
-            scriptsRepository.openScriptFile()
+            coVerify {
+                scriptsRepository.openScriptFile()
+            }
         }
-    }
 }

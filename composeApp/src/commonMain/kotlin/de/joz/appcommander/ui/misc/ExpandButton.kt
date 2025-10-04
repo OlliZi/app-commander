@@ -27,15 +27,16 @@ fun ExpandButton(
         onClick = onClick,
     ) {
         Icon(
-            imageVector = when (direction) {
-                ExpandButtonDirection.BOTTOM_TO_TOP -> {
-                    if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown
-                }
+            imageVector =
+                when (direction) {
+                    ExpandButtonDirection.BOTTOM_TO_TOP -> {
+                        if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown
+                    }
 
-                ExpandButtonDirection.LEFT_TO_RIGHT -> {
-                    if (isExpanded) FeatherIcons.ArrowRight else FeatherIcons.ArrowLeft
-                }
-            },
+                    ExpandButtonDirection.LEFT_TO_RIGHT -> {
+                        if (isExpanded) FeatherIcons.ArrowRight else FeatherIcons.ArrowLeft
+                    }
+                },
             contentDescription = "Expand button",
             tint = MaterialTheme.colorScheme.primary,
         )
@@ -51,7 +52,7 @@ enum class ExpandButtonDirection {
 @Composable
 private fun PreviewExpandButton_Dark() {
     AppCommanderTheme(
-        darkTheme = true
+        darkTheme = true,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -84,7 +85,7 @@ private fun PreviewExpandButton_Dark() {
 @Composable
 private fun PreviewExpandButton_Light() {
     AppCommanderTheme(
-        darkTheme = false
+        darkTheme = false,
     ) {
         Column(
             verticalArrangement = Arrangement.SpaceBetween,

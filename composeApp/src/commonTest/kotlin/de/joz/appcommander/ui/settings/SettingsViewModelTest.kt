@@ -58,132 +58,151 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `should return default state when viewmodel is initialized`() = runTest {
-        val viewModel = createViewModel()
-        runCurrent()
-
-        val uiState = viewModel.uiState.value
-
-        assertEquals(1, uiState.togglePreferences.size)
-        assertEquals(2, uiState.sliderPreferences.size)
-
-        assertEquals(
-            SettingsViewModel.ToggleItem(
-                isChecked = false,
-                label = Res.string.settings_preference_show_welcome_screen,
-                key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
-            ),
-            uiState.togglePreferences.first(),
-        )
-
-        assertEquals(
-            SettingsViewModel.SliderItem(
-                maximum = 10f,
-                minimum = 1f,
-                steps = 8,
-                sliderValue = 0f,
-                label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-                key = SettingsViewModel.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-                labelValue = SettingsViewModel.LabelValue.IntRes(0)
-            ),
-            uiState.sliderPreferences[0],
-        )
-
-        assertEquals(
-            SettingsViewModel.SliderItem(
-                maximum = 2f,
-                minimum = 0f,
-                steps = 1,
-                sliderValue = 0f,
-                label = Res.string.settings_preference_ui_appearance_label,
-                key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-                labelValue = StringRes(Res.string.settings_preference_ui_appearance_system)
-            ),
-            uiState.sliderPreferences[1],
-        )
-    }
-
-    @Test
-    fun `should toggle item when event OnToggleItem is fired`() = runTest {
-        val viewModel = createViewModel()
-        runCurrent()
-
-        viewModel.uiState.value.togglePreferences.forEach {
-            viewModel.onEvent(
-                event = SettingsViewModel.Event.OnToggleItem(
-                    isChecked = true,
-                    toggleItem = it,
-                )
-            )
+    fun `should return default state when viewmodel is initialized`() =
+        runTest {
+            val viewModel = createViewModel()
             runCurrent()
-        }
-        coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
-            savePreferenceUseCaseMock.invoke(any(), true)
-        }
-        assertTrue(viewModel.uiState.value.togglePreferences.all { it.isChecked })
 
-        viewModel.uiState.value.togglePreferences.forEach {
-            viewModel.onEvent(
-                event = SettingsViewModel.Event.OnToggleItem(
+            val uiState = viewModel.uiState.value
+
+            assertEquals(1, uiState.togglePreferences.size)
+            assertEquals(2, uiState.sliderPreferences.size)
+
+            assertEquals(
+                SettingsViewModel.ToggleItem(
                     isChecked = false,
-                    toggleItem = it,
-                )
+                    label = Res.string.settings_preference_show_welcome_screen,
+                    key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+                ),
+                uiState.togglePreferences.first(),
             )
-            runCurrent()
+
+            assertEquals(
+                SettingsViewModel.SliderItem(
+                    maximum = 10f,
+                    minimum = 1f,
+                    steps = 8,
+                    sliderValue = 0f,
+                    label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+                    key = SettingsViewModel.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
+                    labelValue = SettingsViewModel.LabelValue.IntRes(0),
+                ),
+                uiState.sliderPreferences[0],
+            )
+
+            assertEquals(
+                SettingsViewModel.SliderItem(
+                    maximum = 2f,
+                    minimum = 0f,
+                    steps = 1,
+                    sliderValue = 0f,
+                    label = Res.string.settings_preference_ui_appearance_label,
+                    key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+                    labelValue = StringRes(Res.string.settings_preference_ui_appearance_system),
+                ),
+                uiState.sliderPreferences[1],
+            )
         }
-        coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
-            savePreferenceUseCaseMock.invoke(any(), false)
-        }
-        assertFalse(viewModel.uiState.value.togglePreferences.all { it.isChecked })
-    }
 
     @Test
-    fun `should change slider item when event OnSliderItem is fired`() = runTest {
-        val viewModel = createViewModel()
-        runCurrent()
-
-        viewModel.uiState.value.sliderPreferences.forEach {
-            viewModel.onEvent(
-                event = SettingsViewModel.Event.OnSliderItem(
-                    value = it.maximum,
-                    sliderItem = it,
-                )
-            )
+    fun `should toggle item when event OnToggleItem is fired`() =
+        runTest {
+            val viewModel = createViewModel()
             runCurrent()
 
-            if (it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
-                coVerify {
-                    manageUiAppearanceUseCaseMock.invoke(any())
-                }
-            } else {
-                coVerify {
-                    savePreferenceUseCaseMock.invoke(any(), any<Int>())
-                }
-            }
-        }
-        assertTrue(viewModel.uiState.value.sliderPreferences.all { it.maximum == it.sliderValue })
-
-        viewModel.uiState.value.sliderPreferences.forEach {
-            viewModel.onEvent(
-                event = SettingsViewModel.Event.OnSliderItem(
-                    value = it.minimum,
-                    sliderItem = it,
+            viewModel.uiState.value.togglePreferences.forEach {
+                viewModel.onEvent(
+                    event =
+                        SettingsViewModel.Event.OnToggleItem(
+                            isChecked = true,
+                            toggleItem = it,
+                        ),
                 )
+                runCurrent()
+            }
+            coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
+                savePreferenceUseCaseMock.invoke(any(), true)
+            }
+            assertTrue(
+                viewModel.uiState.value.togglePreferences
+                    .all { it.isChecked },
             )
+
+            viewModel.uiState.value.togglePreferences.forEach {
+                viewModel.onEvent(
+                    event =
+                        SettingsViewModel.Event.OnToggleItem(
+                            isChecked = false,
+                            toggleItem = it,
+                        ),
+                )
+                runCurrent()
+            }
+            coVerify(exactly = viewModel.uiState.value.togglePreferences.size) {
+                savePreferenceUseCaseMock.invoke(any(), false)
+            }
+            assertFalse(
+                viewModel.uiState.value.togglePreferences
+                    .all { it.isChecked },
+            )
+        }
+
+    @Test
+    fun `should change slider item when event OnSliderItem is fired`() =
+        runTest {
+            val viewModel = createViewModel()
             runCurrent()
 
-            if (it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
-                coVerify {
-                    manageUiAppearanceUseCaseMock.invoke(any())
-                }
-            } else {
-                coVerify {
-                    savePreferenceUseCaseMock.invoke(any(), any<Int>())
+            viewModel.uiState.value.sliderPreferences.forEach {
+                viewModel.onEvent(
+                    event =
+                        SettingsViewModel.Event.OnSliderItem(
+                            value = it.maximum,
+                            sliderItem = it,
+                        ),
+                )
+                runCurrent()
+
+                if (it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+                    coVerify {
+                        manageUiAppearanceUseCaseMock.invoke(any())
+                    }
+                } else {
+                    coVerify {
+                        savePreferenceUseCaseMock.invoke(any(), any<Int>())
+                    }
                 }
             }
+            assertTrue(
+                viewModel.uiState.value.sliderPreferences
+                    .all { it.maximum == it.sliderValue },
+            )
+
+            viewModel.uiState.value.sliderPreferences.forEach {
+                viewModel.onEvent(
+                    event =
+                        SettingsViewModel.Event.OnSliderItem(
+                            value = it.minimum,
+                            sliderItem = it,
+                        ),
+                )
+                runCurrent()
+
+                if (it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
+                    coVerify {
+                        manageUiAppearanceUseCaseMock.invoke(any())
+                    }
+                } else {
+                    coVerify {
+                        savePreferenceUseCaseMock.invoke(any(), any<Int>())
+                    }
+                }
+            }
+            assertTrue(
+                viewModel.uiState.value.sliderPreferences
+                    .all { it.minimum == it.sliderValue },
+            )
         }
-        assertTrue(viewModel.uiState.value.sliderPreferences.all { it.minimum == it.sliderValue })
-    }
 
     @Test
     fun `should change ui appearance when event OnSliderItem of type 'ui appearance' is fired`() =
@@ -191,23 +210,26 @@ class SettingsViewModelTest {
             val viewModel = createViewModel()
             runCurrent()
 
-            val uiAppearanceSlider = viewModel.uiState.value.sliderPreferences.find {
-                it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
-            }
+            val uiAppearanceSlider =
+                viewModel.uiState.value.sliderPreferences.find {
+                    it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+                }
             assertNotNull(uiAppearanceSlider)
 
             (uiAppearanceSlider.minimum.toInt()..uiAppearanceSlider.maximum.toInt()).forEach { sliderValue ->
                 viewModel.onEvent(
-                    event = SettingsViewModel.Event.OnSliderItem(
-                        value = sliderValue.toFloat(),
-                        sliderItem = uiAppearanceSlider,
-                    )
+                    event =
+                        SettingsViewModel.Event.OnSliderItem(
+                            value = sliderValue.toFloat(),
+                            sliderItem = uiAppearanceSlider,
+                        ),
                 )
                 runCurrent()
 
-                val slider = viewModel.uiState.value.sliderPreferences.find {
-                    it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
-                }
+                val slider =
+                    viewModel.uiState.value.sliderPreferences.find {
+                        it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+                    }
                 assertEquals(sliderValue.toFloat(), slider?.sliderValue)
 
                 val expectedUiAppearance =
@@ -217,9 +239,20 @@ class SettingsViewModelTest {
 
                 assertEquals(
                     when (expectedUiAppearance) {
-                        ManageUiAppearanceUseCase.UiAppearance.SYSTEM -> StringRes(Res.string.settings_preference_ui_appearance_system)
-                        ManageUiAppearanceUseCase.UiAppearance.DARK -> StringRes(Res.string.settings_preference_ui_appearance_dark)
-                        ManageUiAppearanceUseCase.UiAppearance.LIGHT -> StringRes(Res.string.settings_preference_ui_appearance_light)
+                        ManageUiAppearanceUseCase.UiAppearance.SYSTEM ->
+                            StringRes(
+                                Res.string.settings_preference_ui_appearance_system,
+                            )
+
+                        ManageUiAppearanceUseCase.UiAppearance.DARK ->
+                            StringRes(
+                                Res.string.settings_preference_ui_appearance_dark,
+                            )
+
+                        ManageUiAppearanceUseCase.UiAppearance.LIGHT ->
+                            StringRes(
+                                Res.string.settings_preference_ui_appearance_light,
+                            )
                         null -> throw IllegalStateException("Fix test.")
                     },
                     slider?.labelValue,
@@ -231,12 +264,11 @@ class SettingsViewModelTest {
             }
         }
 
-    private fun createViewModel(): SettingsViewModel {
-        return SettingsViewModel(
+    private fun createViewModel(): SettingsViewModel =
+        SettingsViewModel(
             savePreferenceUseCase = savePreferenceUseCaseMock,
             getPreferenceUseCase = getPreferenceUseCaseMock,
             manageUiAppearanceUseCase = manageUiAppearanceUseCaseMock,
             dispatcher = Dispatchers.Unconfined,
         )
-    }
 }

@@ -9,9 +9,10 @@ class ClearLoggingUseCaseTest {
     fun `should clear logs`() {
         val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
 
-        val useCase = ClearLoggingUseCase(
-            loggingRepository = loggingRepositoryMock,
-        )
+        val useCase =
+            ClearLoggingUseCase(
+                loggingRepository = loggingRepositoryMock,
+            )
 
         useCase()
 

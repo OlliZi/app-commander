@@ -78,28 +78,28 @@ internal fun WelcomeContent(
         modifier = modifier,
     ) {
         val yOffset =
-            rememberInfiniteTransition(label = "bubble").animateFloat(
-                initialValue = -0.25f,
-                targetValue = 1.5f,
-                animationSpec =
-                    infiniteRepeatable(
-                        repeatMode = RepeatMode.Restart,
-                        animation =
-                            tween(
-                                durationMillis = 4000,
-                                easing = LinearEasing,
-                            ),
-                    ),
-                label = "bubble",
-            ).value
+            rememberInfiniteTransition(label = "bubble")
+                .animateFloat(
+                    initialValue = -0.25f,
+                    targetValue = 1.5f,
+                    animationSpec =
+                        infiniteRepeatable(
+                            repeatMode = RepeatMode.Restart,
+                            animation =
+                                tween(
+                                    durationMillis = 4000,
+                                    easing = LinearEasing,
+                                ),
+                        ),
+                    label = "bubble",
+                ).value
 
         Column(
             Modifier
                 .fillMaxSize()
                 .drawBehind {
                     renderBubbles(yOffset, isInTextExecution, bubblesStrategy)
-                }
-                .padding(16.dp)
+                }.padding(16.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

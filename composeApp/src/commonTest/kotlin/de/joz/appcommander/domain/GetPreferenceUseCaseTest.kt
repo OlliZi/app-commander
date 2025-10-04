@@ -10,39 +10,41 @@ import kotlin.test.assertTrue
 
 class GetPreferenceUseCaseTest {
     @Test
-    fun `should execute repository for integer when use case is executed`() = runTest {
-        val preferencesRepositoryMock: PreferencesRepository = mockk()
-        coEvery {
-            preferencesRepositoryMock.get("key", defaultValue = -1)
-        } returns 123
+    fun `should execute repository for integer when use case is executed`() =
+        runTest {
+            val preferencesRepositoryMock: PreferencesRepository = mockk()
+            coEvery {
+                preferencesRepositoryMock.get("key", defaultValue = -1)
+            } returns 123
 
-        val getPreferenceUseCase =
-            GetPreferenceUseCase(
-                preferencesRepository = preferencesRepositoryMock,
-            )
+            val getPreferenceUseCase =
+                GetPreferenceUseCase(
+                    preferencesRepository = preferencesRepositoryMock,
+                )
 
-        assertEquals(123, getPreferenceUseCase.get(key = "key", defaultValue = -1))
+            assertEquals(123, getPreferenceUseCase.get(key = "key", defaultValue = -1))
 
-        coVerify {
-            preferencesRepositoryMock.get(key = "key", defaultValue = -1)
+            coVerify {
+                preferencesRepositoryMock.get(key = "key", defaultValue = -1)
+            }
         }
-    }
 
     @Test
-    fun `should execute repository for boolean when use case is executed`() = runTest {
-        val preferencesRepositoryMock: PreferencesRepository = mockk()
-        coEvery {
-            preferencesRepositoryMock.get("key", defaultValue = false)
-        } returns true
+    fun `should execute repository for boolean when use case is executed`() =
+        runTest {
+            val preferencesRepositoryMock: PreferencesRepository = mockk()
+            coEvery {
+                preferencesRepositoryMock.get("key", defaultValue = false)
+            } returns true
 
-        val getPreferenceUseCase =
-            GetPreferenceUseCase(
-                preferencesRepository = preferencesRepositoryMock,
-            )
-        assertTrue(getPreferenceUseCase.get(key = "key", defaultValue = false))
+            val getPreferenceUseCase =
+                GetPreferenceUseCase(
+                    preferencesRepository = preferencesRepositoryMock,
+                )
+            assertTrue(getPreferenceUseCase.get(key = "key", defaultValue = false))
 
-        coVerify {
-            preferencesRepositoryMock.get(key = "key", defaultValue = false)
+            coVerify {
+                preferencesRepositoryMock.get(key = "key", defaultValue = false)
+            }
         }
-    }
 }

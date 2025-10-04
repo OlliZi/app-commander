@@ -23,107 +23,66 @@ class ScriptsRepositoryImplTest {
     }
 
     @Test
-    fun `should return default scripts when file does not exist`() = runTest {
-        val repository = ScriptsRepositoryImpl(
-            scriptFile = testFile.absolutePath,
-            addLoggingUseCase = addLoggingUseCaseMock,
-        )
-
-        assertFalse(testFile.exists())
-
-        val scripts = repository.getScripts()
-
-        assertTrue(testFile.exists())
-        assertEquals(
-            listOf(
-                ScriptsRepository.Script(
-                    label = "Dark mode",
-                    script = "adb shell cmd uimode night yes",
-                    platform = ScriptsRepository.Platform.ANDROID,
-                ),
-                ScriptsRepository.Script(
-                    label = "Light mode",
-                    script = "adb shell cmd uimode night no",
-                    platform = ScriptsRepository.Platform.ANDROID,
+    fun `should return default scripts when file does not exist`() =
+        runTest {
+            val repository =
+                ScriptsRepositoryImpl(
+                    scriptFile = testFile.absolutePath,
+                    addLoggingUseCase = addLoggingUseCaseMock,
                 )
-            ),
-            scripts,
-        )
-    }
 
-    @Test
-    fun `should return custom scripts when file contains custom scripts`() = runTest {
-        val prettyJson = Json {
-            prettyPrint = true
-        }
-        testFile.writeText(
-            text = prettyJson.encodeToString(
+            assertFalse(testFile.exists())
+
+            val scripts = repository.getScripts()
+
+            assertTrue(testFile.exists())
+            assertEquals(
                 listOf(
                     ScriptsRepository.Script(
-                        label = "my script",
-                        script = "foo",
+                        label = "Dark mode",
+                        script = "adb shell cmd uimode night yes",
                         platform = ScriptsRepository.Platform.ANDROID,
                     ),
                     ScriptsRepository.Script(
-                        label = "my script abc",
-                        script = "bar",
-                        platform = ScriptsRepository.Platform.IOS,
-                    )
-                )
-            )
-        )
-
-        val repository = ScriptsRepositoryImpl(
-            scriptFile = testFile.absolutePath,
-            addLoggingUseCase = addLoggingUseCaseMock,
-        )
-
-        assertTrue(testFile.exists())
-
-        val scripts = repository.getScripts()
-
-        assertTrue(testFile.exists())
-        assertEquals(
-            listOf(
-                ScriptsRepository.Script(
-                    label = "my script",
-                    script = "foo",
-                    platform = ScriptsRepository.Platform.ANDROID,
+                        label = "Light mode",
+                        script = "adb shell cmd uimode night no",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    ),
                 ),
-                ScriptsRepository.Script(
-                    label = "my script abc",
-                    script = "bar",
-                    platform = ScriptsRepository.Platform.IOS,
-                )
-            ),
-            scripts,
-        )
-    }
+                scripts,
+            )
+        }
 
     @Test
-    fun `should return custom scripts when file contains custom scripts but with unknown fields`() =
+    fun `should return custom scripts when file contains custom scripts`() =
         runTest {
+            val prettyJson =
+                Json {
+                    prettyPrint = true
+                }
             testFile.writeText(
-                text = "[\n" +
-                        "    {\n" +
-                        "        \"unknown\": \"null\",\n" +
-                        "        \"label\": \"my script\",\n" +
-                        "        \"script\": \"foo\",\n" +
-                        "        \"platform\": \"ANDROID\"\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"unknown\": \"\",\n" +
-                        "        \"label\": \"my script abc\",\n" +
-                        "        \"script\": \"bar\",\n" +
-                        "        \"platform\": \"IOS\"\n" +
-                        "    }\n" +
-                        "]"
+                text =
+                    prettyJson.encodeToString(
+                        listOf(
+                            ScriptsRepository.Script(
+                                label = "my script",
+                                script = "foo",
+                                platform = ScriptsRepository.Platform.ANDROID,
+                            ),
+                            ScriptsRepository.Script(
+                                label = "my script abc",
+                                script = "bar",
+                                platform = ScriptsRepository.Platform.IOS,
+                            ),
+                        ),
+                    ),
             )
 
-            val repository = ScriptsRepositoryImpl(
-                scriptFile = testFile.absolutePath,
-                addLoggingUseCase = addLoggingUseCaseMock,
-            )
+            val repository =
+                ScriptsRepositoryImpl(
+                    scriptFile = testFile.absolutePath,
+                    addLoggingUseCase = addLoggingUseCaseMock,
+                )
 
             assertTrue(testFile.exists())
 
@@ -141,42 +100,93 @@ class ScriptsRepositoryImplTest {
                         label = "my script abc",
                         script = "bar",
                         platform = ScriptsRepository.Platform.IOS,
-                    )
+                    ),
                 ),
-                scripts
+                scripts,
             )
         }
 
     @Test
-    fun `should open script`() = runTest {
-        val processBuilder: ProcessBuilder = mockk(relaxed = true)
+    fun `should return custom scripts when file contains custom scripts but with unknown fields`() =
+        runTest {
+            testFile.writeText(
+                text =
+                    "[\n" +
+                        "    {\n" +
+                        "        \"unknown\": \"null\",\n" +
+                        "        \"label\": \"my script\",\n" +
+                        "        \"script\": \"foo\",\n" +
+                        "        \"platform\": \"ANDROID\"\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"unknown\": \"\",\n" +
+                        "        \"label\": \"my script abc\",\n" +
+                        "        \"script\": \"bar\",\n" +
+                        "        \"platform\": \"IOS\"\n" +
+                        "    }\n" +
+                            "]",
+            )
 
-        testFile.writeText("")
+            val repository =
+                ScriptsRepositoryImpl(
+                    scriptFile = testFile.absolutePath,
+                    addLoggingUseCase = addLoggingUseCaseMock,
+                )
 
-        ScriptsRepositoryImpl(
-            scriptFile = testFile.absolutePath,
-            processBuilder = processBuilder,
-            addLoggingUseCase = addLoggingUseCaseMock,
-        ).openScriptFile()
+            assertTrue(testFile.exists())
 
-        coVerify {
-            processBuilder.command("open", testFile.absolutePath)
-            processBuilder.start()
+            val scripts = repository.getScripts()
+
+            assertTrue(testFile.exists())
+            assertEquals(
+                listOf(
+                    ScriptsRepository.Script(
+                        label = "my script",
+                        script = "foo",
+                        platform = ScriptsRepository.Platform.ANDROID,
+                    ),
+                    ScriptsRepository.Script(
+                        label = "my script abc",
+                        script = "bar",
+                        platform = ScriptsRepository.Platform.IOS,
+                    ),
+                ),
+                scripts,
+            )
         }
-    }
 
     @Test
-    fun `should log error when opening script fails`() = runTest {
-        val processBuilder: ProcessBuilder = mockk(relaxed = true)
+    fun `should open script`() =
+        runTest {
+            val processBuilder: ProcessBuilder = mockk(relaxed = true)
 
-        ScriptsRepositoryImpl(
-            scriptFile = "unknown file",
-            processBuilder = processBuilder,
-            addLoggingUseCase = addLoggingUseCaseMock,
-        ).openScriptFile()
+            testFile.writeText("")
 
-        coVerify {
-            addLoggingUseCaseMock("Cannot open script file 'unknown file'. (Error: unknown file)")
+            ScriptsRepositoryImpl(
+                scriptFile = testFile.absolutePath,
+                processBuilder = processBuilder,
+                addLoggingUseCase = addLoggingUseCaseMock,
+            ).openScriptFile()
+
+            coVerify {
+                processBuilder.command("open", testFile.absolutePath)
+                processBuilder.start()
+            }
         }
-    }
+
+    @Test
+    fun `should log error when opening script fails`() =
+        runTest {
+            val processBuilder: ProcessBuilder = mockk(relaxed = true)
+
+            ScriptsRepositoryImpl(
+                scriptFile = "unknown file",
+                processBuilder = processBuilder,
+                addLoggingUseCase = addLoggingUseCaseMock,
+            ).openScriptFile()
+
+            coVerify {
+                addLoggingUseCaseMock("Cannot open script file 'unknown file'. (Error: unknown file)")
+            }
+        }
 }

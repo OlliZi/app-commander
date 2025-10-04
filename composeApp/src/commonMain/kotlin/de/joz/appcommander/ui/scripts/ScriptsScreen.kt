@@ -65,9 +65,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ScriptsScreen(
-    viewModel: ScriptsViewModel,
-) {
+fun ScriptsScreen(viewModel: ScriptsViewModel) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     ScriptsContent(
@@ -95,10 +93,11 @@ fun ScriptsScreen(
         },
         onExecuteScriptText = { scriptText, platform ->
             viewModel.onEvent(
-                event = ScriptsViewModel.Event.OnExecuteScriptText(
-                    script = scriptText,
-                    platform = platform,
-                ),
+                event =
+                    ScriptsViewModel.Event.OnExecuteScriptText(
+                        script = scriptText,
+                        platform = platform,
+                    ),
             )
         },
     )
@@ -121,12 +120,14 @@ internal fun ScriptsContent(
         modifier = Modifier.fillMaxSize().background(Color.Red),
         topBar = {
             TitleBar(
-                title = stringResource(Res.string.scripts_title), actions = listOf(
-                    Action(
-                        action = onNavigateToSettings,
-                        icon = FeatherIcons.Settings,
-                    )
-                )
+                title = stringResource(Res.string.scripts_title),
+                actions =
+                    listOf(
+                        Action(
+                            action = onNavigateToSettings,
+                            icon = FeatherIcons.Settings,
+                        ),
+                    ),
             )
         },
         bottomBar = {
@@ -185,11 +186,18 @@ private fun ConnectedDevices(
             style = MaterialTheme.typography.bodySmall,
         )
         Text(
-            text = stringResource(if (connectedDevices.isNotEmpty()) Res.string.scripts_hint_devices else Res.string.scripts_hint_no_devices),
+            text =
+                stringResource(
+                    if (connectedDevices.isNotEmpty()) {
+                        Res.string.scripts_hint_devices
+                    } else {
+                        Res.string.scripts_hint_no_devices
+                    },
+                ),
         )
 
         FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Button(
                 onClick = onRefreshDevices,
@@ -243,21 +251,26 @@ private fun ScriptsSection(
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = script.description,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = script.scriptText,
-                                style = MaterialTheme.typography.bodySmall
+                                style = MaterialTheme.typography.bodySmall,
                             )
                         }
                         ExpandButton(
-                            modifier = Modifier.then(
-                                if (isAtMinimumOneDeviceSelected) Modifier.background(
-                                    Color.White,
-                                    CircleShape
-                                ) else Modifier
-                            ),
+                            modifier =
+                                Modifier.then(
+                                    if (isAtMinimumOneDeviceSelected) {
+                                        Modifier.background(
+                                            Color.White,
+                                            CircleShape,
+                                        )
+                                    } else {
+                                        Modifier
+                                    },
+                                ),
                             isExpanded = true,
                             onClick = { onExpand(script) },
                         )
@@ -284,12 +297,17 @@ private fun ScriptsSection(
                             style = MaterialTheme.typography.bodySmall,
                         )
                         ExpandButton(
-                            modifier = Modifier.then(
-                                if (isAtMinimumOneDeviceSelected) Modifier.background(
-                                    Color.White,
-                                    CircleShape
-                                ) else Modifier
-                            ),
+                            modifier =
+                                Modifier.then(
+                                    if (isAtMinimumOneDeviceSelected) {
+                                        Modifier.background(
+                                            Color.White,
+                                            CircleShape,
+                                        )
+                                    } else {
+                                        Modifier
+                                    },
+                                ),
                             isExpanded = false,
                             onClick = { onExpand(script) },
                         )
@@ -308,9 +326,11 @@ private fun LoggingSection(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Column(
-        modifier = modifier.background(
-            MaterialTheme.colorScheme.background,
-        ).padding(8.dp),
+        modifier =
+            modifier
+                .background(
+                    MaterialTheme.colorScheme.background,
+                ).padding(8.dp),
     ) {
         Row(
             modifier = Modifier.height(36.dp),
@@ -353,17 +373,17 @@ private fun LoggingSection(
 }
 
 @Composable
-private fun TerminalSection(
-    onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
-) {
+private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit) {
     var inputValue by remember { mutableStateOf("") }
     var isExpanded by remember { mutableStateOf(false) }
     var selectedPlatform by remember { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 
     Column(
-        modifier = Modifier.background(
-            MaterialTheme.colorScheme.background,
-        ).padding(8.dp),
+        modifier =
+            Modifier
+                .background(
+                    MaterialTheme.colorScheme.background,
+                ).padding(8.dp),
     ) {
         Row(
             modifier = Modifier.height(36.dp),
@@ -389,15 +409,17 @@ private fun TerminalSection(
                     TextField(
                         value = inputValue,
                         modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                        ),
-                        textStyle = LocalTextStyle.current.copy(
-                            color = MaterialTheme.colorScheme.background
-                        ),
+                        colors =
+                            TextFieldDefaults.colors(
+                                unfocusedContainerColor = Color.White,
+                                focusedContainerColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                            ),
+                        textStyle =
+                            LocalTextStyle.current.copy(
+                                color = MaterialTheme.colorScheme.background,
+                            ),
                         onValueChange = {
                             inputValue = it
                         },
@@ -432,7 +454,7 @@ private fun TerminalSection(
                             checked = selectedPlatform == platform,
                             onCheckedChange = {
                                 selectedPlatform = platform
-                            }
+                            },
                         )
                     }
                 }
@@ -442,18 +464,20 @@ private fun TerminalSection(
 }
 
 @Composable
-private fun BottomBar(
-    onOpenScriptFile: () -> Unit,
-) {
+private fun BottomBar(onOpenScriptFile: () -> Unit) {
     Row(
-        modifier = Modifier.navigationBarsPadding().fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f)).padding(16.dp),
+        modifier =
+            Modifier
+                .navigationBarsPadding()
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f))
+                .padding(16.dp),
     ) {
         Button(
             onClick = onOpenScriptFile,
         ) {
             Text(
-                text = stringResource(Res.string.scripts_open_script_file)
+                text = stringResource(Res.string.scripts_open_script_file),
             )
         }
     }
@@ -463,35 +487,48 @@ private fun BottomBar(
 @Composable
 private fun PreviewScriptScreen() {
     ScriptsContent(
-        uiState = ScriptsViewModel.UiState(
-            connectedDevices = listOf(
-                ScriptsViewModel.Device(
-                    label = "Pixel 9", isSelected = true, id = "1"
-                ), ScriptsViewModel.Device(
-                    label = "Pixel 8", isSelected = false, id = "2"
-                )
-            ), scripts = listOf(
-                Script(
-                    description = "my script",
-                    scriptText = "adb devices",
-                    isExpanded = false,
-                    originalScript = ScriptsRepository.Script(
-                        label = "",
-                        script = "",
-                        platform = ScriptsRepository.Platform.ANDROID,
-                    )
-                ), Script(
-                    description = "my script",
-                    scriptText = "adb long long long long long long long long long long long long long long long  script",
-                    isExpanded = true,
-                    originalScript = ScriptsRepository.Script(
-                        label = "",
-                        script = "",
-                        platform = ScriptsRepository.Platform.ANDROID,
-                    )
-                )
-            ), logging = listOf("log 1", "log 2", "log 3")
-        ),
+        uiState =
+            ScriptsViewModel.UiState(
+                connectedDevices =
+                    listOf(
+                        ScriptsViewModel.Device(
+                            label = "Pixel 9",
+                            isSelected = true,
+                            id = "1",
+                        ),
+                        ScriptsViewModel.Device(
+                            label = "Pixel 8",
+                            isSelected = false,
+                            id = "2",
+                        ),
+                    ),
+                scripts =
+                    listOf(
+                        Script(
+                            description = "my script",
+                            scriptText = "adb devices",
+                            isExpanded = false,
+                            originalScript =
+                                ScriptsRepository.Script(
+                                    label = "",
+                                    script = "",
+                                    platform = ScriptsRepository.Platform.ANDROID,
+                                ),
+                        ),
+                        Script(
+                            description = "my script",
+                            scriptText = "adb long long long long long long long long long long long long script",
+                            isExpanded = true,
+                            originalScript =
+                                ScriptsRepository.Script(
+                                    label = "",
+                                    script = "",
+                                    platform = ScriptsRepository.Platform.ANDROID,
+                                ),
+                        ),
+                    ),
+                logging = listOf("log 1", "log 2", "log 3"),
+            ),
         onExecuteScript = {},
         onExecuteScriptText = { _, _ -> },
         onRefreshDevices = {},

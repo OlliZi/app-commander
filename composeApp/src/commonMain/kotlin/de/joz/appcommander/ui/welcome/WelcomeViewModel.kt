@@ -17,8 +17,8 @@ import org.koin.core.annotation.InjectedParam
 class WelcomeViewModel(
     @InjectedParam private val navController: NavController,
     private val savePreferenceUseCase: SavePreferenceUseCase,
-) : ViewModel(), UnidirectionalDataFlowViewModel<Unit, WelcomeViewModel.Event> {
-
+) : ViewModel(),
+    UnidirectionalDataFlowViewModel<Unit, WelcomeViewModel.Event> {
     private val _uiState = MutableStateFlow(Unit)
     override val uiState = _uiState.asStateFlow()
 
@@ -31,7 +31,8 @@ class WelcomeViewModel(
 
                 is Event.OnDoNotShowWelcomeAgain -> {
                     savePreferenceUseCase(
-                        SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, value = event.value
+                        SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+                        value = event.value,
                     )
                 }
             }
@@ -40,6 +41,9 @@ class WelcomeViewModel(
 
     sealed interface Event {
         object OnNavigateToScripts : Event
-        data class OnDoNotShowWelcomeAgain(val value: Boolean) : Event
+
+        data class OnDoNotShowWelcomeAgain(
+            val value: Boolean,
+        ) : Event
     }
 }

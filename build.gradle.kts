@@ -1,3 +1,5 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 buildscript {
     repositories {
         google()
@@ -8,6 +10,7 @@ buildscript {
     dependencies {
         // https://github.com/ben-manes/gradle-versions-plugin
         classpath(libs.gradle.versions.plugin)
+        classpath(libs.ktlint.gradle)
     }
 }
 
@@ -18,8 +21,22 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.io.gitlab.arturbosch.detekt)
+    alias(libs.plugins.ktlint)
 }
 
 allprojects {
     apply(plugin = "com.github.ben-manes.versions")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+}
+
+ktlint {
+    android = true
+    ignoreFailures = false
+    debug = true
+    verbose = true
+    outputToConsole = true
+    outputColorName = "YELLOW"
+    reporters {
+        reporter(ReporterType.CHECKSTYLE)
+    }
 }

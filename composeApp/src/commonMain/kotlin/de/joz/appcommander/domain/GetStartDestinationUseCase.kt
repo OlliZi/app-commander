@@ -9,14 +9,13 @@ import org.koin.core.annotation.Factory
 class GetStartDestinationUseCase(
     private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
-    operator fun invoke(scope: CoroutineScope): NavigationScreens {
-        return runBlocking {
+    operator fun invoke(scope: CoroutineScope): NavigationScreens =
+        runBlocking {
             getStartDestination()
         }
-    }
 
-    private suspend fun getStartDestination(): NavigationScreens {
-        return if (getPreferenceUseCase.get(
+    private suspend fun getStartDestination(): NavigationScreens =
+        if (getPreferenceUseCase.get(
                 key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
                 defaultValue = false,
             )
@@ -25,5 +24,4 @@ class GetStartDestinationUseCase(
         } else {
             NavigationScreens.WelcomeScreen
         }
-    }
 }

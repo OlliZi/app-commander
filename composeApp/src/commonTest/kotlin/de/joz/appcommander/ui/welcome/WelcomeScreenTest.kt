@@ -34,13 +34,15 @@ class WelcomeScreenTest {
 
     @BeforeTest
     fun setup() {
-        koin = startKoin {
-            modules(
-                DependencyInjection().module + module {
-                    single<PreferencesRepository> { preferencesRepositoryMock }
-                }
-            )
-        }.koin
+        koin =
+            startKoin {
+                modules(
+                    DependencyInjection().module +
+                            module {
+                                single<PreferencesRepository> { preferencesRepositoryMock }
+                            },
+                )
+            }.koin
     }
 
     @AfterTest
@@ -53,69 +55,76 @@ class WelcomeScreenTest {
         runComposeUiTest {
             setContent {
                 WelcomeScreen(
-                    viewModel = WelcomeViewModel(
-                        navController = rememberNavController(),
-                        savePreferenceUseCase = koin.get(),
-                    ),
+                    viewModel =
+                        WelcomeViewModel(
+                            navController = rememberNavController(),
+                            savePreferenceUseCase = koin.get(),
+                        ),
                     bubblesStrategy = koin.get(),
                 )
             }
 
             onNodeWithText("Welcome to \n'App-Commander'.").assertIsDisplayed()
-            onNodeWithText("Your programmable multi-device execution helper. Execute your custom scripts for your apps on multiple devices.").assertIsDisplayed()
+            onNodeWithText(
+                "Your programmable multi-device execution helper. Execute your custom scripts for your apps on multiple devices.",
+            ).assertIsDisplayed()
             onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
             onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
         }
     }
 
     @Test
-    fun `should save flag when toggle is clicked`() = runTest {
-        runComposeUiTest {
-            setContent {
-                WelcomeScreen(
-                    viewModel = WelcomeViewModel(
-                        navController = rememberNavController(),
-                        savePreferenceUseCase = koin.get(),
-                    ),
-                    bubblesStrategy = koin.get(),
-                )
+    fun `should save flag when toggle is clicked`() =
+        runTest {
+            runComposeUiTest {
+                setContent {
+                    WelcomeScreen(
+                        viewModel =
+                            WelcomeViewModel(
+                                navController = rememberNavController(),
+                                savePreferenceUseCase = koin.get(),
+                            ),
+                        bubblesStrategy = koin.get(),
+                    )
+                }
+
+                onNodeWithText("Do not show welcome screen again.").performClick()
             }
 
-            onNodeWithText("Do not show welcome screen again.").performClick()
-        }
-
-        assertTrue(
-            preferencesRepositoryMock.get(
-                "HIDE_WELCOME_SCREEN",
-                false,
+            assertTrue(
+                preferencesRepositoryMock.get(
+                    "HIDE_WELCOME_SCREEN",
+                    false,
+                ),
             )
-        )
-    }
+        }
 
     @Test
-    fun `should revert toggle value when toggle is clicked twice`() = runTest {
-        runComposeUiTest {
-            setContent {
-                WelcomeScreen(
-                    viewModel = WelcomeViewModel(
-                        navController = rememberNavController(),
-                        savePreferenceUseCase = koin.get(),
-                    ),
-                    bubblesStrategy = koin.get(),
-                )
+    fun `should revert toggle value when toggle is clicked twice`() =
+        runTest {
+            runComposeUiTest {
+                setContent {
+                    WelcomeScreen(
+                        viewModel =
+                            WelcomeViewModel(
+                                navController = rememberNavController(),
+                                savePreferenceUseCase = koin.get(),
+                            ),
+                        bubblesStrategy = koin.get(),
+                    )
+                }
+
+                onNodeWithText("Do not show welcome screen again.").performClick()
+                onNodeWithText("Do not show welcome screen again.").performClick()
             }
 
-            onNodeWithText("Do not show welcome screen again.").performClick()
-            onNodeWithText("Do not show welcome screen again.").performClick()
-        }
-
-        assertFalse(
-            preferencesRepositoryMock.get(
-                "HIDE_WELCOME_SCREEN",
-                true,
+            assertFalse(
+                preferencesRepositoryMock.get(
+                    "HIDE_WELCOME_SCREEN",
+                    true,
+                ),
             )
-        )
-    }
+        }
 
     @Test
     fun `should navigate to next screen when next button is clicked`() {
@@ -123,13 +132,13 @@ class WelcomeScreenTest {
         runComposeUiTest {
             setContent {
                 WelcomeScreen(
-                    viewModel = WelcomeViewModel(
-                        navController = navController,
-                        savePreferenceUseCase = koin.get(),
-                    ),
+                    viewModel =
+                        WelcomeViewModel(
+                            navController = navController,
+                            savePreferenceUseCase = koin.get(),
+                        ),
                     bubblesStrategy = koin.get(),
                 )
-
             }
 
             onNodeWithText("Let's go!").performClick()

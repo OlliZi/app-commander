@@ -13,8 +13,8 @@ class TrackScriptsFileChangesUseCase(
     private val getUserScriptsUseCase: GetUserScriptsUseCase,
     private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
-    operator fun invoke(): Flow<List<ScriptsRepository.Script>> {
-        return flow {
+    operator fun invoke(): Flow<List<ScriptsRepository.Script>> =
+        flow {
             var scripts: List<ScriptsRepository.Script>? = null
             while (true) {
                 val prefsValueInSeconds =
@@ -31,5 +31,4 @@ class TrackScriptsFileChangesUseCase(
                 }
             }
         }
-    }
 }
