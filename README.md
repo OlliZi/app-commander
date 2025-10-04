@@ -20,7 +20,6 @@ is still maybe possible in future.
 # TODOs
 
 - Fix detekt
-- Integrate ktlint
 - UI-tests
 - Screenshot testing
 - Code coverage
@@ -42,5 +41,5 @@ is still maybe possible in future.
 - Preferences by datastore
 - Integrate library update tooling
 - Integrate detekt plugin + baseline
-- Code quality (UI-tests, Unit-tests, detekt)
+- Code quality (UI-tests, Unit-tests, detekt & ktlint)
 - Previews for all screens and elements
