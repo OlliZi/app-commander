@@ -346,7 +346,7 @@ private fun LoggingSection(
 				) {
 					Icon(
 						imageVector = FeatherIcons.Trash,
-						contentDescription = "Clear logging",
+						contentDescription = "clear logging",
 						tint = MaterialTheme.colorScheme.primary,
 					)
 				}
