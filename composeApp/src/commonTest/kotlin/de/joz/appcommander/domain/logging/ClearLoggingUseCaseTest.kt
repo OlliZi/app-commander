@@ -5,17 +5,17 @@ import io.mockk.verify
 import kotlin.test.Test
 
 class ClearLoggingUseCaseTest {
-    @Test
-    fun `should clear logs`() {
-        val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
+	@Test
+	fun `should clear logs`() {
+		val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
 
-        val useCase =
-            ClearLoggingUseCase(
-                loggingRepository = loggingRepositoryMock,
-            )
+		val useCase =
+			ClearLoggingUseCase(
+				loggingRepository = loggingRepositoryMock,
+			)
 
-        useCase()
+		useCase()
 
-        verify { loggingRepositoryMock.clear() }
-    }
+		verify { loggingRepositoryMock.clear() }
+	}
 }

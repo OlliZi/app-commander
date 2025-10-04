@@ -15,28 +15,28 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 
 class PreferencesRepositoryImplTest {
-    private val dataStoreMock: DataStore<Preferences> = mockk()
-    private val preferencesRepository =
-        PreferencesRepositoryImpl(
-            dataStore = dataStoreMock,
-        )
+	private val dataStoreMock: DataStore<Preferences> = mockk()
+	private val preferencesRepository =
+		PreferencesRepositoryImpl(
+			dataStore = dataStoreMock,
+		)
 
-    @Test
-    @Ignore()
-    fun `should save value when store is called`() =
-        runTest {
-            every { dataStoreMock.data } returns
-                flow {
-                    emit(preferencesOf(intPreferencesKey("foo") to 123))
-                }
+	@Test
+	@Ignore()
+	fun `should save value when store is called`() =
+		runTest {
+			every { dataStoreMock.data } returns
+				flow {
+					emit(preferencesOf(intPreferencesKey("foo") to 123))
+				}
 
-            coEvery { dataStoreMock.updateData { mockk() } } returns
-                mockk()
+			coEvery { dataStoreMock.updateData { mockk() } } returns
+				mockk()
 
-            preferencesRepository.store("foo", 123)
+			preferencesRepository.store("foo", 123)
 
-            coVerify {
-                dataStoreMock.edit { }
-            }
-        }
+			coVerify {
+				dataStoreMock.edit { }
+			}
+		}
 }

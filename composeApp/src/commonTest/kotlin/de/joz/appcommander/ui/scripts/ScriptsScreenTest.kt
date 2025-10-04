@@ -16,229 +16,229 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ScriptsScreenTest {
-    @Test
-    fun `should show default label when no devices are connected`() {
-        runComposeUiTest {
-            setTestContent(
-                uiState = ScriptsViewModel.UiState(),
-            )
+	@Test
+	fun `should show default label when no devices are connected`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+			)
 
-            onNodeWithText("Your scripts").assertIsDisplayed()
-            onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
-            onNodeWithText("Connect your devices over USB and click refresh.").assertIsDisplayed()
-            onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
-            onNodeWithText("Terminal").assertIsDisplayed()
-            onNodeWithText("Logging").assertIsDisplayed()
-        }
-    }
+			onNodeWithText("Your scripts").assertIsDisplayed()
+			onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
+			onNodeWithText("Connect your devices over USB and click refresh.").assertIsDisplayed()
+			onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
+			onNodeWithText("Terminal").assertIsDisplayed()
+			onNodeWithText("Logging").assertIsDisplayed()
+		}
+	}
 
-    @Test
-    fun `should show log if expand button is clicked`() {
-        runComposeUiTest {
-            setTestContent(
-                uiState =
-                    ScriptsViewModel.UiState(
-                        logging = listOf("Log abc", "Log 123"),
-                    ),
-            )
+	@Test
+	fun `should show log if expand button is clicked`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						logging = listOf("Log abc", "Log 123"),
+					),
+			)
 
-            onNodeWithTag(
-                testTag = "expand_button_logging",
-            ).assertIsDisplayed().performClick()
+			onNodeWithTag(
+				testTag = "expand_button_logging",
+			).assertIsDisplayed().performClick()
 
-            onNodeWithText("Log abc").assertIsDisplayed()
-            onNodeWithText("Log 123").assertIsDisplayed()
-        }
-    }
+			onNodeWithText("Log abc").assertIsDisplayed()
+			onNodeWithText("Log 123").assertIsDisplayed()
+		}
+	}
 
-    @Test
-    fun `should clear log when clear button is executed`() {
-        runComposeUiTest {
-            var isClearClicked = 0
-            setTestContent(
-                uiState =
-                    ScriptsViewModel.UiState(
-                        logging = listOf("Log abc", "Log 123"),
-                    ),
-                onClearLogging = {
-                    isClearClicked++
-                },
-            )
+	@Test
+	fun `should clear log when clear button is executed`() {
+		runComposeUiTest {
+			var isClearClicked = 0
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						logging = listOf("Log abc", "Log 123"),
+					),
+				onClearLogging = {
+					isClearClicked++
+				},
+			)
 
-            onNodeWithContentDescription(
-                label = "Clear logging",
-            ).assertDoesNotExist()
+			onNodeWithContentDescription(
+				label = "Clear logging",
+			).assertDoesNotExist()
 
-            onNodeWithTag(testTag = "expand_button_logging").performClick()
+			onNodeWithTag(testTag = "expand_button_logging").performClick()
 
-            onNodeWithContentDescription(
-                label = "Clear logging",
-            ).assertIsDisplayed().performClick()
+			onNodeWithContentDescription(
+				label = "Clear logging",
+			).assertIsDisplayed().performClick()
 
-            assertEquals(1, isClearClicked)
-        }
-    }
+			assertEquals(1, isClearClicked)
+		}
+	}
 
-    @Test
-    fun `should collapse log when collapse button is executed`() {
-        runComposeUiTest {
-            setTestContent(
-                uiState =
-                    ScriptsViewModel.UiState(
-                        logging = listOf("Log abc", "Log 123"),
-                    ),
-            )
+	@Test
+	fun `should collapse log when collapse button is executed`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						logging = listOf("Log abc", "Log 123"),
+					),
+			)
 
-            onNodeWithTag(
-                testTag = "expand_button_logging",
-            ).assertIsDisplayed().performClick()
+			onNodeWithTag(
+				testTag = "expand_button_logging",
+			).assertIsDisplayed().performClick()
 
-            onNodeWithText("Log abc").assertIsDisplayed().assertExists()
-            onNodeWithText("Log 123").assertIsDisplayed().assertExists()
+			onNodeWithText("Log abc").assertIsDisplayed().assertExists()
+			onNodeWithText("Log 123").assertIsDisplayed().assertExists()
 
-            onNodeWithTag(
-                testTag = "expand_button_logging",
-            ).assertIsDisplayed().performClick()
+			onNodeWithTag(
+				testTag = "expand_button_logging",
+			).assertIsDisplayed().performClick()
 
-            onNodeWithText("Log abc").assertDoesNotExist()
-            onNodeWithText("Log 123").assertDoesNotExist()
-        }
-    }
+			onNodeWithText("Log abc").assertDoesNotExist()
+			onNodeWithText("Log 123").assertDoesNotExist()
+		}
+	}
 
-    @Test
-    fun `should show connected devices`() {
-        runComposeUiTest {
-            setTestContent(
-                uiState =
-                    ScriptsViewModel.UiState(
-                        connectedDevices =
-                            listOf(
-                                ScriptsViewModel.Device(
-                                    label = "Device A",
-                                    id = "1",
-                                    isSelected = true,
-                                ),
-                            ),
-                    ),
-            )
+	@Test
+	fun `should show connected devices`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						connectedDevices =
+							listOf(
+								ScriptsViewModel.Device(
+									label = "Device A",
+									id = "1",
+									isSelected = true,
+								),
+							),
+					),
+			)
 
-            onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
-            onNodeWithText("Your connected devices:").assertIsDisplayed()
-            onNodeWithText("Device A").assertIsDisplayed()
-            onNodeWithText("Refresh").performClick()
-        }
-    }
+			onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
+			onNodeWithText("Your connected devices:").assertIsDisplayed()
+			onNodeWithText("Device A").assertIsDisplayed()
+			onNodeWithText("Refresh").performClick()
+		}
+	}
 
-    @Test
-    fun `should refresh devices when refresh button is clicked`() {
-        runComposeUiTest {
-            var isRefreshClicked = 0
-            setTestContent(
-                uiState = ScriptsViewModel.UiState(),
-                onRefreshDevices = {
-                    isRefreshClicked++
-                },
-            )
+	@Test
+	fun `should refresh devices when refresh button is clicked`() {
+		runComposeUiTest {
+			var isRefreshClicked = 0
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onRefreshDevices = {
+					isRefreshClicked++
+				},
+			)
 
-            onNodeWithText("Refresh").performClick()
+			onNodeWithText("Refresh").performClick()
 
-            assertEquals(1, isRefreshClicked)
-        }
-    }
+			assertEquals(1, isRefreshClicked)
+		}
+	}
 
-    @Test
-    fun `should open script file when open button is clicked`() {
-        runComposeUiTest {
-            var isOpenClicked = 0
-            setTestContent(
-                uiState = ScriptsViewModel.UiState(),
-                onOpenScriptFile = {
-                    isOpenClicked++
-                },
-            )
+	@Test
+	fun `should open script file when open button is clicked`() {
+		runComposeUiTest {
+			var isOpenClicked = 0
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onOpenScriptFile = {
+					isOpenClicked++
+				},
+			)
 
-            onNodeWithText("Open script file").performClick()
+			onNodeWithText("Open script file").performClick()
 
-            assertEquals(1, isOpenClicked)
-        }
-    }
+			assertEquals(1, isOpenClicked)
+		}
+	}
 
-    @Test
-    fun `should show terminal screen when open button is clicked`() {
-        runComposeUiTest {
-            setTestContent(
-                uiState = ScriptsViewModel.UiState(),
-                onOpenScriptFile = {},
-            )
+	@Test
+	fun `should show terminal screen when open button is clicked`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onOpenScriptFile = {},
+			)
 
-            onNodeWithTag(
-                testTag = "expand_button_terminal",
-            ).assertIsDisplayed().performClick()
+			onNodeWithTag(
+				testTag = "expand_button_terminal",
+			).assertIsDisplayed().performClick()
 
-            onNodeWithText("adb devices").assertIsDisplayed()
-            onNodeWithContentDescription("Execute script text").assertIsDisplayed()
+			onNodeWithText("adb devices").assertIsDisplayed()
+			onNodeWithContentDescription("Execute script text").assertIsDisplayed()
 
-            ScriptsRepository.Platform.entries.forEach {
-                onNodeWithText(it.label).assertIsDisplayed()
-            }
-        }
-    }
+			ScriptsRepository.Platform.entries.forEach {
+				onNodeWithText(it.label).assertIsDisplayed()
+			}
+		}
+	}
 
-    @Test
-    fun `should execute script when executed in terminal`() {
-        runComposeUiTest {
-            var selectedScriptText = ""
-            var selectedPlatform: ScriptsRepository.Platform? = null
-            setTestContent(
-                uiState = ScriptsViewModel.UiState(),
-                onExecuteScriptText = { scriptText, platform ->
-                    selectedScriptText = scriptText
-                    selectedPlatform = platform
-                },
-            )
+	@Test
+	fun `should execute script when executed in terminal`() {
+		runComposeUiTest {
+			var selectedScriptText = ""
+			var selectedPlatform: ScriptsRepository.Platform? = null
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onExecuteScriptText = { scriptText, platform ->
+					selectedScriptText = scriptText
+					selectedPlatform = platform
+				},
+			)
 
-            onNodeWithTag(
-                testTag = "expand_button_terminal",
-            ).assertIsDisplayed().performClick()
+			onNodeWithTag(
+				testTag = "expand_button_terminal",
+			).assertIsDisplayed().performClick()
 
-            onNodeWithTag(testTag = "text_field_script_text").performTextInput(
-                "foo bar",
-            )
+			onNodeWithTag(testTag = "text_field_script_text").performTextInput(
+				"foo bar",
+			)
 
-            onNodeWithText(
-                text = ScriptsRepository.Platform.IOS.label,
-            ).assertIsDisplayed().performClick()
+			onNodeWithText(
+				text = ScriptsRepository.Platform.IOS.label,
+			).assertIsDisplayed().performClick()
 
-            onNodeWithContentDescription(label = "Execute script text").performClick()
+			onNodeWithContentDescription(label = "Execute script text").performClick()
 
-            assertEquals("foo bar", selectedScriptText)
-            assertEquals(ScriptsRepository.Platform.IOS, selectedPlatform)
-        }
-    }
+			assertEquals("foo bar", selectedScriptText)
+			assertEquals(ScriptsRepository.Platform.IOS, selectedPlatform)
+		}
+	}
 
-    private fun ComposeUiTest.setTestContent(
-        uiState: ScriptsViewModel.UiState,
-        onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},
-        onExecuteScript: (ScriptsViewModel.Script) -> Unit = {},
-        onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit = { _, _ -> },
-        onRefreshDevices: () -> Unit = {},
-        onExpand: (ScriptsViewModel.Script) -> Unit = {},
-        onNavigateToSettings: () -> Unit = {},
-        onOpenScriptFile: () -> Unit = {},
-        onClearLogging: () -> Unit = {},
-    ) {
-        setContent {
-            ScriptsContent(
-                uiState = uiState,
-                onDeviceSelect = onDeviceSelect,
-                onExecuteScript = onExecuteScript,
-                onExecuteScriptText = onExecuteScriptText,
-                onRefreshDevices = onRefreshDevices,
-                onExpand = onExpand,
-                onNavigateToSettings = onNavigateToSettings,
-                onOpenScriptFile = onOpenScriptFile,
-                onClearLogging = onClearLogging,
-            )
-        }
-    }
+	private fun ComposeUiTest.setTestContent(
+		uiState: ScriptsViewModel.UiState,
+		onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},
+		onExecuteScript: (ScriptsViewModel.Script) -> Unit = {},
+		onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit = { _, _ -> },
+		onRefreshDevices: () -> Unit = {},
+		onExpand: (ScriptsViewModel.Script) -> Unit = {},
+		onNavigateToSettings: () -> Unit = {},
+		onOpenScriptFile: () -> Unit = {},
+		onClearLogging: () -> Unit = {},
+	) {
+		setContent {
+			ScriptsContent(
+				uiState = uiState,
+				onDeviceSelect = onDeviceSelect,
+				onExecuteScript = onExecuteScript,
+				onExecuteScriptText = onExecuteScriptText,
+				onRefreshDevices = onRefreshDevices,
+				onExpand = onExpand,
+				onNavigateToSettings = onNavigateToSettings,
+				onOpenScriptFile = onOpenScriptFile,
+				onClearLogging = onClearLogging,
+			)
+		}
+	}
 }

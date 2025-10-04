@@ -9,55 +9,55 @@ import java.io.File
 
 @Single
 class ScriptsRepositoryImpl(
-    private val addLoggingUseCase: AddLoggingUseCase,
-    private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
-    private val processBuilder: ProcessBuilder = ProcessBuilder(),
+	private val addLoggingUseCase: AddLoggingUseCase,
+	private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
+	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
-    private val prettyJson =
-        Json {
-            prettyPrint = true
-            ignoreUnknownKeys = true
-        }
+	private val prettyJson =
+		Json {
+			prettyPrint = true
+			ignoreUnknownKeys = true
+		}
 
-    override fun getScripts(): List<ScriptsRepository.Script> {
-        val jsonFile = File(scriptFile)
+	override fun getScripts(): List<ScriptsRepository.Script> {
+		val jsonFile = File(scriptFile)
 
-        if (!jsonFile.exists()) {
-            jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
-        }
+		if (!jsonFile.exists()) {
+			jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
+		}
 
-        return runCatching {
-            prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
-        }.getOrDefault(DEFAULT_SCRIPTS)
-    }
+		return runCatching {
+			prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
+		}.getOrDefault(DEFAULT_SCRIPTS)
+	}
 
-    override fun openScriptFile() {
-        runCatching {
-            if (File(scriptFile).exists().not()) {
-                throw FileNotFoundException(scriptFile)
-            }
-            processBuilder.command("open", scriptFile)
-            processBuilder.start()
-        }.onFailure {
-            addLoggingUseCase("Cannot open script file '$scriptFile'. (Error: ${it.message})")
-        }
-    }
+	override fun openScriptFile() {
+		runCatching {
+			if (File(scriptFile).exists().not()) {
+				throw FileNotFoundException(scriptFile)
+			}
+			processBuilder.command("open", scriptFile)
+			processBuilder.start()
+		}.onFailure {
+			addLoggingUseCase("Cannot open script file '$scriptFile'. (Error: ${it.message})")
+		}
+	}
 
-    companion object {
-        private val DEFAULT_SCRIPTS =
-            listOf(
-                ScriptsRepository.Script(
-                    label = "Dark mode",
-                    script = "adb shell cmd uimode night yes",
-                    platform = ScriptsRepository.Platform.ANDROID,
-                ),
-                ScriptsRepository.Script(
-                    label = "Light mode",
-                    script = "adb shell cmd uimode night no",
-                    platform = ScriptsRepository.Platform.ANDROID,
-                ),
-            )
+	companion object {
+		private val DEFAULT_SCRIPTS =
+			listOf(
+				ScriptsRepository.Script(
+					label = "Dark mode",
+					script = "adb shell cmd uimode night yes",
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+				ScriptsRepository.Script(
+					label = "Light mode",
+					script = "adb shell cmd uimode night no",
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+			)
 
-        internal const val JSON_FILE_NAME = "scripts.json"
-    }
+		internal const val JSON_FILE_NAME = "scripts.json"
+	}
 }

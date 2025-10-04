@@ -10,25 +10,25 @@ import kotlin.math.min
 
 @Factory
 class TrackScriptsFileChangesUseCase(
-    private val getUserScriptsUseCase: GetUserScriptsUseCase,
-    private val getPreferenceUseCase: GetPreferenceUseCase,
+	private val getUserScriptsUseCase: GetUserScriptsUseCase,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
-    operator fun invoke(): Flow<List<ScriptsRepository.Script>> =
-        flow {
-            var scripts: List<ScriptsRepository.Script>? = null
-            while (true) {
-                val prefsValueInSeconds =
-                    getPreferenceUseCase.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, 1).toLong()
-                val waitDelay = 1000 * min(10, max(1, prefsValueInSeconds))
-                delay(waitDelay)
+	operator fun invoke(): Flow<List<ScriptsRepository.Script>> =
+		flow {
+			var scripts: List<ScriptsRepository.Script>? = null
+			while (true) {
+				val prefsValueInSeconds =
+					getPreferenceUseCase.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, 1).toLong()
+				val waitDelay = 1000 * min(10, max(1, prefsValueInSeconds))
+				delay(waitDelay)
 
-                val newLoadedScripts = getUserScriptsUseCase()
-                if (scripts == null) {
-                    scripts = newLoadedScripts
-                } else if (scripts != newLoadedScripts) {
-                    scripts = newLoadedScripts
-                    emit(newLoadedScripts)
-                }
-            }
-        }
+				val newLoadedScripts = getUserScriptsUseCase()
+				if (scripts == null) {
+					scripts = newLoadedScripts
+				} else if (scripts != newLoadedScripts) {
+					scripts = newLoadedScripts
+					emit(newLoadedScripts)
+				}
+			}
+		}
 }

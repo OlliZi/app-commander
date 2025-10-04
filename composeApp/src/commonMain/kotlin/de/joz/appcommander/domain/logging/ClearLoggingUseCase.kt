@@ -4,9 +4,9 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class ClearLoggingUseCase(
-    private val loggingRepository: LoggingRepository,
+	private val loggingRepository: LoggingRepository,
 ) {
-    operator fun invoke() {
-        loggingRepository.clear()
-    }
+	operator fun invoke() {
+		loggingRepository.clear()
+	}
 }

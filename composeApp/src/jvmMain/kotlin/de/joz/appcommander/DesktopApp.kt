@@ -14,23 +14,23 @@ import org.koin.compose.KoinApplication
 import org.koin.ksp.generated.*
 
 fun main() =
-    application {
-        val windowState =
-            rememberWindowState(
-                size = DpSize(500.dp, 800.dp),
-            )
+	application {
+		val windowState =
+			rememberWindowState(
+				size = DpSize(500.dp, 800.dp),
+			)
 
-        Window(
-            state = windowState,
-            title = stringResource(Res.string.app_name),
-            onCloseRequest = ::exitApplication,
-        ) {
-            KoinApplication(
-                application = {
-                    modules(DependencyInjection().module)
-                },
-            ) {
-                App()
-            }
-        }
-    }
+		Window(
+			state = windowState,
+			title = stringResource(Res.string.app_name),
+			onCloseRequest = ::exitApplication,
+		) {
+			KoinApplication(
+				application = {
+					modules(DependencyInjection().module)
+				},
+			) {
+				App()
+			}
+		}
+	}
