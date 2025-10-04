@@ -8,7 +8,8 @@ is still maybe possible in future.
 # Features
 
 - Welcome-screen
-- Script-screen
+- Scripts-screen
+- Script-screen for new scripts
 - Terminal-screen
 - Logging-section
 - Settings-screen
@@ -22,7 +23,6 @@ is still maybe possible in future.
 - UI-tests
 - Screenshot testing
 - Code coverage
-- Enter new scripts screen
 - Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
 - Open-Icons für Logging and Terminal unten

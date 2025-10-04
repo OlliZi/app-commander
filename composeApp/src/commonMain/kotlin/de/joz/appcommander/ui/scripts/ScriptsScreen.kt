@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.scripts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -46,6 +47,7 @@ import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
@@ -88,6 +90,9 @@ fun ScriptsScreen(viewModel: ScriptsViewModel) {
 		onOpenScriptFile = {
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
 		},
+		onNewScriptFile = {
+			viewModel.onEvent(event = ScriptsViewModel.Event.OnNewScript)
+		},
 		onClearLogging = {
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
 		},
@@ -112,6 +117,7 @@ internal fun ScriptsContent(
 	onExecuteScript: (Script) -> Unit,
 	onExpand: (Script) -> Unit,
 	onOpenScriptFile: () -> Unit,
+	onNewScriptFile: () -> Unit,
 	onClearLogging: () -> Unit,
 	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
@@ -133,6 +139,7 @@ internal fun ScriptsContent(
 		bottomBar = {
 			BottomBar(
 				onOpenScriptFile = onOpenScriptFile,
+				onNewScriptFile = onNewScriptFile,
 			)
 		},
 	) { paddingValues ->
@@ -464,7 +471,10 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 }
 
 @Composable
-private fun BottomBar(onOpenScriptFile: () -> Unit) {
+private fun BottomBar(
+	onOpenScriptFile: () -> Unit,
+	onNewScriptFile: () -> Unit,
+) {
 	Row(
 		modifier =
 			Modifier
@@ -478,6 +488,16 @@ private fun BottomBar(onOpenScriptFile: () -> Unit) {
 		) {
 			Text(
 				text = stringResource(Res.string.scripts_open_script_file),
+			)
+		}
+
+		Box(modifier = Modifier.weight(1f))
+
+		Button(
+			onClick = onNewScriptFile,
+		) {
+			Text(
+				text = stringResource(Res.string.scripts_add_new_script),
 			)
 		}
 	}
@@ -535,6 +555,7 @@ private fun PreviewScriptScreen() {
 		onNavigateToSettings = {},
 		onExpand = {},
 		onOpenScriptFile = {},
+		onNewScriptFile = {},
 		onDeviceSelect = { devive -> },
 		onClearLogging = {},
 	)
