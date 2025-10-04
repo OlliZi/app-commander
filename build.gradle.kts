@@ -1,5 +1,3 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 buildscript {
     repositories {
         google()
@@ -27,16 +25,4 @@ plugins {
 allprojects {
     apply(plugin = "com.github.ben-manes.versions")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-}
-
-ktlint {
-    android = true
-    ignoreFailures = false
-    debug = true
-    verbose = true
-    outputToConsole = true
-    outputColorName = "YELLOW"
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-    }
 }
