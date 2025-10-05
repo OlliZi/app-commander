@@ -410,47 +410,43 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 			Column(
 				modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 			) {
-				Row(
-					verticalAlignment = Alignment.CenterVertically,
-				) {
-					TextField(
-						value = inputValue,
-						modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
-						colors =
-							TextFieldDefaults.colors(
-								unfocusedContainerColor = Color.White,
-								focusedContainerColor = Color.White,
-								focusedIndicatorColor = Color.Transparent,
-								unfocusedIndicatorColor = Color.Transparent,
-							),
-						textStyle =
-							LocalTextStyle.current.copy(
-								color = MaterialTheme.colorScheme.background,
-							),
-						onValueChange = {
-							inputValue = it
-						},
-						placeholder = {
-							Text(
-								text = stringResource(Res.string.scripts_terminal_placeholder),
-								color = MaterialTheme.colorScheme.background,
+				TextField(
+					value = inputValue,
+					modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
+					colors =
+						TextFieldDefaults.colors(
+							unfocusedContainerColor = Color.White,
+							focusedContainerColor = Color.White,
+							focusedIndicatorColor = Color.Transparent,
+							unfocusedIndicatorColor = Color.Transparent,
+						),
+					textStyle =
+						LocalTextStyle.current.copy(
+							color = MaterialTheme.colorScheme.background,
+						),
+					onValueChange = {
+						inputValue = it
+					},
+					placeholder = {
+						Text(
+							text = stringResource(Res.string.scripts_terminal_placeholder),
+							color = MaterialTheme.colorScheme.background,
+						)
+					},
+					trailingIcon = {
+						IconButton(
+							onClick = {
+								onExecuteScriptText(inputValue, selectedPlatform)
+							},
+						) {
+							Icon(
+								imageVector = FeatherIcons.Play,
+								tint = MaterialTheme.colorScheme.primary,
+								contentDescription = "Execute script text",
 							)
-						},
-						trailingIcon = {
-							IconButton(
-								onClick = {
-									onExecuteScriptText(inputValue, selectedPlatform)
-								},
-							) {
-								Icon(
-									imageVector = FeatherIcons.Play,
-									tint = MaterialTheme.colorScheme.primary,
-									contentDescription = "Execute script text",
-								)
-							}
-						},
-					)
-				}
+						}
+					},
+				)
 				PlatformSelection(
 					selectedPlatform = selectedPlatform,
 					onSelectPlatform = {
