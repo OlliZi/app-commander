@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -13,9 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
+import de.joz.appcommander.resources.enter_terminal_placeholder
 import de.joz.appcommander.ui.misc.PlatformSelection
+import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -33,6 +37,12 @@ fun EditScriptScreen(viewModel: EditScriptViewModel) {
 		onSelectPlatform = {
 			viewModel.onEvent(event = EditScriptViewModel.Event.OnSelectPlatform(platform = it))
 		},
+		onExecuteScriptText = {
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnExecuteScript)
+		},
+		onChangeScriptText = { scriptText ->
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScript(script = scriptText))
+		},
 	)
 }
 
@@ -41,6 +51,8 @@ internal fun ScriptsContent(
 	uiState: EditScriptViewModel.UiState,
 	onBackNavigation: () -> Unit,
 	onSelectPlatform: (ScriptsRepository.Platform) -> Unit,
+	onChangeScriptText: (String) -> Unit,
+	onExecuteScriptText: () -> Unit,
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
@@ -64,6 +76,20 @@ internal fun ScriptsContent(
 				selectedPlatform = uiState.selectedPlatform,
 				onSelectPlatform = onSelectPlatform,
 			)
+
+			HorizontalDivider()
+
+			Text(
+				text = stringResource(Res.string.edit_enter_or_edit),
+				style = MaterialTheme.typography.bodyLarge,
+			)
+			ScriptInput(
+				placeHolder = stringResource(Res.string.enter_terminal_placeholder),
+				onChangeScriptText = onChangeScriptText,
+				onExecuteScriptText = {
+					onExecuteScriptText()
+				},
+			)
 		}
 	}
 }
@@ -78,6 +104,8 @@ private fun PreviewEditScriptScreen_Dark() {
 			uiState = EditScriptViewModel.UiState(),
 			onBackNavigation = {},
 			onSelectPlatform = { _ -> },
+			onChangeScriptText = { _ -> },
+			onExecuteScriptText = {},
 		)
 	}
 }
@@ -92,6 +120,8 @@ private fun PreviewEditScriptScreen_Light() {
 			uiState = EditScriptViewModel.UiState(),
 			onBackNavigation = {},
 			onSelectPlatform = { _ -> },
+			onChangeScriptText = { _ -> },
+			onExecuteScriptText = {},
 		)
 	}
 }

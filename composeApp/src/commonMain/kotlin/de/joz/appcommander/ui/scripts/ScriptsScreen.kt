@@ -22,12 +22,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +39,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Play
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
@@ -60,6 +56,7 @@ import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
 import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
+import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
@@ -381,7 +378,6 @@ private fun LoggingSection(
 
 @Composable
 private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit) {
-	var inputValue by remember { mutableStateOf("") }
 	var isExpanded by remember { mutableStateOf(false) }
 	var selectedPlatform by remember { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 
@@ -410,41 +406,10 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 			Column(
 				modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 			) {
-				TextField(
-					value = inputValue,
-					modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
-					colors =
-						TextFieldDefaults.colors(
-							unfocusedContainerColor = Color.White,
-							focusedContainerColor = Color.White,
-							focusedIndicatorColor = Color.Transparent,
-							unfocusedIndicatorColor = Color.Transparent,
-						),
-					textStyle =
-						LocalTextStyle.current.copy(
-							color = MaterialTheme.colorScheme.background,
-						),
-					onValueChange = {
-						inputValue = it
-					},
-					placeholder = {
-						Text(
-							text = stringResource(Res.string.scripts_terminal_placeholder),
-							color = MaterialTheme.colorScheme.background,
-						)
-					},
-					trailingIcon = {
-						IconButton(
-							onClick = {
-								onExecuteScriptText(inputValue, selectedPlatform)
-							},
-						) {
-							Icon(
-								imageVector = FeatherIcons.Play,
-								tint = MaterialTheme.colorScheme.primary,
-								contentDescription = "Execute script text",
-							)
-						}
+				ScriptInput(
+					placeHolder = stringResource(Res.string.scripts_terminal_placeholder),
+					onExecuteScriptText = {
+						onExecuteScriptText(it, selectedPlatform)
 					},
 				)
 				PlatformSelection(

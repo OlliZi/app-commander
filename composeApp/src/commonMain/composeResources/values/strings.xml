@@ -28,4 +28,5 @@
     <string name="edit_title">Change or add a script</string>
     <string name="edit_select_platform">Select affected platform</string>
     <string name="edit_enter_or_edit">Enter or edit your script</string>
+    <string name="enter_terminal_placeholder">adb shell cmd </string>
 </resources>

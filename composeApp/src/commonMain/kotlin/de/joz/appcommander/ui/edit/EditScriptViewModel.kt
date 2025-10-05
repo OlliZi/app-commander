@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,7 +18,9 @@ import org.koin.core.annotation.InjectedParam
 @KoinViewModel
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
+	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
+	private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<EditScriptViewModel.UiState, EditScriptViewModel.Event> {
 	private val _uiState = MutableStateFlow(UiState())
@@ -28,6 +31,8 @@ class EditScriptViewModel(
 			when (event) {
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
+				is Event.OnChangeScript -> onChangeScript(event.script)
+				is Event.OnExecuteScript -> onExecuteScript()
 			}
 		}
 	}
@@ -44,8 +49,36 @@ class EditScriptViewModel(
 		}
 	}
 
+	private fun onChangeScript(script: String) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				script = script,
+			)
+		}
+	}
+
+	private fun onExecuteScript() {
+		viewModelScope.launch(dispatcherIO) {
+			executeScriptUseCase(
+				script =
+					ScriptsRepository.Script(
+						label = "test script",
+						script = _uiState.value.script,
+						platform = _uiState.value.selectedPlatform,
+					),
+				selectedDevice = "TODO",
+			)
+		}
+	}
+
 	sealed interface Event {
 		data object OnNavigateBack : Event
+
+		data class OnChangeScript(
+			val script: String,
+		) : Event
+
+		data object OnExecuteScript : Event
 
 		data class OnSelectPlatform(
 			val platform: ScriptsRepository.Platform,
@@ -53,6 +86,7 @@ class EditScriptViewModel(
 	}
 
 	data class UiState(
+		val script: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
 	)
 }
