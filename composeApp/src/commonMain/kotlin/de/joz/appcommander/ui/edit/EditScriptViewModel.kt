@@ -32,6 +32,7 @@ class EditScriptViewModel(
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
 				is Event.OnChangeScript -> onChangeScript(event.script)
+				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnExecuteScript -> onExecuteScript()
 			}
 		}
@@ -57,12 +58,20 @@ class EditScriptViewModel(
 		}
 	}
 
+	private fun onChangeScriptName(scriptName: String) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				scriptName = scriptName,
+			)
+		}
+	}
+
 	private fun onExecuteScript() {
 		viewModelScope.launch(dispatcherIO) {
 			executeScriptUseCase(
 				script =
 					ScriptsRepository.Script(
-						label = "test script",
+						label = _uiState.value.scriptName,
 						script = _uiState.value.script,
 						platform = _uiState.value.selectedPlatform,
 					),
@@ -78,6 +87,10 @@ class EditScriptViewModel(
 			val script: String,
 		) : Event
 
+		data class OnChangeScriptName(
+			val scriptName: String,
+		) : Event
+
 		data object OnExecuteScript : Event
 
 		data class OnSelectPlatform(
@@ -87,6 +100,7 @@ class EditScriptViewModel(
 
 	data class UiState(
 		val script: String = "",
+		val scriptName: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
 	)
 }

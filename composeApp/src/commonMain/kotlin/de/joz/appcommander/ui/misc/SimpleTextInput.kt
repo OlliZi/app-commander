@@ -1,7 +1,5 @@
 package de.joz.appcommander.ui.misc
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,20 +17,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Play
+import compose.icons.feathericons.X
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ScriptInput(
-	placeHolder: String,
-	onExecuteScriptText: (String) -> Unit,
-	onChangeScriptText: (String) -> Unit = { _ -> },
+fun SimpleTextInput(
+	label: String,
+	onChangeTextChange: (String) -> Unit,
 ) {
 	var inputValue by remember { mutableStateOf("") }
 	TextField(
 		value = inputValue,
-		modifier = Modifier.fillMaxWidth().testTag("text_field_script_input"),
+		modifier = Modifier.fillMaxWidth().testTag("text_field_simple_text"),
 		colors =
 			TextFieldDefaults.colors(
 				unfocusedContainerColor = Color.White,
@@ -46,24 +43,25 @@ fun ScriptInput(
 			),
 		onValueChange = {
 			inputValue = it
-			onChangeScriptText(it)
+			onChangeTextChange(it)
 		},
 		placeholder = {
 			Text(
-				text = placeHolder,
+				text = label,
 				color = MaterialTheme.colorScheme.background,
 			)
 		},
 		trailingIcon = {
 			IconButton(
 				onClick = {
-					onExecuteScriptText(inputValue)
+					inputValue = ""
+					onChangeTextChange("")
 				},
 			) {
 				Icon(
-					imageVector = FeatherIcons.Play,
+					imageVector = FeatherIcons.X,
 					tint = MaterialTheme.colorScheme.primary,
-					contentDescription = "Execute script text",
+					contentDescription = "Delete script",
 				)
 			}
 		},
@@ -72,34 +70,26 @@ fun ScriptInput(
 
 @Preview
 @Composable
-private fun PreviewScriptInput_Dark() {
+private fun PreviewSimpleTextInput_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
-		) {
-			ScriptInput(
-				placeHolder = "adb devices",
-				onExecuteScriptText = {},
-			)
-		}
+		SimpleTextInput(
+			label = "adb devices",
+			onChangeTextChange = {},
+		)
 	}
 }
 
 @Preview
 @Composable
-private fun PreviewScriptInput_Light() {
+private fun PreviewSimpleTextInput_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
-		) {
-			ScriptInput(
-				placeHolder = "adb devices",
-				onExecuteScriptText = {},
-			)
-		}
+		SimpleTextInput(
+			label = "adb devices",
+			onChangeTextChange = {},
+		)
 	}
 }

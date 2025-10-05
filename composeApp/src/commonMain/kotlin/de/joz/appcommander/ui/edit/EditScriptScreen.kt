@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -15,11 +14,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_enter_or_edit
+import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
 import de.joz.appcommander.resources.enter_terminal_placeholder
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
+import de.joz.appcommander.ui.misc.SectionDivider
+import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -40,8 +42,11 @@ fun EditScriptScreen(viewModel: EditScriptViewModel) {
 		onExecuteScriptText = {
 			viewModel.onEvent(event = EditScriptViewModel.Event.OnExecuteScript)
 		},
-		onChangeScriptText = { scriptText ->
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScript(script = scriptText))
+		onChangeScriptText = { script ->
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScript(script = script))
+		},
+		onChangeTextChange = { scriptName ->
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScriptName(scriptName = scriptName))
 		},
 	)
 }
@@ -53,6 +58,7 @@ internal fun ScriptsContent(
 	onSelectPlatform: (ScriptsRepository.Platform) -> Unit,
 	onChangeScriptText: (String) -> Unit,
 	onExecuteScriptText: () -> Unit,
+	onChangeTextChange: (String) -> Unit,
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
@@ -68,16 +74,15 @@ internal fun ScriptsContent(
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
 			Text(
-				text = stringResource(Res.string.edit_select_platform),
+				text = stringResource(Res.string.edit_script_name),
 				style = MaterialTheme.typography.bodyLarge,
 			)
-
-			PlatformSelection(
-				selectedPlatform = uiState.selectedPlatform,
-				onSelectPlatform = onSelectPlatform,
+			SimpleTextInput(
+				label = uiState.scriptName,
+				onChangeTextChange = onChangeTextChange,
 			)
 
-			HorizontalDivider()
+			SectionDivider()
 
 			Text(
 				text = stringResource(Res.string.edit_enter_or_edit),
@@ -89,6 +94,17 @@ internal fun ScriptsContent(
 				onExecuteScriptText = {
 					onExecuteScriptText()
 				},
+			)
+
+			SectionDivider()
+
+			Text(
+				text = stringResource(Res.string.edit_select_platform),
+				style = MaterialTheme.typography.bodyLarge,
+			)
+			PlatformSelection(
+				selectedPlatform = uiState.selectedPlatform,
+				onSelectPlatform = onSelectPlatform,
 			)
 		}
 	}
@@ -106,6 +122,7 @@ private fun PreviewEditScriptScreen_Dark() {
 			onSelectPlatform = { _ -> },
 			onChangeScriptText = { _ -> },
 			onExecuteScriptText = {},
+			onChangeTextChange = {},
 		)
 	}
 }
@@ -122,6 +139,7 @@ private fun PreviewEditScriptScreen_Light() {
 			onSelectPlatform = { _ -> },
 			onChangeScriptText = { _ -> },
 			onExecuteScriptText = {},
+			onChangeTextChange = {},
 		)
 	}
 }
