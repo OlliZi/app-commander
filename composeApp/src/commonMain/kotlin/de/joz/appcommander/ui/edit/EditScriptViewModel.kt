@@ -34,6 +34,7 @@ class EditScriptViewModel(
 				is Event.OnChangeScript -> onChangeScript(event.script)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnExecuteScript -> onExecuteScript()
+				is Event.OnSaveScript -> onSaveScript()
 			}
 		}
 	}
@@ -80,8 +81,16 @@ class EditScriptViewModel(
 		}
 	}
 
+	private fun onSaveScript() {
+
+	}
+
 	sealed interface Event {
 		data object OnNavigateBack : Event
+
+		data object OnSaveScript : Event
+
+		data object OnExecuteScript : Event
 
 		data class OnChangeScript(
 			val script: String,
@@ -90,8 +99,6 @@ class EditScriptViewModel(
 		data class OnChangeScriptName(
 			val scriptName: String,
 		) : Event
-
-		data object OnExecuteScript : Event
 
 		data class OnSelectPlatform(
 			val platform: ScriptsRepository.Platform,

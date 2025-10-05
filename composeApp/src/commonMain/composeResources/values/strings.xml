@@ -29,5 +29,7 @@
     <string name="edit_script_name">Name or description of your script</string>
     <string name="edit_enter_or_edit">Enter or edit your script</string>
     <string name="edit_select_platform">Select affected platform</string>
-    <string name="enter_terminal_placeholder">adb shell cmd </string>
+    <string name="edit_script_placeholder">adb shell cmd </string>
+    <string name="edit_action_save">Save script</string>
+    <string name="edit_action_abort">Abort</string>
 </resources>
