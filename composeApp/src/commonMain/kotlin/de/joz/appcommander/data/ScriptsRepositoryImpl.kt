@@ -43,6 +43,10 @@ class ScriptsRepositoryImpl(
 		}
 	}
 
+	override fun saveScript(script: ScriptsRepository.Script) {
+		// TODO add new script or reset existing script
+	}
+
 	companion object {
 		private val DEFAULT_SCRIPTS =
 			listOf(

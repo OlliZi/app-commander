@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
+import de.joz.appcommander.domain.SaveUserScriptUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,6 +20,7 @@ import org.koin.core.annotation.InjectedParam
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
+	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
 	private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(),
@@ -82,7 +84,16 @@ class EditScriptViewModel(
 	}
 
 	private fun onSaveScript() {
-
+		viewModelScope.launch(dispatcherIO) {
+			saveUserScriptUseCase.invoke(
+				script =
+					ScriptsRepository.Script(
+						label = _uiState.value.scriptName,
+						script = _uiState.value.script,
+						platform = _uiState.value.selectedPlatform,
+					),
+			)
+		}
 	}
 
 	sealed interface Event {
