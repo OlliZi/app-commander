@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
@@ -26,16 +25,13 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun SettingsScreen(
-	viewModel: SettingsViewModel,
-	navController: NavController,
-) {
+fun SettingsScreen(viewModel: SettingsViewModel) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
 	SettingsContent(
 		uiState = uiState.value,
 		onBackNavigation = {
-			navController.navigateUp()
+			viewModel.onEvent(event = SettingsViewModel.Event.OnNavigateBack)
 		},
 		onToggleItem = { toggleItem, isChecked ->
 			viewModel.onEvent(

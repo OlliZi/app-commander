@@ -1,7 +1,6 @@
 package de.joz.appcommander
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -13,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.domain.GetStartDestinationUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.ui.edit.EditScriptScreen
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
 import de.joz.appcommander.ui.settings.SettingsScreen
@@ -65,14 +66,22 @@ fun App(
 				)
 			}
 			composable<NavigationScreens.NewScriptScreen> {
-				Text("sdfd")
+				val viewModel: EditScriptViewModel =
+					koinViewModel {
+						parametersOf(navHostController)
+					}
+				EditScriptScreen(
+					viewModel = viewModel,
+				)
 			}
 			composable<NavigationScreens.SettingsScreen> {
-				val viewModel: SettingsViewModel = koinViewModel()
+				val viewModel: SettingsViewModel =
+					koinViewModel {
+						parametersOf(navHostController)
+					}
 
 				SettingsScreen(
 					viewModel = viewModel,
-					navController = navHostController,
 				)
 			}
 		}

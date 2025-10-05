@@ -24,4 +24,8 @@
     <string name="settings_preference_ui_appearance_system">System</string>
     <string name="settings_preference_ui_appearance_dark">Dark</string>
     <string name="settings_preference_ui_appearance_light">Light</string>
+
+    <string name="edit_title">Change or add a script</string>
+    <string name="edit_select_platform">Select affected platform</string>
+    <string name="edit_enter_or_edit">Enter or edit your script</string>
 </resources>

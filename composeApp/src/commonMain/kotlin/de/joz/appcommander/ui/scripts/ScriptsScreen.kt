@@ -59,10 +59,11 @@ import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.Action
 import de.joz.appcommander.ui.misc.ExpandButton
-import de.joz.appcommander.ui.misc.LabelledSwitch
+import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -123,7 +124,6 @@ internal fun ScriptsContent(
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
-		modifier = Modifier.fillMaxSize().background(Color.Red),
 		topBar = {
 			TitleBar(
 				title = stringResource(Res.string.scripts_title),
@@ -451,20 +451,12 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 						},
 					)
 				}
-				Row(
-					modifier = Modifier.fillMaxWidth(),
-					horizontalArrangement = Arrangement.spacedBy(16.dp),
-				) {
-					ScriptsRepository.Platform.entries.forEach { platform ->
-						LabelledSwitch(
-							label = platform.label,
-							checked = selectedPlatform == platform,
-							onCheckedChange = {
-								selectedPlatform = platform
-							},
-						)
-					}
-				}
+				PlatformSelection(
+					selectedPlatform = selectedPlatform,
+					onSelectPlatform = {
+						selectedPlatform = it
+					},
+				)
 			}
 		}
 	}
@@ -505,58 +497,124 @@ private fun BottomBar(
 
 @Preview
 @Composable
-private fun PreviewScriptScreen() {
-	ScriptsContent(
-		uiState =
-			ScriptsViewModel.UiState(
-				connectedDevices =
-					listOf(
-						ScriptsViewModel.Device(
-							label = "Pixel 9",
-							isSelected = true,
-							id = "1",
+private fun PreviewScriptScreen_Dark() {
+	AppCommanderTheme(
+		darkTheme = true,
+	) {
+		ScriptsContent(
+			uiState =
+				ScriptsViewModel.UiState(
+					connectedDevices =
+						listOf(
+							ScriptsViewModel.Device(
+								label = "Pixel 9",
+								isSelected = true,
+								id = "1",
+							),
+							ScriptsViewModel.Device(
+								label = "Pixel 8",
+								isSelected = false,
+								id = "2",
+							),
 						),
-						ScriptsViewModel.Device(
-							label = "Pixel 8",
-							isSelected = false,
-							id = "2",
+					scripts =
+						listOf(
+							Script(
+								description = "my script",
+								scriptText = "adb devices",
+								isExpanded = false,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+							Script(
+								description = "my script",
+								scriptText = "adb long long long long long long long long long long long long script",
+								isExpanded = true,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
 						),
-					),
-				scripts =
-					listOf(
-						Script(
-							description = "my script",
-							scriptText = "adb devices",
-							isExpanded = false,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
+					logging = listOf("log 1", "log 2", "log 3"),
+				),
+			onExecuteScript = {},
+			onExecuteScriptText = { _, _ -> },
+			onRefreshDevices = {},
+			onNavigateToSettings = {},
+			onExpand = {},
+			onOpenScriptFile = {},
+			onNewScriptFile = {},
+			onDeviceSelect = { devive -> },
+			onClearLogging = {},
+		)
+	}
+}
+
+@Preview
+@Composable
+private fun PreviewScriptScreen_Light() {
+	AppCommanderTheme(
+		darkTheme = false,
+	) {
+		ScriptsContent(
+			uiState =
+				ScriptsViewModel.UiState(
+					connectedDevices =
+						listOf(
+							ScriptsViewModel.Device(
+								label = "Pixel 9",
+								isSelected = true,
+								id = "1",
+							),
+							ScriptsViewModel.Device(
+								label = "Pixel 8",
+								isSelected = false,
+								id = "2",
+							),
 						),
-						Script(
-							description = "my script",
-							scriptText = "adb long long long long long long long long long long long long script",
-							isExpanded = true,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
+					scripts =
+						listOf(
+							Script(
+								description = "my script",
+								scriptText = "adb devices",
+								isExpanded = false,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+							Script(
+								description = "my script",
+								scriptText = "adb long long long long long long long long long long long long script",
+								isExpanded = true,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
 						),
-					),
-				logging = listOf("log 1", "log 2", "log 3"),
-			),
-		onExecuteScript = {},
-		onExecuteScriptText = { _, _ -> },
-		onRefreshDevices = {},
-		onNavigateToSettings = {},
-		onExpand = {},
-		onOpenScriptFile = {},
-		onNewScriptFile = {},
-		onDeviceSelect = { devive -> },
-		onClearLogging = {},
-	)
+					logging = listOf("log 1", "log 2", "log 3"),
+				),
+			onExecuteScript = {},
+			onExecuteScriptText = { _, _ -> },
+			onRefreshDevices = {},
+			onNavigateToSettings = {},
+			onExpand = {},
+			onOpenScriptFile = {},
+			onNewScriptFile = {},
+			onDeviceSelect = { devive -> },
+			onClearLogging = {},
+		)
+	}
 }

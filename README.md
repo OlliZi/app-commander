@@ -22,6 +22,7 @@ is still maybe possible in future.
 
 - UI-tests
 - Screenshot testing
+- Edit-Screen
 - Code coverage
 - Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
