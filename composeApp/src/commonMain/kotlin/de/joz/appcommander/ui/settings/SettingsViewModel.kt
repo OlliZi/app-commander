@@ -2,6 +2,7 @@ package de.joz.appcommander.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
@@ -21,9 +22,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class SettingsViewModel(
+	@InjectedParam private val navController: NavController,
 	getPreferenceUseCase: GetPreferenceUseCase,
 	private val savePreferenceUseCase: SavePreferenceUseCase,
 	private val manageUiAppearanceUseCase: ManageUiAppearanceUseCase,
@@ -102,8 +105,13 @@ class SettingsViewModel(
 			when (event) {
 				is Event.OnToggleItem -> toggleItem(event)
 				is Event.OnSliderItem -> sliderItem(event)
+				is Event.OnNavigateBack -> onNavigateBack()
 			}
 		}
+	}
+
+	private fun onNavigateBack() {
+		navController.navigateUp()
 	}
 
 	private suspend fun toggleItem(event: Event.OnToggleItem) {
@@ -176,6 +184,8 @@ class SettingsViewModel(
 	}
 
 	sealed interface Event {
+		data object OnNavigateBack : Event
+
 		data class OnToggleItem(
 			val toggleItem: ToggleItem,
 			val isChecked: Boolean,

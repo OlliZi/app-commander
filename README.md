@@ -8,7 +8,8 @@ is still maybe possible in future.
 # Features
 
 - Welcome-screen
-- Script-screen
+- Scripts-screen
+- Script-screen for new scripts
 - Terminal-screen
 - Logging-section
 - Settings-screen
@@ -21,10 +22,10 @@ is still maybe possible in future.
 
 - UI-tests
 - Screenshot testing
+- Edit-Screen
 - Code coverage
-- Enter new scripts screen
-- Unit-test for appended device id in PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
-- Fix test "should append device id in script ..." in ExecuteScriptUseCaseTest
+- Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
+- Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
 - Open-Icons für Logging and Terminal unten
   rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
@@ -43,4 +44,5 @@ is still maybe possible in future.
 - Integrate library update tooling
 - Integrate detekt plugin + baseline
 - Code quality (UI-tests, Unit-tests, detekt & ktlint)
+- Execute code quality locally (on my jenkins) and in github-cloud
 - Previews for all screens and elements

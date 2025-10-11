@@ -66,13 +66,13 @@ class ScriptsScreenTest {
 			)
 
 			onNodeWithContentDescription(
-				label = "Clear logging",
+				label = "clear logging",
 			).assertDoesNotExist()
 
 			onNodeWithTag(testTag = "expand_button_logging").performClick()
 
 			onNodeWithContentDescription(
-				label = "Clear logging",
+				label = "clear logging",
 			).assertIsDisplayed().performClick()
 
 			assertEquals(1, isClearClicked)

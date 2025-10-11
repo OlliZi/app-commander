@@ -9,9 +9,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import de.joz.appcommander.domain.GetStartDestinationUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.ui.edit.EditScriptScreen
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
 import de.joz.appcommander.ui.settings.SettingsScreen
@@ -63,12 +66,24 @@ fun App(
 					viewModel = viewModel,
 				)
 			}
+			composable<NavigationScreens.NewScriptScreen> {
+				val scriptToEdit = it.toRoute<NavigationScreens.NewScriptScreen>().scriptToEdit
+				val viewModel: EditScriptViewModel =
+					koinViewModel {
+						parametersOf(navHostController, scriptToEdit)
+					}
+				EditScriptScreen(
+					viewModel = viewModel,
+				)
+			}
 			composable<NavigationScreens.SettingsScreen> {
-				val viewModel: SettingsViewModel = koinViewModel()
+				val viewModel: SettingsViewModel =
+					koinViewModel {
+						parametersOf(navHostController)
+					}
 
 				SettingsScreen(
 					viewModel = viewModel,
-					navController = navHostController,
 				)
 			}
 		}
