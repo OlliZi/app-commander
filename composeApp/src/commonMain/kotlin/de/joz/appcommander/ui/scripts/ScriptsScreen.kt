@@ -3,7 +3,6 @@ package de.joz.appcommander.ui.scripts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,13 +50,14 @@ import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_placeholder
 import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
-import de.joz.appcommander.ui.misc.Action
+import de.joz.appcommander.ui.misc.BottomBar
+import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.TitleBar
-import de.joz.appcommander.ui.misc.lighter
+import de.joz.appcommander.ui.misc.TitleBarAction
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -126,7 +125,7 @@ internal fun ScriptsContent(
 				title = stringResource(Res.string.scripts_title),
 				actions =
 					listOf(
-						Action(
+						TitleBarAction(
 							action = onNavigateToSettings,
 							icon = FeatherIcons.Settings,
 						),
@@ -135,8 +134,17 @@ internal fun ScriptsContent(
 		},
 		bottomBar = {
 			BottomBar(
-				onOpenScriptFile = onOpenScriptFile,
-				onNewScriptFile = onNewScriptFile,
+				actions =
+					listOf(
+						BottomBarAction(
+							label = Res.string.scripts_open_script_file,
+							action = onOpenScriptFile,
+						),
+						BottomBarAction(
+							label = Res.string.scripts_add_new_script,
+							action = onNewScriptFile,
+						),
+					),
 			)
 		},
 	) { paddingValues ->
@@ -419,39 +427,6 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 					},
 				)
 			}
-		}
-	}
-}
-
-@Composable
-private fun BottomBar(
-	onOpenScriptFile: () -> Unit,
-	onNewScriptFile: () -> Unit,
-) {
-	Row(
-		modifier =
-			Modifier
-				.navigationBarsPadding()
-				.fillMaxWidth()
-				.background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f))
-				.padding(16.dp),
-	) {
-		Button(
-			onClick = onOpenScriptFile,
-		) {
-			Text(
-				text = stringResource(Res.string.scripts_open_script_file),
-			)
-		}
-
-		Box(modifier = Modifier.weight(1f))
-
-		Button(
-			onClick = onNewScriptFile,
-		) {
-			Text(
-				text = stringResource(Res.string.scripts_add_new_script),
-			)
 		}
 	}
 }
