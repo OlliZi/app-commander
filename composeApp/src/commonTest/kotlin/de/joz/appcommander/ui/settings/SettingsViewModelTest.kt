@@ -15,6 +15,7 @@ import de.joz.appcommander.ui.settings.SettingsViewModel.LabelValue.StringRes
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
@@ -31,7 +32,7 @@ class SettingsViewModelTest {
 	private val savePreferenceUseCaseMock: SavePreferenceUseCase = mockk(relaxed = true)
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
 	private val manageUiAppearanceUseCaseMock: ManageUiAppearanceUseCase = mockk(relaxed = true)
-	private val navControllerMock: NavController = mockk()
+	private val navControllerMock: NavController = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
@@ -104,6 +105,20 @@ class SettingsViewModelTest {
 				),
 				uiState.sliderPreferences[1],
 			)
+		}
+
+	@Test
+	fun `should navigate back event OnNavigateBack is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+			runCurrent()
+
+			viewModel.onEvent(event = SettingsViewModel.Event.OnNavigateBack)
+			runCurrent()
+
+			verify {
+				navControllerMock.navigateUp()
+			}
 		}
 
 	@Test
