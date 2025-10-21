@@ -12,7 +12,7 @@ on:
 jobs:
   
   pr_check_build:
-    # if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
