@@ -4,12 +4,14 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -201,6 +203,7 @@ class ScriptsScreenTest {
 				testTag = "expand_button_terminal",
 			).assertIsDisplayed().performClick()
 
+			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
 			onNodeWithTag(testTag = "text_field_script_input").performTextInput(
 				"foo bar",
 			)

@@ -108,7 +108,7 @@ class SettingsViewModelTest {
 		}
 
 	@Test
-	fun `should navigate back event OnNavigateBack is fired`() =
+	fun `should navigate back when event OnNavigateBack is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			runCurrent()
