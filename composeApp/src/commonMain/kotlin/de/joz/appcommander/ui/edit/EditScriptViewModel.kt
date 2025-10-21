@@ -25,7 +25,14 @@ class EditScriptViewModel(
 	private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<EditScriptViewModel.UiState, EditScriptViewModel.Event> {
-	private val _uiState = MutableStateFlow(UiState())
+	private val _uiState =
+		MutableStateFlow(
+			UiState(
+				scriptName = "",
+				script = "",
+				selectedPlatform = ScriptsRepository.Platform.ANDROID,
+			),
+		)
 	override val uiState = _uiState.asStateFlow()
 
 	override fun onEvent(event: Event) {

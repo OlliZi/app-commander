@@ -44,7 +44,10 @@ class ScriptsRepositoryImpl(
 	}
 
 	override fun saveScript(script: ScriptsRepository.Script) {
-		// TODO add new script or reset existing script
+		val jsonFile = File(scriptFile)
+		val newScripts = listOf(script) + getScripts()
+
+		jsonFile.writeText(text = prettyJson.encodeToString(newScripts))
 	}
 
 	companion object {

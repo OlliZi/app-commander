@@ -1,15 +1,9 @@
 package de.joz.appcommander.ui.edit
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,12 +20,13 @@ import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_script_placeholder
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
+import de.joz.appcommander.ui.misc.BottomBar
+import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TitleBar
-import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -83,8 +78,17 @@ internal fun ScriptsContent(
 		},
 		bottomBar = {
 			BottomBar(
-				onAbort = onBackNavigation,
-				onSaveScript = onSaveScript,
+				actions =
+					listOf(
+						BottomBarAction(
+							label = Res.string.edit_action_save,
+							action = onSaveScript,
+						),
+						BottomBarAction(
+							label = Res.string.edit_action_abort,
+							action = onBackNavigation,
+						),
+					),
 			)
 		},
 	) { paddingValues ->
@@ -124,39 +128,6 @@ internal fun ScriptsContent(
 			PlatformSelection(
 				selectedPlatform = uiState.selectedPlatform,
 				onSelectPlatform = onSelectPlatform,
-			)
-		}
-	}
-}
-
-@Composable
-private fun BottomBar(
-	onSaveScript: () -> Unit,
-	onAbort: () -> Unit,
-) {
-	Row(
-		modifier =
-			Modifier
-				.navigationBarsPadding()
-				.fillMaxWidth()
-				.background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f))
-				.padding(16.dp),
-	) {
-		Button(
-			onClick = onSaveScript,
-		) {
-			Text(
-				text = stringResource(Res.string.edit_action_save),
-			)
-		}
-
-		Box(modifier = Modifier.weight(1f))
-
-		Button(
-			onClick = onAbort,
-		) {
-			Text(
-				text = stringResource(Res.string.edit_action_abort),
 			)
 		}
 	}

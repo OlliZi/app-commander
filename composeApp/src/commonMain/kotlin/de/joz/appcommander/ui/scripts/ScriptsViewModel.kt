@@ -194,7 +194,9 @@ class ScriptsViewModel(
 	}
 
 	private fun onNewScript() {
-		navController.navigate(NavigationScreens.NewScriptScreen)
+		navController.navigate(
+			NavigationScreens.NewScriptScreen,
+		)
 	}
 
 	private fun onClearLogging() {
