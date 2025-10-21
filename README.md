@@ -23,6 +23,7 @@ is still maybe possible in future.
 
 # TODOs
 
+- Solve selectedDevice = "TODO", in EditScriptVM
 - UI-tests
 - Screenshot testing
 - Edit-Screen
