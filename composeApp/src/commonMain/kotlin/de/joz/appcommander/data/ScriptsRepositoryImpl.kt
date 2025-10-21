@@ -44,15 +44,16 @@ class ScriptsRepositoryImpl(
 	}
 
 	override fun saveScript(script: ScriptsRepository.Script) {
-		val jsonFile = File(scriptFile)
-		val newScripts = listOf(script) + getScripts()
-
-		jsonFile.writeText(text = prettyJson.encodeToString(newScripts))
+		writeScriptsToFile(listOf(script) + getScripts())
 	}
 
 	override fun removeScript(script: ScriptsRepository.Script) {
+		writeScriptsToFile(getScripts() - script)
+	}
+
+	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {
 		val jsonFile = File(scriptFile)
-		val newScripts = getScripts() - script
+		val newScripts = scripts
 
 		jsonFile.writeText(text = prettyJson.encodeToString(newScripts))
 	}
