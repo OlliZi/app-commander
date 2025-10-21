@@ -53,9 +53,7 @@ class ScriptsRepositoryImpl(
 
 	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {
 		val jsonFile = File(scriptFile)
-		val newScripts = scripts
-
-		jsonFile.writeText(text = prettyJson.encodeToString(newScripts))
+		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
 	}
 
 	companion object {

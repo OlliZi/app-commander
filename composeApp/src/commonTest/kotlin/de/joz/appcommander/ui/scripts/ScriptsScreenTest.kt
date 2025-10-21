@@ -226,6 +226,7 @@ class ScriptsScreenTest {
 		onNavigateToSettings: () -> Unit = {},
 		onOpenScriptFile: () -> Unit = {},
 		onClearLogging: () -> Unit = {},
+		onNewScriptFile: () -> Unit = {},
 	) {
 		setContent {
 			ScriptsContent(
@@ -238,6 +239,7 @@ class ScriptsScreenTest {
 				onNavigateToSettings = onNavigateToSettings,
 				onOpenScriptFile = onOpenScriptFile,
 				onClearLogging = onClearLogging,
+				onNewScriptFile = onNewScriptFile,
 			)
 		}
 	}

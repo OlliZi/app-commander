@@ -1,5 +1,6 @@
 package de.joz.appcommander.ui.settings
 
+import androidx.navigation.NavController
 import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
@@ -30,6 +31,7 @@ class SettingsViewModelTest {
 	private val savePreferenceUseCaseMock: SavePreferenceUseCase = mockk(relaxed = true)
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
 	private val manageUiAppearanceUseCaseMock: ManageUiAppearanceUseCase = mockk(relaxed = true)
+	private val navControllerMock: NavController = mockk()
 
 	@BeforeTest
 	fun setUp() {
@@ -253,6 +255,7 @@ class SettingsViewModelTest {
 							StringRes(
 								Res.string.settings_preference_ui_appearance_light,
 							)
+
 						null -> throw IllegalStateException("Fix test.")
 					},
 					slider?.labelValue,
@@ -269,6 +272,7 @@ class SettingsViewModelTest {
 			savePreferenceUseCase = savePreferenceUseCaseMock,
 			getPreferenceUseCase = getPreferenceUseCaseMock,
 			manageUiAppearanceUseCase = manageUiAppearanceUseCaseMock,
+			navController = navControllerMock,
 			dispatcher = Dispatchers.Unconfined,
 		)
 }
