@@ -50,6 +50,13 @@ class ScriptsRepositoryImpl(
 		jsonFile.writeText(text = prettyJson.encodeToString(newScripts))
 	}
 
+	override fun removeScript(script: ScriptsRepository.Script) {
+		val jsonFile = File(scriptFile)
+		val newScripts = getScripts() - script
+
+		jsonFile.writeText(text = prettyJson.encodeToString(newScripts))
+	}
+
 	companion object {
 		private val DEFAULT_SCRIPTS =
 			listOf(

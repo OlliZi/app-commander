@@ -31,5 +31,6 @@
     <string name="edit_select_platform">Select affected platform</string>
     <string name="edit_script_placeholder">adb shell cmd </string>
     <string name="edit_action_save">Save script</string>
-    <string name="edit_action_abort">Abort</string>
+    <string name="edit_action_remove">Remove script</string>
+    <string name="edit_action_abort">Close</string>
 </resources>

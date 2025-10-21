@@ -9,6 +9,8 @@ interface ScriptsRepository {
 
 	fun saveScript(script: Script)
 
+	fun removeScript(script: Script)
+
 	@Serializable
 	data class Script(
 		val label: String,

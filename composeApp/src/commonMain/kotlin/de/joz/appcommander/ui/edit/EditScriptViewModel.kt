@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
+import de.joz.appcommander.domain.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.SaveUserScriptUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
@@ -21,6 +22,7 @@ class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
+	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
 	private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
 	private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel(),
@@ -44,6 +46,7 @@ class EditScriptViewModel(
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnExecuteScript -> onExecuteScript()
 				is Event.OnSaveScript -> onSaveScript()
+				is Event.OnRemoveScript -> onRemoveScript()
 			}
 		}
 	}
@@ -103,10 +106,25 @@ class EditScriptViewModel(
 		}
 	}
 
+	private fun onRemoveScript() {
+		viewModelScope.launch(dispatcherIO) {
+			removeUserScriptUseCase.invoke(
+				script =
+					ScriptsRepository.Script(
+						label = _uiState.value.scriptName,
+						script = _uiState.value.script,
+						platform = _uiState.value.selectedPlatform,
+					),
+			)
+		}
+	}
+
 	sealed interface Event {
 		data object OnNavigateBack : Event
 
 		data object OnSaveScript : Event
+
+		data object OnRemoveScript : Event
 
 		data object OnExecuteScript : Event
 

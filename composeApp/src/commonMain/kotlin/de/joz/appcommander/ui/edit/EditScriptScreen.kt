@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_script_name
@@ -55,6 +56,9 @@ fun EditScriptScreen(viewModel: EditScriptViewModel) {
 		onSaveScript = {
 			viewModel.onEvent(event = EditScriptViewModel.Event.OnSaveScript)
 		},
+		onRemoveScript = {
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnRemoveScript)
+		},
 	)
 }
 
@@ -67,6 +71,7 @@ internal fun ScriptsContent(
 	onExecuteScriptText: () -> Unit,
 	onChangeTextChange: (String) -> Unit,
 	onSaveScript: () -> Unit,
+	onRemoveScript: () -> Unit,
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
@@ -83,6 +88,10 @@ internal fun ScriptsContent(
 						BottomBarAction(
 							label = Res.string.edit_action_save,
 							action = onSaveScript,
+						),
+						BottomBarAction(
+							label = Res.string.edit_action_remove,
+							action = onRemoveScript,
 						),
 						BottomBarAction(
 							label = Res.string.edit_action_abort,
@@ -147,6 +156,7 @@ private fun PreviewEditScriptScreen_Dark() {
 			onExecuteScriptText = {},
 			onChangeTextChange = {},
 			onSaveScript = {},
+			onRemoveScript = {},
 		)
 	}
 }
@@ -165,6 +175,7 @@ private fun PreviewEditScriptScreen_Light() {
 			onExecuteScriptText = {},
 			onChangeTextChange = {},
 			onSaveScript = {},
+			onRemoveScript = {},
 		)
 	}
 }
