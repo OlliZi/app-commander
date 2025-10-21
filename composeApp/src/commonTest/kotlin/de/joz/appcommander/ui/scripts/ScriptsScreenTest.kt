@@ -201,7 +201,7 @@ class ScriptsScreenTest {
 				testTag = "expand_button_terminal",
 			).assertIsDisplayed().performClick()
 
-			onNodeWithTag(testTag = "text_field_script_text").performTextInput(
+			onNodeWithTag(testTag = "text_field_script_input").performTextInput(
 				"foo bar",
 			)
 
