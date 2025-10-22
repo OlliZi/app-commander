@@ -38,7 +38,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun EditScriptScreen(viewModel: EditScriptViewModel) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-	ScriptsContent(
+	EditScriptContent(
 		uiState = uiState.value,
 		onBackNavigation = {
 			viewModel.onEvent(event = EditScriptViewModel.Event.OnNavigateBack)
@@ -65,7 +65,7 @@ fun EditScriptScreen(viewModel: EditScriptViewModel) {
 }
 
 @Composable
-internal fun ScriptsContent(
+internal fun EditScriptContent(
 	uiState: EditScriptViewModel.UiState,
 	onBackNavigation: () -> Unit,
 	onSelectPlatform: (ScriptsRepository.Platform) -> Unit,
@@ -163,7 +163,7 @@ private fun PreviewEditScriptScreen_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
-		ScriptsContent(
+		EditScriptContent(
 			uiState = EditScriptViewModel.UiState(),
 			onBackNavigation = {},
 			onSelectPlatform = { _ -> },
@@ -182,7 +182,7 @@ private fun PreviewEditScriptScreen_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
-		ScriptsContent(
+		EditScriptContent(
 			uiState = EditScriptViewModel.UiState(),
 			onBackNavigation = {},
 			onSelectPlatform = { _ -> },
