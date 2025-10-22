@@ -219,6 +219,25 @@ class ScriptsScreenTest {
 		}
 	}
 
+	@Test
+	fun `should open new script screen when button is clicked`() {
+		runComposeUiTest {
+			var onNewScriptFileCounter = 0
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onNewScriptFile = {
+					onNewScriptFileCounter++
+				},
+			)
+
+			onNodeWithText(
+				text = "Add new script",
+			).assertIsDisplayed().performClick()
+
+			assertEquals(1, onNewScriptFileCounter)
+		}
+	}
+
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
 		onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},
