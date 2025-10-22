@@ -5,7 +5,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -23,10 +22,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SimpleTextInput(
-	label: String,
+	value: String = "",
 	onChangeTextChange: (String) -> Unit,
 ) {
-	var inputValue by remember { mutableStateOf("") }
+	var inputValue by remember { mutableStateOf(value) }
 	TextField(
 		value = inputValue,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_simple_text"),
@@ -44,12 +43,6 @@ fun SimpleTextInput(
 		onValueChange = {
 			inputValue = it
 			onChangeTextChange(it)
-		},
-		placeholder = {
-			Text(
-				text = label,
-				color = MaterialTheme.colorScheme.background,
-			)
 		},
 		trailingIcon = {
 			IconButton(
@@ -75,7 +68,7 @@ private fun PreviewSimpleTextInput_Dark() {
 		darkTheme = true,
 	) {
 		SimpleTextInput(
-			label = "adb devices",
+			value = "adb devices",
 			onChangeTextChange = {},
 		)
 	}
@@ -88,7 +81,7 @@ private fun PreviewSimpleTextInput_Light() {
 		darkTheme = false,
 	) {
 		SimpleTextInput(
-			label = "adb devices",
+			value = "adb devices",
 			onChangeTextChange = {},
 		)
 	}

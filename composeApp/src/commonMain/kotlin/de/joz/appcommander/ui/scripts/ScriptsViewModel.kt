@@ -80,6 +80,7 @@ class ScriptsViewModel(
 					)
 
 				is Event.OnExpandScript -> onExpandScript(script = event.script)
+				is Event.OnEditScript -> onEditScript(script = event.script)
 			}
 		}
 	}
@@ -187,6 +188,14 @@ class ScriptsViewModel(
 		}
 	}
 
+	private fun onEditScript(script: Script) {
+		navController.navigate(
+			NavigationScreens.NewScriptScreen(
+				scriptKey = script.originalScript.hashCode(),
+			),
+		)
+	}
+
 	private fun onOpenScriptFile() {
 		viewModelScope.launch(dispatcherIO) {
 			openScriptFileUseCase()
@@ -195,7 +204,9 @@ class ScriptsViewModel(
 
 	private fun onNewScript() {
 		navController.navigate(
-			NavigationScreens.NewScriptScreen,
+			NavigationScreens.NewScriptScreen(
+				scriptKey = null,
+			),
 		)
 	}
 
@@ -228,6 +239,10 @@ class ScriptsViewModel(
 		) : Event
 
 		data class OnExpandScript(
+			val script: Script,
+		) : Event
+
+		data class OnEditScript(
 			val script: Script,
 		) : Event
 	}

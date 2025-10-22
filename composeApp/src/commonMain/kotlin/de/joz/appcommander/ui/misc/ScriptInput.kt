@@ -7,7 +7,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -25,11 +24,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ScriptInput(
-	placeHolder: String,
 	onExecuteScriptText: (String) -> Unit,
+	script: String = "",
 	onChangeScriptText: (String) -> Unit = { _ -> },
 ) {
-	var inputValue by remember { mutableStateOf("") }
+	var inputValue by remember { mutableStateOf(script) }
 	TextField(
 		value = inputValue,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_script_input"),
@@ -47,12 +46,6 @@ fun ScriptInput(
 		onValueChange = {
 			inputValue = it
 			onChangeScriptText(it)
-		},
-		placeholder = {
-			Text(
-				text = placeHolder,
-				color = MaterialTheme.colorScheme.background,
-			)
 		},
 		trailingIcon = {
 			IconButton(
@@ -80,7 +73,7 @@ private fun PreviewScriptInput_Dark() {
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			ScriptInput(
-				placeHolder = "adb devices",
+				script = "adb devices",
 				onExecuteScriptText = {},
 			)
 		}
@@ -97,7 +90,7 @@ private fun PreviewScriptInput_Light() {
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			ScriptInput(
-				placeHolder = "adb devices",
+				script = "adb devices",
 				onExecuteScriptText = {},
 			)
 		}

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
+import de.joz.appcommander.domain.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.SaveUserScriptUseCase
 import de.joz.appcommander.domain.ScriptsRepository
@@ -20,6 +21,8 @@ import org.koin.core.annotation.InjectedParam
 @KoinViewModel
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
+	@InjectedParam private val scriptKey: Int?,
+	private val getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
@@ -29,11 +32,7 @@ class EditScriptViewModel(
 	UnidirectionalDataFlowViewModel<EditScriptViewModel.UiState, EditScriptViewModel.Event> {
 	private val _uiState =
 		MutableStateFlow(
-			UiState(
-				scriptName = "",
-				script = "",
-				selectedPlatform = ScriptsRepository.Platform.ANDROID,
-			),
+			mapToUiState(getUserScriptByKeyUseCase(scriptKey)),
 		)
 	override val uiState = _uiState.asStateFlow()
 
@@ -94,6 +93,7 @@ class EditScriptViewModel(
 	}
 
 	private fun onSaveScript() {
+		// TODO use scriptKey to save correct script
 		viewModelScope.launch(dispatcherIO) {
 			saveUserScriptUseCase.invoke(
 				script =
@@ -107,6 +107,7 @@ class EditScriptViewModel(
 	}
 
 	private fun onRemoveScript() {
+		// TODO use scriptKey to remove correct script
 		viewModelScope.launch(dispatcherIO) {
 			removeUserScriptUseCase.invoke(
 				script =
@@ -118,6 +119,13 @@ class EditScriptViewModel(
 			)
 		}
 	}
+
+	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
+		UiState(
+			scriptName = script?.label.orEmpty(),
+			script = script?.script.orEmpty(),
+			selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
+		)
 
 	sealed interface Event {
 		data object OnNavigateBack : Event

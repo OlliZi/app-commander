@@ -112,7 +112,7 @@ internal fun EditScriptContent(
 				style = MaterialTheme.typography.bodyLarge,
 			)
 			SimpleTextInput(
-				label = uiState.scriptName,
+				value = uiState.scriptName,
 				onChangeTextChange = onChangeTextChange,
 			)
 
@@ -123,7 +123,12 @@ internal fun EditScriptContent(
 				style = MaterialTheme.typography.bodyLarge,
 			)
 			ScriptInput(
-				placeHolder = stringResource(Res.string.edit_script_placeholder),
+				script =
+					uiState.script.ifEmpty {
+						stringResource(
+							Res.string.edit_script_placeholder,
+						)
+					},
 				onChangeScriptText = onChangeScriptText,
 				onExecuteScriptText = {
 					onExecuteScriptText()
@@ -142,6 +147,7 @@ internal fun EditScriptContent(
 			)
 
 			SectionDivider()
+
 			Text(
 				text = stringResource(Res.string.edit_select_devices),
 				style = MaterialTheme.typography.bodyLarge,
