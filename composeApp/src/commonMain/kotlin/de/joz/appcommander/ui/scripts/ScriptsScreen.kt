@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,7 +42,6 @@ import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
-import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_placeholder
@@ -52,6 +49,7 @@ import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
+import de.joz.appcommander.ui.misc.DevicesBar
 import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
@@ -208,29 +206,11 @@ private fun ConnectedDevices(
 				),
 		)
 
-		FlowRow(
-			horizontalArrangement = Arrangement.spacedBy(8.dp),
-		) {
-			Button(
-				onClick = onRefreshDevices,
-			) {
-				Text(
-					text = stringResource(Res.string.scripts_hint_no_devices_refresh),
-				)
-			}
-			connectedDevices.forEach { device ->
-				Button(
-					modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f),
-					onClick = {
-						onDeviceSelect(device)
-					},
-				) {
-					Text(
-						text = device.label,
-					)
-				}
-			}
-		}
+		DevicesBar(
+			connectedDevices = connectedDevices,
+			onDeviceSelect = onDeviceSelect,
+			onRefreshDevices = onRefreshDevices,
+		)
 	}
 }
 
