@@ -24,6 +24,7 @@ is still maybe possible in future.
 # TODOs
 
 - Solve selectedDevice = "TODO", in EditScriptVM
+- Make device section in edit script-screen workable
 - UI-tests
 - Screenshot testing
 - Edit-Screen
