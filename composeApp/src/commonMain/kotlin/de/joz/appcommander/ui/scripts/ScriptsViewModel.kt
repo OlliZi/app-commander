@@ -69,6 +69,7 @@ class ScriptsViewModel(
 				Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
 				Event.OnRefreshDevices -> onRefreshDevices()
 				Event.OnOpenScriptFile -> onOpenScriptFile()
+				Event.OnNewScript -> onNewScript()
 				Event.OnClearLogging -> onClearLogging()
 				is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
 				is Event.OnExecuteScript -> onExecuteScript(script = event.script)
@@ -192,6 +193,12 @@ class ScriptsViewModel(
 		}
 	}
 
+	private fun onNewScript() {
+		navController.navigate(
+			NavigationScreens.NewScriptScreen,
+		)
+	}
+
 	private fun onClearLogging() {
 		clearLoggingUseCase()
 	}
@@ -202,6 +209,8 @@ class ScriptsViewModel(
 		data object OnRefreshDevices : Event
 
 		data object OnOpenScriptFile : Event
+
+		data object OnNewScript : Event
 
 		data object OnClearLogging : Event
 

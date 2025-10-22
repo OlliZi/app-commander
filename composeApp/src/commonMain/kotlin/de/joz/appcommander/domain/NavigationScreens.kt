@@ -11,5 +11,8 @@ sealed interface NavigationScreens {
 	object ScriptsScreen : NavigationScreens
 
 	@Serializable
+	object NewScriptScreen : NavigationScreens
+
+	@Serializable
 	object SettingsScreen : NavigationScreens
 }

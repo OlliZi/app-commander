@@ -4,13 +4,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,15 +16,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,33 +28,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
-import compose.icons.feathericons.Play
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
-import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_placeholder
 import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
-import de.joz.appcommander.ui.misc.Action
+import de.joz.appcommander.ui.misc.BottomBar
+import de.joz.appcommander.ui.misc.BottomBarAction
+import de.joz.appcommander.ui.misc.DevicesBar
 import de.joz.appcommander.ui.misc.ExpandButton
-import de.joz.appcommander.ui.misc.LabelledSwitch
+import de.joz.appcommander.ui.misc.PlatformSelection
+import de.joz.appcommander.ui.misc.ScriptInput
+import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.TitleBar
-import de.joz.appcommander.ui.misc.lighter
+import de.joz.appcommander.ui.misc.TitleBarAction
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -88,6 +85,9 @@ fun ScriptsScreen(viewModel: ScriptsViewModel) {
 		onOpenScriptFile = {
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
 		},
+		onNewScriptFile = {
+			viewModel.onEvent(event = ScriptsViewModel.Event.OnNewScript)
+		},
 		onClearLogging = {
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
 		},
@@ -112,18 +112,18 @@ internal fun ScriptsContent(
 	onExecuteScript: (Script) -> Unit,
 	onExpand: (Script) -> Unit,
 	onOpenScriptFile: () -> Unit,
+	onNewScriptFile: () -> Unit,
 	onClearLogging: () -> Unit,
 	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
-		modifier = Modifier.fillMaxSize().background(Color.Red),
 		topBar = {
 			TitleBar(
 				title = stringResource(Res.string.scripts_title),
 				actions =
 					listOf(
-						Action(
+						TitleBarAction(
 							action = onNavigateToSettings,
 							icon = FeatherIcons.Settings,
 						),
@@ -132,7 +132,17 @@ internal fun ScriptsContent(
 		},
 		bottomBar = {
 			BottomBar(
-				onOpenScriptFile = onOpenScriptFile,
+				actions =
+					listOf(
+						BottomBarAction(
+							label = Res.string.scripts_open_script_file,
+							action = onOpenScriptFile,
+						),
+						BottomBarAction(
+							label = Res.string.scripts_add_new_script,
+							action = onNewScriptFile,
+						),
+					),
 			)
 		},
 	) { paddingValues ->
@@ -148,7 +158,7 @@ internal fun ScriptsContent(
 				onRefreshDevices = onRefreshDevices,
 			)
 
-			HorizontalDivider()
+			SectionDivider()
 
 			ScriptsSection(
 				scripts = uiState.scripts,
@@ -196,29 +206,11 @@ private fun ConnectedDevices(
 				),
 		)
 
-		FlowRow(
-			horizontalArrangement = Arrangement.spacedBy(8.dp),
-		) {
-			Button(
-				onClick = onRefreshDevices,
-			) {
-				Text(
-					text = stringResource(Res.string.scripts_hint_no_devices_refresh),
-				)
-			}
-			connectedDevices.forEach { device ->
-				Button(
-					modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f),
-					onClick = {
-						onDeviceSelect(device)
-					},
-				) {
-					Text(
-						text = device.label,
-					)
-				}
-			}
-		}
+		DevicesBar(
+			connectedDevices = connectedDevices,
+			onDeviceSelect = onDeviceSelect,
+			onRefreshDevices = onRefreshDevices,
+		)
 	}
 }
 
@@ -346,7 +338,7 @@ private fun LoggingSection(
 				) {
 					Icon(
 						imageVector = FeatherIcons.Trash,
-						contentDescription = "Clear logging",
+						contentDescription = "clear logging",
 						tint = MaterialTheme.colorScheme.primary,
 					)
 				}
@@ -374,7 +366,6 @@ private fun LoggingSection(
 
 @Composable
 private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit) {
-	var inputValue by remember { mutableStateOf("") }
 	var isExpanded by remember { mutableStateOf(false) }
 	var selectedPlatform by remember { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 
@@ -403,139 +394,143 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 			Column(
 				modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 			) {
-				Row(
-					verticalAlignment = Alignment.CenterVertically,
-				) {
-					TextField(
-						value = inputValue,
-						modifier = Modifier.fillMaxWidth().testTag("text_field_script_text"),
-						colors =
-							TextFieldDefaults.colors(
-								unfocusedContainerColor = Color.White,
-								focusedContainerColor = Color.White,
-								focusedIndicatorColor = Color.Transparent,
-								unfocusedIndicatorColor = Color.Transparent,
-							),
-						textStyle =
-							LocalTextStyle.current.copy(
-								color = MaterialTheme.colorScheme.background,
-							),
-						onValueChange = {
-							inputValue = it
-						},
-						placeholder = {
-							Text(
-								text = stringResource(Res.string.scripts_terminal_placeholder),
-								color = MaterialTheme.colorScheme.background,
-							)
-						},
-						trailingIcon = {
-							IconButton(
-								onClick = {
-									onExecuteScriptText(inputValue, selectedPlatform)
-								},
-							) {
-								Icon(
-									imageVector = FeatherIcons.Play,
-									tint = MaterialTheme.colorScheme.primary,
-									contentDescription = "Execute script text",
-								)
-							}
-						},
-					)
-				}
-				Row(
-					modifier = Modifier.fillMaxWidth(),
-					horizontalArrangement = Arrangement.spacedBy(16.dp),
-				) {
-					ScriptsRepository.Platform.entries.forEach { platform ->
-						LabelledSwitch(
-							label = platform.label,
-							checked = selectedPlatform == platform,
-							onCheckedChange = {
-								selectedPlatform = platform
-							},
-						)
-					}
-				}
+				ScriptInput(
+					placeHolder = stringResource(Res.string.scripts_terminal_placeholder),
+					onExecuteScriptText = {
+						onExecuteScriptText(it, selectedPlatform)
+					},
+				)
+				PlatformSelection(
+					selectedPlatform = selectedPlatform,
+					onSelectPlatform = {
+						selectedPlatform = it
+					},
+				)
 			}
-		}
-	}
-}
-
-@Composable
-private fun BottomBar(onOpenScriptFile: () -> Unit) {
-	Row(
-		modifier =
-			Modifier
-				.navigationBarsPadding()
-				.fillMaxWidth()
-				.background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f))
-				.padding(16.dp),
-	) {
-		Button(
-			onClick = onOpenScriptFile,
-		) {
-			Text(
-				text = stringResource(Res.string.scripts_open_script_file),
-			)
 		}
 	}
 }
 
 @Preview
 @Composable
-private fun PreviewScriptScreen() {
-	ScriptsContent(
-		uiState =
-			ScriptsViewModel.UiState(
-				connectedDevices =
-					listOf(
-						ScriptsViewModel.Device(
-							label = "Pixel 9",
-							isSelected = true,
-							id = "1",
+private fun PreviewScriptScreen_Dark() {
+	AppCommanderTheme(
+		darkTheme = true,
+	) {
+		ScriptsContent(
+			uiState =
+				ScriptsViewModel.UiState(
+					connectedDevices =
+						listOf(
+							ScriptsViewModel.Device(
+								label = "Pixel 9",
+								isSelected = true,
+								id = "1",
+							),
+							ScriptsViewModel.Device(
+								label = "Pixel 8",
+								isSelected = false,
+								id = "2",
+							),
 						),
-						ScriptsViewModel.Device(
-							label = "Pixel 8",
-							isSelected = false,
-							id = "2",
+					scripts =
+						listOf(
+							Script(
+								description = "my script",
+								scriptText = "adb devices",
+								isExpanded = false,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+							Script(
+								description = "my script",
+								scriptText = "adb long long long long long long long long long long long long script",
+								isExpanded = true,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
 						),
-					),
-				scripts =
-					listOf(
-						Script(
-							description = "my script",
-							scriptText = "adb devices",
-							isExpanded = false,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
+					logging = listOf("log 1", "log 2", "log 3"),
+				),
+			onExecuteScript = {},
+			onExecuteScriptText = { _, _ -> },
+			onRefreshDevices = {},
+			onNavigateToSettings = {},
+			onExpand = {},
+			onOpenScriptFile = {},
+			onNewScriptFile = {},
+			onDeviceSelect = { devive -> },
+			onClearLogging = {},
+		)
+	}
+}
+
+@Preview
+@Composable
+private fun PreviewScriptScreen_Light() {
+	AppCommanderTheme(
+		darkTheme = false,
+	) {
+		ScriptsContent(
+			uiState =
+				ScriptsViewModel.UiState(
+					connectedDevices =
+						listOf(
+							ScriptsViewModel.Device(
+								label = "Pixel 9",
+								isSelected = true,
+								id = "1",
+							),
+							ScriptsViewModel.Device(
+								label = "Pixel 8",
+								isSelected = false,
+								id = "2",
+							),
 						),
-						Script(
-							description = "my script",
-							scriptText = "adb long long long long long long long long long long long long script",
-							isExpanded = true,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
+					scripts =
+						listOf(
+							Script(
+								description = "my script",
+								scriptText = "adb devices",
+								isExpanded = false,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+							Script(
+								description = "my script",
+								scriptText = "adb long long long long long long long long long long long long script",
+								isExpanded = true,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										script = "",
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
 						),
-					),
-				logging = listOf("log 1", "log 2", "log 3"),
-			),
-		onExecuteScript = {},
-		onExecuteScriptText = { _, _ -> },
-		onRefreshDevices = {},
-		onNavigateToSettings = {},
-		onExpand = {},
-		onOpenScriptFile = {},
-		onDeviceSelect = { devive -> },
-		onClearLogging = {},
-	)
+					logging = listOf("log 1", "log 2", "log 3"),
+				),
+			onExecuteScript = {},
+			onExecuteScriptText = { _, _ -> },
+			onRefreshDevices = {},
+			onNavigateToSettings = {},
+			onExpand = {},
+			onOpenScriptFile = {},
+			onNewScriptFile = {},
+			onDeviceSelect = { devive -> },
+			onClearLogging = {},
+		)
+	}
 }

@@ -21,7 +21,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun TitleBar(
 	title: String,
 	onBackNavigation: (() -> Unit)? = null,
-	actions: List<Action> = emptyList(),
+	actions: List<TitleBarAction> = emptyList(),
 ) {
 	TopAppBar(title = {
 		Text(text = title)
@@ -52,7 +52,7 @@ fun TitleBar(
 	})
 }
 
-data class Action(
+data class TitleBarAction(
 	val icon: ImageVector,
 	val action: () -> Unit,
 )
@@ -78,7 +78,7 @@ private fun PreviewTitleBar_Dark() {
 				onBackNavigation = {},
 				actions =
 					listOf(
-						Action(
+						TitleBarAction(
 							action = {},
 							icon = FeatherIcons.Settings,
 						),
@@ -109,7 +109,7 @@ private fun PreviewTitleBar_Light() {
 				onBackNavigation = {},
 				actions =
 					listOf(
-						Action(
+						TitleBarAction(
 							action = {},
 							icon = FeatherIcons.Settings,
 						),

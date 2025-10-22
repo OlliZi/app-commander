@@ -4,12 +4,14 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -66,13 +68,13 @@ class ScriptsScreenTest {
 			)
 
 			onNodeWithContentDescription(
-				label = "Clear logging",
+				label = "clear logging",
 			).assertDoesNotExist()
 
 			onNodeWithTag(testTag = "expand_button_logging").performClick()
 
 			onNodeWithContentDescription(
-				label = "Clear logging",
+				label = "clear logging",
 			).assertIsDisplayed().performClick()
 
 			assertEquals(1, isClearClicked)
@@ -201,7 +203,8 @@ class ScriptsScreenTest {
 				testTag = "expand_button_terminal",
 			).assertIsDisplayed().performClick()
 
-			onNodeWithTag(testTag = "text_field_script_text").performTextInput(
+			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
+			onNodeWithTag(testTag = "text_field_script_input").performTextInput(
 				"foo bar",
 			)
 
@@ -216,6 +219,25 @@ class ScriptsScreenTest {
 		}
 	}
 
+	@Test
+	fun `should open new script screen when button is clicked`() {
+		runComposeUiTest {
+			var onNewScriptFileCounter = 0
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onNewScriptFile = {
+					onNewScriptFileCounter++
+				},
+			)
+
+			onNodeWithText(
+				text = "Add new script",
+			).assertIsDisplayed().performClick()
+
+			assertEquals(1, onNewScriptFileCounter)
+		}
+	}
+
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
 		onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},
@@ -226,6 +248,7 @@ class ScriptsScreenTest {
 		onNavigateToSettings: () -> Unit = {},
 		onOpenScriptFile: () -> Unit = {},
 		onClearLogging: () -> Unit = {},
+		onNewScriptFile: () -> Unit = {},
 	) {
 		setContent {
 			ScriptsContent(
@@ -238,6 +261,7 @@ class ScriptsScreenTest {
 				onNavigateToSettings = onNavigateToSettings,
 				onOpenScriptFile = onOpenScriptFile,
 				onClearLogging = onClearLogging,
+				onNewScriptFile = onNewScriptFile,
 			)
 		}
 	}

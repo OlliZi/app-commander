@@ -12,6 +12,7 @@
     <string name="scripts_hint_no_devices">Connect your devices over USB and click refresh.</string>
     <string name="scripts_hint_no_devices_refresh">Refresh</string>
     <string name="scripts_open_script_file">Open script file</string>
+    <string name="scripts_add_new_script">Add new script</string>
     <string name="scripts_logging_section_title">Logging</string>
     <string name="scripts_terminal_section_title">Terminal</string>
     <string name="scripts_terminal_placeholder">adb devices</string>
@@ -23,4 +24,14 @@
     <string name="settings_preference_ui_appearance_system">System</string>
     <string name="settings_preference_ui_appearance_dark">Dark</string>
     <string name="settings_preference_ui_appearance_light">Light</string>
+
+    <string name="edit_title">Change or add a script</string>
+    <string name="edit_script_name">Name or description of your script</string>
+    <string name="edit_enter_or_edit">Enter or edit your script</string>
+    <string name="edit_script_placeholder">adb shell cmd </string>
+    <string name="edit_select_platform">Select affected platform</string>
+    <string name="edit_select_devices">Select device for testing your script</string>
+    <string name="edit_action_save">Save script</string>
+    <string name="edit_action_remove">Remove script</string>
+    <string name="edit_action_abort">Close</string>
 </resources>
