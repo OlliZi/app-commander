@@ -147,8 +147,10 @@ internal fun ScriptsContent(
 				style = MaterialTheme.typography.bodyLarge,
 			)
 			DevicesBar(
+				connectedDevices = emptyList(),
 				onDeviceSelect = {
-					print(1)
+				},
+				onRefreshDevices = {
 				},
 			)
 		}
