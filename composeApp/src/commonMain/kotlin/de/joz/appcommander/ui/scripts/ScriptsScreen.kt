@@ -251,20 +251,10 @@ private fun ScriptsSection(
 								style = MaterialTheme.typography.bodySmall,
 							)
 						}
-						ExpandButton(
-							modifier =
-								Modifier.then(
-									if (isAtMinimumOneDeviceSelected) {
-										Modifier.background(
-											Color.White,
-											CircleShape,
-										)
-									} else {
-										Modifier
-									},
-								),
+						ExpandButtonItem(
+							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 							isExpanded = true,
-							onClick = { onExpand(script) },
+							onExpand = { onExpand(script) },
 						)
 					}
 				} else {
@@ -288,20 +278,10 @@ private fun ScriptsSection(
 							overflow = TextOverflow.Ellipsis,
 							style = MaterialTheme.typography.bodySmall,
 						)
-						ExpandButton(
-							modifier =
-								Modifier.then(
-									if (isAtMinimumOneDeviceSelected) {
-										Modifier.background(
-											Color.White,
-											CircleShape,
-										)
-									} else {
-										Modifier
-									},
-								),
+						ExpandButtonItem(
+							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 							isExpanded = false,
-							onClick = { onExpand(script) },
+							onExpand = { onExpand(script) },
 						)
 					}
 				}
@@ -409,6 +389,29 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 			}
 		}
 	}
+}
+
+@Composable
+private fun ExpandButtonItem(
+	isAtMinimumOneDeviceSelected: Boolean,
+	isExpanded: Boolean,
+	onExpand: () -> Unit,
+) {
+	ExpandButton(
+		modifier =
+			Modifier.then(
+				if (isAtMinimumOneDeviceSelected) {
+					Modifier.background(
+						Color.White,
+						CircleShape,
+					)
+				} else {
+					Modifier
+				},
+			),
+		isExpanded = isExpanded,
+		onClick = onExpand,
+	)
 }
 
 @Preview
