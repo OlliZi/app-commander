@@ -19,10 +19,12 @@ import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_script_placeholder
+import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
+import de.joz.appcommander.ui.misc.DevicesBar
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
@@ -137,6 +139,17 @@ internal fun ScriptsContent(
 			PlatformSelection(
 				selectedPlatform = uiState.selectedPlatform,
 				onSelectPlatform = onSelectPlatform,
+			)
+
+			SectionDivider()
+			Text(
+				text = stringResource(Res.string.edit_select_devices),
+				style = MaterialTheme.typography.bodyLarge,
+			)
+			DevicesBar(
+				onDeviceSelect = {
+					print(1)
+				},
 			)
 		}
 	}
