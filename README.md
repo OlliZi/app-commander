@@ -23,8 +23,7 @@ is still maybe possible in future.
 
 # TODOs
 
-- Solve selectedDevice = "TODO", in EditScriptVM
-- Make device section in edit script-screen workable
+- Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, SettingsScreen, ...)
 - Screenshot testing
 - build artefacts in CI
