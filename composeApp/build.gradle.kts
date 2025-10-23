@@ -96,5 +96,10 @@ kover {
 				packages("org.koin.ksp.generated", "de.joz.appcommander.resources")
 			}
 		}
+		verify {
+			rule("Minimal line coverage rate in percents") {
+				minBound(53)
+			}
+		}
 	}
 }
