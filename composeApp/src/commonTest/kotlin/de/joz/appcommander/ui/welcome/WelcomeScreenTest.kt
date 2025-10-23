@@ -1,5 +1,6 @@
 package de.joz.appcommander.ui.welcome
 
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -7,11 +8,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -53,14 +54,10 @@ class WelcomeScreenTest {
 	@Test
 	fun `should display all default labels on screen`() {
 		runComposeUiTest {
+			val navController: NavController = mockk(relaxed = true)
 			setContent {
-				WelcomeScreen(
-					viewModel =
-						WelcomeViewModel(
-							navController = rememberNavController(),
-							savePreferenceUseCase = koin.get(),
-						),
-					bubblesStrategy = koin.get(),
+				setTestContent(
+					navController = navController,
 				)
 			}
 
@@ -76,17 +73,11 @@ class WelcomeScreenTest {
 	@Test
 	fun `should save flag when toggle is clicked`() =
 		runTest {
+			val navController: NavController = mockk(relaxed = true)
 			runComposeUiTest {
-				setContent {
-					WelcomeScreen(
-						viewModel =
-							WelcomeViewModel(
-								navController = rememberNavController(),
-								savePreferenceUseCase = koin.get(),
-							),
-						bubblesStrategy = koin.get(),
-					)
-				}
+				setTestContent(
+					navController = navController,
+				)
 
 				onNodeWithText("Do not show welcome screen again.").performClick()
 			}
@@ -102,17 +93,11 @@ class WelcomeScreenTest {
 	@Test
 	fun `should revert toggle value when toggle is clicked twice`() =
 		runTest {
+			val navController: NavController = mockk(relaxed = true)
 			runComposeUiTest {
-				setContent {
-					WelcomeScreen(
-						viewModel =
-							WelcomeViewModel(
-								navController = rememberNavController(),
-								savePreferenceUseCase = koin.get(),
-							),
-						bubblesStrategy = koin.get(),
-					)
-				}
+				setTestContent(
+					navController = navController,
+				)
 
 				onNodeWithText("Do not show welcome screen again.").performClick()
 				onNodeWithText("Do not show welcome screen again.").performClick()
@@ -130,20 +115,31 @@ class WelcomeScreenTest {
 	fun `should navigate to next screen when next button is clicked`() {
 		val navController: NavController = mockk(relaxed = true)
 		runComposeUiTest {
-			setContent {
-				WelcomeScreen(
-					viewModel =
-						WelcomeViewModel(
-							navController = navController,
-							savePreferenceUseCase = koin.get(),
-						),
-					bubblesStrategy = koin.get(),
-				)
-			}
+			setTestContent(
+				navController = navController,
+			)
 
 			onNodeWithText("Let's go!").performClick()
 
 			verify { navController.navigate(NavigationScreens.ScriptsScreen) }
+		}
+	}
+
+	private fun ComposeUiTest.setTestContent(navController: NavController) {
+		setContent {
+			AppCommanderTheme(
+				darkTheme = true,
+				content = {
+					WelcomeScreen(
+						viewModel =
+							WelcomeViewModel(
+								navController = navController,
+								savePreferenceUseCase = koin.get(),
+							),
+						bubblesStrategy = koin.get(),
+					)
+				},
+			)
 		}
 	}
 }

@@ -8,6 +8,7 @@ plugins {
 	alias(libs.plugins.kotlinSerialization)
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
+	alias(libs.plugins.koverCodeCoverage)
 }
 
 allprojects {
@@ -77,7 +78,7 @@ compose.desktop {
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-			packageName = "de.joz.appcommander"
+			packageName = "App-Commander"
 			packageVersion = "1.0.0"
 		}
 	}
@@ -86,4 +87,27 @@ compose.desktop {
 tasks.register("runDependencyUpdates") {
 	group = "_joz"
 	dependsOn("dependencyUpdates")
+}
+
+tasks.register("runCodeCoverage") {
+	group = "_joz"
+	dependsOn("koverLog")
+	dependsOn("koverVerify")
+	dependsOn("koverHtmlReport")
+}
+
+kover {
+	reports {
+		filters {
+			excludes {
+				packages("org.koin.ksp.generated", "de.joz.appcommander.resources")
+				classes("**ComposableSingletons**")
+			}
+		}
+		verify {
+			rule("Minimal line coverage rate in percent.") {
+				minBound(66)
+			}
+		}
+	}
 }

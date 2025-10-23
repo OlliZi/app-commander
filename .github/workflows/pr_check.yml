@@ -21,3 +21,4 @@ jobs:
           ./gradlew detekt detektJvmMain --no-build-cache
           ./gradlew ktlintCheck --no-build-cache
           ./gradlew allTests --no-build-cache
+          ./gradlew runCodeCoverage
