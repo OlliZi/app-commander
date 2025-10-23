@@ -8,6 +8,7 @@ plugins {
 	alias(libs.plugins.kotlinSerialization)
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
+	id("org.jetbrains.kotlinx.kover") version "0.9.3"
 }
 
 allprojects {
@@ -77,7 +78,7 @@ compose.desktop {
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-			packageName = "de.joz.appcommander"
+			packageName = "App-Commander"
 			packageVersion = "1.0.0"
 		}
 	}
@@ -86,4 +87,14 @@ compose.desktop {
 tasks.register("runDependencyUpdates") {
 	group = "_joz"
 	dependsOn("dependencyUpdates")
+}
+
+kover {
+	reports {
+		filters {
+			excludes {
+				packages("org.koin.ksp.generated", "de.joz.appcommander.resources")
+			}
+		}
+	}
 }
