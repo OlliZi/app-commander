@@ -124,6 +124,29 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			coVerify { saveUserScriptUseCaseMock.invoke(any(), 1) }
+			coVerify { getScriptIdUseCaseMock.invoke(any()) }
+		}
+
+	@Test
+	fun `should apply script when script is loaded over constructor`() =
+		runTest {
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns
+				ScriptsRepository.Script(
+					script = "foo",
+					label = "bar",
+					platform = ScriptsRepository.Platform.IOS,
+				)
+
+			val viewModel =
+				createViewModel(
+					scriptKey = 1,
+				)
+
+			assertEquals("foo", viewModel.uiState.value.script)
+			assertEquals("bar", viewModel.uiState.value.scriptName)
+			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.selectedPlatform)
+
+			coVerify { getUserScriptByKeyUseCaseMock.invoke(any()) }
 		}
 
 	@Test
