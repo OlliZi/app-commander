@@ -34,7 +34,7 @@ class EditScriptViewModelTest {
 	}
 
 	@Test
-	fun `should navigate back when event OnNavigateBack is fired`() =
+	fun `should navigate back when event 'OnNavigateBack' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 
@@ -47,7 +47,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should select platform when event OnSelectPlatform is fired`() =
+	fun `should select platform when event 'OnSelectPlatform' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.selectedPlatform)
@@ -64,7 +64,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should change script when event OnChangeScript is fired`() =
+	fun `should change script when event 'OnChangeScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 
@@ -80,7 +80,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should change name of script when event OnChangeScriptName is fired`() =
+	fun `should change name of script when event 'OnChangeScriptName' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 
@@ -96,7 +96,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should save script when event OnSaveScript is fired`() =
+	fun `should save script when event 'OnSaveScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 
@@ -110,7 +110,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should save script with script id when event OnSaveScript is fired`() =
+	fun `should save script with script id when event 'OnSaveScript' is fired`() =
 		runTest {
 			val viewModel =
 				createViewModel(
@@ -127,7 +127,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should remove script when event OnRemoveScript is fired`() =
+	fun `should remove script when event 'OnRemoveScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 
@@ -141,7 +141,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should execute script when event OnExecuteScript is fired`() =
+	fun `should execute script when event 'OnExecuteScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 

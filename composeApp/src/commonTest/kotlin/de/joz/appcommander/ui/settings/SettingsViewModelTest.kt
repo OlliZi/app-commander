@@ -108,7 +108,7 @@ class SettingsViewModelTest {
 		}
 
 	@Test
-	fun `should navigate back when event OnNavigateBack is fired`() =
+	fun `should navigate back when event 'OnNavigateBack' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			runCurrent()
@@ -122,7 +122,7 @@ class SettingsViewModelTest {
 		}
 
 	@Test
-	fun `should toggle item when event OnToggleItem is fired`() =
+	fun `should toggle item when event 'OnToggleItem' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			runCurrent()
@@ -165,7 +165,7 @@ class SettingsViewModelTest {
 		}
 
 	@Test
-	fun `should change slider item when event OnSliderItem is fired`() =
+	fun `should change slider item when event 'OnSliderItem' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			runCurrent()
@@ -222,7 +222,7 @@ class SettingsViewModelTest {
 		}
 
 	@Test
-	fun `should change ui appearance when event OnSliderItem of type 'ui appearance' is fired`() =
+	fun `should change ui appearance when event 'OnSliderItem' of type 'ui appearance' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			runCurrent()

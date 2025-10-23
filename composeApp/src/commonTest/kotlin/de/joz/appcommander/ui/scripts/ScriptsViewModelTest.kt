@@ -138,6 +138,48 @@ class ScriptsViewModelTest {
 		}
 
 	@Test
+	fun `should navigate to edit a new script when event 'OnNewScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = ScriptsViewModel.Event.OnNewScript)
+			runCurrent()
+
+			verify {
+				navControllerMock.navigate(
+					NavigationScreens.NewScriptScreen(
+						scriptKey = null,
+					),
+				)
+			}
+		}
+
+	@Test
+	fun `should navigate to edit a new script when event 'OnEditScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+			every { getScriptIdUseCaseMock(any()) } returns 123
+
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnEditScript(
+						script =
+							viewModel.uiState.value.scripts
+								.first(),
+					),
+			)
+			runCurrent()
+
+			verify {
+				navControllerMock.navigate(
+					NavigationScreens.NewScriptScreen(
+						scriptKey = 123,
+					),
+				)
+			}
+		}
+
+	@Test
 	fun `should expand script when event 'OnExpandScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
