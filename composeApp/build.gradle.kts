@@ -8,7 +8,7 @@ plugins {
 	alias(libs.plugins.kotlinSerialization)
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
-	id("org.jetbrains.kotlinx.kover") version "0.9.3"
+	alias(libs.plugins.koverCodeCoverage)
 }
 
 allprojects {
@@ -105,7 +105,7 @@ kover {
 			}
 		}
 		verify {
-			rule("Minimal line coverage rate in percents") {
+			rule("Minimal line coverage rate in percent.") {
 				minBound(66)
 			}
 		}
