@@ -27,7 +27,7 @@ is still maybe possible in future.
 - Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, SettingsScreen, ...)
 - Screenshot testing
-
+- build artefacts in CI
 - Code coverage
 - Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
