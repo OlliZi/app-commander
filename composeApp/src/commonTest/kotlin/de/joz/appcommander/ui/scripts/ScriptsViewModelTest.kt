@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.scripts
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
@@ -38,6 +39,7 @@ class ScriptsViewModelTest {
 	private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
 	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
 		mockk(relaxed = true)
+	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
@@ -452,6 +454,7 @@ class ScriptsViewModelTest {
 			trackScriptsFileChangesUseCase = trackScriptsFileChangesUseCaseMock,
 			clearLoggingUseCase = clearLoggingUseCaseMock,
 			getLoggingUseCase = getLoggingUseCaseMock,
+			getScriptIdUseCase = getScriptIdUseCaseMock,
 			dispatcher = Dispatchers.Unconfined,
 			dispatcherIO = Dispatchers.Unconfined,
 		)

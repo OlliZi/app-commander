@@ -2,16 +2,20 @@ package de.joz.appcommander.ui.edit
 
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
+import de.joz.appcommander.domain.GetScriptIdUseCase
+import de.joz.appcommander.domain.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.SaveUserScriptUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -21,6 +25,13 @@ class EditScriptViewModelTest {
 	private val saveUserScriptUseCaseMock: SaveUserScriptUseCase = mockk(relaxed = true)
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
 	private val removeUserScriptUseCaseMock: RemoveUserScriptUseCase = mockk(relaxed = true)
+	private val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = false)
+	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
+
+	@BeforeTest
+	fun setUp() {
+		every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns null
+	}
 
 	@Test
 	fun `should navigate back when event OnNavigateBack is fired`() =
@@ -95,7 +106,24 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			coVerify { saveUserScriptUseCaseMock.invoke(any()) }
+			coVerify { saveUserScriptUseCaseMock.invoke(any(), null) }
+		}
+
+	@Test
+	fun `should save script with script id when event OnSaveScript is fired`() =
+		runTest {
+			val viewModel =
+				createViewModel(
+					scriptKey = 1,
+				)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnSaveScript,
+			)
+			runCurrent()
+
+			coVerify { saveUserScriptUseCaseMock.invoke(any(), 1) }
 		}
 
 	@Test
@@ -126,12 +154,15 @@ class EditScriptViewModelTest {
 			coVerify { executeScriptUseCaseMock.invoke(any(), any()) }
 		}
 
-	private fun createViewModel(): EditScriptViewModel =
+	private fun createViewModel(scriptKey: Int? = null): EditScriptViewModel =
 		EditScriptViewModel(
+			scriptKey = scriptKey,
 			navController = navControllerMock,
 			executeScriptUseCase = executeScriptUseCaseMock,
 			saveUserScriptUseCase = saveUserScriptUseCaseMock,
 			removeUserScriptUseCase = removeUserScriptUseCaseMock,
+			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+			getScriptIdUseCase = getScriptIdUseCaseMock,
 			dispatcher = Dispatchers.Unconfined,
 			dispatcherIO = Dispatchers.Unconfined,
 		)

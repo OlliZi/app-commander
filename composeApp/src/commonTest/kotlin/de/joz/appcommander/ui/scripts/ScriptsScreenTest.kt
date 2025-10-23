@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
@@ -204,9 +205,8 @@ class ScriptsScreenTest {
 			).assertIsDisplayed().performClick()
 
 			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
-			onNodeWithTag(testTag = "text_field_script_input").performTextInput(
-				"foo bar",
-			)
+			onNodeWithTag(testTag = "text_field_script_input").performTextClearance()
+			onNodeWithTag(testTag = "text_field_script_input").performTextInput("foo bar")
 
 			onNodeWithText(
 				text = ScriptsRepository.Platform.IOS.label,
@@ -249,6 +249,7 @@ class ScriptsScreenTest {
 		onOpenScriptFile: () -> Unit = {},
 		onClearLogging: () -> Unit = {},
 		onNewScriptFile: () -> Unit = {},
+		onEditScript: (ScriptsViewModel.Script) -> Unit = {},
 	) {
 		setContent {
 			ScriptsContent(
@@ -262,6 +263,7 @@ class ScriptsScreenTest {
 				onOpenScriptFile = onOpenScriptFile,
 				onClearLogging = onClearLogging,
 				onNewScriptFile = onNewScriptFile,
+				onEditScript = onEditScript,
 			)
 		}
 	}
