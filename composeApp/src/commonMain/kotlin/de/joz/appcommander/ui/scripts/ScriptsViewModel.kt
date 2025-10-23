@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
@@ -26,6 +27,7 @@ import org.koin.core.annotation.InjectedParam
 class ScriptsViewModel(
 	@InjectedParam private val navController: NavController,
 	private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
+	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val getUserScriptsUseCase: GetUserScriptsUseCase,
 	private val openScriptFileUseCase: OpenScriptFileUseCase,
@@ -191,7 +193,7 @@ class ScriptsViewModel(
 	private fun onEditScript(script: Script) {
 		navController.navigate(
 			NavigationScreens.NewScriptScreen(
-				scriptKey = script.originalScript.hashCode(),
+				scriptKey = getScriptIdUseCase(script.originalScript),
 			),
 		)
 	}

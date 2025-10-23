@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
+import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.SaveUserScriptUseCase
@@ -21,8 +22,9 @@ import org.koin.core.annotation.InjectedParam
 @KoinViewModel
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
-	@InjectedParam private val scriptKey: Int?,
+	@InjectedParam private var scriptKey: Int?,
 	private val getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
+	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
@@ -93,23 +95,25 @@ class EditScriptViewModel(
 	}
 
 	private fun onSaveScript() {
-		// TODO use scriptKey to save correct script
 		viewModelScope.launch(dispatcherIO) {
-			saveUserScriptUseCase.invoke(
-				script =
-					ScriptsRepository.Script(
-						label = _uiState.value.scriptName,
-						script = _uiState.value.script,
-						platform = _uiState.value.selectedPlatform,
-					),
+			val scriptToSave =
+				ScriptsRepository.Script(
+					label = _uiState.value.scriptName,
+					script = _uiState.value.script,
+					platform = _uiState.value.selectedPlatform,
+				)
+			saveUserScriptUseCase(
+				script = scriptToSave,
+				scriptKey = scriptKey,
 			)
+
+			scriptKey = getScriptIdUseCase(scriptToSave)
 		}
 	}
 
 	private fun onRemoveScript() {
-		// TODO use scriptKey to remove correct script
 		viewModelScope.launch(dispatcherIO) {
-			removeUserScriptUseCase.invoke(
+			removeUserScriptUseCase(
 				script =
 					ScriptsRepository.Script(
 						label = _uiState.value.scriptName,
