@@ -1,0 +1,22 @@
+name: App-Commander - Release build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  
+  pr_check_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build release application
+        run: |
+          ./gradlew allTests --no-build-cache
+          ./gradlew packageDmg --no-build-cache
