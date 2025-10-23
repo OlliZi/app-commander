@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import de.joz.appcommander.domain.GetStartDestinationUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.NavigationScreens
@@ -68,7 +69,7 @@ fun App(
 			composable<NavigationScreens.NewScriptScreen> {
 				val viewModel: EditScriptViewModel =
 					koinViewModel {
-						parametersOf(navHostController)
+						parametersOf(navHostController, it.toRoute<NavigationScreens.NewScriptScreen>().scriptKey)
 					}
 
 				EditScriptScreen(

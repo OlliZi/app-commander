@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.scripts
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.OpenScriptFileUseCase
@@ -38,6 +39,7 @@ class ScriptsViewModelTest {
 	private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
 	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
 		mockk(relaxed = true)
+	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
@@ -133,6 +135,48 @@ class ScriptsViewModelTest {
 					.first()
 					.isSelected,
 			)
+		}
+
+	@Test
+	fun `should navigate to edit a new script when event 'OnNewScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = ScriptsViewModel.Event.OnNewScript)
+			runCurrent()
+
+			verify {
+				navControllerMock.navigate(
+					NavigationScreens.NewScriptScreen(
+						scriptKey = null,
+					),
+				)
+			}
+		}
+
+	@Test
+	fun `should edit a script when event 'OnEditScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+			every { getScriptIdUseCaseMock(any()) } returns 123
+
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnEditScript(
+						script =
+							viewModel.uiState.value.scripts
+								.first(),
+					),
+			)
+			runCurrent()
+
+			verify {
+				navControllerMock.navigate(
+					NavigationScreens.NewScriptScreen(
+						scriptKey = 123,
+					),
+				)
+			}
 		}
 
 	@Test
@@ -452,6 +496,7 @@ class ScriptsViewModelTest {
 			trackScriptsFileChangesUseCase = trackScriptsFileChangesUseCaseMock,
 			clearLoggingUseCase = clearLoggingUseCaseMock,
 			getLoggingUseCase = getLoggingUseCaseMock,
+			getScriptIdUseCase = getScriptIdUseCaseMock,
 			dispatcher = Dispatchers.Unconfined,
 			dispatcherIO = Dispatchers.Unconfined,
 		)

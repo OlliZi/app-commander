@@ -11,7 +11,9 @@ sealed interface NavigationScreens {
 	object ScriptsScreen : NavigationScreens
 
 	@Serializable
-	object NewScriptScreen : NavigationScreens
+	data class NewScriptScreen(
+		val scriptKey: Int?,
+	) : NavigationScreens
 
 	@Serializable
 	object SettingsScreen : NavigationScreens

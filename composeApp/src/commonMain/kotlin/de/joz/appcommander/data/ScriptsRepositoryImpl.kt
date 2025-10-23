@@ -43,6 +43,13 @@ class ScriptsRepositoryImpl(
 		}
 	}
 
+	override fun updateScript(
+		script: ScriptsRepository.Script,
+		oldScript: ScriptsRepository.Script,
+	) {
+		writeScriptsToFile(listOf(script) + getScripts() - oldScript)
+	}
+
 	override fun saveScript(script: ScriptsRepository.Script) {
 		writeScriptsToFile(listOf(script) + getScripts())
 	}

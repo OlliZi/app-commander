@@ -5,11 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import compose.icons.FeatherIcons
+import compose.icons.feathericons.Edit
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
@@ -82,6 +85,9 @@ fun ScriptsScreen(viewModel: ScriptsViewModel) {
 		onExpand = { script ->
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
 		},
+		onEditScript = { script ->
+			viewModel.onEvent(event = ScriptsViewModel.Event.OnEditScript(script = script))
+		},
 		onOpenScriptFile = {
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
 		},
@@ -110,6 +116,7 @@ internal fun ScriptsContent(
 	onRefreshDevices: () -> Unit,
 	onNavigateToSettings: () -> Unit,
 	onExecuteScript: (Script) -> Unit,
+	onEditScript: (Script) -> Unit,
 	onExpand: (Script) -> Unit,
 	onOpenScriptFile: () -> Unit,
 	onNewScriptFile: () -> Unit,
@@ -165,6 +172,7 @@ internal fun ScriptsContent(
 				isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
 				modifier = Modifier.weight(1f).then(paddingInline),
 				onExecuteScript = onExecuteScript,
+				onEditScript = onEditScript,
 				onExpand = onExpand,
 			)
 
@@ -219,6 +227,7 @@ private fun ScriptsSection(
 	scripts: List<Script>,
 	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScript: (Script) -> Unit,
+	onEditScript: (Script) -> Unit,
 	onExpand: (Script) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
@@ -251,20 +260,15 @@ private fun ScriptsSection(
 								style = MaterialTheme.typography.bodySmall,
 							)
 						}
-						ExpandButton(
-							modifier =
-								Modifier.then(
-									if (isAtMinimumOneDeviceSelected) {
-										Modifier.background(
-											Color.White,
-											CircleShape,
-										)
-									} else {
-										Modifier
-									},
-								),
+						EditButtonItem(
+							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+							onClick = { onEditScript(script) },
+						)
+						Spacer(modifier = Modifier.width(8.dp))
+						ExpandButtonItem(
+							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 							isExpanded = true,
-							onClick = { onExpand(script) },
+							onExpand = { onExpand(script) },
 						)
 					}
 				} else {
@@ -288,20 +292,15 @@ private fun ScriptsSection(
 							overflow = TextOverflow.Ellipsis,
 							style = MaterialTheme.typography.bodySmall,
 						)
-						ExpandButton(
-							modifier =
-								Modifier.then(
-									if (isAtMinimumOneDeviceSelected) {
-										Modifier.background(
-											Color.White,
-											CircleShape,
-										)
-									} else {
-										Modifier
-									},
-								),
+						EditButtonItem(
+							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+							onClick = { onEditScript(script) },
+						)
+						Spacer(modifier = Modifier.width(8.dp))
+						ExpandButtonItem(
+							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 							isExpanded = false,
-							onClick = { onExpand(script) },
+							onExpand = { onExpand(script) },
 						)
 					}
 				}
@@ -395,7 +394,7 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 				modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 			) {
 				ScriptInput(
-					placeHolder = stringResource(Res.string.scripts_terminal_placeholder),
+					script = stringResource(Res.string.scripts_terminal_placeholder),
 					onExecuteScriptText = {
 						onExecuteScriptText(it, selectedPlatform)
 					},
@@ -409,6 +408,56 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 			}
 		}
 	}
+}
+
+@Composable
+private fun EditButtonItem(
+	isAtMinimumOneDeviceSelected: Boolean,
+	onClick: () -> Unit,
+) {
+	IconButton(
+		modifier =
+			Modifier.then(
+				if (isAtMinimumOneDeviceSelected) {
+					Modifier.background(
+						Color.White,
+						CircleShape,
+					)
+				} else {
+					Modifier
+				},
+			),
+		onClick = onClick,
+	) {
+		Icon(
+			imageVector = FeatherIcons.Edit,
+			contentDescription = "Edit button",
+			tint = MaterialTheme.colorScheme.primary,
+		)
+	}
+}
+
+@Composable
+private fun ExpandButtonItem(
+	isAtMinimumOneDeviceSelected: Boolean,
+	isExpanded: Boolean,
+	onExpand: () -> Unit,
+) {
+	ExpandButton(
+		modifier =
+			Modifier.then(
+				if (isAtMinimumOneDeviceSelected) {
+					Modifier.background(
+						Color.White,
+						CircleShape,
+					)
+				} else {
+					Modifier
+				},
+			),
+		isExpanded = isExpanded,
+		onClick = onExpand,
+	)
 }
 
 @Preview
@@ -469,6 +518,7 @@ private fun PreviewScriptScreen_Dark() {
 			onNewScriptFile = {},
 			onDeviceSelect = { devive -> },
 			onClearLogging = {},
+			onEditScript = {},
 		)
 	}
 }
@@ -531,6 +581,7 @@ private fun PreviewScriptScreen_Light() {
 			onNewScriptFile = {},
 			onDeviceSelect = { devive -> },
 			onClearLogging = {},
+			onEditScript = {},
 		)
 	}
 }

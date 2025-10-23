@@ -12,7 +12,7 @@ is still maybe possible in future.
 
 - Welcome-screen
 - Scripts-screen
-- Script-screen for new scripts
+- Script-screen for new scripts + edit existing scripts
 - Terminal-screen
 - Logging-section
 - Settings-screen
@@ -23,11 +23,10 @@ is still maybe possible in future.
 
 # TODOs
 
-- Solve selectedDevice = "TODO", in EditScriptVM
-- Make device section in edit script-screen workable
+- Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, SettingsScreen, ...)
 - Screenshot testing
-- Edit-Screen
+- build artefacts in CI
 - Code coverage
 - Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest

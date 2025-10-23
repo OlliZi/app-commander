@@ -189,4 +189,65 @@ class ScriptsRepositoryImplTest {
 				addLoggingUseCaseMock("Cannot open script file 'unknown file'. (Error: unknown file)")
 			}
 		}
+
+	@Test
+	fun `should save script when method is called`() =
+		runTest {
+			val repository =
+				ScriptsRepositoryImpl(
+					scriptFile = testFile.absolutePath,
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+
+			val newScript =
+				ScriptsRepository.Script(
+					script = "bar",
+					label = "my script abc",
+					platform = ScriptsRepository.Platform.IOS,
+				)
+
+			repository.saveScript(script = newScript)
+
+			assertEquals(3, repository.getScripts().size)
+			assertEquals(newScript, repository.getScripts().first())
+		}
+
+	@Test
+	fun `should remove script when method is called`() =
+		runTest {
+			val repository =
+				ScriptsRepositoryImpl(
+					scriptFile = testFile.absolutePath,
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+
+			val scripts = repository.getScripts()
+			val scriptToRemove = scripts.first()
+
+			repository.removeScript(script = scriptToRemove)
+
+			assertEquals(1, repository.getScripts().size)
+			assertFalse(repository.getScripts().contains(scriptToRemove))
+		}
+
+	@Test
+	fun `should update script when method is called`() =
+		runTest {
+			val repository =
+				ScriptsRepositoryImpl(
+					scriptFile = testFile.absolutePath,
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+
+			val scripts = repository.getScripts()
+			val oldScript = scripts.first()
+
+			val scriptToUpdate = oldScript.copy(label = "bar")
+			repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
+
+			val updatedScripts = repository.getScripts()
+			assertEquals(2, updatedScripts.size)
+			assertFalse(updatedScripts.contains(oldScript))
+			assertTrue(updatedScripts.contains(scriptToUpdate))
+		}
 }

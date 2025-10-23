@@ -7,6 +7,11 @@ interface ScriptsRepository {
 
 	fun openScriptFile()
 
+	fun updateScript(
+		script: Script,
+		oldScript: Script,
+	)
+
 	fun saveScript(script: Script)
 
 	fun removeScript(script: Script)
