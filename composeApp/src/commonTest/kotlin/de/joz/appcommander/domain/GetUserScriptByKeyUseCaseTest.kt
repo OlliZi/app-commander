@@ -39,7 +39,7 @@ class GetUserScriptByKeyUseCaseTest {
 	}
 
 	@Test
-	fun `should return null if input was not found`() {
+	fun `should return null if input is not found`() {
 		val useCase = createUseCase()
 
 		assertNull(useCase(scriptKey = 2))

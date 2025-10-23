@@ -23,7 +23,7 @@ import org.koin.core.annotation.InjectedParam
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
 	@InjectedParam private var scriptKey: Int?,
-	private val getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
+	getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
 	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
