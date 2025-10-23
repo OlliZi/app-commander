@@ -101,6 +101,7 @@ kover {
 		filters {
 			excludes {
 				packages("org.koin.ksp.generated", "de.joz.appcommander.resources")
+				classes("**ComposableSingletons**")
 			}
 		}
 		verify {
