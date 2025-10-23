@@ -12,7 +12,7 @@ is still maybe possible in future.
 
 - Welcome-screen
 - Scripts-screen
-- Script-screen for new scripts
+- Script-screen for new scripts + edit existing scripts
 - Terminal-screen
 - Logging-section
 - Settings-screen
