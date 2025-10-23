@@ -27,7 +27,6 @@ is still maybe possible in future.
 - UI-tests (EditScriptContent, SettingsScreen, ...)
 - Screenshot testing
 - build artefacts in CI
-- Code coverage
 - Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
 - Open-Icons für Logging and Terminal unten
@@ -48,5 +47,6 @@ is still maybe possible in future.
 - Integrate library update tooling
 - Integrate detekt plugin + baseline
 - Code quality (UI-tests, Unit-tests, detekt & ktlint)
+- Code coverage
 - Execute code quality locally (on my jenkins) and in github-cloud
 - Previews for all screens and elements
