@@ -155,7 +155,7 @@ class ScriptsViewModelTest {
 		}
 
 	@Test
-	fun `should navigate to edit a new script when event 'OnEditScript' is fired`() =
+	fun `should edit a script when event 'OnEditScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 			every { getScriptIdUseCaseMock(any()) } returns 123
