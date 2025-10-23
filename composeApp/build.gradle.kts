@@ -89,6 +89,13 @@ tasks.register("runDependencyUpdates") {
 	dependsOn("dependencyUpdates")
 }
 
+tasks.register("runCodeCoverage") {
+	group = "_joz"
+	dependsOn("koverLog")
+	dependsOn("koverVerify")
+	dependsOn("koverHtmlReport")
+}
+
 kover {
 	reports {
 		filters {
