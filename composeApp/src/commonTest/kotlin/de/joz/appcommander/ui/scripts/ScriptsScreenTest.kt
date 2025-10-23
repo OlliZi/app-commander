@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -252,18 +253,23 @@ class ScriptsScreenTest {
 		onEditScript: (ScriptsViewModel.Script) -> Unit = {},
 	) {
 		setContent {
-			ScriptsContent(
-				uiState = uiState,
-				onDeviceSelect = onDeviceSelect,
-				onExecuteScript = onExecuteScript,
-				onExecuteScriptText = onExecuteScriptText,
-				onRefreshDevices = onRefreshDevices,
-				onExpand = onExpand,
-				onNavigateToSettings = onNavigateToSettings,
-				onOpenScriptFile = onOpenScriptFile,
-				onClearLogging = onClearLogging,
-				onNewScriptFile = onNewScriptFile,
-				onEditScript = onEditScript,
+			AppCommanderTheme(
+				darkTheme = true,
+				content = {
+					ScriptsContent(
+						uiState = uiState,
+						onDeviceSelect = onDeviceSelect,
+						onExecuteScript = onExecuteScript,
+						onExecuteScriptText = onExecuteScriptText,
+						onRefreshDevices = onRefreshDevices,
+						onExpand = onExpand,
+						onNavigateToSettings = onNavigateToSettings,
+						onOpenScriptFile = onOpenScriptFile,
+						onClearLogging = onClearLogging,
+						onNewScriptFile = onNewScriptFile,
+						onEditScript = onEditScript,
+					)
+				},
 			)
 		}
 	}

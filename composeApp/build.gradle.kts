@@ -106,7 +106,7 @@ kover {
 		}
 		verify {
 			rule("Minimal line coverage rate in percents") {
-				minBound(65)
+				minBound(66)
 			}
 		}
 	}
