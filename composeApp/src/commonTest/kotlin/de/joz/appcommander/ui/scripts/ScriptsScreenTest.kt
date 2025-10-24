@@ -21,7 +21,10 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ScriptsScreenTest {
-	private val screenshotVerifier = ScreenshotVerifier()
+	private val screenshotVerifier =
+		ScreenshotVerifier(
+			testClass = javaClass,
+		)
 
 	@Test
 	fun `should show default label when no devices are connected`() {
@@ -38,7 +41,6 @@ class ScriptsScreenTest {
 			onNodeWithText("Logging").assertIsDisplayed()
 
 			screenshotVerifier.verifyScreenshot(
-				testClass = this@ScriptsScreenTest.javaClass,
 				source = this,
 				screenshotName = "default_label",
 			)
@@ -63,7 +65,6 @@ class ScriptsScreenTest {
 			onNodeWithText("Log 123").assertIsDisplayed()
 
 			screenshotVerifier.verifyScreenshot(
-				testClass = this@ScriptsScreenTest.javaClass,
 				source = this,
 				screenshotName = "see_log",
 			)

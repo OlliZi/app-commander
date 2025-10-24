@@ -14,7 +14,8 @@ import java.util.Arrays
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
-class ScreenshotVerifier(
+class ScreenshotVerifier<T>(
+	private val testClass: Class<T>,
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
 	private val writeScreenshotToSrcDirectoryWhenFailed: Boolean = true,
@@ -23,8 +24,7 @@ class ScreenshotVerifier(
 		storeDirectory.mkdirs()
 	}
 
-	fun <T> verifyScreenshot(
-		testClass: Class<T>,
+	fun verifyScreenshot(
 		source: ComposeUiTest,
 		screenshotName: String,
 	) {
@@ -36,7 +36,6 @@ class ScreenshotVerifier(
 		when (screenshotResult) {
 			is ScreenshotResult.Success ->
 				innerVerify(
-					testClass = testClass, // TODO besser machen
 					screenshotFile = screenshotResult.screenshot,
 				)
 
@@ -64,13 +63,9 @@ class ScreenshotVerifier(
 			ScreenshotResult.Failure(error = throwable)
 		}
 
-	private fun <T> innerVerify(
-		testClass: Class<T>,
-		screenshotFile: File,
-	) {
+	private fun innerVerify(screenshotFile: File) {
 		val goldenImage =
 			readGoldenImageFromSrcDir(
-				testClass = testClass,
 				screenshotFileName = screenshotFile.name,
 			)
 
@@ -92,10 +87,7 @@ class ScreenshotVerifier(
 		)
 	}
 
-	private fun <T> readGoldenImageFromSrcDir(
-		testClass: Class<T>,
-		screenshotFileName: String,
-	): File {
+	private fun readGoldenImageFromSrcDir(screenshotFileName: String): File {
 		val sourceDirectory =
 			testClass.name
 				.split(".") // split class name into parts
