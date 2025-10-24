@@ -18,7 +18,6 @@ class ScreenshotVerifier<T>(
 	private val testClass: Class<T>,
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
-	private val writeScreenshotToSrcDirectoryWhenFailed: Boolean = true,
 ) {
 	init {
 		storeDirectory.mkdirs()
@@ -76,18 +75,18 @@ class ScreenshotVerifier<T>(
 				IMAGE_DOES_NOT_EXIST
 			}
 
-		if (compareResult == IMAGE_DOES_NOT_EXIST && writeScreenshotToSrcDirectoryWhenFailed) {
+		if (compareResult == IMAGE_DOES_NOT_EXIST) {
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
-		} else if (compareResult != IDENTICAL_IMAGES && writeScreenshotToSrcDirectoryWhenFailed) {
+		} else if (compareResult != IDENTICAL_IMAGES) {
 			val diffFile = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_diff.png")
 			Files.copy(screenshotFile.toPath(), diffFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		}
 
 		val failMessage =
 			when (compareResult) {
-				IDENTICAL_IMAGES -> "WILL NOT PRINT IN TEST RESULT"
+				IDENTICAL_IMAGES -> "WILL NOT PRINT IN TEST RESULT."
 				IMAGE_DOES_NOT_EXIST -> "Golden image does not exist. Copied screenshot for you:)."
-				else -> "Fail: Screenshot are not identical."
+				else -> "Fail: Screenshots are not identical. Copied screenshot diff to directory."
 			}
 
 		assertEquals(
