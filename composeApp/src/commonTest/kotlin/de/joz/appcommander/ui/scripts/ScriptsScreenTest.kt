@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
-import de.joz.appcommander.ui.misc.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
 import kotlin.test.assertEquals

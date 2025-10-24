@@ -1,4 +1,4 @@
-package de.joz.appcommander.ui.misc.screenshot
+package de.joz.appcommander.helper.screenshot
 
 import java.io.File
 

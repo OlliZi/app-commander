@@ -1,4 +1,4 @@
-package de.joz.appcommander.ui.misc.screenshot
+package de.joz.appcommander.helper.screenshot
 
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.test.ComposeUiTest
