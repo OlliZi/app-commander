@@ -12,6 +12,7 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,6 +30,10 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class WelcomeScreenTest {
+	private val screenshotVerifier =
+		ScreenshotVerifier(
+			testClass = javaClass,
+		)
 	private lateinit var koin: Koin
 
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
@@ -67,6 +72,8 @@ class WelcomeScreenTest {
 			).assertIsDisplayed()
 			onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
 			onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
+
+			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "all_labels")
 		}
 	}
 
@@ -80,6 +87,8 @@ class WelcomeScreenTest {
 				)
 
 				onNodeWithText("Do not show welcome screen again.").performClick()
+
+				screenshotVerifier.verifyScreenshot(source = this, screenshotName = "toggle_click")
 			}
 
 			assertTrue(

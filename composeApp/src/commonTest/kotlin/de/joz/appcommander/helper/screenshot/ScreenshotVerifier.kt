@@ -83,7 +83,10 @@ class ScreenshotVerifier<T>(
 		assertEquals(
 			IDENTICAL_IMAGES,
 			compareResult,
-			"Fail: Screenshot are not identical.\n Current: ${screenshotFile.absolutePath}\n Golden: ${goldenImage.absolutePath}",
+			"Fail: Screenshot are not identical.\n" +
+				"Current: ${screenshotFile.absolutePath}\n" +
+				"Golden: ${goldenImage.absolutePath}\n" +
+				"Verify your screenshots in your VCS.",
 		)
 	}
 
