@@ -85,7 +85,7 @@ class ScreenshotVerifier<T>(
 		val failMessage =
 			when (compareResult) {
 				IDENTICAL_IMAGES -> "WILL NOT PRINT IN TEST RESULT."
-				IMAGE_DOES_NOT_EXIST -> "Golden image does not exist. Copied screenshot for you:)."
+				IMAGE_DOES_NOT_EXIST -> "Fail: Golden image does not exist. Copied screenshot for you:)."
 				else -> "Fail: Screenshots are not identical. Copied screenshot diff to directory."
 			}
 
