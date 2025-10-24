@@ -14,14 +14,14 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
-import de.joz.appcommander.ui.misc.screenshot.Screenshotter
+import de.joz.appcommander.ui.misc.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ScriptsScreenTest {
-	private val screenshotter = Screenshotter()
+	private val screenshotVerifier = ScreenshotVerifier()
 
 	@Test
 	fun `should show default label when no devices are connected`() {
@@ -37,7 +37,7 @@ class ScriptsScreenTest {
 			onNodeWithText("Terminal").assertIsDisplayed()
 			onNodeWithText("Logging").assertIsDisplayed()
 
-			screenshotter.verifyScreenshot(
+			screenshotVerifier.verifyScreenshot(
 				testClass = this@ScriptsScreenTest.javaClass,
 				source = this,
 				screenshotName = "default_label",
@@ -61,6 +61,12 @@ class ScriptsScreenTest {
 
 			onNodeWithText("Log abc").assertIsDisplayed()
 			onNodeWithText("Log 123").assertIsDisplayed()
+
+			screenshotVerifier.verifyScreenshot(
+				testClass = this@ScriptsScreenTest.javaClass,
+				source = this,
+				screenshotName = "see_log",
+			)
 		}
 	}
 

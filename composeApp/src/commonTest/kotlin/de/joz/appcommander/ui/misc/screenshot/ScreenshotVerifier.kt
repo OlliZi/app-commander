@@ -14,7 +14,7 @@ import java.util.Arrays
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
-class Screenshotter(
+class ScreenshotVerifier(
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
 	private val writeScreenshotToSrcDirectoryWhenFailed: Boolean = true,
@@ -74,14 +74,19 @@ class Screenshotter(
 				screenshotFileName = screenshotFile.name,
 			)
 
-		val compareResult = Arrays.compare(screenshotFile.readBytes(), goldenImage.readBytes())
+		val compareResult =
+			if (goldenImage.exists()) {
+				Arrays.compare(screenshotFile.readBytes(), goldenImage.readBytes())
+			} else {
+				IMAGES_DOES_NOT_EXIST
+			}
 
-		if (compareResult != 0 && writeScreenshotToSrcDirectoryWhenFailed) {
+		if (compareResult != IDENTICAL_IMAGES && writeScreenshotToSrcDirectoryWhenFailed) {
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		}
 
 		assertEquals(
-			0,
+			IDENTICAL_IMAGES,
 			compareResult,
 			"Fail: Screenshot are not identical.\n Current: ${screenshotFile.absolutePath}\n Golden: ${goldenImage.absolutePath}",
 		)
@@ -100,7 +105,9 @@ class Screenshotter(
 		return File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/"), screenshotFileName)
 	}
 
-	companion object {
+	companion object Companion {
 		private const val IMAGE_QUALITY = 100
+		private const val IDENTICAL_IMAGES = 0
+		private const val IMAGES_DOES_NOT_EXIST = -1
 	}
 }
