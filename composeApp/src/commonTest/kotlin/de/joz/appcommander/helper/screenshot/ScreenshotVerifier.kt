@@ -94,7 +94,10 @@ class ScreenshotVerifier<T>(
 				.dropLast(1) // remove class name
 				.joinToString("/") // convert to directory path
 
-		return File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/"), screenshotFileName)
+		val parentScreenshotDir = File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/screenshots/"))
+		parentScreenshotDir.mkdir()
+
+		return File(parentScreenshotDir, screenshotFileName)
 	}
 
 	companion object Companion {
