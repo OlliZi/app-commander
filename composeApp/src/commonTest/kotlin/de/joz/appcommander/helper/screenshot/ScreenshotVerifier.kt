@@ -73,17 +73,27 @@ class ScreenshotVerifier<T>(
 			if (goldenImage.exists()) {
 				Arrays.compare(screenshotFile.readBytes(), goldenImage.readBytes())
 			} else {
-				IMAGES_DOES_NOT_EXIST
+				IMAGE_DOES_NOT_EXIST
 			}
 
-		if (compareResult != IDENTICAL_IMAGES && writeScreenshotToSrcDirectoryWhenFailed) {
+		if (compareResult == IMAGE_DOES_NOT_EXIST && writeScreenshotToSrcDirectoryWhenFailed) {
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
+		} else if (compareResult != IDENTICAL_IMAGES && writeScreenshotToSrcDirectoryWhenFailed) {
+			val diffFile = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_diff.png")
+			Files.copy(screenshotFile.toPath(), diffFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		}
+
+		val failMessage =
+			when (compareResult) {
+				IDENTICAL_IMAGES -> "WILL NOT PRINT IN TEST RESULT"
+				IMAGE_DOES_NOT_EXIST -> "Golden image does not exist. Copied screenshot for you:)."
+				else -> "Fail: Screenshot are not identical."
+			}
 
 		assertEquals(
 			IDENTICAL_IMAGES,
 			compareResult,
-			"Fail: Screenshot are not identical.\n" +
+			"$failMessage\n" +
 				"Current: ${screenshotFile.absolutePath}\n" +
 				"Golden: ${goldenImage.absolutePath}\n" +
 				"Verify your screenshots in your VCS.",
@@ -106,6 +116,6 @@ class ScreenshotVerifier<T>(
 	companion object Companion {
 		private const val IMAGE_QUALITY = 100
 		private const val IDENTICAL_IMAGES = 0
-		private const val IMAGES_DOES_NOT_EXIST = -1
+		private const val IMAGE_DOES_NOT_EXIST = -1
 	}
 }
