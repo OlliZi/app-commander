@@ -8,6 +8,8 @@ import androidx.compose.ui.test.isRoot
 import org.jetbrains.skia.EncodedImageFormat
 import org.jetbrains.skia.Image
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.Arrays
 import kotlin.test.assertEquals
 
@@ -15,6 +17,7 @@ import kotlin.test.assertEquals
 class Screenshotter(
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
+	private val writeScreenshotToSrcDirectoryWhenFailed: Boolean = true,
 ) {
 	init {
 		storeDirectory.mkdirs()
@@ -71,9 +74,15 @@ class Screenshotter(
 				screenshotFileName = screenshotFile.name,
 			)
 
+		val compareResult = Arrays.compare(screenshotFile.readBytes(), goldenImage.readBytes())
+
+		if (compareResult != 0 && writeScreenshotToSrcDirectoryWhenFailed) {
+			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
+		}
+
 		assertEquals(
 			0,
-			Arrays.compare(screenshotFile.readBytes(), goldenImage.readBytes()),
+			compareResult,
 			"Fail: Screenshot are not identical.\n Current: ${screenshotFile.absolutePath}\n Golden: ${goldenImage.absolutePath}",
 		)
 	}
