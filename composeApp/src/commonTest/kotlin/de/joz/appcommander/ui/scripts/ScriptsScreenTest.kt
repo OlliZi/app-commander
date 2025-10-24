@@ -14,12 +14,15 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.ui.misc.screenshot.Screenshotter
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ScriptsScreenTest {
+	private val screenshotter = Screenshotter()
+
 	@Test
 	fun `should show default label when no devices are connected`() {
 		runComposeUiTest {
@@ -33,6 +36,8 @@ class ScriptsScreenTest {
 			onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
 			onNodeWithText("Terminal").assertIsDisplayed()
 			onNodeWithText("Logging").assertIsDisplayed()
+
+			screenshotter.screenshot(source = this, name = "test")
 		}
 	}
 
