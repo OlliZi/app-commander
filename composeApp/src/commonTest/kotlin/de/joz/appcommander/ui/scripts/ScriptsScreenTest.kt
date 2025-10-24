@@ -37,7 +37,11 @@ class ScriptsScreenTest {
 			onNodeWithText("Terminal").assertIsDisplayed()
 			onNodeWithText("Logging").assertIsDisplayed()
 
-			screenshotter.screenshot(source = this, name = "test")
+			val result = screenshotter.screenshot(source = this, screenshotName = "test")
+			screenshotter.verify(
+				test = this@ScriptsScreenTest,
+				screenshotResult = result,
+			)
 		}
 	}
 
