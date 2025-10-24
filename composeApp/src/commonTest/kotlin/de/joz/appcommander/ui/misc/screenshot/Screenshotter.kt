@@ -1,10 +1,8 @@
 package de.joz.appcommander.ui.misc.screenshot
 
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.isRoot
 import org.jetbrains.skia.EncodedImageFormat
@@ -22,47 +20,20 @@ class Screenshotter(
 		storeDirectory.mkdirs()
 	}
 
-	fun screenshot(
+	fun <T> verifyScreenshot(
+		testClass: Class<T>,
 		source: ComposeUiTest,
 		screenshotName: String,
-		quality: Int = 100,
-	): ScreenshotResult =
-		screenshot(
-			source = source.onNode(isRoot()),
-			screenshotName = screenshotName,
-			quality = quality,
-		)
-
-	fun screenshot(
-		source: SemanticsNodeInteraction,
-		screenshotName: String,
-		quality: Int = 100,
-	): ScreenshotResult =
-		runCatching {
-			val image = source.captureToImage()
-			val bytearray = encodeToBytes(image = image, quality = quality)
-
-			if (bytearray == null || bytearray.isEmpty()) {
-				throw Exception("Screenshot is empty")
-			}
-
-			val file = File(storeDirectory, "$screenshotName.png")
-			file.writeBytes(bytearray)
-			println("Screenshot taken successfully: ${file.absolutePath}")
-			ScreenshotResult.Success(screenshot = file)
-		}.getOrElse { throwable ->
-			println("Screenshot failed: ${throwable.message}")
-			ScreenshotResult.Failure(error = throwable)
-		}
-
-	fun verify(
-		test: Any,
-		screenshotResult: ScreenshotResult,
 	) {
+		val screenshotResult =
+			screenshot(
+				source = source,
+				screenshotName = screenshotName,
+			)
 		when (screenshotResult) {
 			is ScreenshotResult.Success ->
 				innerVerify(
-					test = test, // TODO besser machen
+					testClass = testClass, // TODO besser machen
 					screenshotFile = screenshotResult.screenshot,
 				)
 
@@ -70,14 +41,34 @@ class Screenshotter(
 		}
 	}
 
-	private fun innerVerify(
-		test: Any,
+	private fun screenshot(
+		source: ComposeUiTest,
+		screenshotName: String,
+	): ScreenshotResult =
+		runCatching {
+			val image = source.onNode(isRoot()).captureToImage()
+			val bytearray =
+				Image.makeFromBitmap(image.asSkiaBitmap()).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
+
+			if (bytearray == null || bytearray.isEmpty()) {
+				throw Exception("Screenshot is empty.")
+			}
+
+			val file = File(storeDirectory, "$screenshotName.png")
+			file.writeBytes(bytearray)
+			ScreenshotResult.Success(screenshot = file)
+		}.getOrElse { throwable ->
+			ScreenshotResult.Failure(error = throwable)
+		}
+
+	private fun <T> innerVerify(
+		testClass: Class<T>,
 		screenshotFile: File,
 	) {
 		val goldenImage =
-			readFromTestDir(
-				test = test,
-				screenshotFile.name,
+			readGoldenImageFromSrcDir(
+				testClass = testClass,
+				screenshotFileName = screenshotFile.name,
 			)
 
 		assertEquals(
@@ -87,26 +78,20 @@ class Screenshotter(
 		)
 	}
 
-	private fun readFromTestDir(
-		test: Any,
-		name: String,
+	private fun <T> readGoldenImageFromSrcDir(
+		testClass: Class<T>,
+		screenshotFileName: String,
 	): File {
-		val dir =
-			test.javaClass.name
-				.split(".")
-				.dropLast(1)
-				.joinToString("/")
-				.replace(".", "/")
-		val goldenIMage = File(goldenImageDirectory.absolutePath + "/" + dir + "/", name)
-		return goldenIMage
+		val sourceDirectory =
+			testClass.name
+				.split(".") // split class name into parts
+				.dropLast(1) // remove class name
+				.joinToString("/") // convert to directory path
+
+		return File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/"), screenshotFileName)
 	}
 
-	private fun encodeToBytes(
-		image: ImageBitmap,
-		quality: Int,
-	): ByteArray? =
-		Image
-			.makeFromBitmap(image.asSkiaBitmap())
-			.encodeToData(EncodedImageFormat.PNG, quality)
-			?.bytes
+	companion object {
+		private const val IMAGE_QUALITY = 100
+	}
 }
