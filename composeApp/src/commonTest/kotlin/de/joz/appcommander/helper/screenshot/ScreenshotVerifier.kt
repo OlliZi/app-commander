@@ -81,6 +81,8 @@ class ScreenshotVerifier<T>(
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		} else if (compareResult != IDENTICAL_IMAGES) {
 			makeDiff(goldenImage, screenshotFile)
+			val currentScreenshot = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_current.png")
+			Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		}
 
 		val failMessage =
