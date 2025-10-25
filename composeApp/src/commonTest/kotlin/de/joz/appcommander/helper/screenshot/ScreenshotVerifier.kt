@@ -15,6 +15,7 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.Arrays
 import kotlin.test.assertEquals
+import kotlin.test.fail
 
 @OptIn(ExperimentalTestApi::class)
 class ScreenshotVerifier<T>(
@@ -41,7 +42,9 @@ class ScreenshotVerifier<T>(
 					screenshotFile = screenshotResult.screenshot,
 				)
 
-			is ScreenshotResult.Failure -> throw screenshotResult.error
+			is ScreenshotResult.Failure -> {
+				fail("verifyScreenshot failed: ${screenshotResult.error}")
+			}
 		}
 	}
 
