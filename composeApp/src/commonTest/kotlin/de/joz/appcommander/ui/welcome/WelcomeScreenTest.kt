@@ -92,7 +92,7 @@ class WelcomeScreenTest {
 
 				onNodeWithText("Do not show welcome screen again.").performClick()
 
-				//screenshotVerifier.verifyScreenshot(source = this, screenshotName = "toggle_click")
+				// screenshotVerifier.verifyScreenshot(source = this, screenshotName = "toggle_click")
 			}
 
 			assertTrue(
