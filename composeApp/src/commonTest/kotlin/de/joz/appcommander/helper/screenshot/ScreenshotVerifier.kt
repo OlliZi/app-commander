@@ -31,6 +31,7 @@ class ScreenshotVerifier<T>(
 		source: ComposeUiTest,
 		screenshotName: String,
 	) {
+		println("1")
 		val screenshotResult =
 			takeScreenshot(
 				source = source,
@@ -55,15 +56,18 @@ class ScreenshotVerifier<T>(
 		screenshotName: String,
 	): ScreenshotResult =
 		runCatching {
+			println("2")
 			val image = source.onNode(isRoot()).captureToImage()
 			val bytearray = convertToPng(image.asSkiaBitmap())
 
 			if (bytearray == null || bytearray.isEmpty()) {
+				println("3")
 				throw Exception("Screenshot is empty.")
 			}
 
 			val file = File(storeDirectory, "$screenshotName.png")
 			file.writeBytes(bytearray)
+			println("4")
 			ScreenshotResult.Success(screenshot = file)
 		}.getOrElse { throwable ->
 			ScreenshotResult.Failure(error = throwable)
