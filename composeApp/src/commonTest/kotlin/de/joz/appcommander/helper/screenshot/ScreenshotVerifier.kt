@@ -36,8 +36,10 @@ class ScreenshotVerifier<T>(
 				source = source,
 				screenshotName = screenshotName,
 			)
+		println("Result is: $screenshotResult")
 		when (screenshotResult) {
-			is ScreenshotResult.Success ->
+			is ScreenshotResult.Success,
+			->
 				verifyAgainstGoldenImage(
 					screenshotFile = screenshotResult.screenshot,
 				)
