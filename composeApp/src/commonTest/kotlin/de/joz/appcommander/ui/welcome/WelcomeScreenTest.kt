@@ -1,5 +1,8 @@
 package de.joz.appcommander.ui.welcome
 
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
@@ -14,6 +17,7 @@ import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -145,7 +149,11 @@ class WelcomeScreenTest {
 								navController = navController,
 								savePreferenceUseCase = koin.get(),
 							),
-						bubblesStrategy = koin.get(),
+						bubblesStrategy =object : BubblesStrategy {
+							override fun drawBubbles(drawScope: DrawScope, size: Size, step: Float) {
+								drawScope.drawCircle(Color.LightGray)
+							}
+						},
 					)
 				},
 			)
