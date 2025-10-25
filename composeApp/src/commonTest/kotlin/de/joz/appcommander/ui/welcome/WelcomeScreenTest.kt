@@ -149,11 +149,16 @@ class WelcomeScreenTest {
 								navController = navController,
 								savePreferenceUseCase = koin.get(),
 							),
-						bubblesStrategy =object : BubblesStrategy {
-							override fun drawBubbles(drawScope: DrawScope, size: Size, step: Float) {
-								drawScope.drawCircle(Color.LightGray)
-							}
-						},
+						bubblesStrategy =
+							object : BubblesStrategy {
+								override fun drawBubbles(
+									drawScope: DrawScope,
+									size: Size,
+									step: Float,
+								) {
+									drawScope.drawCircle(Color.LightGray)
+								}
+							},
 					)
 				},
 			)
