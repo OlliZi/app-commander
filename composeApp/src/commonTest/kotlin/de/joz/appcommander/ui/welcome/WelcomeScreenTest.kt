@@ -1,5 +1,8 @@
 package de.joz.appcommander.ui.welcome
 
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
@@ -12,7 +15,9 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -29,6 +34,10 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class WelcomeScreenTest {
+	private val screenshotVerifier =
+		ScreenshotVerifier(
+			testClass = javaClass,
+		)
 	private lateinit var koin: Koin
 
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
@@ -67,6 +76,8 @@ class WelcomeScreenTest {
 			).assertIsDisplayed()
 			onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
 			onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
+
+			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "all_labels")
 		}
 	}
 
@@ -80,6 +91,8 @@ class WelcomeScreenTest {
 				)
 
 				onNodeWithText("Do not show welcome screen again.").performClick()
+
+				// screenshotVerifier.verifyScreenshot(source = this, screenshotName = "toggle_click")
 			}
 
 			assertTrue(
@@ -136,7 +149,16 @@ class WelcomeScreenTest {
 								navController = navController,
 								savePreferenceUseCase = koin.get(),
 							),
-						bubblesStrategy = koin.get(),
+						bubblesStrategy =
+							object : BubblesStrategy {
+								override fun drawBubbles(
+									drawScope: DrawScope,
+									size: Size,
+									step: Float,
+								) {
+									drawScope.drawCircle(Color.LightGray)
+								}
+							},
 					)
 				},
 			)
