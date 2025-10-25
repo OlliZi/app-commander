@@ -18,7 +18,7 @@ jobs:
 
       - name: Run code analysis-tools and execute unit-test.
         run: |
-          ./gradlew detekt detektJvmMain --no-build-cache
-          ./gradlew ktlintCheck --no-build-cache
-          ./gradlew allTests --no-build-cache
-          ./gradlew runCodeCoverage
+          ./gradlew detekt detektJvmMain --no-build-cache --stacktrace
+          ./gradlew ktlintCheck --no-build-cache --stacktrace
+          ./gradlew allTests --no-build-cache --stacktrace
+          ./gradlew runCodeCoverage --no-build-cache --stacktrace
