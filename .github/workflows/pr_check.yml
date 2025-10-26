@@ -30,9 +30,7 @@ jobs:
           name: screenshots-files
           path: |
             **/build/reports/tests/screenshots/*.png
-            /build/reports/tests/screenshots/*.png
-            /build/reports/**/**/*.png
-                    
+            
       - name: Publish test report.
         uses: mikepenz/action-junit-report@v5
         if: success() || failure() # always run even if the previous step fails
