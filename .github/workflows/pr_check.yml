@@ -25,10 +25,14 @@ jobs:
           
       - name: Archive generated screenshots from test.
         uses: actions/upload-artifact@v4
+        if: success() || failure() # always run even if the previous step fails
         with:
           name: screenshots-files
-          path: '**/build/reports/tests/screenshots/*.png'
-          
+          path: |
+            **/build/reports/tests/screenshots/*.png
+            /build/reports/tests/screenshots/*.png
+            /build/reports/**/**/*.png
+                    
       - name: Publish test report.
         uses: mikepenz/action-junit-report@v5
         if: success() || failure() # always run even if the previous step fails
