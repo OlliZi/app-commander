@@ -22,13 +22,15 @@ jobs:
           ./gradlew ktlintCheck --no-build-cache
           ./gradlew allTests --no-build-cache
           ./gradlew runCodeCoverage --no-build-cache
-      - name: Publish test report.
-        uses: mikepenz/action-junit-report@v5
-        if: success() || failure() # always run even if the previous step fails
-        with:
-          report_paths: '**/build/test-results/jvmTest/TEST-*.xml'
+          
       - name: Archive generated screenshots from test.
         uses: actions/upload-artifact@v4
         with:
           name: screenshots-files
           path: '**/build/reports/tests/screenshots/*.png'
+          
+      - name: Publish test report.
+        uses: mikepenz/action-junit-report@v5
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: '**/build/test-results/jvmTest/TEST-*.xml'
