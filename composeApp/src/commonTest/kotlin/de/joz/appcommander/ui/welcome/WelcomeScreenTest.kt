@@ -2,11 +2,14 @@ package de.joz.appcommander.ui.welcome
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -15,20 +18,31 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.helper.screenshot.ScreenshotResult
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.jetbrains.skia.Bitmap
+import org.jetbrains.skia.Canvas
+import org.jetbrains.skia.EncodedImageFormat
+import org.jetbrains.skia.Image
+import org.jetbrains.skia.Paint
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.ksp.generated.*
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.util.Arrays
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -42,7 +56,7 @@ class WelcomeScreenTest {
 
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
 
-	private val testClass: Class<T> = this
+	//private val testClass: Class = this
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/")
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/")
 
@@ -168,6 +182,7 @@ class WelcomeScreenTest {
 			)
 		}
 	}
+
 	fun verifyScreenshot(
 		source: ComposeUiTest,
 		screenshotName: String,
@@ -181,7 +196,7 @@ class WelcomeScreenTest {
 		println("Result is: $screenshotResult")
 		when (screenshotResult) {
 			is ScreenshotResult.Success,
-				->
+			->
 				verifyAgainstGoldenImage(
 					screenshotFile = screenshotResult.screenshot,
 				)
@@ -289,7 +304,7 @@ class WelcomeScreenTest {
 
 	private fun readGoldenImageFromSrcDir(screenshotFileName: String): File {
 		val sourceDirectory =
-			testClass.name
+			this.javaClass.name
 				.split(".") // split class name into parts
 				.dropLast(1) // remove class name
 				.joinToString("/") // convert to directory path
