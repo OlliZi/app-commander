@@ -97,7 +97,7 @@ class ScreenshotVerifier<T>(
 			when (compareResult) {
 				IDENTICAL_IMAGES -> "WILL NOT PRINT IN TEST RESULT."
 				IMAGE_DOES_NOT_EXIST -> "Fail: Golden image does not exist. Copied screenshot for you:)."
-				else -> "Fail: Screenshots are not identical. Created screenshot diff to directory."
+				else -> "Fail: Screenshots are not identical ($compareResult). Created screenshot diff to directory."
 			}
 
 		assertEquals(
