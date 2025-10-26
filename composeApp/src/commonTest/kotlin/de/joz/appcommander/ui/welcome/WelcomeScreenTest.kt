@@ -56,7 +56,7 @@ class WelcomeScreenTest {
 
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
 
-	//private val testClass: Class = this
+	// private val testClass: Class = this
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/")
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/")
 
