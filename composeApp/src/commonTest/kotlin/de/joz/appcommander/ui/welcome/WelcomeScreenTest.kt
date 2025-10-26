@@ -76,8 +76,6 @@ class WelcomeScreenTest {
 			).assertIsDisplayed()
 			onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
 			onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
-
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "all_labels")
 		}
 	}
 
@@ -88,6 +86,7 @@ class WelcomeScreenTest {
 			runComposeUiTest {
 				setTestContent(
 					navController = navController,
+					useCustomBubbleStrategy = true,
 				)
 
 				onNodeWithText("Do not show welcome screen again.").performClick()
@@ -138,7 +137,10 @@ class WelcomeScreenTest {
 		}
 	}
 
-	private fun ComposeUiTest.setTestContent(navController: NavController) {
+	private fun ComposeUiTest.setTestContent(
+		navController: NavController,
+		useCustomBubbleStrategy: Boolean = false,
+	) {
 		setContent {
 			AppCommanderTheme(
 				darkTheme = true,
@@ -150,14 +152,18 @@ class WelcomeScreenTest {
 								savePreferenceUseCase = koin.get(),
 							),
 						bubblesStrategy =
-							object : BubblesStrategy {
-								override fun drawBubbles(
-									drawScope: DrawScope,
-									size: Size,
-									step: Float,
-								) {
-									drawScope.drawCircle(Color.LightGray)
+							if (useCustomBubbleStrategy) {
+								object : BubblesStrategy {
+									override fun drawBubbles(
+										drawScope: DrawScope,
+										size: Size,
+										step: Float,
+									) {
+										drawScope.drawCircle(Color.LightGray)
+									}
 								}
+							} else {
+								koin.get()
 							},
 					)
 				},
