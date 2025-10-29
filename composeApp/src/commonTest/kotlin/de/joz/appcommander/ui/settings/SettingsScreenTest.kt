@@ -4,15 +4,18 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlin.test.Test
@@ -20,9 +23,9 @@ import kotlin.test.Test
 @OptIn(ExperimentalTestApi::class)
 class SettingsScreenTest {
 	private val navControllerMock: NavController = mockk()
-	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
-	private val savePreferenceUseCaseMock: SavePreferenceUseCase = mockk()
-	private val manageUiAppearanceUseCaseMock: ManageUiAppearanceUseCase = mockk()
+	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
+	private val savePreferenceUseCaseMock: SavePreferenceUseCase = mockk(relaxed = true)
+	private val manageUiAppearanceUseCaseMock: ManageUiAppearanceUseCase = mockk(relaxed = true)
 	private val screenshotVerifier =
 		ScreenshotVerifier(
 			testClass = javaClass,
@@ -42,6 +45,17 @@ class SettingsScreenTest {
 				source = this,
 				screenshotName = "default_label",
 			)
+		}
+	}
+
+	@Test
+	fun `should toggle hide welcome screen on startup when toggled`() {
+		runComposeUiTest {
+			setTestContent()
+
+			onNodeWithText("Hide welcome screen on startup.").assertIsDisplayed().performClick()
+
+			coVerify { savePreferenceUseCaseMock.invoke(HIDE_WELCOME_SCREEN_PREF_KEY, true) }
 		}
 	}
 
@@ -66,6 +80,7 @@ class SettingsScreenTest {
 				manageUiAppearanceUseCase = manageUiAppearanceUseCaseMock,
 				mainDispatcher = Dispatchers.Unconfined,
 			)
+
 		setContent {
 			AppCommanderTheme(
 				darkTheme = true,
