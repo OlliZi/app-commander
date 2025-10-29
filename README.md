@@ -21,6 +21,9 @@ is still maybe possible in future.
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
 
+# Screenshot
+![Scripts-screen](/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)
+
 # TODOs
 
 - TODO improve DI: @Factory fun provideMainDispatcher(): MainCoroutineDispatcher = Dispatchers.Main
