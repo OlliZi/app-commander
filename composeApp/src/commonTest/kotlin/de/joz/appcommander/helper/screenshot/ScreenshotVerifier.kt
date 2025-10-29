@@ -30,22 +30,20 @@ class ScreenshotVerifier<T>(
 		source: ComposeUiTest,
 		screenshotName: String,
 	) {
-		println("1")
 		val screenshotResult =
 			takeScreenshot(
 				source = source,
 				screenshotName = screenshotName,
 			)
-		println("Result is: $screenshotResult")
+
 		when (screenshotResult) {
-			is ScreenshotResult.Success,
-			->
+			is ScreenshotResult.Success ->
 				verifyAgainstGoldenImage(
 					screenshotFile = screenshotResult.screenshot,
 				)
 
 			is ScreenshotResult.Failure -> {
-				screenshotResult.error
+				throw screenshotResult.error
 			}
 		}
 	}
@@ -55,18 +53,15 @@ class ScreenshotVerifier<T>(
 		screenshotName: String,
 	): ScreenshotResult =
 		runCatching {
-			println("2")
-			val image = source.onNode(isRoot()).captureToImage()
-			val bytearray = convertToPng(image.asSkiaBitmap())
+			val screenshot = source.onNode(isRoot()).captureToImage()
+			val pngByteArray = convertToPng(screenshot.asSkiaBitmap())
 
-			if (bytearray == null || bytearray.isEmpty()) {
-				println("3")
+			if (pngByteArray == null || pngByteArray.isEmpty()) {
 				throw Exception("Screenshot is empty.")
 			}
 
 			val file = File(storeDirectory, "$screenshotName.png")
-			file.writeBytes(bytearray)
-			println("4")
+			file.writeBytes(pngByteArray)
 			ScreenshotResult.Success(screenshot = file)
 		}.getOrElse { throwable ->
 			ScreenshotResult.Failure(error = throwable)
@@ -88,7 +83,7 @@ class ScreenshotVerifier<T>(
 		if (compareResult == IMAGE_DOES_NOT_EXIST) {
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		} else if (compareResult != IDENTICAL_IMAGES) {
-			makeDiff(goldenImage, screenshotFile)
+			createDifferenceScreenshot(goldenImage, screenshotFile)
 			val currentScreenshot = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_current.png")
 			Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		}
@@ -96,8 +91,8 @@ class ScreenshotVerifier<T>(
 		val failMessage =
 			when (compareResult) {
 				IDENTICAL_IMAGES -> "WILL NOT PRINT IN TEST RESULT."
-				IMAGE_DOES_NOT_EXIST -> "Fail: Golden image does not exist. Copied screenshot for you:)."
-				else -> "Fail: Screenshots are not identical ($compareResult). Created screenshot diff to directory."
+				IMAGE_DOES_NOT_EXIST -> "Hint: Golden image does not exist. Copied screenshot for you:)."
+				else -> "Fail: Screenshots are not identical ($compareResult). Created screenshot diff in directory."
 			}
 
 		assertEquals(
@@ -110,7 +105,7 @@ class ScreenshotVerifier<T>(
 		)
 	}
 
-	private fun makeDiff(
+	private fun createDifferenceScreenshot(
 		goldenImage: File,
 		screenshotFile: File,
 	) {
