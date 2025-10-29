@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
@@ -38,7 +39,7 @@ fun Slider(
 			steps = sliderItem.steps,
 			valueRange = sliderItem.minimum..sliderItem.maximum,
 			onValueChange = onValueChange,
-			modifier = Modifier.fillMaxWidth(),
+			modifier = Modifier.fillMaxWidth().testTag(sliderItem.key),
 		)
 	}
 }

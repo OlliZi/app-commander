@@ -26,10 +26,22 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel) {
-	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val uiState =
+		viewModel.uiState.collectAsStateWithLifecycle()
 
-	SettingsContent(
+	SettingsScreen(
+		viewModel = viewModel,
 		uiState = uiState.value,
+	)
+}
+
+@Composable
+internal fun SettingsScreen(
+	viewModel: SettingsViewModel,
+	uiState: SettingsViewModel.UiState,
+) {
+	SettingsContent(
+		uiState = uiState,
 		onBackNavigation = {
 			viewModel.onEvent(event = SettingsViewModel.Event.OnNavigateBack)
 		},

@@ -105,9 +105,12 @@ kover {
 			}
 		}
 		verify {
+			val lineCoverage = 70
 			rule("Minimal line coverage rate in percent.") {
-				minBound(66)
-				maxBound(67) // indicator to adjust coverage was increased
+				minBound(lineCoverage)
+			}
+			rule("Maximum line coverage rate in percent. Indicator to adjust when coverage was increased.") {
+				maxBound(lineCoverage + 1)
 			}
 		}
 	}
