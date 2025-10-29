@@ -21,7 +21,8 @@ is still maybe possible in future.
 - Open script file to make changes
 - Automatically refresh scripts list all x seconds if file has changed
 
-# Screenshot
+# Screenshots
+- Scripts-screen
 ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)
 
 # TODOs
