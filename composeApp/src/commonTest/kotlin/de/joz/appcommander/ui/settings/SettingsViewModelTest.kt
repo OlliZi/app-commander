@@ -288,6 +288,6 @@ class SettingsViewModelTest {
 			getPreferenceUseCase = getPreferenceUseCaseMock,
 			manageUiAppearanceUseCase = manageUiAppearanceUseCaseMock,
 			navController = navControllerMock,
-			dispatcher = Dispatchers.Unconfined,
+			mainDispatcher = Dispatchers.Unconfined,
 		)
 }

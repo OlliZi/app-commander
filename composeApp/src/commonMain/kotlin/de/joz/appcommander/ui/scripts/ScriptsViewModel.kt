@@ -3,6 +3,8 @@ package de.joz.appcommander.ui.scripts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.joz.appcommander.IODispatcher
+import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.GetScriptIdUseCase
@@ -15,7 +17,6 @@ import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,15 +35,15 @@ class ScriptsViewModel(
 	private val trackScriptsFileChangesUseCase: TrackScriptsFileChangesUseCase,
 	private val clearLoggingUseCase: ClearLoggingUseCase,
 	private val getLoggingUseCase: GetLoggingUseCase,
-	private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
-	private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<ScriptsViewModel.UiState, ScriptsViewModel.Event> {
 	private val _uiState = MutableStateFlow(UiState())
 	override val uiState = _uiState.asStateFlow()
 
 	init {
-		viewModelScope.launch(dispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			onRefreshDevices()
 			onRefreshScripts(getUserScriptsUseCase())
 
@@ -51,7 +52,7 @@ class ScriptsViewModel(
 			}
 		}
 
-		viewModelScope.launch(dispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			getLoggingUseCase().collect { logging ->
 				_uiState.update { oldState ->
 					oldState.copy(
@@ -66,7 +67,7 @@ class ScriptsViewModel(
 	}
 
 	override fun onEvent(event: Event) {
-		viewModelScope.launch(dispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			when (event) {
 				Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
 				Event.OnRefreshDevices -> onRefreshDevices()
@@ -141,7 +142,7 @@ class ScriptsViewModel(
 	}
 
 	private fun onExecuteScript(script: Script) {
-		viewModelScope.launch(dispatcherIO) {
+		viewModelScope.launch(ioDispatcher) {
 			_uiState.value.connectedDevices
 				.filter {
 					it.isSelected
@@ -155,7 +156,7 @@ class ScriptsViewModel(
 		script: String,
 		platform: ScriptsRepository.Platform,
 	) {
-		viewModelScope.launch(dispatcherIO) {
+		viewModelScope.launch(ioDispatcher) {
 			_uiState.value.connectedDevices
 				.filter {
 					it.isSelected
@@ -199,7 +200,7 @@ class ScriptsViewModel(
 	}
 
 	private fun onOpenScriptFile() {
-		viewModelScope.launch(dispatcherIO) {
+		viewModelScope.launch(ioDispatcher) {
 			openScriptFileUseCase()
 		}
 	}
