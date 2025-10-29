@@ -23,9 +23,9 @@ is still maybe possible in future.
 
 # TODOs
 
+- TODO improve DI: @Factory fun provideMainDispatcher(): MainCoroutineDispatcher = Dispatchers.Main
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, SettingsScreen, ...)
-- Screenshot testing
 - build artefacts in CI
 - Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
@@ -48,5 +48,6 @@ is still maybe possible in future.
 - Integrate detekt plugin + baseline
 - Code quality (UI-tests, Unit-tests, detekt & ktlint)
 - Code coverage
+- Screenshot testing
 - Execute code quality locally (on my jenkins) and in github-cloud
 - Previews for all screens and elements

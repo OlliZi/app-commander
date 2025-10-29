@@ -107,6 +107,7 @@ kover {
 		verify {
 			rule("Minimal line coverage rate in percent.") {
 				minBound(66)
+				maxBound(67) // indicator to adjust coverage was increased
 			}
 		}
 	}
