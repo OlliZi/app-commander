@@ -3,6 +3,8 @@ package de.joz.appcommander.ui.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.joz.appcommander.IODispatcher
+import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptByKeyUseCase
@@ -11,7 +13,6 @@ import de.joz.appcommander.domain.SaveUserScriptUseCase
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -28,8 +29,8 @@ class EditScriptViewModel(
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
-	private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
-	private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<EditScriptViewModel.UiState, EditScriptViewModel.Event> {
 	private val _uiState =
@@ -39,7 +40,7 @@ class EditScriptViewModel(
 	override val uiState = _uiState.asStateFlow()
 
 	override fun onEvent(event: Event) {
-		viewModelScope.launch(dispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			when (event) {
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
@@ -81,7 +82,7 @@ class EditScriptViewModel(
 	}
 
 	private fun onExecuteScript() {
-		viewModelScope.launch(dispatcherIO) {
+		viewModelScope.launch(ioDispatcher) {
 			executeScriptUseCase(
 				script =
 					ScriptsRepository.Script(
@@ -95,7 +96,7 @@ class EditScriptViewModel(
 	}
 
 	private fun onSaveScript() {
-		viewModelScope.launch(dispatcherIO) {
+		viewModelScope.launch(ioDispatcher) {
 			val scriptToSave =
 				ScriptsRepository.Script(
 					label = _uiState.value.scriptName,
@@ -112,7 +113,7 @@ class EditScriptViewModel(
 	}
 
 	private fun onRemoveScript() {
-		viewModelScope.launch(dispatcherIO) {
+		viewModelScope.launch(ioDispatcher) {
 			removeUserScriptUseCase(
 				script =
 					ScriptsRepository.Script(

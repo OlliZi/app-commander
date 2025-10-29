@@ -186,7 +186,7 @@ class EditScriptViewModelTest {
 			removeUserScriptUseCase = removeUserScriptUseCaseMock,
 			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
-			dispatcher = Dispatchers.Unconfined,
-			dispatcherIO = Dispatchers.Unconfined,
+			mainDispatcher = Dispatchers.Unconfined,
+			ioDispatcher = Dispatchers.Unconfined,
 		)
 }

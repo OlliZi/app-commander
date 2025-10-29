@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.SavePreferenceUseCase
@@ -15,7 +16,6 @@ import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -30,14 +30,14 @@ class SettingsViewModel(
 	getPreferenceUseCase: GetPreferenceUseCase,
 	private val savePreferenceUseCase: SavePreferenceUseCase,
 	private val manageUiAppearanceUseCase: ManageUiAppearanceUseCase,
-	private val dispatcher: CoroutineDispatcher = Dispatchers.Main,
+	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
 	private val _uiState = MutableStateFlow(UiState())
 	override val uiState = _uiState.asStateFlow()
 
 	init {
-		viewModelScope.launch(dispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			_uiState.update { oldState ->
 				oldState.copy(
 					togglePreferences =
@@ -101,7 +101,7 @@ class SettingsViewModel(
 	}
 
 	override fun onEvent(event: Event) {
-		viewModelScope.launch(dispatcher) {
+		viewModelScope.launch(mainDispatcher) {
 			when (event) {
 				is Event.OnToggleItem -> toggleItem(event)
 				is Event.OnSliderItem -> sliderItem(event)

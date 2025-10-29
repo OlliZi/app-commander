@@ -27,7 +27,6 @@ is still maybe possible in future.
 
 # TODOs
 
-- TODO improve DI: @Factory fun provideMainDispatcher(): MainCoroutineDispatcher = Dispatchers.Main
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, SettingsScreen, ...)
 - build artefacts in CI
