@@ -16,14 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run code analysis-tools and execute unit-test.
+      - name: Run code analysis-tools and execute unit-tests.
         run: |
           ./gradlew detekt detektJvmMain --no-build-cache
           ./gradlew ktlintCheck --no-build-cache
           ./gradlew allTests --no-build-cache
           ./gradlew runCodeCoverage --no-build-cache
           
-      - name: Archive generated screenshots from test.
+      - name: Archive generated screenshots from unit-tests.
         uses: actions/upload-artifact@v4
         if: success() || failure() # always run even if the previous step fails
         with:
@@ -31,6 +31,7 @@ jobs:
           path: |
             **/build/reports/tests/screenshots/*.png
             **/src/commonTest/kotlin/de/joz/appcommander/**/*_diff.png
+            **/src/commonTest/kotlin/de/joz/appcommander/**/*_current.png
             
       - name: Publish test report.
         uses: mikepenz/action-junit-report@v5
