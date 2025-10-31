@@ -59,7 +59,7 @@ data class TitleBarAction(
 
 @Preview
 @Composable
-private fun PreviewTitleBar_Dark() {
+internal fun PreviewTitleBar_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -90,7 +90,7 @@ private fun PreviewTitleBar_Dark() {
 
 @Preview
 @Composable
-private fun PreviewTitleBar_Light() {
+internal fun PreviewTitleBar_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

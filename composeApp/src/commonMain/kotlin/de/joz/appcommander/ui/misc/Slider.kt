@@ -54,7 +54,7 @@ private fun SettingsViewModel.LabelValue.toUiString(): String =
 
 @Preview
 @Composable
-private fun PreviewSlider_Dark() {
+internal fun PreviewSlider_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -96,7 +96,7 @@ private fun PreviewSlider_Dark() {
 
 @Preview
 @Composable
-private fun PreviewSlider_Light() {
+internal fun PreviewSlider_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

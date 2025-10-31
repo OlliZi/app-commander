@@ -48,7 +48,7 @@ fun DevicesBar(
 
 @Preview
 @Composable
-private fun PreviewDevicesBar_Dark() {
+internal fun PreviewDevicesBar_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -74,7 +74,7 @@ private fun PreviewDevicesBar_Dark() {
 
 @Preview
 @Composable
-private fun PreviewDevicesBar_Light() {
+internal fun PreviewDevicesBar_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

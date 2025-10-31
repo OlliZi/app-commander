@@ -65,7 +65,7 @@ fun ScriptInput(
 
 @Preview
 @Composable
-private fun PreviewScriptInput_Dark() {
+internal fun PreviewScriptInput_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -82,7 +82,7 @@ private fun PreviewScriptInput_Dark() {
 
 @Preview
 @Composable
-private fun PreviewScriptInput_Light() {
+internal fun PreviewScriptInput_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

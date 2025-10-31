@@ -33,7 +33,7 @@ fun PlatformSelection(
 
 @Preview
 @Composable
-private fun PreviewPlatformSelection_Dark() {
+internal fun PreviewPlatformSelection_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -46,7 +46,7 @@ private fun PreviewPlatformSelection_Dark() {
 
 @Preview
 @Composable
-private fun PreviewPlatformSelection_Light() {
+internal fun PreviewPlatformSelection_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

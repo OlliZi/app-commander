@@ -63,7 +63,7 @@ fun SimpleTextInput(
 
 @Preview
 @Composable
-private fun PreviewSimpleTextInput_Dark() {
+internal fun PreviewSimpleTextInput_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -76,7 +76,7 @@ private fun PreviewSimpleTextInput_Dark() {
 
 @Preview
 @Composable
-private fun PreviewSimpleTextInput_Light() {
+internal fun PreviewSimpleTextInput_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

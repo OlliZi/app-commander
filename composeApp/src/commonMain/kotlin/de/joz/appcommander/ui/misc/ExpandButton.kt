@@ -50,7 +50,7 @@ enum class ExpandButtonDirection {
 
 @Preview
 @Composable
-private fun PreviewExpandButton_Dark() {
+internal fun PreviewExpandButton_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -83,7 +83,7 @@ private fun PreviewExpandButton_Dark() {
 
 @Preview
 @Composable
-private fun PreviewExpandButton_Light() {
+internal fun PreviewExpandButton_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

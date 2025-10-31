@@ -56,7 +56,7 @@ data class BottomBarAction(
 
 @Preview
 @Composable
-private fun PreviewBottomBar_Dark() {
+internal fun PreviewBottomBar_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -67,6 +67,14 @@ private fun PreviewBottomBar_Dark() {
 						label = Res.string.edit_action_save,
 						action = {},
 					),
+					BottomBarAction(
+						label = Res.string.edit_action_abort,
+						action = {},
+					),
+					BottomBarAction(
+						label = Res.string.edit_action_abort,
+						action = {},
+					),
 				),
 		)
 	}
@@ -74,7 +82,7 @@ private fun PreviewBottomBar_Dark() {
 
 @Preview
 @Composable
-private fun PreviewBottomBar_Light() {
+internal fun PreviewBottomBar_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

@@ -65,7 +65,7 @@ fun LabelledSwitch(
 
 @Preview
 @Composable
-private fun PreviewLabelledSwitch_Dark() {
+internal fun PreviewLabelledSwitch_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -88,7 +88,7 @@ private fun PreviewLabelledSwitch_Dark() {
 
 @Preview
 @Composable
-private fun PreviewLabelledSwitch_Light() {
+internal fun PreviewLabelledSwitch_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
