@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,6 +28,8 @@ import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.SimpleTextInput
+import de.joz.appcommander.ui.misc.TextLabel
+import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -107,9 +108,9 @@ internal fun EditScriptContent(
 			Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.edit_script_name),
-				style = MaterialTheme.typography.bodyLarge,
+				textLabelType = TextLabelType.BodyLarge,
 			)
 			SimpleTextInput(
 				value = uiState.scriptName,
@@ -118,9 +119,9 @@ internal fun EditScriptContent(
 
 			SectionDivider()
 
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.edit_enter_or_edit),
-				style = MaterialTheme.typography.bodyLarge,
+				textLabelType = TextLabelType.BodyLarge,
 			)
 			ScriptInput(
 				script =
@@ -137,9 +138,9 @@ internal fun EditScriptContent(
 
 			SectionDivider()
 
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.edit_select_platform),
-				style = MaterialTheme.typography.bodyLarge,
+				textLabelType = TextLabelType.BodyLarge,
 			)
 			PlatformSelection(
 				selectedPlatform = uiState.selectedPlatform,
@@ -148,9 +149,9 @@ internal fun EditScriptContent(
 
 			SectionDivider()
 
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.edit_select_devices),
-				style = MaterialTheme.typography.bodyLarge,
+				textLabelType = TextLabelType.BodyLarge,
 			)
 			DevicesBar(
 				connectedDevices = emptyList(),

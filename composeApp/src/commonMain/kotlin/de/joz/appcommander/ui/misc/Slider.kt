@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.ui.Modifier
@@ -30,9 +28,9 @@ fun Slider(
 		verticalArrangement = Arrangement.spacedBy(4.dp),
 		modifier = Modifier.padding(vertical = 12.dp),
 	) {
-		Text(
+		TextLabel(
 			text = stringResource(sliderItem.label, sliderItem.labelValue.toUiString()),
-			style = MaterialTheme.typography.bodyLarge,
+			textLabelType = TextLabelType.BodyLarge,
 		)
 		Slider(
 			value = sliderItem.sliderValue,

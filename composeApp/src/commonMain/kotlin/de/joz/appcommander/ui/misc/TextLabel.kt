@@ -7,19 +7,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TextLabel(
-	label: String,
-	textLabelType: TextLabelType = TextLabelType.BodyLarge,
-	textModifier: Modifier = Modifier,
+	text: String,
+	textLabelType: TextLabelType,
+	modifier: Modifier = Modifier,
+	maxLines: Int = Int.MAX_VALUE,
+	textAlign: TextAlign = TextAlign.Start,
+	overflow: TextOverflow = TextOverflow.Clip,
 ) {
 	Text(
-		text = label,
-		modifier = textModifier,
+		text = text,
+		modifier = modifier,
+		maxLines = maxLines,
+		textAlign = textAlign,
+		overflow = overflow,
 		style =
 			when (textLabelType) {
 				TextLabelType.BodyLarge -> MaterialTheme.typography.bodyLarge.applyThemeColor()
@@ -56,7 +64,8 @@ internal fun PreviewTextLabel_Dark() {
 		) {
 			TextLabelType.entries.forEach {
 				TextLabel(
-					label = it.name,
+					text = it.name,
+					textLabelType = it,
 				)
 			}
 		}
@@ -74,7 +83,8 @@ internal fun PreviewTextLabel_Light() {
 		) {
 			TextLabelType.entries.forEach {
 				TextLabel(
-					label = it.name,
+					text = it.name,
+					textLabelType = it,
 				)
 			}
 		}

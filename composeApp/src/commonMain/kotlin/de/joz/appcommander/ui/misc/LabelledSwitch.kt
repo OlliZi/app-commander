@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,13 +40,10 @@ fun LabelledSwitch(
 		horizontalArrangement = Arrangement.spacedBy(8.dp),
 		verticalAlignment = Alignment.CenterVertically,
 	) {
-		Text(
+		TextLabel(
 			text = label,
 			modifier = textModifier,
-			style =
-				MaterialTheme.typography.bodyLarge.copy(
-					color = MaterialTheme.colorScheme.onSurface,
-				),
+			textLabelType = TextLabelType.BodyLarge,
 		)
 
 		Switch(

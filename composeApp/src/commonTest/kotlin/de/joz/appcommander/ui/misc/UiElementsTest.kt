@@ -3,14 +3,12 @@ package de.joz.appcommander.ui.misc
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
-import androidx.compose.ui.unit.dp
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
@@ -58,8 +56,7 @@ class UiElementsTest {
 					Column(
 						modifier =
 							Modifier
-								.fillMaxWidth()
-								.height(1200.dp)
+								.fillMaxSize()
 								.background(MaterialTheme.colorScheme.background),
 						verticalArrangement = Arrangement.SpaceEvenly,
 					) {

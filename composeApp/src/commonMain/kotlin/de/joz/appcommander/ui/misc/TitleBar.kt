@@ -74,10 +74,6 @@ internal fun PreviewTitleBar_Dark() {
 				title = "Title bar (plain)",
 			)
 			TitleBar(
-				title = "Title bar with back",
-				onBackNavigation = {},
-			)
-			TitleBar(
 				title = "Title bar with back + actions",
 				onBackNavigation = {},
 				actions =
@@ -103,10 +99,6 @@ internal fun PreviewTitleBar_Light() {
 		) {
 			TitleBar(
 				title = "Title bar (plain)",
-			)
-			TitleBar(
-				title = "Title bar with back",
-				onBackNavigation = {},
 			)
 			TitleBar(
 				title = "Title bar with back + actions",
