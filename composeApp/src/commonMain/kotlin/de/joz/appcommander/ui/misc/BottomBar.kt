@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
@@ -72,7 +73,7 @@ internal fun PreviewBottomBar_Dark() {
 						action = {},
 					),
 					BottomBarAction(
-						label = Res.string.edit_action_abort,
+						label = Res.string.edit_action_remove,
 						action = {},
 					),
 				),
@@ -98,7 +99,7 @@ internal fun PreviewBottomBar_Light() {
 						action = {},
 					),
 					BottomBarAction(
-						label = Res.string.edit_action_abort,
+						label = Res.string.edit_action_remove,
 						action = {},
 					),
 				),
