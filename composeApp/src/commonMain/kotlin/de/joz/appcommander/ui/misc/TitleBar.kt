@@ -23,33 +23,37 @@ fun TitleBar(
 	onBackNavigation: (() -> Unit)? = null,
 	actions: List<TitleBarAction> = emptyList(),
 ) {
-	TopAppBar(title = {
-		Text(text = title)
-	}, navigationIcon = {
-		if (onBackNavigation != null) {
-			IconButton(
-				onClick = onBackNavigation,
-			) {
-				Icon(
-					imageVector = FeatherIcons.ArrowLeft,
-					contentDescription = null,
-					tint = MaterialTheme.colorScheme.primary,
-				)
+	TopAppBar(
+		title = {
+			Text(text = title)
+		},
+		navigationIcon = {
+			if (onBackNavigation != null) {
+				IconButton(
+					onClick = onBackNavigation,
+				) {
+					Icon(
+						imageVector = FeatherIcons.ArrowLeft,
+						contentDescription = null,
+						tint = MaterialTheme.colorScheme.primary,
+					)
+				}
 			}
-		}
-	}, actions = {
-		actions.forEach { actionItem ->
-			IconButton(
-				onClick = actionItem.action,
-			) {
-				Icon(
-					imageVector = actionItem.icon,
-					contentDescription = null,
-					tint = MaterialTheme.colorScheme.primary,
-				)
+		},
+		actions = {
+			actions.forEach { actionItem ->
+				IconButton(
+					onClick = actionItem.action,
+				) {
+					Icon(
+						imageVector = actionItem.icon,
+						contentDescription = null,
+						tint = MaterialTheme.colorScheme.primary,
+					)
+				}
 			}
-		}
-	})
+		},
+	)
 }
 
 data class TitleBarAction(
