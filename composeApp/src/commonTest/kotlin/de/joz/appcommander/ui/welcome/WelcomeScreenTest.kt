@@ -15,7 +15,7 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
-import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import io.mockk.mockk

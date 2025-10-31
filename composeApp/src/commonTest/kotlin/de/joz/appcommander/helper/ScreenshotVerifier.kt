@@ -1,4 +1,4 @@
-package de.joz.appcommander.helper.screenshot
+package de.joz.appcommander.helper
 
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.test.ComposeUiTest
@@ -84,7 +84,8 @@ class ScreenshotVerifier<T>(
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		} else if (compareResult != IDENTICAL_IMAGES) {
 			createDifferenceScreenshot(goldenImage, screenshotFile)
-			val currentScreenshot = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_current.png")
+			val currentScreenshot =
+				File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_current.png")
 			Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
 		}
 
@@ -147,7 +148,8 @@ class ScreenshotVerifier<T>(
 				.dropLast(1) // remove class name
 				.joinToString("/") // convert to directory path
 
-		val parentScreenshotDir = File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/screenshots/"))
+		val parentScreenshotDir =
+			File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/screenshots/"))
 		parentScreenshotDir.mkdir()
 
 		return File(parentScreenshotDir, screenshotFileName)
@@ -155,7 +157,7 @@ class ScreenshotVerifier<T>(
 
 	private fun createBitmapFromScreenshot(screenshotFile: File): Bitmap {
 		val imageBitmap = Bitmap()
-		val image = Image.makeFromEncoded(screenshotFile.readBytes())
+		val image = Image.Companion.makeFromEncoded(screenshotFile.readBytes())
 
 		imageBitmap.allocPixels(image.imageInfo)
 		image.readPixels(imageBitmap)
@@ -164,7 +166,20 @@ class ScreenshotVerifier<T>(
 	}
 
 	private fun convertToPng(bitmap: Bitmap): ByteArray? =
-		Image.makeFromBitmap(bitmap).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
+		Image
+			.makeFromBitmap(bitmap)
+			.encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)
+			?.bytes
+
+	private sealed interface ScreenshotResult {
+		data class Success(
+			val screenshot: File,
+		) : ScreenshotResult
+
+		data class Failure(
+			val error: Throwable,
+		) : ScreenshotResult
+	}
 
 	companion object Companion {
 		private const val IMAGE_QUALITY = 100
