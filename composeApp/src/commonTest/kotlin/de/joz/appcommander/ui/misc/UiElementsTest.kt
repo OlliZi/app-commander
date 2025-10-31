@@ -73,6 +73,7 @@ class UiElementsTest {
 							PreviewSectionDivider_Dark()
 							PreviewSimpleTextInput_Dark()
 							PreviewSlider_Dark()
+							PreviewTextLabel_Dark()
 							PreviewTitleBar_Dark()
 						} else {
 							PreviewBottomBar_Light()
@@ -84,6 +85,7 @@ class UiElementsTest {
 							PreviewSectionDivider_Light()
 							PreviewSimpleTextInput_Light()
 							PreviewSlider_Light()
+							PreviewTextLabel_Light()
 							PreviewTitleBar_Light()
 						}
 					}
