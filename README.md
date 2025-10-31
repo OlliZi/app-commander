@@ -28,9 +28,9 @@ is still maybe possible in future.
 # TODOs
 
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
-- UI-tests (EditScriptContent, SettingsScreen, ...)
+- UI-tests (EditScriptContent, ...)
 - build artefacts in CI
-- Unit-test for PreferencesRepositoryImpl + TrackScriptsFileChangesUseCaseTest
+- Unit-test for PreferencesRepositoryImpl
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
 - Open-Icons für Logging and Terminal unten
   rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
