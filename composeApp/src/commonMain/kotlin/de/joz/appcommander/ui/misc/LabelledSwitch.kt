@@ -3,7 +3,6 @@ package de.joz.appcommander.ui.misc
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -69,16 +68,16 @@ internal fun PreviewLabelledSwitch_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
+		Row(
+			horizontalArrangement = Arrangement.spacedBy(16.dp),
 		) {
 			LabelledSwitch(
-				label = "some switch",
+				label = "some switch ON",
 				checked = true,
 				onCheckedChange = {},
 			)
 			LabelledSwitch(
-				label = "some switch",
+				label = "some switch OFF",
 				checked = false,
 				onCheckedChange = {},
 			)
@@ -92,16 +91,16 @@ internal fun PreviewLabelledSwitch_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
+		Row(
+			horizontalArrangement = Arrangement.spacedBy(16.dp),
 		) {
 			LabelledSwitch(
-				label = "some switch",
+				label = "some switch ON",
 				checked = true,
 				onCheckedChange = {},
 			)
 			LabelledSwitch(
-				label = "some switch",
+				label = "some switch OFF",
 				checked = false,
 				onCheckedChange = {},
 			)

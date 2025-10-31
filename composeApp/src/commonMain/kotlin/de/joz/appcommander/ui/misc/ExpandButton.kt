@@ -1,7 +1,7 @@
 package de.joz.appcommander.ui.misc
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,8 +54,8 @@ internal fun PreviewExpandButton_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
+		Row(
+			horizontalArrangement = Arrangement.SpaceBetween,
 		) {
 			ExpandButton(
 				isExpanded = true,
@@ -87,8 +87,8 @@ internal fun PreviewExpandButton_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
+		Row(
+			horizontalArrangement = Arrangement.SpaceBetween,
 		) {
 			ExpandButton(
 				isExpanded = true,
