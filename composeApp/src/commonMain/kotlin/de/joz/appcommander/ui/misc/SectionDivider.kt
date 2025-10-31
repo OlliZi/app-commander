@@ -17,7 +17,7 @@ fun SectionDivider() {
 
 @Preview
 @Composable
-private fun PreviewSectionDivider_Dark() {
+internal fun PreviewSectionDivider_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -27,7 +27,7 @@ private fun PreviewSectionDivider_Dark() {
 
 @Preview
 @Composable
-private fun PreviewSectionDivider_Light() {
+internal fun PreviewSectionDivider_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

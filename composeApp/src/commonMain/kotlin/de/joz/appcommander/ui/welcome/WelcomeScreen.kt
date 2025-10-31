@@ -39,6 +39,8 @@ import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_do_not_show_again
 import de.joz.appcommander.resources.welcome_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
+import de.joz.appcommander.ui.misc.TextLabel
+import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
 import de.joz.appcommander.ui.welcome.bubble.FadingInBubblesStrategy
 import org.jetbrains.compose.resources.painterResource
@@ -104,16 +106,16 @@ internal fun WelcomeContent(
 			horizontalAlignment = Alignment.CenterHorizontally,
 			verticalArrangement = Arrangement.Center,
 		) {
-			Text(
+			TextLabel(
 				modifier = Modifier.padding(top = 24.dp),
 				text = stringResource(Res.string.welcome_title),
-				style = MaterialTheme.typography.headlineLarge,
+				textLabelType = TextLabelType.HeadlineLarge,
 				textAlign = TextAlign.Center,
 			)
 			Spacer(Modifier.height(16.dp))
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.welcome_catch_phrase),
-				style = MaterialTheme.typography.headlineSmall,
+				textLabelType = TextLabelType.HeadlineSmall,
 				textAlign = TextAlign.Center,
 			)
 			Spacer(Modifier.height(12.dp))

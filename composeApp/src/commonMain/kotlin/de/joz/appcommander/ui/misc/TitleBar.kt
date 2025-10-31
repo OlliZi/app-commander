@@ -23,33 +23,37 @@ fun TitleBar(
 	onBackNavigation: (() -> Unit)? = null,
 	actions: List<TitleBarAction> = emptyList(),
 ) {
-	TopAppBar(title = {
-		Text(text = title)
-	}, navigationIcon = {
-		if (onBackNavigation != null) {
-			IconButton(
-				onClick = onBackNavigation,
-			) {
-				Icon(
-					imageVector = FeatherIcons.ArrowLeft,
-					contentDescription = null,
-					tint = MaterialTheme.colorScheme.primary,
-				)
+	TopAppBar(
+		title = {
+			Text(text = title)
+		},
+		navigationIcon = {
+			if (onBackNavigation != null) {
+				IconButton(
+					onClick = onBackNavigation,
+				) {
+					Icon(
+						imageVector = FeatherIcons.ArrowLeft,
+						contentDescription = null,
+						tint = MaterialTheme.colorScheme.primary,
+					)
+				}
 			}
-		}
-	}, actions = {
-		actions.forEach { actionItem ->
-			IconButton(
-				onClick = actionItem.action,
-			) {
-				Icon(
-					imageVector = actionItem.icon,
-					contentDescription = null,
-					tint = MaterialTheme.colorScheme.primary,
-				)
+		},
+		actions = {
+			actions.forEach { actionItem ->
+				IconButton(
+					onClick = actionItem.action,
+				) {
+					Icon(
+						imageVector = actionItem.icon,
+						contentDescription = null,
+						tint = MaterialTheme.colorScheme.primary,
+					)
+				}
 			}
-		}
-	})
+		},
+	)
 }
 
 data class TitleBarAction(
@@ -59,7 +63,7 @@ data class TitleBarAction(
 
 @Preview
 @Composable
-private fun PreviewTitleBar_Dark() {
+internal fun PreviewTitleBar_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -68,10 +72,6 @@ private fun PreviewTitleBar_Dark() {
 		) {
 			TitleBar(
 				title = "Title bar (plain)",
-			)
-			TitleBar(
-				title = "Title bar with back",
-				onBackNavigation = {},
 			)
 			TitleBar(
 				title = "Title bar with back + actions",
@@ -90,7 +90,7 @@ private fun PreviewTitleBar_Dark() {
 
 @Preview
 @Composable
-private fun PreviewTitleBar_Light() {
+internal fun PreviewTitleBar_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
@@ -99,10 +99,6 @@ private fun PreviewTitleBar_Light() {
 		) {
 			TitleBar(
 				title = "Title bar (plain)",
-			)
-			TitleBar(
-				title = "Title bar with back",
-				onBackNavigation = {},
 			)
 			TitleBar(
 				title = "Title bar with back + actions",

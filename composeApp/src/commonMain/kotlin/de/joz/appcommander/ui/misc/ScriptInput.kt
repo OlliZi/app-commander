@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -17,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextStyle
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Play
 import de.joz.appcommander.ui.theme.AppCommanderTheme
@@ -40,8 +40,8 @@ fun ScriptInput(
 				unfocusedIndicatorColor = Color.Transparent,
 			),
 		textStyle =
-			LocalTextStyle.current.copy(
-				color = MaterialTheme.colorScheme.background,
+			TextStyle.Default.copy(
+				color = Color.Black,
 			),
 		onValueChange = {
 			inputValue = it
@@ -65,7 +65,7 @@ fun ScriptInput(
 
 @Preview
 @Composable
-private fun PreviewScriptInput_Dark() {
+internal fun PreviewScriptInput_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -82,7 +82,7 @@ private fun PreviewScriptInput_Dark() {
 
 @Preview
 @Composable
-private fun PreviewScriptInput_Light() {
+internal fun PreviewScriptInput_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

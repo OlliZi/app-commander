@@ -22,7 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +56,8 @@ import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
+import de.joz.appcommander.ui.misc.TextLabel
+import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.TitleBarAction
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
@@ -199,11 +200,11 @@ private fun ConnectedDevices(
 		modifier = modifier.fillMaxWidth(),
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		Text(
+		TextLabel(
 			text = stringResource(Res.string.scripts_hint),
-			style = MaterialTheme.typography.bodySmall,
+			textLabelType = TextLabelType.BodySmall,
 		)
-		Text(
+		TextLabel(
 			text =
 				stringResource(
 					if (connectedDevices.isNotEmpty()) {
@@ -212,6 +213,7 @@ private fun ConnectedDevices(
 						Res.string.scripts_hint_no_devices
 					},
 				),
+			textLabelType = TextLabelType.BodyLarge,
 		)
 
 		DevicesBar(
@@ -249,15 +251,15 @@ private fun ScriptsSection(
 						Column(
 							modifier = Modifier.fillMaxWidth().weight(1f),
 						) {
-							Text(
+							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
 								text = script.description,
-								style = MaterialTheme.typography.bodyMedium,
+								textLabelType = TextLabelType.BodyMedium,
 							)
-							Text(
+							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
 								text = script.scriptText,
-								style = MaterialTheme.typography.bodySmall,
+								textLabelType = TextLabelType.BodySmall,
 							)
 						}
 						EditButtonItem(
@@ -277,20 +279,20 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 						horizontalArrangement = Arrangement.SpaceBetween,
 					) {
-						Text(
+						TextLabel(
 							text = script.description,
-							style = MaterialTheme.typography.bodyMedium,
+							textLabelType = TextLabelType.BodyMedium,
 						)
-						Text(
+						TextLabel(
 							text = " | ",
-							style = MaterialTheme.typography.bodySmall,
+							textLabelType = TextLabelType.BodySmall,
 						)
-						Text(
+						TextLabel(
 							modifier = Modifier.weight(1f),
 							text = script.scriptText,
 							maxLines = 1,
 							overflow = TextOverflow.Ellipsis,
-							style = MaterialTheme.typography.bodySmall,
+							textLabelType = TextLabelType.BodySmall,
 						)
 						EditButtonItem(
 							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
@@ -327,9 +329,10 @@ private fun LoggingSection(
 			modifier = Modifier.height(36.dp),
 			verticalAlignment = Alignment.CenterVertically,
 		) {
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.scripts_logging_section_title),
 				modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
+				textLabelType = TextLabelType.BodyLarge,
 			)
 			AnimatedVisibility(visible = isExpanded) {
 				IconButton(
@@ -353,9 +356,9 @@ private fun LoggingSection(
 				modifier = modifier.heightIn(max = 250.dp).wrapContentHeight(),
 			) {
 				items(logging) { item ->
-					Text(
+					TextLabel(
 						text = item,
-						style = MaterialTheme.typography.bodySmall,
+						textLabelType = TextLabelType.BodySmall,
 					)
 				}
 			}
@@ -379,9 +382,10 @@ private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Plat
 			modifier = Modifier.height(36.dp),
 			verticalAlignment = Alignment.CenterVertically,
 		) {
-			Text(
+			TextLabel(
 				text = stringResource(Res.string.scripts_terminal_section_title),
 				modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
+				textLabelType = TextLabelType.BodyLarge,
 			)
 			ExpandButton(
 				isExpanded = isExpanded,
@@ -516,7 +520,7 @@ private fun PreviewScriptScreen_Dark() {
 			onExpand = {},
 			onOpenScriptFile = {},
 			onNewScriptFile = {},
-			onDeviceSelect = { devive -> },
+			onDeviceSelect = { _ -> },
 			onClearLogging = {},
 			onEditScript = {},
 		)
@@ -579,7 +583,7 @@ private fun PreviewScriptScreen_Light() {
 			onExpand = {},
 			onOpenScriptFile = {},
 			onNewScriptFile = {},
-			onDeviceSelect = { devive -> },
+			onDeviceSelect = { _ -> },
 			onClearLogging = {},
 			onEditScript = {},
 		)

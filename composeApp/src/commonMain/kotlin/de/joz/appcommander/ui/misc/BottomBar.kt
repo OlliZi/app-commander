@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
@@ -56,7 +57,7 @@ data class BottomBarAction(
 
 @Preview
 @Composable
-private fun PreviewBottomBar_Dark() {
+internal fun PreviewBottomBar_Dark() {
 	AppCommanderTheme(
 		darkTheme = true,
 	) {
@@ -67,6 +68,14 @@ private fun PreviewBottomBar_Dark() {
 						label = Res.string.edit_action_save,
 						action = {},
 					),
+					BottomBarAction(
+						label = Res.string.edit_action_abort,
+						action = {},
+					),
+					BottomBarAction(
+						label = Res.string.edit_action_remove,
+						action = {},
+					),
 				),
 		)
 	}
@@ -74,7 +83,7 @@ private fun PreviewBottomBar_Dark() {
 
 @Preview
 @Composable
-private fun PreviewBottomBar_Light() {
+internal fun PreviewBottomBar_Light() {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {
@@ -90,7 +99,7 @@ private fun PreviewBottomBar_Light() {
 						action = {},
 					),
 					BottomBarAction(
-						label = Res.string.edit_action_abort,
+						label = Res.string.edit_action_remove,
 						action = {},
 					),
 				),
