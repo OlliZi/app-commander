@@ -44,7 +44,10 @@ fun LabelledSwitch(
 		Text(
 			text = label,
 			modifier = textModifier,
-			style = MaterialTheme.typography.bodyLarge,
+			style =
+				MaterialTheme.typography.bodyLarge.copy(
+					color = MaterialTheme.colorScheme.onSurface,
+				),
 		)
 
 		Switch(
