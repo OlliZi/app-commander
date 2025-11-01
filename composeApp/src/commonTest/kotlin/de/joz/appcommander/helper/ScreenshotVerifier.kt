@@ -21,6 +21,7 @@ class ScreenshotVerifier<T>(
 	private val testClass: Class<T>,
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
+	private val isLocalTestRunUseCase: IsLocalTestRunUseCase = IsLocalTestRunUseCase(),
 ) {
 	init {
 		storeDirectory.mkdirs()
@@ -96,14 +97,18 @@ class ScreenshotVerifier<T>(
 				else -> "Fail: Screenshots are not identical ($compareResult). Created screenshot diff in directory."
 			}
 
-		assertEquals(
-			IDENTICAL_IMAGES,
-			compareResult,
-			"$failMessage\n" +
-				"Current: ${screenshotFile.absolutePath}\n" +
-				"Golden: ${goldenImage.absolutePath}\n" +
-				"Verify your screenshots in your VCS.",
-		)
+		if (isLocalTestRunUseCase()) {
+			println("Can run screenshot-tests only on github.")
+		} else {
+			assertEquals(
+				IDENTICAL_IMAGES,
+				compareResult,
+				"$failMessage\n" +
+					"Current: ${screenshotFile.absolutePath}\n" +
+					"Golden: ${goldenImage.absolutePath}\n" +
+					"Verify your screenshots in your VCS.",
+			)
+		}
 	}
 
 	private fun createDifferenceScreenshot(
