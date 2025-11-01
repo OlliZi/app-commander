@@ -30,7 +30,7 @@ jobs:
           name: screenshots-files
           path: |
             **/build/reports/tests/screenshots/*.png
-            **/build/reports/tests/jvmTest/*.html
+            **/build/reports/tests/jvmTest/**
             **/src/commonTest/kotlin/de/joz/appcommander/**/*_diff.png
             **/src/commonTest/kotlin/de/joz/appcommander/**/*_current.png
             
