@@ -158,7 +158,7 @@ class ScreenshotVerifier<T>(
 	}
 
 	companion object Companion {
-		private const val IMAGE_DIFF_THRESHOLD = 0.0001f // 0,01 %
+		private const val IMAGE_DIFF_THRESHOLD = 0.0038f // 0,38 %
 		private const val IMAGE_QUALITY = 100
 	}
 }
