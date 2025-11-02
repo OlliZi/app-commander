@@ -26,8 +26,3 @@ allprojects {
 	apply(plugin = "com.github.ben-manes.versions")
 	apply(plugin = "org.jlleitschuh.gradle.ktlint")
 }
-
-// format code before build
-subprojects {
-	tasks.getByPath(":${project.name}:build").dependsOn("ktlintFormat").dependsOn("detektJvmMain")
-}
