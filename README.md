@@ -22,8 +22,12 @@ is still maybe possible in future.
 - Automatically refresh scripts list all x seconds if file has changed
 
 # Screenshots
+
 - Scripts-screen
-![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)
+  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)
+- Settings-screen
+  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)
+  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)
 
 # TODOs
 
