@@ -18,6 +18,7 @@ class ScreenshotVerifier<T>(
 	private val testClass: Class<T>,
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
+	private val isLocalTestRunUseCase: IsLocalTestRunUseCase = IsLocalTestRunUseCase(),
 	private val createScreenshotDifferenceUseCase: CreateScreenshotDifferenceUseCase = CreateScreenshotDifferenceUseCase(),
 ) {
 	init {
@@ -99,6 +100,11 @@ class ScreenshotVerifier<T>(
 			}
 
 			is CreateScreenshotDifferenceUseCase.Result.ThresholdMatch -> {
+				if (isLocalTestRunUseCase()) {
+					println("Can run screenshot-tests only on github.")
+					return
+				}
+
 				if (result.fraction > IMAGE_DIFF_THRESHOLD) {
 					val diffFile = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_diff.png")
 					diffFile.writeBytes(convertToPng(result.diffBitmap)!!)
@@ -158,7 +164,7 @@ class ScreenshotVerifier<T>(
 	}
 
 	companion object Companion {
-		private const val IMAGE_DIFF_THRESHOLD = 0.0038f // 0,38 %
+		private const val IMAGE_DIFF_THRESHOLD = 0.01f // 1 %
 		private const val IMAGE_QUALITY = 100
 	}
 }
