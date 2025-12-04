@@ -19,6 +19,7 @@ class ScreenshotVerifier<T>(
 	private val storeDirectory: File = File("./build/reports/tests/screenshots/"),
 	private val goldenImageDirectory: File = File("./src/commonTest/kotlin/"),
 	private val isLocalTestRunUseCase: IsLocalTestRunUseCase = IsLocalTestRunUseCase(),
+	private val isJenkinsTestRunUseCase: IsJenkinsTestRunUseCase = IsJenkinsTestRunUseCase(),
 	private val createScreenshotDifferenceUseCase: CreateScreenshotDifferenceUseCase = CreateScreenshotDifferenceUseCase(),
 ) {
 	init {
@@ -36,10 +37,11 @@ class ScreenshotVerifier<T>(
 			)
 
 		when (screenshotResult) {
-			is ScreenshotResult.Success ->
+			is ScreenshotResult.Success -> {
 				verifyAgainstGoldenImage(
 					screenshotFile = screenshotResult.screenshot,
 				)
+			}
 
 			is ScreenshotResult.Failure -> {
 				throw screenshotResult.error
@@ -100,7 +102,7 @@ class ScreenshotVerifier<T>(
 			}
 
 			is CreateScreenshotDifferenceUseCase.Result.ThresholdMatch -> {
-				if (isLocalTestRunUseCase()) {
+				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
 					println("Can run screenshot-tests only on github.")
 					return
 				}
