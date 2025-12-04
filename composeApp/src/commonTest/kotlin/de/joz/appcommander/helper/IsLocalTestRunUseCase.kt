@@ -9,7 +9,8 @@ class IsLocalTestRunUseCase {
 				it.key.lowercase().contains("jenkins") || it.value.lowercase().contains("jenkins")
 			}
 
-		return isDebuggerEnabled.toBoolean() || cfBundleIdentifier.contains("com.google.android.studio") ||
+		return isDebuggerEnabled.toBoolean() ||
+			cfBundleIdentifier.contains("com.google.android.studio") ||
 			!isJenkinsEnvironment
 	}
 }
