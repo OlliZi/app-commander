@@ -38,10 +38,7 @@ class ExecuteScriptUseCase(
 		}
 	}
 
-	private fun removeSpecialCommands(commands: List<String>) =
-		commands.filter {
-			!it.contains(LOOP_COMMAND_REGEX)
-		}
+	private fun removeSpecialCommands(commands: List<String>) = commands.filterNot { it.contains(LOOP_COMMAND_REGEX) }
 
 	private fun getLoopCount(commands: List<String>) =
 		max(
