@@ -140,11 +140,15 @@ class SettingsViewModel(
 								sliderValue = event.value,
 								labelValue =
 									when (event.sliderItem.labelValue) {
-										is LabelValue.IntRes -> LabelValue.IntRes(event.value.toInt())
-										is LabelValue.StringRes ->
+										is LabelValue.IntRes -> {
+											LabelValue.IntRes(event.value.toInt())
+										}
+
+										is LabelValue.StringRes -> {
 											LabelValue.StringRes(
 												mapUiAppearance(event.value),
 											)
+										}
 									},
 							)
 						} else {
@@ -172,14 +176,17 @@ class SettingsViewModel(
 			} ?: ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
 
 		return when (uiAppearance) {
-			ManageUiAppearanceUseCase.UiAppearance.SYSTEM ->
+			ManageUiAppearanceUseCase.UiAppearance.SYSTEM -> {
 				Res.string.settings_preference_ui_appearance_system
+			}
 
-			ManageUiAppearanceUseCase.UiAppearance.DARK ->
+			ManageUiAppearanceUseCase.UiAppearance.DARK -> {
 				Res.string.settings_preference_ui_appearance_dark
+			}
 
-			ManageUiAppearanceUseCase.UiAppearance.LIGHT ->
+			ManageUiAppearanceUseCase.UiAppearance.LIGHT -> {
 				Res.string.settings_preference_ui_appearance_light
+			}
 		}
 	}
 

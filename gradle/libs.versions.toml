@@ -1,20 +1,21 @@
 [versions]
 androidx-lifecycle = "2.9.5"
-composeMultiplatform = "1.9.3"
+composeMultiplatform = "1.10.0"
+material3 = "1.9.0"
 kotlin = "2.2.20"
 kotlinx-coroutines = "1.10.2"
 navigationCompose = "2.9.0-rc01"
 datastorePreferences = "1.1.7"
-mockk = "1.14.5"
+mockk = "1.14.9"
 koin = "4.1.1"
 koin-annotations = "2.1.0"
 ksp = "2.2.10-2.0.2"
 gradleVersionsPlugin = "0.53.0"
 detekt = "1.23.8"
 compose-icons = "1.1.1"
-json = "1.9.0"
+json = "1.10.0"
 ktlintGradle = "13.1.0"
-kover = "0.9.3"
+kover = "0.9.4"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -35,6 +36,12 @@ gradle-versions-plugin = { module = "com.github.ben-manes:gradle-versions-plugin
 compose-icons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "compose-icons" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "json" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
+compose-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }

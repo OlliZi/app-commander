@@ -31,7 +31,6 @@ is still maybe possible in future.
 
 # TODOs
 
-- Update composeMultiplatform = "1.9.1" to get composeHotReload
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, ...)
 - build artefacts in CI

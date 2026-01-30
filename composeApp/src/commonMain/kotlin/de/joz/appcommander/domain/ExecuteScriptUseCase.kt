@@ -47,14 +47,17 @@ class ExecuteScriptUseCase(
 		}
 
 		return when (script.platform) {
-			ScriptsRepository.Platform.ANDROID ->
+			ScriptsRepository.Platform.ANDROID -> {
 				script.script.replace(
 					"adb",
 					"adb -s $selectedDevice",
 				)
+			}
 
 			// TODO
-			ScriptsRepository.Platform.IOS -> script.script
+			ScriptsRepository.Platform.IOS -> {
+				script.script
+			}
 		}
 	}
 

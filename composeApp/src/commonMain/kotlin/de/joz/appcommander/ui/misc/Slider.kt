@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
@@ -17,7 +18,6 @@ import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun Slider(
