@@ -21,7 +21,7 @@ class ExecuteScriptUseCase(
 		return runCatching {
 			val commands = scriptForSelectedDevice.split(" ")
 			val loopCount = getLoopCount(commands)
-			val plainCommand = removeSpecialCommand(commands)
+			val plainCommand = removeSpecialCommands(commands)
 			val output =
 				(1..loopCount).joinToString(",") { index ->
 					"$index. ${innerExecuteScript(plainCommand)}"
@@ -38,7 +38,7 @@ class ExecuteScriptUseCase(
 		}
 	}
 
-	private fun removeSpecialCommand(commands: List<String>) =
+	private fun removeSpecialCommands(commands: List<String>) =
 		commands.filter {
 			!it.contains(LOOP_COMMAND_REGEX)
 		}
