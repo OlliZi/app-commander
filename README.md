@@ -8,6 +8,23 @@ multiple devices.
 This is a Kotlin Multiplatform project targeting Desktop (JVM). Android and iOS dont make sense but
 is still maybe possible in future.
 
+# Description
+Your scripts are saved in home directory in ".app_commander". The file name is "scripts.json".
+You can simple edit your custom script here, for example:
+{
+    "label": "Dark mode",
+    "script": "adb shell cmd uimode night yes",
+    "platform": "ANDROID"
+}
+
+- "label": The name of your script.
+- "script": The script itself.
+- "platform": The target platform ("ANDROID" or "IOS")
+
+# Special commands
+- The device identifier is automatically injected to run your script on multiple devices.
+- To run a script in a loop, add "#LOOP_10" before your script, for example: "#LOOP_10 adb shell input swipe 500 500 1000 500". This runs the script ten times. 
+
 # Features
 
 - Welcome-screen

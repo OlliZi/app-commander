@@ -29,8 +29,29 @@ class ExecuteScriptUseCaseTest {
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
-			assertEquals("foo\n", result.output)
+			assertEquals("1. foo\n", result.output)
 			verify { addLoggingUseCaseMock.invoke("Execute script: 'echo foo' on device 'Pixel7'.") }
+		}
+
+	@Test
+	fun `should execute script multiple times when special command '#LOOP_X' is prefixed`() =
+		runTest {
+			val executeScriptUseCase =
+				ExecuteScriptUseCase(
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+			val script =
+				ScriptsRepository.Script(
+					label = "Test",
+					script = "#LOOP_3 echo foo",
+					platform = ScriptsRepository.Platform.ANDROID,
+				)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
+
+			assertTrue(result is ExecuteScriptUseCase.Result.Success)
+			assertEquals("1. foo\n,2. foo\n,3. foo\n", result.output)
+			verify { addLoggingUseCaseMock.invoke("Execute script: '#LOOP_3 echo foo' on device 'Pixel7'.") }
 		}
 
 	@Test

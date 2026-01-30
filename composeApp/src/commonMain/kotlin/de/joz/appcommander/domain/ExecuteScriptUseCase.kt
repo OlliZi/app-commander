@@ -3,6 +3,7 @@ package de.joz.appcommander.domain
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import org.koin.core.annotation.Factory
 import java.io.File
+import kotlin.math.max
 
 @Factory
 class ExecuteScriptUseCase(
@@ -10,22 +11,21 @@ class ExecuteScriptUseCase(
 	private val workingDir: File = File("."),
 	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) {
-	suspend operator fun invoke(
+	operator fun invoke(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
 	): Result {
-		val scriptForSelectedDevice = injectDeviceConfig(script, selectedDevice)
-		val commands = scriptForSelectedDevice.split(" ")
+		val scriptForSelectedDevice = injectDeviceId(script, selectedDevice)
 		addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice'.")
 
 		return runCatching {
+			val commands = scriptForSelectedDevice.split(" ")
+			val loopCount = getLoopCount(commands)
+			val plainCommand = removeSpecialCommand(commands)
 			val output =
-				processBuilder
-					.command(commands)
-					.directory(workingDir)
-					.start()
-					.inputReader()
-					.readText()
+				(1..loopCount).joinToString(",") { index ->
+					"$index. ${innerExecuteScript(plainCommand)}"
+				}
 
 			Result.Success(
 				output = output,
@@ -38,7 +38,30 @@ class ExecuteScriptUseCase(
 		}
 	}
 
-	private fun injectDeviceConfig(
+	private fun removeSpecialCommand(commands: List<String>) =
+		commands.filter {
+			!it.contains(LOOP_COMMAND_REGEX)
+		}
+
+	private fun getLoopCount(commands: List<String>) =
+		max(
+			1,
+			LOOP_COMMAND_REGEX
+				.find(commands.joinToString(" "))
+				?.groupValues
+				?.get(1)
+				?.toIntOrNull() ?: 1,
+		)
+
+	private fun innerExecuteScript(commands: List<String>) =
+		processBuilder
+			.command(commands)
+			.directory(workingDir)
+			.start()
+			.inputReader()
+			.readText()
+
+	private fun injectDeviceId(
 		script: ScriptsRepository.Script,
 		selectedDevice: String,
 	): String {
@@ -70,5 +93,9 @@ class ExecuteScriptUseCase(
 		data class Error(
 			val message: String,
 		) : Result
+	}
+
+	companion object {
+		private val LOOP_COMMAND_REGEX = """#LOOP_(\d+)""".toRegex()
 	}
 }
