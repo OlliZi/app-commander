@@ -1,7 +1,7 @@
 # App-Commander
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
 
-# What is the "App-Commander"?
+# What is "App-Commander"?
 
 App-Commander: Your programmable multi-device execution helper. Execute scripts for your apps on
 multiple devices.
