@@ -28,12 +28,11 @@ kotlin {
 
 	sourceSets {
 		commonMain.dependencies {
-			implementation(compose.runtime)
-			implementation(compose.foundation)
-			implementation(compose.material3)
-			implementation(compose.ui)
-			implementation(compose.components.resources)
-			implementation(compose.components.uiToolingPreview)
+			implementation(libs.compose.runtime)
+			implementation(libs.compose.foundation)
+			implementation(libs.compose.material3)
+			implementation(libs.compose.ui)
+			implementation(libs.compose.components.resources)
 			implementation(libs.androidx.lifecycle.viewmodelCompose)
 			implementation(libs.androidx.lifecycle.runtimeCompose)
 			implementation(libs.navigation.compose)
@@ -43,8 +42,7 @@ kotlin {
 			implementation(libs.kotlinx.serialization.json)
 		}
 		commonTest.dependencies {
-			@OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-			implementation(compose.uiTest)
+			implementation(libs.compose.ui.test)
 			implementation(libs.kotlin.test)
 			implementation(libs.mockk)
 			implementation(libs.kotlinx.coroutines.test)

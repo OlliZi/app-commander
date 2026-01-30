@@ -10,7 +10,10 @@ class GetConnectedDevicesUseCase(
 
 	private suspend fun getConnectedAndroidDevices(): List<ConnectedDevice> =
 		when (val result = executeScriptUseCase(script = ANDROID_GET_DEVICES_SCRIPT)) {
-			is ExecuteScriptUseCase.Result.Error -> emptyList()
+			is ExecuteScriptUseCase.Result.Error -> {
+				emptyList()
+			}
+
 			is ExecuteScriptUseCase.Result.Success -> {
 				result.output
 					.split("\n")
@@ -28,7 +31,10 @@ class GetConnectedDevicesUseCase(
 	private suspend fun getConnectedIOSDevices(): List<ConnectedDevice> {
 		// TODO
 		return when (val result = executeScriptUseCase(script = IOS_GET_DEVICES_SCRIPT)) {
-			is ExecuteScriptUseCase.Result.Error -> emptyList()
+			is ExecuteScriptUseCase.Result.Error -> {
+				emptyList()
+			}
+
 			is ExecuteScriptUseCase.Result.Success -> {
 				result.output
 					.split("\n")

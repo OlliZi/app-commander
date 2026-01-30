@@ -69,21 +69,48 @@ class ScriptsViewModel(
 	override fun onEvent(event: Event) {
 		viewModelScope.launch(mainDispatcher) {
 			when (event) {
-				Event.OnNavigateToSettings -> navController.navigate(NavigationScreens.SettingsScreen)
-				Event.OnRefreshDevices -> onRefreshDevices()
-				Event.OnOpenScriptFile -> onOpenScriptFile()
-				Event.OnNewScript -> onNewScript()
-				Event.OnClearLogging -> onClearLogging()
-				is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
-				is Event.OnExecuteScript -> onExecuteScript(script = event.script)
-				is Event.OnExecuteScriptText ->
+				Event.OnNavigateToSettings -> {
+					navController.navigate(NavigationScreens.SettingsScreen)
+				}
+
+				Event.OnRefreshDevices -> {
+					onRefreshDevices()
+				}
+
+				Event.OnOpenScriptFile -> {
+					onOpenScriptFile()
+				}
+
+				Event.OnNewScript -> {
+					onNewScript()
+				}
+
+				Event.OnClearLogging -> {
+					onClearLogging()
+				}
+
+				is Event.OnDeviceSelected -> {
+					onDeviceSelected(device = event.device)
+				}
+
+				is Event.OnExecuteScript -> {
+					onExecuteScript(script = event.script)
+				}
+
+				is Event.OnExecuteScriptText -> {
 					onExecuteScriptText(
 						script = event.script,
 						platform = event.platform,
 					)
+				}
 
-				is Event.OnExpandScript -> onExpandScript(script = event.script)
-				is Event.OnEditScript -> onEditScript(script = event.script)
+				is Event.OnExpandScript -> {
+					onExpandScript(script = event.script)
+				}
+
+				is Event.OnEditScript -> {
+					onEditScript(script = event.script)
+				}
 			}
 		}
 	}

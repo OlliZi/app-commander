@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.resources.Res
@@ -22,7 +23,6 @@ import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.Slider
 import de.joz.appcommander.ui.misc.TitleBar
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel) {

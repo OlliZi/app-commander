@@ -256,22 +256,27 @@ class SettingsViewModelTest {
 
 				assertEquals(
 					when (expectedUiAppearance) {
-						ManageUiAppearanceUseCase.UiAppearance.SYSTEM ->
+						ManageUiAppearanceUseCase.UiAppearance.SYSTEM -> {
 							StringRes(
 								Res.string.settings_preference_ui_appearance_system,
 							)
+						}
 
-						ManageUiAppearanceUseCase.UiAppearance.DARK ->
+						ManageUiAppearanceUseCase.UiAppearance.DARK -> {
 							StringRes(
 								Res.string.settings_preference_ui_appearance_dark,
 							)
+						}
 
-						ManageUiAppearanceUseCase.UiAppearance.LIGHT ->
+						ManageUiAppearanceUseCase.UiAppearance.LIGHT -> {
 							StringRes(
 								Res.string.settings_preference_ui_appearance_light,
 							)
+						}
 
-						null -> throw IllegalStateException("Fix test.")
+						null -> {
+							throw IllegalStateException("Fix test.")
+						}
 					},
 					slider?.labelValue,
 				)
