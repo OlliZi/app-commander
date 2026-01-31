@@ -62,7 +62,7 @@ internal class PlatformSelectionPreviewParameterProvider :
 							uiState =
 								PlatformSelectionPreviewParameter(
 									darkMode = darmkMode,
-									platform = ScriptsRepository.Platform.ANDROID,
+									platform = platform,
 								),
 						),
 					)

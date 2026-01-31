@@ -64,9 +64,12 @@ class UiElementsTest {
 						PreviewDevicesBar(uiState)
 						PreviewExpandButton(uiState)
 						PreviewLabelledSwitch(uiState)
-						PlatformSelectionPreviewParameterProvider().values.forEach {
-							PreviewPlatformSelection(it)
-						}
+						PlatformSelectionPreviewParameterProvider()
+							.values
+							.filter { it.uiState.darkMode == darkMode }
+							.forEach {
+								PreviewPlatformSelection(it)
+							}
 						PreviewScriptInput(uiState)
 						PreviewSectionDivider(uiState)
 						PreviewSimpleTextInput(uiState)
