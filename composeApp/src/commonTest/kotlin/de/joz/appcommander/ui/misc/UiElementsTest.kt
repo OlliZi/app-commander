@@ -9,6 +9,7 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
 
@@ -58,31 +59,18 @@ class UiElementsTest {
 								.fillMaxSize()
 								.background(MaterialTheme.colorScheme.background),
 					) {
-						if (darkMode) {
-							PreviewBottomBar_Dark()
-							PreviewDevicesBar_Dark()
-							PreviewExpandButton_Dark()
-							PreviewLabelledSwitch_Dark()
-							PreviewPlatformSelection_Dark()
-							PreviewScriptInput_Dark()
-							PreviewSectionDivider_Dark()
-							PreviewSimpleTextInput_Dark()
-							PreviewSlider_Dark()
-							PreviewTextLabel_Dark()
-							PreviewTitleBar_Dark()
-						} else {
-							PreviewBottomBar_Light()
-							PreviewDevicesBar_Light()
-							PreviewExpandButton_Light()
-							PreviewLabelledSwitch_Light()
-							PreviewPlatformSelection_Light()
-							PreviewScriptInput_Light()
-							PreviewSectionDivider_Light()
-							PreviewSimpleTextInput_Light()
-							PreviewSlider_Light()
-							PreviewTextLabel_Light()
-							PreviewTitleBar_Light()
-						}
+						val uiState = PreviewData.createThemeDarkMode(darkMode)
+						PreviewDevicesBar(uiState)
+						PreviewExpandButton(uiState)
+						PreviewLabelledSwitch(uiState)
+						PreviewPlatformSelection(uiState)
+						PreviewScriptInput(uiState)
+						PreviewSectionDivider(uiState)
+						PreviewSimpleTextInput(uiState)
+						PreviewSlider(uiState)
+						PreviewTextLabel(uiState)
+						PreviewBottomBar(uiState)
+						PreviewTitleBar(uiState)
 					}
 				},
 			)

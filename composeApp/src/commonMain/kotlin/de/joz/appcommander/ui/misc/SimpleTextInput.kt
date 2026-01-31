@@ -16,8 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -63,22 +66,11 @@ fun SimpleTextInput(
 
 @Preview
 @Composable
-internal fun PreviewSimpleTextInput_Dark() {
+internal fun PreviewSimpleTextInput(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		SimpleTextInput(
-			value = "adb devices",
-			onChangeTextChange = {},
-		)
-	}
-}
-
-@Preview
-@Composable
-internal fun PreviewSimpleTextInput_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		SimpleTextInput(
 			value = "adb devices",

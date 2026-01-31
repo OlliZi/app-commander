@@ -10,7 +10,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -55,28 +58,11 @@ enum class TextLabelType {
 
 @Preview
 @Composable
-internal fun PreviewTextLabel_Dark() {
+internal fun PreviewTextLabel(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		Row(
-			horizontalArrangement = Arrangement.spacedBy(16.dp),
-		) {
-			TextLabelType.entries.forEach {
-				TextLabel(
-					text = it.name,
-					textLabelType = it,
-				)
-			}
-		}
-	}
-}
-
-@Preview
-@Composable
-internal fun PreviewTextLabel_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		Row(
 			horizontalArrangement = Arrangement.spacedBy(16.dp),
