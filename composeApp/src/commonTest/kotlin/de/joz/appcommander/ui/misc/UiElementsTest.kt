@@ -60,6 +60,7 @@ class UiElementsTest {
 								.background(MaterialTheme.colorScheme.background),
 					) {
 						val uiState = PreviewData.createThemeDarkMode(darkMode)
+						PreviewBottomBar(uiState)
 						PreviewDevicesBar(uiState)
 						PreviewExpandButton(uiState)
 						PreviewLabelledSwitch(uiState)
