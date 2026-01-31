@@ -37,7 +37,7 @@ fun PlatformSelection(
 @Preview
 @Composable
 internal fun PreviewPlatformSelection(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+	@PreviewParameter(PlatformSelectionPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
 ) {
 	AppCommanderTheme(
 		darkTheme = previewData.uiState,
@@ -48,3 +48,29 @@ internal fun PreviewPlatformSelection(
 		)
 	}
 }
+
+internal class PlatformSelectionPreviewParameterProvider :
+	AppCommanderPreviewParameterProvider<PlatformSelectionPreviewParameter>(
+		buildList {
+			ScriptsRepository.Platform.entries.forEach { platform ->
+				listOf(true, false).forEach { darmkMode ->
+					val mode = if (darmkMode) "dark" else "light"
+					add(
+						PreviewData(
+							label = "${platform.label} selection in $mode mode",
+							uiState =
+								PlatformSelectionPreviewParameter(
+									darkMode = darmkMode,
+									platform = ScriptsRepository.Platform.ANDROID,
+								),
+						),
+					)
+				}
+			}
+		},
+	)
+
+internal data class PlatformSelectionPreviewParameter(
+	val darkMode: Boolean,
+	val platform: ScriptsRepository.Platform,
+)

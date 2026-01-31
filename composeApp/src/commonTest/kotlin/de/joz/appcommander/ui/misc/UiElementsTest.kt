@@ -70,7 +70,6 @@ class UiElementsTest {
 						PreviewSimpleTextInput(uiState)
 						PreviewSlider(uiState)
 						PreviewTextLabel(uiState)
-						PreviewBottomBar(uiState)
 						PreviewTitleBar(uiState)
 					}
 				},
