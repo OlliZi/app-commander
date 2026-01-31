@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.domain.ScriptsRepository
@@ -22,6 +23,8 @@ import de.joz.appcommander.resources.edit_script_placeholder
 import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.DevicesBar
@@ -166,28 +169,11 @@ internal fun EditScriptContent(
 
 @Preview
 @Composable
-private fun PreviewEditScriptScreen_Dark() {
+private fun PreviewEditScriptScreen(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		EditScriptContent(
-			uiState = EditScriptViewModel.UiState(),
-			onBackNavigation = {},
-			onSelectPlatform = { _ -> },
-			onChangeScriptText = { _ -> },
-			onExecuteScriptText = {},
-			onChangeTextChange = {},
-			onSaveScript = {},
-			onRemoveScript = {},
-		)
-	}
-}
-
-@Preview
-@Composable
-private fun PreviewEditScriptScreen_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		EditScriptContent(
 			uiState = EditScriptViewModel.UiState(),

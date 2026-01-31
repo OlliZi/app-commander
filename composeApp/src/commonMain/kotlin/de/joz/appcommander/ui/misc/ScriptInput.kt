@@ -18,8 +18,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Play
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -65,24 +68,9 @@ fun ScriptInput(
 
 @Preview
 @Composable
-internal fun PreviewScriptInput_Dark() {
-	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
-		) {
-			ScriptInput(
-				script = "adb devices",
-				onExecuteScriptText = {},
-			)
-		}
-	}
-}
-
-@Preview
-@Composable
-internal fun PreviewScriptInput_Light() {
+internal fun PreviewScriptInput(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
 		darkTheme = false,
 	) {

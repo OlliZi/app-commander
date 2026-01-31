@@ -5,7 +5,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -17,19 +20,11 @@ fun SectionDivider() {
 
 @Preview
 @Composable
-internal fun PreviewSectionDivider_Dark() {
+internal fun PreviewSectionDivider(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		SectionDivider()
-	}
-}
-
-@Preview
-@Composable
-internal fun PreviewSectionDivider_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		SectionDivider()
 	}

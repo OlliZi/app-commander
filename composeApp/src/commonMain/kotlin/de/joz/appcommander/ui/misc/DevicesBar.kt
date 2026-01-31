@@ -8,9 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -48,35 +51,11 @@ fun DevicesBar(
 
 @Preview
 @Composable
-internal fun PreviewDevicesBar_Dark() {
+internal fun PreviewDevicesBar(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		DevicesBar(
-			connectedDevices =
-				listOf(
-					ScriptsViewModel.Device(
-						id = "1",
-						label = "Device A",
-						isSelected = true,
-					),
-					ScriptsViewModel.Device(
-						id = "2",
-						label = "Device B",
-						isSelected = false,
-					),
-				),
-			onDeviceSelect = {},
-			onRefreshDevices = {},
-		)
-	}
-}
-
-@Preview
-@Composable
-internal fun PreviewDevicesBar_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		DevicesBar(
 			connectedDevices =

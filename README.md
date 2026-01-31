@@ -8,7 +8,7 @@ multiple devices.
 This is a Kotlin Multiplatform project targeting Desktop (JVM). Android and iOS dont make sense but
 is still maybe possible in future.
 
-# Description
+# Scripts
 Your scripts are saved in home directory in ".app_commander". The file name is "scripts.json".
 You can simple edit your custom script here, for example:
 ```json

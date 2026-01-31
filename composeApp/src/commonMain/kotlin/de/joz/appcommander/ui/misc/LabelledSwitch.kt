@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -63,32 +66,11 @@ fun LabelledSwitch(
 
 @Preview
 @Composable
-internal fun PreviewLabelledSwitch_Dark() {
+internal fun PreviewLabelledSwitch(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		Row(
-			horizontalArrangement = Arrangement.spacedBy(16.dp),
-		) {
-			LabelledSwitch(
-				label = "some switch ON",
-				checked = true,
-				onCheckedChange = {},
-			)
-			LabelledSwitch(
-				label = "some switch OFF",
-				checked = false,
-				onCheckedChange = {},
-			)
-		}
-	}
-}
-
-@Preview
-@Composable
-internal fun PreviewLabelledSwitch_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		Row(
 			horizontalArrangement = Arrangement.spacedBy(16.dp),
