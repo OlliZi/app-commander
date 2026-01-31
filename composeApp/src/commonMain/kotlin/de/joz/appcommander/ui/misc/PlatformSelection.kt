@@ -37,13 +37,14 @@ fun PlatformSelection(
 @Preview
 @Composable
 internal fun PreviewPlatformSelection(
-	@PreviewParameter(PlatformSelectionPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+	@PreviewParameter(PlatformSelectionPreviewParameterProvider::class) previewData:
+		PreviewData<PlatformSelectionPreviewParameter>,
 ) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = previewData.uiState.darkMode,
 	) {
 		PlatformSelection(
-			selectedPlatform = ScriptsRepository.Platform.ANDROID,
+			selectedPlatform = previewData.uiState.platform,
 			onSelectPlatform = { _ -> },
 		)
 	}

@@ -64,7 +64,9 @@ class UiElementsTest {
 						PreviewDevicesBar(uiState)
 						PreviewExpandButton(uiState)
 						PreviewLabelledSwitch(uiState)
-						PreviewPlatformSelection(uiState)
+						PlatformSelectionPreviewParameterProvider().values.forEach {
+							PreviewPlatformSelection(it)
+						}
 						PreviewScriptInput(uiState)
 						PreviewSectionDivider(uiState)
 						PreviewSimpleTextInput(uiState)
