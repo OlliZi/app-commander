@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -27,8 +28,7 @@ class UiElementsTest {
 				darkMode = true,
 			)
 
-			screenshotVerifier.verifyScreenshot(
-				source = this,
+			verifyScreenshot(
 				screenshotName = "all_ui_elements_in_dark_mode",
 			)
 		}
@@ -41,8 +41,7 @@ class UiElementsTest {
 				darkMode = false,
 			)
 
-			screenshotVerifier.verifyScreenshot(
-				source = this,
+			verifyScreenshot(
 				screenshotName = "all_ui_elements_in_light_mode",
 			)
 		}
