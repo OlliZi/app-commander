@@ -48,17 +48,70 @@ class UiElementsTest {
 	}
 
 	@Test
-	fun `should render BottomBar in all modes`() {
-		runComposeUiTest {
-			setupTestUiElement {
-				PreviewBottomBar()
-			}
-
-			verifyScreenshot(
-				screenshotName = "ui_element_bottom_bar_in_all_modes",
-			)
+	fun `should render PreviewBottomBar in all modes`() =
+		setupTestUiElement("PreviewBottomBar") {
+			PreviewBottomBar()
 		}
-	}
+
+	@Test
+	fun `should render PreviewDevicesBar in all modes`() =
+		setupTestUiElement("PreviewDevicesBar") {
+			PreviewDevicesBar()
+		}
+
+	@Test
+	fun `should render PreviewExpandButton in all modes`() =
+		setupTestUiElement("PreviewExpandButton") {
+			PreviewExpandButton()
+		}
+
+	@Test
+	fun `should render PreviewLabelledSwitch in all modes`() =
+		setupTestUiElement("PreviewLabelledSwitch") {
+			PreviewLabelledSwitch()
+		}
+
+	@Test
+	fun `should render PreviewPlatformSelection in all modes`() =
+		setupTestUiElement("PreviewPlatformSelection") {
+			PreviewPlatformSelection()
+		}
+
+	@Test
+	fun `should render PreviewScriptInput in all modes`() =
+		setupTestUiElement("PreviewScriptInput") {
+			PreviewScriptInput()
+		}
+
+	@Test
+	fun `should render PreviewSectionDivider in all modes`() =
+		setupTestUiElement("PreviewSectionDivider") {
+			PreviewSectionDivider()
+		}
+
+	@Test
+	fun `should render PreviewSimpleTextInput in all modes`() =
+		setupTestUiElement("PreviewSimpleTextInput") {
+			PreviewSimpleTextInput()
+		}
+
+	@Test
+	fun `should render PreviewSlider in all modes`() =
+		setupTestUiElement("PreviewSlider") {
+			PreviewSlider()
+		}
+
+	@Test
+	fun `should render PreviewTextLabel in all modes`() =
+		setupTestUiElement("PreviewTextLabel") {
+			PreviewTextLabel()
+		}
+
+	@Test
+	fun `should render PreviewTitleBar in all modes`() =
+		setupTestUiElement("PreviewTitleBar") {
+			PreviewTitleBar()
+		}
 
 	private fun ComposeUiTest.verifyScreenshot(screenshotName: String) {
 		screenshotVerifier.verifyScreenshot(
@@ -67,13 +120,22 @@ class UiElementsTest {
 		)
 	}
 
-	private fun ComposeUiTest.setupTestUiElement(content: @Composable () -> Unit) {
-		setContent {
-			Column(
-				modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-			) {
-				content()
+	private fun setupTestUiElement(
+		screenshotName: String,
+		content: @Composable () -> Unit,
+	) {
+		runComposeUiTest {
+			setContent {
+				Column(
+					modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+				) {
+					content()
+				}
 			}
+
+			verifyScreenshot(
+				screenshotName = screenshotName,
+			)
 		}
 	}
 

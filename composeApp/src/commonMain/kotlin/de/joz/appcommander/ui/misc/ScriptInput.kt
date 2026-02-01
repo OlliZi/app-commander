@@ -23,6 +23,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Play
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -64,6 +65,14 @@ fun ScriptInput(
 			}
 		},
 	)
+}
+
+@Preview
+@Composable
+internal fun PreviewScriptInput() {
+	PreviewRenderContainer { previewData ->
+		PreviewScriptInput(previewData)
+	}
 }
 
 @Preview

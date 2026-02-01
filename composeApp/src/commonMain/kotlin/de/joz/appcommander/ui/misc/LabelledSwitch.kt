@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -61,6 +62,14 @@ fun LabelledSwitch(
 				onCheckedChange(it)
 			},
 		)
+	}
+}
+
+@Preview
+@Composable
+internal fun PreviewLabelledSwitch() {
+	PreviewRenderContainer { previewData ->
+		PreviewLabelledSwitch(previewData)
 	}
 }
 

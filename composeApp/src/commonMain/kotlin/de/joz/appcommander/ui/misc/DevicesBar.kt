@@ -14,6 +14,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -46,6 +47,14 @@ fun DevicesBar(
 				)
 			}
 		}
+	}
+}
+
+@Preview
+@Composable
+internal fun PreviewDevicesBar() {
+	PreviewRenderContainer { previewData ->
+		PreviewDevicesBar(previewData)
 	}
 }
 

@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -31,6 +32,14 @@ fun PlatformSelection(
 				},
 			)
 		}
+	}
+}
+
+@Preview
+@Composable
+internal fun PreviewPlatformSelection() {
+	PreviewRenderContainer { previewData ->
+		PreviewPlatformSelection(previewData)
 	}
 }
 

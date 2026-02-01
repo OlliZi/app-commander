@@ -18,6 +18,7 @@ import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -52,6 +53,14 @@ private fun SettingsViewModel.LabelValue.toUiString(): String =
 		is SettingsViewModel.LabelValue.IntRes -> value.toString()
 		is SettingsViewModel.LabelValue.StringRes -> stringResource(value)
 	}
+
+@Preview
+@Composable
+internal fun PreviewSlider() {
+	PreviewRenderContainer { previewData ->
+		PreviewSlider(previewData)
+	}
+}
 
 @Preview
 @Composable

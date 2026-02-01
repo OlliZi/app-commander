@@ -16,6 +16,7 @@ import compose.icons.feathericons.ArrowRight
 import compose.icons.feathericons.ArrowUp
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -49,6 +50,14 @@ fun ExpandButton(
 enum class ExpandButtonDirection {
 	BOTTOM_TO_TOP,
 	LEFT_TO_RIGHT,
+}
+
+@Preview
+@Composable
+internal fun PreviewExpandButton() {
+	PreviewRenderContainer { previewData ->
+		PreviewExpandButton(previewData)
+	}
 }
 
 @Preview

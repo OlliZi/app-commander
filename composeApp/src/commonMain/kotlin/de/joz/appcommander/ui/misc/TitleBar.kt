@@ -17,6 +17,7 @@ import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Settings
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,6 +67,14 @@ data class TitleBarAction(
 
 @Preview
 @Composable
+internal fun PreviewTitleBar() {
+	PreviewRenderContainer { previewData ->
+		PreviewTitleBar(previewData)
+	}
+}
+
+@Preview
+@Composable
 internal fun PreviewTitleBar(
 	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
 ) {
@@ -77,6 +86,9 @@ internal fun PreviewTitleBar(
 		) {
 			TitleBar(
 				title = "Title bar (plain)",
+			)
+			TitleBar(
+				title = "Title bar with",
 			)
 			TitleBar(
 				title = "Title bar with back + actions",

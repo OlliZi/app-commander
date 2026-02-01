@@ -21,6 +21,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -62,6 +63,14 @@ fun SimpleTextInput(
 			}
 		},
 	)
+}
+
+@Preview
+@Composable
+internal fun PreviewSimpleTextInput() {
+	PreviewRenderContainer { previewData ->
+		PreviewSimpleTextInput(previewData)
+	}
 }
 
 @Preview
