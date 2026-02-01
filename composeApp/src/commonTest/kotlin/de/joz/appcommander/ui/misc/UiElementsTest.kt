@@ -54,22 +54,14 @@ class UiElementsTest {
 				darkTheme = darkMode,
 				content = {
 					Column(
-						modifier =
-							Modifier
-								.fillMaxSize()
-								.background(MaterialTheme.colorScheme.background),
+						modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
 					) {
 						val uiState = PreviewData.createThemeDarkMode(darkMode)
 						PreviewBottomBar(uiState)
 						PreviewDevicesBar(uiState)
 						PreviewExpandButton(uiState)
 						PreviewLabelledSwitch(uiState)
-						PlatformSelectionPreviewParameterProvider()
-							.values
-							.filter { it.uiState.darkMode == darkMode }
-							.forEach {
-								PreviewPlatformSelection(it)
-							}
+						PreviewPlatformSelection(uiState)
 						PreviewScriptInput(uiState)
 						PreviewSectionDivider(uiState)
 						PreviewSimpleTextInput(uiState)
