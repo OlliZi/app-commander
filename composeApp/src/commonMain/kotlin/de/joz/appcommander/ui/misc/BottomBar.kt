@@ -12,11 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -57,35 +61,19 @@ data class BottomBarAction(
 
 @Preview
 @Composable
-internal fun PreviewBottomBar_Dark() {
-	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		BottomBar(
-			actions =
-				listOf(
-					BottomBarAction(
-						label = Res.string.edit_action_save,
-						action = {},
-					),
-					BottomBarAction(
-						label = Res.string.edit_action_abort,
-						action = {},
-					),
-					BottomBarAction(
-						label = Res.string.edit_action_remove,
-						action = {},
-					),
-				),
-		)
+internal fun PreviewBottomBar() {
+	PreviewRenderContainer { previewData ->
+		PreviewBottomBar(previewData)
 	}
 }
 
 @Preview
 @Composable
-internal fun PreviewBottomBar_Light() {
+internal fun PreviewBottomBar(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		BottomBar(
 			actions =

@@ -8,11 +8,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowDown
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.ArrowRight
 import compose.icons.feathericons.ArrowUp
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -50,42 +54,19 @@ enum class ExpandButtonDirection {
 
 @Preview
 @Composable
-internal fun PreviewExpandButton_Dark() {
-	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		Row(
-			horizontalArrangement = Arrangement.SpaceBetween,
-		) {
-			ExpandButton(
-				isExpanded = true,
-				direction = ExpandButtonDirection.BOTTOM_TO_TOP,
-				onClick = {},
-			)
-			ExpandButton(
-				isExpanded = false,
-				direction = ExpandButtonDirection.BOTTOM_TO_TOP,
-				onClick = {},
-			)
-			ExpandButton(
-				isExpanded = true,
-				direction = ExpandButtonDirection.LEFT_TO_RIGHT,
-				onClick = {},
-			)
-			ExpandButton(
-				isExpanded = false,
-				direction = ExpandButtonDirection.LEFT_TO_RIGHT,
-				onClick = {},
-			)
-		}
+internal fun PreviewExpandButton() {
+	PreviewRenderContainer { previewData ->
+		PreviewExpandButton(previewData)
 	}
 }
 
 @Preview
 @Composable
-internal fun PreviewExpandButton_Light() {
+internal fun PreviewExpandButton(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		Row(
 			horizontalArrangement = Arrangement.SpaceBetween,

@@ -11,9 +11,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Settings
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,15 +67,28 @@ data class TitleBarAction(
 
 @Preview
 @Composable
-internal fun PreviewTitleBar_Dark() {
+internal fun PreviewTitleBar() {
+	PreviewRenderContainer { previewData ->
+		PreviewTitleBar(previewData)
+	}
+}
+
+@Preview
+@Composable
+internal fun PreviewTitleBar(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = true,
+		darkTheme = previewData.uiState,
 	) {
 		Column(
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			TitleBar(
 				title = "Title bar (plain)",
+			)
+			TitleBar(
+				title = "Title bar with",
 			)
 			TitleBar(
 				title = "Title bar with back + actions",
@@ -88,29 +105,16 @@ internal fun PreviewTitleBar_Dark() {
 	}
 }
 
-@Preview
-@Composable
-internal fun PreviewTitleBar_Light() {
-	AppCommanderTheme(
-		darkTheme = false,
-	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
-		) {
-			TitleBar(
-				title = "Title bar (plain)",
-			)
-			TitleBar(
-				title = "Title bar with back + actions",
-				onBackNavigation = {},
-				actions =
-					listOf(
-						TitleBarAction(
-							action = {},
-							icon = FeatherIcons.Settings,
-						),
-					),
-			)
-		}
-	}
-}
+internal class PreviewParams :
+	AppCommanderPreviewParameterProvider<Boolean>(
+		listOf(
+			PreviewData(
+				label = "Light",
+				uiState = false,
+			),
+			PreviewData(
+				label = "Dark",
+				uiState = true,
+			),
+		),
+	)

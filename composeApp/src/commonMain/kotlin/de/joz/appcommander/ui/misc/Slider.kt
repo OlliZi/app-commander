@@ -10,11 +10,15 @@ import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
+import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
+import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -52,51 +56,19 @@ private fun SettingsViewModel.LabelValue.toUiString(): String =
 
 @Preview
 @Composable
-internal fun PreviewSlider_Dark() {
-	AppCommanderTheme(
-		darkTheme = true,
-	) {
-		Column(
-			verticalArrangement = Arrangement.SpaceBetween,
-		) {
-			Slider(
-				sliderItem =
-					SettingsViewModel.SliderItem(
-						sliderValue = 5f,
-						maximum = 10f,
-						minimum = 0f,
-						steps = 20,
-						label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-						labelValue = SettingsViewModel.LabelValue.IntRes(5),
-						key = "",
-					),
-				onValueChange = {},
-			)
-			Slider(
-				sliderItem =
-					SettingsViewModel.SliderItem(
-						sliderValue = 5f,
-						maximum = 10f,
-						minimum = 0f,
-						steps = 20,
-						label = Res.string.settings_preference_ui_appearance_label,
-						labelValue =
-							SettingsViewModel.LabelValue.StringRes(
-								Res.string.settings_preference_ui_appearance_system,
-							),
-						key = "",
-					),
-				onValueChange = {},
-			)
-		}
+internal fun PreviewSlider() {
+	PreviewRenderContainer { previewData ->
+		PreviewSlider(previewData)
 	}
 }
 
 @Preview
 @Composable
-internal fun PreviewSlider_Light() {
+internal fun PreviewSlider(
+	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
+) {
 	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		Column(
 			verticalArrangement = Arrangement.SpaceBetween,
