@@ -1,5 +1,7 @@
 package de.joz.appcommander.ui.internalpreviews
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 
 internal open class AppCommanderPreviewParameterProvider<T>(
@@ -33,5 +35,19 @@ internal data class PreviewData<T>(
 				label = "Light",
 				uiState = false,
 			)
+	}
+}
+
+@Composable
+internal fun PreviewRenderContainer(content: @Composable (PreviewData<Boolean>) -> Unit) {
+	Column {
+		AppCommanderPreviewParameterProvider(
+			listOf(
+				PreviewData.createThemeDarkMode(darkMode = true),
+				PreviewData.createThemeDarkMode(darkMode = false),
+			),
+		).values.forEach {
+			content(it)
+		}
 	}
 }

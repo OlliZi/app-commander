@@ -20,6 +20,7 @@ import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -57,6 +58,14 @@ data class BottomBarAction(
 	val label: StringResource,
 	val action: () -> Unit,
 )
+
+@Preview
+@Composable
+internal fun PreviewBottomBar() {
+	PreviewRenderContainer { previewData ->
+		PreviewBottomBar(previewData)
+	}
+}
 
 @Preview
 @Composable

@@ -47,6 +47,36 @@ class UiElementsTest {
 		}
 	}
 
+	@Test
+	fun `should render BottomBar in all modes`() {
+		runComposeUiTest {
+			setupTestUiElement {
+				PreviewBottomBar()
+			}
+
+			verifyScreenshot(
+				screenshotName = "ui_element_bottom_bar_in_all_modes",
+			)
+		}
+	}
+
+	private fun ComposeUiTest.verifyScreenshot(screenshotName: String) {
+		screenshotVerifier.verifyScreenshot(
+			source = this,
+			screenshotName = screenshotName,
+		)
+	}
+
+	private fun ComposeUiTest.setupTestUiElement(content: @Composable () -> Unit) {
+		setContent {
+			Column(
+				modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+			) {
+				content()
+			}
+		}
+	}
+
 	private fun ComposeUiTest.setupTestUi(darkMode: Boolean) {
 		setContent {
 			AppCommanderTheme(
