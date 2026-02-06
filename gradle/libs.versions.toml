@@ -9,13 +9,13 @@ datastorePreferences = "1.1.7"
 mockk = "1.14.9"
 koin = "4.1.1"
 koin-annotations = "2.1.0"
-ksp = "2.2.10-2.0.2"
+ksp = "2.3.5"
 gradleVersionsPlugin = "0.53.0"
 detekt = "1.23.8"
 compose-icons = "1.1.1"
 json = "1.10.0"
 ktlintGradle = "13.1.0"
-kover = "0.9.4"
+kover = "0.9.6"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
