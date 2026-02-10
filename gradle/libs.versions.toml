@@ -15,7 +15,7 @@ detekt = "1.23.8"
 compose-icons = "1.1.1"
 json = "1.10.0"
 ktlintGradle = "13.1.0"
-kover = "0.9.6"
+kover = "0.9.7"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
