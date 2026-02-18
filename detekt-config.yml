@@ -23,10 +23,16 @@ style:
   MaxLineLength:
     active: true
     excludes: '**/generated/**'
+  WildcardImport:
+    active: true
+    excludes: '**/generated/**'
 
 naming:
   ClassNaming:
     excludes: '**/generated/**'
   FunctionNaming:
     ignoreAnnotated: [ 'Composable' ]
+    excludes: '**/generated/**'
+  TopLevelPropertyNaming:
+    active: true
     excludes: '**/generated/**'
