@@ -62,7 +62,7 @@ This runs the script ten times.
   rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
-- Build a release application on every push on main.
+- Build a release application on every push on main (https://kotlinlang.org/docs/multiplatform/compose-native-distribution.html).
 - Run desktop app:
     - Navigate to DesktopApp.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start
       main function.
