@@ -9,14 +9,14 @@ on:
 
 jobs:
   
-  pr_check_build:
+  release_build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Builds the release application.
         run: |
-          ./gradlew packageDmg
+          ./gradlew packageDistributionForCurrentOS
 
       - name: Archive release applications.
         uses: actions/upload-artifact@v4
@@ -24,7 +24,7 @@ jobs:
         with:
           name: releases
           path: |
-            **/build/compose/binaries/main/dmg/*.dmg
+            **/build/compose/binaries/main/**
             
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -33,4 +33,4 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            **/build/compose/binaries/main/dmg/*.dmg
+            **/build/compose/binaries/main/**
