@@ -16,7 +16,7 @@ jobs:
 
       - name: Builds the release application.
         run: |
-          ./gradlew clean packageDmg packageDeb
+          ./gradlew clean packageDmg
 
       - name: Archive release applications.
         uses: actions/upload-artifact@v4
