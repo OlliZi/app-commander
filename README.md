@@ -56,14 +56,13 @@ This runs the script ten times.
 
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, ...)
-- build artefacts in CI
 - Unit-test for PreferencesRepositoryImpl
 - Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
 - Open-Icons für Logging and Terminal unten
   rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
-
+- Build a release application on every push on main.
 - Run desktop app:
     - Navigate to DesktopApp.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start
       main function.
