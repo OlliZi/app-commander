@@ -16,7 +16,7 @@ jobs:
 
       - name: Builds the release application.
         run: |
-          ./gradlew packageDistributionForCurrentOS
+          ./gradlew clean package
 
       - name: Archive release applications.
         uses: actions/upload-artifact@v4
@@ -24,4 +24,6 @@ jobs:
         with:
           name: releases
           path: |
-            **/build/compose/binaries/main/**
+            **/build/compose/binaries/main/app/**
+            **/build/compose/binaries/main/dmg/**
+            **/build/libs/composeApp-jvm.jar
