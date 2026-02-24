@@ -74,9 +74,10 @@ compose.desktop {
 		mainClass = "de.joz.appcommander.DesktopAppKt"
 
 		nativeDistributions {
-			targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+			targetFormats(TargetFormat.Dmg)
 			packageName = "App-Commander"
 			packageVersion = "1.0.0"
+			modules("jdk.unsupported")
 		}
 	}
 }
