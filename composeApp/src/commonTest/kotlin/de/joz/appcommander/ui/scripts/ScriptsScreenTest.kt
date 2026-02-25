@@ -99,6 +99,10 @@ class ScriptsScreenTest {
 					),
 			)
 
+			onNodeWithTag(
+				testTag = "expand_button_logging",
+			).assertIsDisplayed().performClick()
+
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "show_all",
