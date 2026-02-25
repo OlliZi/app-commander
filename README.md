@@ -47,11 +47,11 @@ This runs the script ten times.
 # Screenshots
 
 - Scripts-screen
-  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)
-  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)
+  <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
+  <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
 - Settings-screen
-  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)
-  ![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)
+  <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
+  <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 # TODOs
 
