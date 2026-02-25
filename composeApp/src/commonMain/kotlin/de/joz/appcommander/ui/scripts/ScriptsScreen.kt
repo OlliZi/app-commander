@@ -201,10 +201,6 @@ private fun ConnectedDevices(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		TextLabel(
-			text = stringResource(Res.string.scripts_hint),
-			textLabelType = TextLabelType.BodySmall,
-		)
-		TextLabel(
 			text =
 				stringResource(
 					if (connectedDevices.isNotEmpty()) {
@@ -220,6 +216,11 @@ private fun ConnectedDevices(
 			connectedDevices = connectedDevices,
 			onDeviceSelect = onDeviceSelect,
 			onRefreshDevices = onRefreshDevices,
+		)
+
+		TextLabel(
+			text = stringResource(Res.string.scripts_hint),
+			textLabelType = TextLabelType.BodySmall,
 		)
 	}
 }
@@ -254,12 +255,12 @@ private fun ScriptsSection(
 							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
 								text = script.description,
-								textLabelType = TextLabelType.BodyMedium,
+								textLabelType = TextLabelType.BodyLarge,
 							)
 							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
 								text = script.scriptText,
-								textLabelType = TextLabelType.BodySmall,
+								textLabelType = TextLabelType.BodyMedium,
 							)
 						}
 						EditButtonItem(
@@ -281,18 +282,18 @@ private fun ScriptsSection(
 					) {
 						TextLabel(
 							text = script.description,
-							textLabelType = TextLabelType.BodyMedium,
+							textLabelType = TextLabelType.BodyLarge,
 						)
 						TextLabel(
 							text = " | ",
-							textLabelType = TextLabelType.BodySmall,
+							textLabelType = TextLabelType.BodyMedium,
 						)
 						TextLabel(
 							modifier = Modifier.weight(1f),
 							text = script.scriptText,
 							maxLines = 1,
 							overflow = TextOverflow.Ellipsis,
-							textLabelType = TextLabelType.BodySmall,
+							textLabelType = TextLabelType.BodyMedium,
 						)
 						EditButtonItem(
 							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,

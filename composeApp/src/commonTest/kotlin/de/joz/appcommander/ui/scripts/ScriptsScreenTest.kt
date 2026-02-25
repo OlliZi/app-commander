@@ -16,6 +16,7 @@ import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -43,6 +44,68 @@ class ScriptsScreenTest {
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "default_label",
+			)
+		}
+	}
+
+	@Test
+	fun `should show scripts label when scripts are available`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						connectedDevices =
+							listOf(
+								ScriptsViewModel.Device(
+									label = "emulator-5555",
+									id = "1",
+									isSelected = true,
+								),
+								ScriptsViewModel.Device(
+									label = "emulator-5556",
+									id = "2",
+									isSelected = false,
+								),
+								ScriptsViewModel.Device(
+									label = "Google Pixel 10",
+									id = "3",
+									isSelected = true,
+								),
+							),
+						scripts =
+							listOf(
+								ScriptsViewModel.Script(
+									description = "Dark mode",
+									scriptText = "adb shell cmd uimode night yes",
+									originalScript = mockk(),
+								),
+								ScriptsViewModel.Script(
+									description = "Light mode",
+									scriptText = "adb shell cmd uimode night no",
+									originalScript = mockk(),
+								),
+								ScriptsViewModel.Script(
+									description = "Login into app",
+									scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
+									originalScript = mockk(),
+								),
+								ScriptsViewModel.Script(
+									description = "Swipe through app",
+									scriptText = "#LOOP_10 adb shell input swipe 500 500 500 500",
+									originalScript = mockk(),
+								),
+							),
+						logging = listOf("1. adb devices", "2. adb shell cmd uimode night yes"),
+					),
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button_logging",
+			).assertIsDisplayed().performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "show_all",
 			)
 		}
 	}
