@@ -25,11 +25,15 @@ You can simple edit your custom script here, for example:
 
 # Special commands
 - The device identifier is automatically injected to run your script on multiple devices.
-- To run a script in a loop, add "#LOOP_10" before your script, for example: 
+- To run a script in a loop, add "#LOOP_10" before your script, for example to run a script ten times: 
 ```
 "#LOOP_10 adb shell input swipe 500 500 1000 500"
 ```
-This runs the script ten times.
+
+- You can chain multiple commands by inserting "&&" between your commands, for example:
+```
+"adb shell input swipe 500 500 1000 500 && adb shell input tab 500 500"
+```
 
 # Features
 
@@ -47,11 +51,13 @@ This runs the script ten times.
 # Screenshots
 
 - Scripts-screen
-  <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
-  <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
+  - <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
+  - 
+  - <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
 - Settings-screen
-  <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
-  <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
+  - <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
+  - 
+  - <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 # TODOs
 
