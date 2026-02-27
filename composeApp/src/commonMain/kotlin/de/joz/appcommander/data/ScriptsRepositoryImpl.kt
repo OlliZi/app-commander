@@ -76,6 +76,13 @@ class ScriptsRepositoryImpl(
 					script = "adb shell cmd uimode night no",
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
+				ScriptsRepository.Script(
+					label = "Switch dark to light to dark mode",
+					script =
+						"adb shell cmd uimode night no && sleep 1 && adb shell cmd uimode night yes && " +
+							"sleep 1 && adb shell cmd uimode night no",
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
 			)
 
 		internal const val JSON_FILE_NAME = "scripts.json"
