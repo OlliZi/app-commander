@@ -20,7 +20,6 @@ class GetConnectedDevicesUseCaseTest {
 			} returns
 				ExecuteScriptUseCase.Result.Success(
 					"List of devices attached\n\ndevice-7\tdevice",
-					commands = emptyList(),
 				)
 
 			val getConnectedDevicesUseCase = GetConnectedDevicesUseCase(executeScriptUseCase)
@@ -58,7 +57,7 @@ class GetConnectedDevicesUseCaseTest {
 					any(),
 					any(),
 				)
-			} returns ExecuteScriptUseCase.Result.Success("List of devices attached\n\n", emptyList())
+			} returns ExecuteScriptUseCase.Result.Success("List of devices attached\n\n")
 
 			val getConnectedDevicesUseCase = GetConnectedDevicesUseCase(executeScriptUseCase)
 			val result = getConnectedDevicesUseCase()

@@ -212,7 +212,7 @@ class ScriptsViewModelTest {
 					script = script.originalScript,
 					selectedDevice = "p7",
 				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "", emptyList())
+			} returns ExecuteScriptUseCase.Result.Success(output = "")
 
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
 			runCurrent()
@@ -311,13 +311,13 @@ class ScriptsViewModelTest {
 					script = testScript,
 					selectedDevice = "1",
 				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "", emptyList())
+			} returns ExecuteScriptUseCase.Result.Success(output = "")
 			coEvery {
 				executeScriptUseCaseMock(
 					script = testScript,
 					selectedDevice = "3",
 				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "", emptyList())
+			} returns ExecuteScriptUseCase.Result.Success(output = "")
 
 			val viewModel = createViewModel()
 

@@ -48,6 +48,13 @@ class ScriptsRepositoryImplTest {
 						script = "adb shell cmd uimode night no",
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
+					ScriptsRepository.Script(
+						label = "Switch dark to light to dark mode",
+						script =
+							"adb shell cmd uimode night no && sleep 1 && adb shell cmd uimode night yes " +
+								"&& sleep 1 && adb shell cmd uimode night no",
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
 				),
 				scripts,
 			)
@@ -208,7 +215,7 @@ class ScriptsRepositoryImplTest {
 
 			repository.saveScript(script = newScript)
 
-			assertEquals(3, repository.getScripts().size)
+			assertEquals(4, repository.getScripts().size)
 			assertEquals(newScript, repository.getScripts().first())
 		}
 
@@ -226,7 +233,7 @@ class ScriptsRepositoryImplTest {
 
 			repository.removeScript(script = scriptToRemove)
 
-			assertEquals(1, repository.getScripts().size)
+			assertEquals(2, repository.getScripts().size)
 			assertFalse(repository.getScripts().contains(scriptToRemove))
 		}
 
@@ -246,7 +253,7 @@ class ScriptsRepositoryImplTest {
 			repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
 
 			val updatedScripts = repository.getScripts()
-			assertEquals(2, updatedScripts.size)
+			assertEquals(3, updatedScripts.size)
 			assertFalse(updatedScripts.contains(oldScript))
 			assertTrue(updatedScripts.contains(scriptToUpdate))
 		}

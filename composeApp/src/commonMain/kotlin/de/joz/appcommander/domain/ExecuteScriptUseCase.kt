@@ -15,21 +15,27 @@ class ExecuteScriptUseCase(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
 	): Result {
-		val scriptForSelectedDevice = injectDeviceId(script, selectedDevice)
-		addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice'.")
+		val allSubScripts = script.script.split("&&").map { it.trim() }
 
 		return runCatching {
-			val commands = scriptForSelectedDevice.split(" ")
-			val loopCount = getLoopCount(commands)
-			val plainCommand = removeSpecialCommands(commands)
-			val output =
-				(1..loopCount).joinToString(",") { index ->
-					"$index. ${innerExecuteScript(plainCommand)}"
+			val outputs = mutableListOf<String>()
+
+			allSubScripts.forEach { subScript ->
+				val scriptForSelectedDevice =
+					injectDeviceId(script = subScript, platform = script.platform, selectedDevice)
+
+				val commands = scriptForSelectedDevice.split(" ")
+				val loopCount = getLoopCount(commands)
+				val plainCommand = removeSpecialCommands(commands)
+
+				(1..loopCount).forEach { _ ->
+					addLoggingUseCase("Execute script: '${plainCommand.joinToString(" ")}' on device '$selectedDevice'.")
+					outputs.add("- ${innerExecuteScript(plainCommand)}")
 				}
+			}
 
 			Result.Success(
-				output = output,
-				commands = commands,
+				output = outputs.joinToString(""),
 			)
 		}.getOrElse {
 			val error = it.message ?: "Unknown error"
@@ -59,16 +65,17 @@ class ExecuteScriptUseCase(
 			.readText()
 
 	private fun injectDeviceId(
-		script: ScriptsRepository.Script,
+		script: String,
+		platform: ScriptsRepository.Platform,
 		selectedDevice: String,
 	): String {
 		if (selectedDevice.isEmpty()) {
-			return script.script
+			return script
 		}
 
-		return when (script.platform) {
+		return when (platform) {
 			ScriptsRepository.Platform.ANDROID -> {
-				script.script.replace(
+				script.replace(
 					"adb",
 					"adb -s $selectedDevice",
 				)
@@ -76,7 +83,7 @@ class ExecuteScriptUseCase(
 
 			// TODO
 			ScriptsRepository.Platform.IOS -> {
-				script.script
+				script
 			}
 		}
 	}
@@ -84,7 +91,6 @@ class ExecuteScriptUseCase(
 	sealed interface Result {
 		data class Success(
 			val output: String,
-			val commands: List<String>,
 		) : Result
 
 		data class Error(
