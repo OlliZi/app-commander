@@ -52,21 +52,19 @@ You can simple edit your custom script here, for example:
 
 - Scripts-screen
   - <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
-  - 
   - <kbd>![Scripts-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
 - Settings-screen
   - <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
-  - 
   - <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 # TODOs
-
+- Save script on every keystroke?
+- AI to write readme
+- Create a video
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 - UI-tests (EditScriptContent, ...)
 - Unit-test for PreferencesRepositoryImpl
-- Fix Unit-test "should append device id in script ..." in ExecuteScriptUseCaseTest
-- Open-Icons für Logging and Terminal unten
-  rechts? https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
+- Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
 - Build a release application on every push on main (https://kotlinlang.org/docs/multiplatform/compose-native-distribution.html).

@@ -123,6 +123,8 @@ class EditScriptViewModel(
 					),
 			)
 		}
+
+		onNavigateBack()
 	}
 
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
