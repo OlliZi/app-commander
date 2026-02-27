@@ -24,13 +24,12 @@ class ExecuteScriptUseCase(
 				val scriptForSelectedDevice =
 					injectDeviceId(script = subScript, platform = script.platform, selectedDevice)
 
-				addLoggingUseCase("Execute script: '$scriptForSelectedDevice' on device '$selectedDevice'.")
-
 				val commands = scriptForSelectedDevice.split(" ")
 				val loopCount = getLoopCount(commands)
 				val plainCommand = removeSpecialCommands(commands)
 
 				(1..loopCount).forEach { _ ->
+					addLoggingUseCase("Execute script: '${plainCommand.joinToString(" ")}' on device '$selectedDevice'.")
 					outputs.add("- ${innerExecuteScript(plainCommand)}")
 				}
 			}

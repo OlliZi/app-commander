@@ -46,17 +46,20 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "echo foo && echo bar",
+					script = "echo foo && echo bar && #LOOP_2 echo loop && echo test",
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
-			assertEquals("- foo\n- bar\n", result.output)
+			assertEquals("- foo\n- bar\n- loop\n- loop\n- test\n", result.output)
 			verify {
 				addLoggingUseCaseMock.invoke("Execute script: 'echo foo' on device 'Pixel7'.")
 				addLoggingUseCaseMock.invoke("Execute script: 'echo bar' on device 'Pixel7'.")
+				addLoggingUseCaseMock.invoke("Execute script: 'echo loop' on device 'Pixel7'.")
+				addLoggingUseCaseMock.invoke("Execute script: 'echo loop' on device 'Pixel7'.")
+				addLoggingUseCaseMock.invoke("Execute script: 'echo test' on device 'Pixel7'.")
 			}
 		}
 
@@ -78,7 +81,7 @@ class ExecuteScriptUseCaseTest {
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
 			assertEquals("- foo\n- foo\n- foo\n", result.output)
-			verify { addLoggingUseCaseMock.invoke("Execute script: '#LOOP_3 echo foo' on device 'Pixel7'.") }
+			verify(exactly = 3) { addLoggingUseCaseMock.invoke("Execute script: '#LOOP_3 echo foo' on device 'Pixel7'.") }
 		}
 
 	@Test
