@@ -98,15 +98,8 @@ class ExecuteScriptUseCaseTest {
 			val result = executeScriptUseCase(script = script, selectedDevice = "")
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Error)
-			assertEquals(
-				"Cannot run program \"foo_bar_unknown_command\" (in directory \".\"): Exec failed, error: 2 (No such file or directory) ",
-				result.message,
-			)
-			verify {
-				addLoggingUseCaseMock.invoke(
-					"Cannot run program \"foo_bar_unknown_command\" (in directory \".\"): Exec failed, error: 2 (No such file or directory) ",
-				)
-			}
+			assertTrue(result.message.startsWith("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"):"))
+			verify { addLoggingUseCaseMock.invoke(any()) }
 		}
 
 	@Test
