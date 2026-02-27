@@ -81,7 +81,7 @@ class ExecuteScriptUseCaseTest {
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
 			assertEquals("- foo\n- foo\n- foo\n", result.output)
-			verify(exactly = 3) { addLoggingUseCaseMock.invoke("Execute script: '#LOOP_3 echo foo' on device 'Pixel7'.") }
+			verify(exactly = 3) { addLoggingUseCaseMock.invoke("Execute script: 'echo foo' on device 'Pixel7'.") }
 		}
 
 	@Test
