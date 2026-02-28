@@ -119,13 +119,11 @@ internal fun WelcomeContent(
 				textAlign = TextAlign.Center,
 			)
 			Spacer(Modifier.height(12.dp))
-			if (!isInTextExecution) { // does not work for screenshot testing
-				Image(
-					modifier = Modifier.size(380.dp),
-					painter = painterResource(Res.drawable.welcome),
-					contentDescription = null,
-				)
-			}
+			Image(
+				modifier = Modifier.size(380.dp),
+				painter = painterResource(Res.drawable.welcome),
+				contentDescription = null,
+			)
 			Spacer(Modifier.height(16.dp))
 			Button(
 				onClick = onNavigateToScripts,
@@ -159,7 +157,13 @@ private fun DrawScope.renderBubbles(
 	isInTextExecution: Boolean,
 	bubblesStrategy: BubblesStrategy,
 ) {
-	if (isInTextExecution.not()) {
+	if (isInTextExecution) {
+		bubblesStrategy.drawBubbles(
+			drawScope = this,
+			size = size,
+			step = 0.6f,
+		)
+	} else {
 		bubblesStrategy.drawBubbles(
 			drawScope = this,
 			size = size,

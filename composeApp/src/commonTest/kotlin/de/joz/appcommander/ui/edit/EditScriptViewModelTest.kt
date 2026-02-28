@@ -107,6 +107,7 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			coVerify { saveUserScriptUseCaseMock.invoke(any(), null) }
+			verify { navControllerMock.navigateUp() }
 		}
 
 	@Test
@@ -161,6 +162,7 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			coVerify { removeUserScriptUseCaseMock.invoke(any()) }
+			verify { navControllerMock.navigateUp() }
 		}
 
 	@Test

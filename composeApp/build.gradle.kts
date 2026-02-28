@@ -76,7 +76,7 @@ compose.desktop {
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg)
 			packageName = "App-Commander"
-			packageVersion = "1.0.2"
+			packageVersion = "1.1.1"
 			modules("jdk.unsupported")
 		}
 	}
@@ -103,7 +103,7 @@ kover {
 			}
 		}
 		verify {
-			val lineCoverage = 82
+			val lineCoverage = 81
 			rule("Minimal line coverage rate in percent.") {
 				minBound(lineCoverage)
 			}

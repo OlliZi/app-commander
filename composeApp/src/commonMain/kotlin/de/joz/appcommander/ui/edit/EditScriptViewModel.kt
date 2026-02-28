@@ -110,6 +110,8 @@ class EditScriptViewModel(
 
 			scriptKey = getScriptIdUseCase(scriptToSave)
 		}
+
+		onNavigateBack()
 	}
 
 	private fun onRemoveScript() {
@@ -123,6 +125,8 @@ class EditScriptViewModel(
 					),
 			)
 		}
+
+		onNavigateBack()
 	}
 
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
