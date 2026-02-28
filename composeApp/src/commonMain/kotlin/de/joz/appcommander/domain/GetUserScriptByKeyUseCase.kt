@@ -8,7 +8,7 @@ class GetUserScriptByKeyUseCase(
 	private val getScriptIdUseCase: GetScriptIdUseCase,
 ) {
 	operator fun invoke(scriptKey: Int?): ScriptsRepository.Script? =
-		scriptsRepository.getScripts().firstOrNull {
+		scriptsRepository.getScripts().scripts.firstOrNull {
 			getScriptIdUseCase(it) == scriptKey
 		}
 }

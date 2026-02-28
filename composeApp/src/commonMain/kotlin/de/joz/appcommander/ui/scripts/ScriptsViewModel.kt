@@ -120,7 +120,7 @@ class ScriptsViewModel(
 			val devices = getConnectedDevicesUseCase()
 			oldState.copy(
 				connectedDevices =
-					devices.mapIndexed { index, device ->
+					devices.map { device ->
 						Device(
 							id = device.id,
 							label = device.label,
@@ -133,11 +133,12 @@ class ScriptsViewModel(
 		}
 	}
 
-	private fun onRefreshScripts(scripts: List<ScriptsRepository.Script>) {
+	private fun onRefreshScripts(jsonParseResult: ScriptsRepository.JsonParseResult) {
 		_uiState.update { oldState ->
 			oldState.copy(
+				jsonParsingError = jsonParseResult.throwable?.message,
 				scripts =
-					scripts.map { script ->
+					jsonParseResult.scripts.map { script ->
 						Script(
 							description = script.label,
 							scriptText = script.script,
@@ -281,6 +282,7 @@ class ScriptsViewModel(
 		val connectedDevices: List<Device> = emptyList(),
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
+		val jsonParsingError: String? = null,
 	)
 
 	data class Device(

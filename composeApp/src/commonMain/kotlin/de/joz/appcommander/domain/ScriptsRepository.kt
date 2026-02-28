@@ -3,7 +3,7 @@ package de.joz.appcommander.domain
 import kotlinx.serialization.Serializable
 
 interface ScriptsRepository {
-	fun getScripts(): List<Script>
+	fun getScripts(): JsonParseResult
 
 	fun openScriptFile()
 
@@ -21,6 +21,11 @@ interface ScriptsRepository {
 		val label: String,
 		val script: String,
 		val platform: Platform,
+	)
+
+	data class JsonParseResult(
+		val scripts: List<Script>,
+		val throwable: Throwable?,
 	)
 
 	enum class Platform(
