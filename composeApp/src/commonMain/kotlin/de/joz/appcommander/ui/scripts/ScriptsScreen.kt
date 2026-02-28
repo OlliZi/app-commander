@@ -25,7 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +42,7 @@ import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_add_new_script
+import de.joz.appcommander.resources.scripts_filter_section_title
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
@@ -147,11 +148,14 @@ internal fun ScriptsContent(
 				onEditScript = {
 					onEvent(ScriptsViewModel.Event.OnEditScript(script = it))
 				},
-				onFilterScripts = {
-					onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
-				},
 				onExpand = {
 					onEvent(ScriptsViewModel.Event.OnExpandScript(script = it))
+				},
+			)
+
+			FilterSection(
+				onFilterScripts = {
+					onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
 				},
 			)
 
@@ -219,19 +223,10 @@ private fun ScriptsSection(
 	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScript: (Script) -> Unit,
 	onEditScript: (Script) -> Unit,
-	onFilterScripts: (String) -> Unit,
 	onExpand: (Script) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	JsonParsingError(jsonParsingError)
-
-	var scriptFilter by remember { mutableStateOf("") }
-	SimpleTextInput(
-		value = scriptFilter,
-	) {
-		scriptFilter = it
-		onFilterScripts(it)
-	}
 
 	LazyColumn(
 		modifier = modifier,
@@ -326,12 +321,50 @@ private fun JsonParsingError(jsonParsingError: String?) {
 }
 
 @Composable
+private fun FilterSection(onFilterScripts: (String) -> Unit) {
+	var isExpanded by rememberSaveable { mutableStateOf(false) }
+	var scriptFilter by rememberSaveable { mutableStateOf("") }
+
+	Column(
+		modifier =
+			Modifier
+				.background(
+					MaterialTheme.colorScheme.background,
+				).padding(8.dp),
+	) {
+		Row(
+			modifier = Modifier.height(36.dp),
+			verticalAlignment = Alignment.CenterVertically,
+		) {
+			TextLabel(
+				text = stringResource(Res.string.scripts_filter_section_title),
+				modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
+				textLabelType = TextLabelType.BodyLarge,
+			)
+			ExpandButton(
+				isExpanded = isExpanded,
+				modifier = Modifier.testTag("expand_button_filter"),
+				onClick = { isExpanded = !isExpanded },
+			)
+		}
+		AnimatedVisibility(visible = isExpanded) {
+			SimpleTextInput(
+				value = scriptFilter,
+			) {
+				scriptFilter = it
+				onFilterScripts(it)
+			}
+		}
+	}
+}
+
+@Composable
 private fun LoggingSection(
 	logging: List<String>,
 	onClearLogging: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	var isExpanded by remember { mutableStateOf(false) }
+	var isExpanded by rememberSaveable { mutableStateOf(false) }
 	Column(
 		modifier =
 			modifier
@@ -382,8 +415,8 @@ private fun LoggingSection(
 
 @Composable
 private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit) {
-	var isExpanded by remember { mutableStateOf(false) }
-	var selectedPlatform by remember { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
+	var isExpanded by rememberSaveable { mutableStateOf(false) }
+	var selectedPlatform by rememberSaveable { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 
 	Column(
 		modifier =

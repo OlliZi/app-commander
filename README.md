@@ -97,8 +97,8 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-1. Create a video
-2. Filter for the scripts
+1. Create a video showing the UI
+2. Settings: Checkboxes to show sections (Terminal, Logging, Filter)
 3. Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
 4. UI-tests (EditScriptContent, ...)
 5. Unit-test for PreferencesRepositoryImpl
