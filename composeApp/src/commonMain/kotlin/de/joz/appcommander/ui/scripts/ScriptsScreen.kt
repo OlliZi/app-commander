@@ -58,6 +58,7 @@ import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
+import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
@@ -146,6 +147,9 @@ internal fun ScriptsContent(
 				onEditScript = {
 					onEvent(ScriptsViewModel.Event.OnEditScript(script = it))
 				},
+				onFilterScripts = {
+					onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
+				},
 				onExpand = {
 					onEvent(ScriptsViewModel.Event.OnExpandScript(script = it))
 				},
@@ -215,10 +219,19 @@ private fun ScriptsSection(
 	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScript: (Script) -> Unit,
 	onEditScript: (Script) -> Unit,
+	onFilterScripts: (String) -> Unit,
 	onExpand: (Script) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	JsonParsingError(jsonParsingError)
+
+	var scriptFilter by remember { mutableStateOf("") }
+	SimpleTextInput(
+		value = scriptFilter,
+	) {
+		scriptFilter = it
+		onFilterScripts(it)
+	}
 
 	LazyColumn(
 		modifier = modifier,
