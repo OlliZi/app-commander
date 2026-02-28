@@ -59,9 +59,13 @@ class ScreenshotVerifier<T>(
 			val dialog = source.onNode(isDialog())
 
 			val node =
-				if (dialog.isDisplayed()) {
-					dialog
-				} else {
+				try {
+					if (dialog.isDisplayed()) {
+						dialog
+					} else {
+						source.onNode(isRoot())
+					}
+				} catch (_: Throwable) {
 					source.onNode(isRoot())
 				}
 
