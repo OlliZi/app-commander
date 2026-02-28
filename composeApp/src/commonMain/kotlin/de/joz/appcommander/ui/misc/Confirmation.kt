@@ -9,13 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.confirmation_no
 import de.joz.appcommander.resources.confirmation_yes
 import de.joz.appcommander.resources.edit_confirmation_remove
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -72,17 +69,14 @@ fun Confirmation(
 @Composable
 internal fun PreviewConfirmation() {
 	PreviewRenderContainer { previewData ->
-		PreviewConfirmation(previewData)
+		PreviewConfirmation(darkTheme = previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewConfirmation(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewConfirmation(darkTheme: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkTheme,
 	) {
 		Confirmation(
 			show = true,

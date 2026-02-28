@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isRoot
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.EncodedImageFormat
@@ -54,8 +56,16 @@ class ScreenshotVerifier<T>(
 		screenshotName: String,
 	): ScreenshotResult =
 		runCatching {
-			val screenshot = source.onNode(isRoot()).captureToImage()
-			val pngByteArray = convertToPng(screenshot.asSkiaBitmap())
+			val dialog = source.onNode(isDialog())
+
+			val node =
+				if (dialog.isDisplayed()) {
+					dialog
+				} else {
+					source.onNode(isRoot())
+				}
+
+			val pngByteArray = convertToPng(node.captureToImage().asSkiaBitmap())
 
 			if (pngByteArray == null || pngByteArray.isEmpty()) {
 				throw Exception("Screenshot is empty.")

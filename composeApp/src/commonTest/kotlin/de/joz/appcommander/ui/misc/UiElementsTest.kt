@@ -54,9 +54,15 @@ class UiElementsTest {
 		}
 
 	@Test
-	fun `should render Confirmation in all modes`() =
-		setupTestUiElement("Confirmation") {
-			PreviewConfirmation()
+	fun `should render Confirmation in dark mode`() =
+		setupTestUiElement("PreviewConfirmation_dark") {
+			PreviewConfirmation(darkTheme = true)
+		}
+
+	@Test
+	fun `should render Confirmation in light mode`() =
+		setupTestUiElement("PreviewConfirmation_light") {
+			PreviewConfirmation(darkTheme = false)
 		}
 
 	@Test
