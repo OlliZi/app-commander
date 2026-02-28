@@ -72,58 +72,14 @@ fun ScriptsScreen(viewModel: ScriptsViewModel) {
 
 	ScriptsContent(
 		uiState = uiState.value,
-		onDeviceSelect = { device ->
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-		},
-		onRefreshDevices = {
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-		},
-		onNavigateToSettings = {
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnNavigateToSettings)
-		},
-		onExecuteScript = { script ->
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnExecuteScript(script = script))
-		},
-		onExpand = { script ->
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
-		},
-		onEditScript = { script ->
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnEditScript(script = script))
-		},
-		onOpenScriptFile = {
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnOpenScriptFile)
-		},
-		onNewScriptFile = {
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnNewScript)
-		},
-		onClearLogging = {
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnClearLogging)
-		},
-		onExecuteScriptText = { scriptText, platform ->
-			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnExecuteScriptText(
-						script = scriptText,
-						platform = platform,
-					),
-			)
-		},
+		onEvent = viewModel::onEvent,
 	)
 }
 
 @Composable
 internal fun ScriptsContent(
 	uiState: ScriptsViewModel.UiState,
-	onDeviceSelect: (ScriptsViewModel.Device) -> Unit,
-	onRefreshDevices: () -> Unit,
-	onNavigateToSettings: () -> Unit,
-	onExecuteScript: (Script) -> Unit,
-	onEditScript: (Script) -> Unit,
-	onExpand: (Script) -> Unit,
-	onOpenScriptFile: () -> Unit,
-	onNewScriptFile: () -> Unit,
-	onClearLogging: () -> Unit,
-	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
+	onEvent: (ScriptsViewModel.Event) -> Unit,
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
@@ -133,7 +89,9 @@ internal fun ScriptsContent(
 				actions =
 					listOf(
 						TitleBarAction(
-							action = onNavigateToSettings,
+							action = {
+								onEvent(ScriptsViewModel.Event.OnNavigateToSettings)
+							},
 							icon = FeatherIcons.Settings,
 						),
 					),
@@ -145,11 +103,15 @@ internal fun ScriptsContent(
 					listOf(
 						BottomBarAction(
 							label = Res.string.scripts_open_script_file,
-							action = onOpenScriptFile,
+							action = {
+								onEvent(ScriptsViewModel.Event.OnOpenScriptFile)
+							},
 						),
 						BottomBarAction(
 							label = Res.string.scripts_add_new_script,
-							action = onNewScriptFile,
+							action = {
+								onEvent(ScriptsViewModel.Event.OnNewScript)
+							},
 						),
 					),
 			)
@@ -163,8 +125,12 @@ internal fun ScriptsContent(
 			ConnectedDevices(
 				connectedDevices = uiState.connectedDevices,
 				modifier = paddingInline,
-				onDeviceSelect = onDeviceSelect,
-				onRefreshDevices = onRefreshDevices,
+				onDeviceSelect = {
+					onEvent(ScriptsViewModel.Event.OnDeviceSelected(device = it))
+				},
+				onRefreshDevices = {
+					onEvent(ScriptsViewModel.Event.OnRefreshDevices)
+				},
 			)
 
 			SectionDivider()
@@ -174,18 +140,33 @@ internal fun ScriptsContent(
 				jsonParsingError = uiState.jsonParsingError,
 				isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
 				modifier = Modifier.weight(1f).then(paddingInline),
-				onExecuteScript = onExecuteScript,
-				onEditScript = onEditScript,
-				onExpand = onExpand,
+				onExecuteScript = {
+					onEvent(ScriptsViewModel.Event.OnExecuteScript(script = it))
+				},
+				onEditScript = {
+					onEvent(ScriptsViewModel.Event.OnEditScript(script = it))
+				},
+				onExpand = {
+					onEvent(ScriptsViewModel.Event.OnExpandScript(script = it))
+				},
 			)
 
 			TerminalSection(
-				onExecuteScriptText = onExecuteScriptText,
+				onExecuteScriptText = { scriptText, platform ->
+					onEvent(
+						ScriptsViewModel.Event.OnExecuteScriptText(
+							script = scriptText,
+							platform = platform,
+						),
+					)
+				},
 			)
 
 			LoggingSection(
 				logging = uiState.logging,
-				onClearLogging = onClearLogging,
+				onClearLogging = {
+					onEvent(ScriptsViewModel.Event.OnClearLogging)
+				},
 			)
 		}
 	}
@@ -237,14 +218,7 @@ private fun ScriptsSection(
 	onExpand: (Script) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	if (jsonParsingError != null) {
-		TextLabel(
-			modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
-			text = stringResource(Res.string.scripts_json_parsing_error, jsonParsingError),
-			textLabelType = TextLabelType.BodyLarge,
-			textColor = Color.Red,
-		)
-	}
+	JsonParsingError(jsonParsingError)
 
 	LazyColumn(
 		modifier = modifier,
@@ -322,6 +296,20 @@ private fun ScriptsSection(
 			}
 		}
 	}
+}
+
+@Composable
+private fun JsonParsingError(jsonParsingError: String?) {
+	if (jsonParsingError.isNullOrEmpty()) {
+		return
+	}
+
+	TextLabel(
+		modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+		text = stringResource(Res.string.scripts_json_parsing_error, jsonParsingError),
+		textLabelType = TextLabelType.BodyLarge,
+		textColor = Color.Red,
+	)
 }
 
 @Composable
@@ -526,16 +514,7 @@ private fun PreviewScriptScreen_Dark() {
 						),
 					logging = listOf("log 1", "log 2", "log 3"),
 				),
-			onExecuteScript = {},
-			onExecuteScriptText = { _, _ -> },
-			onRefreshDevices = {},
-			onNavigateToSettings = {},
-			onExpand = {},
-			onOpenScriptFile = {},
-			onNewScriptFile = {},
-			onDeviceSelect = { _ -> },
-			onClearLogging = {},
-			onEditScript = {},
+			onEvent = {},
 		)
 	}
 }
@@ -589,16 +568,7 @@ private fun PreviewScriptScreen_Light() {
 						),
 					logging = listOf("log 1", "log 2", "log 3"),
 				),
-			onExecuteScript = {},
-			onExecuteScriptText = { _, _ -> },
-			onRefreshDevices = {},
-			onNavigateToSettings = {},
-			onExpand = {},
-			onOpenScriptFile = {},
-			onNewScriptFile = {},
-			onDeviceSelect = { _ -> },
-			onClearLogging = {},
-			onEditScript = {},
+			onEvent = {},
 		)
 	}
 }

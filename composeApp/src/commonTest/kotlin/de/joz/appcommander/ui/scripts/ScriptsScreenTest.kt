@@ -143,7 +143,7 @@ class ScriptsScreenTest {
 					ScriptsViewModel.UiState(
 						logging = listOf("Log abc", "Log 123"),
 					),
-				onClearLogging = {
+				onEvent = {
 					isClearClicked++
 				},
 			)
@@ -218,7 +218,7 @@ class ScriptsScreenTest {
 			var isRefreshClicked = 0
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
-				onRefreshDevices = {
+				onEvent = {
 					isRefreshClicked++
 				},
 			)
@@ -235,7 +235,7 @@ class ScriptsScreenTest {
 			var isOpenClicked = 0
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
-				onOpenScriptFile = {
+				onEvent = {
 					isOpenClicked++
 				},
 			)
@@ -251,7 +251,7 @@ class ScriptsScreenTest {
 		runComposeUiTest {
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
-				onOpenScriptFile = {},
+				onEvent = {},
 			)
 
 			onNodeWithTag(
@@ -274,9 +274,11 @@ class ScriptsScreenTest {
 			var selectedPlatform: ScriptsRepository.Platform? = null
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
-				onExecuteScriptText = { scriptText, platform ->
-					selectedScriptText = scriptText
-					selectedPlatform = platform
+				onEvent = {
+					if (it is ScriptsViewModel.Event.OnExecuteScriptText) {
+						selectedScriptText = it.script
+						selectedPlatform = it.platform
+					}
 				},
 			)
 
@@ -305,7 +307,7 @@ class ScriptsScreenTest {
 			var onNewScriptFileCounter = 0
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
-				onNewScriptFile = {
+				onEvent = {
 					onNewScriptFileCounter++
 				},
 			)
@@ -337,16 +339,7 @@ class ScriptsScreenTest {
 
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
-		onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},
-		onExecuteScript: (ScriptsViewModel.Script) -> Unit = {},
-		onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit = { _, _ -> },
-		onRefreshDevices: () -> Unit = {},
-		onExpand: (ScriptsViewModel.Script) -> Unit = {},
-		onNavigateToSettings: () -> Unit = {},
-		onOpenScriptFile: () -> Unit = {},
-		onClearLogging: () -> Unit = {},
-		onNewScriptFile: () -> Unit = {},
-		onEditScript: (ScriptsViewModel.Script) -> Unit = {},
+		onEvent: (ScriptsViewModel.Event) -> Unit = {},
 	) {
 		setContent {
 			AppCommanderTheme(
@@ -354,16 +347,7 @@ class ScriptsScreenTest {
 				content = {
 					ScriptsContent(
 						uiState = uiState,
-						onDeviceSelect = onDeviceSelect,
-						onExecuteScript = onExecuteScript,
-						onExecuteScriptText = onExecuteScriptText,
-						onRefreshDevices = onRefreshDevices,
-						onExpand = onExpand,
-						onNavigateToSettings = onNavigateToSettings,
-						onOpenScriptFile = onOpenScriptFile,
-						onClearLogging = onClearLogging,
-						onNewScriptFile = onNewScriptFile,
-						onEditScript = onEditScript,
+						onEvent = onEvent,
 					)
 				},
 			)
