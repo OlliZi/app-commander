@@ -24,15 +24,18 @@ App-Commander is a powerful desktop application built with Kotlin Multiplatform 
 
 ## 🎥 First Impressions I
 <kbd>![Welcome-screen](preview_overview.gif)</kbd>
+<img src="preview_overview.gif" width="500"/>
 
 ## 📸 First Impressions II
 
-- **Welcome Screen Animation**
+**Welcome Screen Animation**
     <kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/welcome/screenshots/animation.png)</kbd>
-- **Scripts Screen**
+
+**Scripts Screen**
     <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
     <kbd>![Scripts-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
-- **Settings Screen**
+
+**Settings Screen**
     <kbd>![Settings-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
     <kbd>![Settings-screen with changed label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
