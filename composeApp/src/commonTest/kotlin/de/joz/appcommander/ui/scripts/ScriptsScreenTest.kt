@@ -337,6 +337,20 @@ class ScriptsScreenTest {
 		}
 	}
 
+	@Test
+	fun `should show filter screen when open button is clicked`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onEvent = {},
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button_filter",
+			).assertIsDisplayed().performClick()
+		}
+	}
+
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
 		onEvent: (ScriptsViewModel.Event) -> Unit = {},
