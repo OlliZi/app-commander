@@ -80,6 +80,20 @@ class WelcomeScreenTest {
 	}
 
 	@Test
+	fun `should render animation bubbles when app is started`() =
+		runTest {
+			val navController: NavController = mockk(relaxed = true)
+			runComposeUiTest {
+				setTestContent(
+					navController = navController,
+					useCustomBubbleStrategy = false,
+				)
+
+				screenshotVerifier.verifyScreenshot(source = this, screenshotName = "animation")
+			}
+		}
+
+	@Test
 	fun `should save flag when toggle is clicked`() =
 		runTest {
 			val navController: NavController = mockk(relaxed = true)
@@ -165,6 +179,7 @@ class WelcomeScreenTest {
 							} else {
 								koin.get()
 							},
+						isInTextExecution = true,
 					)
 				},
 			)
