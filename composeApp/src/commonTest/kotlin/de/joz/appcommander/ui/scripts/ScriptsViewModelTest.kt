@@ -64,6 +64,11 @@ class ScriptsViewModelTest {
 							script = "foo",
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
+						ScriptsRepository.Script(
+							label = "my another script",
+							script = "bar",
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
 					),
 				throwable = null,
 			)
@@ -98,6 +103,16 @@ class ScriptsViewModelTest {
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
+					ScriptsViewModel.Script(
+						description = "my another script",
+						scriptText = "bar",
+						originalScript =
+							ScriptsRepository.Script(
+								label = "my another script",
+								script = "bar",
+								platform = ScriptsRepository.Platform.ANDROID,
+							),
+					),
 				),
 				viewModel.uiState.value.scripts,
 			)
@@ -118,6 +133,38 @@ class ScriptsViewModelTest {
 
 			verify {
 				navControllerMock.navigate(NavigationScreens.SettingsScreen)
+			}
+		}
+
+	@Test
+	fun `should filter scripts when event 'OnFilterScripts' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+			assertEquals(2, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnFilterScripts(
+						filter = "bar",
+					),
+			)
+			runCurrent()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertTrue(
+				viewModel.uiState.value.scripts
+					.all {
+						it.description.contains("bar") || it.scriptText.contains("bar")
+					},
+			)
+			assertFalse(
+				viewModel.uiState.value.scripts
+					.any {
+						it.description.contains("foo") || it.scriptText.contains("foo")
+					},
+			)
+			verify {
+				getUserScriptsUseCaseMock.invoke()
 			}
 		}
 

@@ -82,14 +82,9 @@ internal fun PreviewTextLabel(
 				TextLabel(
 					text = it.name,
 					textLabelType = it,
+					textColor = if (TextLabelType.BodyLarge == it) Color.Red else MaterialTheme.colorScheme.onSurface,
 				)
 			}
-
-			TextLabel(
-				text = "some error",
-				textLabelType = TextLabelType.BodyLarge,
-				textColor = Color.Red,
-			)
 		}
 	}
 }

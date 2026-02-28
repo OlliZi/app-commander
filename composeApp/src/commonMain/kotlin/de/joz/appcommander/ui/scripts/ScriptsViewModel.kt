@@ -111,6 +111,10 @@ class ScriptsViewModel(
 				is Event.OnEditScript -> {
 					onEditScript(script = event.script)
 				}
+
+				is Event.OnFilterScripts -> {
+					onFilterScripts(filter = event.filter)
+				}
 			}
 		}
 	}
@@ -133,23 +137,29 @@ class ScriptsViewModel(
 		}
 	}
 
-	private fun onRefreshScripts(jsonParseResult: ScriptsRepository.JsonParseResult) {
+	private fun onRefreshScripts(
+		jsonParseResult: ScriptsRepository.JsonParseResult,
+		filter: String? = "",
+	) {
 		_uiState.update { oldState ->
 			oldState.copy(
 				jsonParsingError = jsonParseResult.throwable?.message,
 				scripts =
-					jsonParseResult.scripts.map { script ->
-						Script(
-							description = script.label,
-							scriptText = script.script,
-							originalScript = script,
-							isExpanded =
-								_uiState.value.scripts.any {
-									(it.description == script.label || it.scriptText == script.script) &&
-										it.isExpanded
-								},
-						)
-					},
+					jsonParseResult.scripts
+						.filter {
+							it.label.contains(filter.orEmpty()) || it.script.contains(filter.orEmpty())
+						}.map { script ->
+							Script(
+								description = script.label,
+								scriptText = script.script,
+								originalScript = script,
+								isExpanded =
+									_uiState.value.scripts.any {
+										(it.description == script.label || it.scriptText == script.script) &&
+											it.isExpanded
+									},
+							)
+						},
 			)
 		}
 	}
@@ -227,6 +237,10 @@ class ScriptsViewModel(
 		)
 	}
 
+	private fun onFilterScripts(filter: String) {
+		onRefreshScripts(jsonParseResult = getUserScriptsUseCase(), filter = filter)
+	}
+
 	private fun onOpenScriptFile() {
 		viewModelScope.launch(ioDispatcher) {
 			openScriptFileUseCase()
@@ -275,6 +289,10 @@ class ScriptsViewModel(
 
 		data class OnEditScript(
 			val script: Script,
+		) : Event
+
+		data class OnFilterScripts(
+			val filter: String,
 		) : Event
 	}
 

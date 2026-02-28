@@ -97,13 +97,13 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-1. Create a video
-2. Filter for the scripts
-3. Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
-4. UI-tests (EditScriptContent, ...)
-5. Unit-test for PreferencesRepositoryImpl
-6. Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
-
+- Refactoring: Collapse UI
+- Create a video showing the UI with emulator and a real device
+- Settings: Checkboxes to show sections (Terminal, Logging, Filter)
+- Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 
+- UI-tests (EditScriptContent, ...)
+- Unit-test for PreferencesRepositoryImpl 
+- Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 ## 🤝 Contributing
 
