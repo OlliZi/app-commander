@@ -76,7 +76,7 @@ compose.desktop {
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg)
 			packageName = "App-Commander"
-			packageVersion = "1.0.2"
+			packageVersion = "1.1.1"
 			modules("jdk.unsupported")
 		}
 	}

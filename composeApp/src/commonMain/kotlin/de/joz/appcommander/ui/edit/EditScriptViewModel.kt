@@ -110,6 +110,8 @@ class EditScriptViewModel(
 
 			scriptKey = getScriptIdUseCase(scriptToSave)
 		}
+
+		onNavigateBack()
 	}
 
 	private fun onRemoveScript() {

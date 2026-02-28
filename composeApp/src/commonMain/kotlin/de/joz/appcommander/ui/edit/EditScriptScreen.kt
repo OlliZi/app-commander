@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
@@ -44,47 +43,21 @@ fun EditScriptScreen(viewModel: EditScriptViewModel) {
 
 	EditScriptContent(
 		uiState = uiState.value,
-		onBackNavigation = {
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnNavigateBack)
-		},
-		onSelectPlatform = {
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnSelectPlatform(platform = it))
-		},
-		onExecuteScriptText = {
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnExecuteScript)
-		},
-		onChangeScriptText = { script ->
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScript(script = script))
-		},
-		onChangeTextChange = { scriptName ->
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScriptName(scriptName = scriptName))
-		},
-		onSaveScript = {
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnSaveScript)
-		},
-		onRemoveScript = {
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnRemoveScript)
-		},
+		onEvent = viewModel::onEvent,
 	)
 }
 
 @Composable
 internal fun EditScriptContent(
 	uiState: EditScriptViewModel.UiState,
-	onBackNavigation: () -> Unit,
-	onSelectPlatform: (ScriptsRepository.Platform) -> Unit,
-	onChangeScriptText: (String) -> Unit,
-	onExecuteScriptText: () -> Unit,
-	onChangeTextChange: (String) -> Unit,
-	onSaveScript: () -> Unit,
-	onRemoveScript: () -> Unit,
+	onEvent: (EditScriptViewModel.Event) -> Unit,
 ) {
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
 		topBar = {
 			TitleBar(
 				title = stringResource(Res.string.edit_title),
-				onBackNavigation = onBackNavigation,
+				onBackNavigation = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
 			)
 		},
 		bottomBar = {
@@ -93,15 +66,19 @@ internal fun EditScriptContent(
 					listOf(
 						BottomBarAction(
 							label = Res.string.edit_action_save,
-							action = onSaveScript,
+							action = {
+								onEvent(EditScriptViewModel.Event.OnSaveScript)
+							},
 						),
 						BottomBarAction(
 							label = Res.string.edit_action_remove,
-							action = onRemoveScript,
+							action = {
+								onEvent(EditScriptViewModel.Event.OnRemoveScript)
+							},
 						),
 						BottomBarAction(
 							label = Res.string.edit_action_abort,
-							action = onBackNavigation,
+							action = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
 						),
 					),
 			)
@@ -117,7 +94,9 @@ internal fun EditScriptContent(
 			)
 			SimpleTextInput(
 				value = uiState.scriptName,
-				onChangeTextChange = onChangeTextChange,
+				onChangeTextChange = {
+					onEvent(EditScriptViewModel.Event.OnChangeScriptName(scriptName = it))
+				},
 			)
 
 			SectionDivider()
@@ -133,9 +112,11 @@ internal fun EditScriptContent(
 							Res.string.edit_script_placeholder,
 						)
 					},
-				onChangeScriptText = onChangeScriptText,
+				onChangeScriptText = {
+					onEvent(EditScriptViewModel.Event.OnChangeScript(script = it))
+				},
 				onExecuteScriptText = {
-					onExecuteScriptText()
+					onEvent(EditScriptViewModel.Event.OnExecuteScript)
 				},
 			)
 
@@ -147,7 +128,9 @@ internal fun EditScriptContent(
 			)
 			PlatformSelection(
 				selectedPlatform = uiState.selectedPlatform,
-				onSelectPlatform = onSelectPlatform,
+				onSelectPlatform = {
+					onEvent(EditScriptViewModel.Event.OnSelectPlatform(platform = it))
+				},
 			)
 
 			SectionDivider()
@@ -177,13 +160,7 @@ private fun PreviewEditScriptScreen(
 	) {
 		EditScriptContent(
 			uiState = EditScriptViewModel.UiState(),
-			onBackNavigation = {},
-			onSelectPlatform = { _ -> },
-			onChangeScriptText = { _ -> },
-			onExecuteScriptText = {},
-			onChangeTextChange = {},
-			onSaveScript = {},
-			onRemoveScript = {},
+			onEvent = {},
 		)
 	}
 }

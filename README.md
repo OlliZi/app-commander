@@ -5,12 +5,12 @@
 
 App-Commander: Your programmable multi-device execution helper. Execute scripts for your apps on
 multiple devices.
-This is a Kotlin Multiplatform project targeting Desktop (JVM). Android and iOS dont make sense but
-is still maybe possible in future.
+This is a Kotlin Multiplatform project targeting Desktop (JVM). Android and iOS don't make sense but
+is still maybe possible in the future.
 
 # Scripts
 Your scripts are saved in home directory in ".app_commander". The file name is "scripts.json".
-You can simple edit your custom script here, for example:
+You can simply edit your custom script here, for example:
 ```json
 {
     "label": "Dark mode",
@@ -67,7 +67,6 @@ You can simple edit your custom script here, for example:
 - Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 # Installation/Run
-- Build a release application on every push on main (https://kotlinlang.org/docs/multiplatform/compose-native-distribution.html).
 - Run desktop app:
     - Navigate to DesktopApp.kt in ../composeApp/src/jvmMain/kotlin/de/joz/appcommander and start
       main function.
