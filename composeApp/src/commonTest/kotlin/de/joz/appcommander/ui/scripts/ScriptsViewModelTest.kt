@@ -151,7 +151,7 @@ class ScriptsViewModelTest {
 			runCurrent()
 
 			assertEquals(1, viewModel.uiState.value.scripts.size)
-			assertFalse(
+			assertTrue(
 				viewModel.uiState.value.scripts
 					.all {
 						it.description.contains("bar") || it.scriptText.contains("bar")
