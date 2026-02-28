@@ -34,4 +34,8 @@
     <string name="edit_action_save">Save script</string>
     <string name="edit_action_remove">Remove script</string>
     <string name="edit_action_abort">Close</string>
+    <string name="edit_confirmation_remove">Are your sure you want to remove this script?</string>
+
+    <string name="confirmation_yes">Yes</string>
+    <string name="confirmation_no">No</string>
 </resources>

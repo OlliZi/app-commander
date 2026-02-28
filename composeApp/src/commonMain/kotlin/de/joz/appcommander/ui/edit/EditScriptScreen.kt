@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -16,6 +20,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
+import de.joz.appcommander.resources.edit_confirmation_remove
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_script_placeholder
@@ -26,6 +31,7 @@ import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvi
 import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
+import de.joz.appcommander.ui.misc.Confirmation
 import de.joz.appcommander.ui.misc.DevicesBar
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
@@ -52,6 +58,20 @@ internal fun EditScriptContent(
 	uiState: EditScriptViewModel.UiState,
 	onEvent: (EditScriptViewModel.Event) -> Unit,
 ) {
+	var showConfirmationRemoveScriptDialog by remember { mutableStateOf(false) }
+
+	Confirmation(
+		show = showConfirmationRemoveScriptDialog,
+		title = stringResource(Res.string.edit_confirmation_remove),
+		onOkSelected = {
+			showConfirmationRemoveScriptDialog = true
+			onEvent(EditScriptViewModel.Event.OnRemoveScript)
+		},
+		onDismissRequest = {
+			showConfirmationRemoveScriptDialog = false
+		},
+	)
+
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
 		topBar = {
@@ -73,7 +93,7 @@ internal fun EditScriptContent(
 						BottomBarAction(
 							label = Res.string.edit_action_remove,
 							action = {
-								onEvent(EditScriptViewModel.Event.OnRemoveScript)
+								showConfirmationRemoveScriptDialog = true
 							},
 						),
 						BottomBarAction(

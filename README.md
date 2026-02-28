@@ -58,7 +58,6 @@ You can simply edit your custom script here, for example:
   - <kbd>![Settings-screen](/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 # TODOs
-- Save script on every keystroke?
 - AI to write readme
 - Create a video
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable

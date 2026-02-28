@@ -54,6 +54,12 @@ class UiElementsTest {
 		}
 
 	@Test
+	fun `should render Confirmation in all modes`() =
+		setupTestUiElement("Confirmation") {
+			PreviewConfirmation()
+		}
+
+	@Test
 	fun `should render PreviewDevicesBar in all modes`() =
 		setupTestUiElement("PreviewDevicesBar") {
 			PreviewDevicesBar()
