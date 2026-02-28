@@ -87,6 +87,14 @@ App-Commander is built with modern technologies and best practices:
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
 
+## 👷TODOs
+1. Create a video
+2. Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable
+3. UI-tests (EditScriptContent, ...)
+4. Unit-test for PreferencesRepositoryImpl
+5. Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
+
+
 ## 🤝 Contributing
 
 Contributions are welcome! If you have ideas for new features, bug fixes, or improvements, feel free to open an issue or submit a pull request.
