@@ -23,7 +23,7 @@ App-Commander is a powerful desktop application built with Kotlin Multiplatform 
 *   **External Script Editing:** For advanced users, you can directly edit the `scripts.json` file.
 
 ## 🎥 First Impressions I
-<kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/preview_overview.mov)</kbd>
+<kbd>![Welcome-screen](preview_overview.mov)</kbd>
 
 ## 📸 First Impressions II
 
