@@ -81,11 +81,16 @@ App-Commander is built with modern technologies and best practices:
 
 *   **Kotlin Multiplatform:** Targeting the JVM for a native desktop experience.
 *   **Clean Architecture:** A well-structured codebase separating UI, business logic, and data layers.
+*   **Software Layer:** UI <-> ViewModel <-> UseCases <-> Repository <-> DB/API
 *   **Dependency Injection:** Using Koin for managing dependencies.
 *   **Data Persistence:** Jetpack Datastore for storing user preferences.
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
+    *   Code Coverage.
+    *   Execute code quality locally (on my jenkins) and in github-cloud
+*   **Composable Preview:**
+    *   Provide previews for all screens and composables.
 
 ## 👷TODOs
 1. Create a video
