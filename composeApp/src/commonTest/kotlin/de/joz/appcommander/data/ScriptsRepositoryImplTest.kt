@@ -11,6 +11,8 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ScriptsRepositoryImplTest {
@@ -56,8 +58,47 @@ class ScriptsRepositoryImplTest {
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
-				scripts,
+				scripts.scripts,
 			)
+			assertNull(scripts.throwable)
+		}
+
+	@Test
+	fun `should return default scripts and error when file contains invalid JSON`() =
+		runTest {
+			val repository =
+				ScriptsRepositoryImpl(
+					scriptFile = testFile.absolutePath,
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+
+			testFile.writeText("{ key : invalid JSON, }")
+
+			val scripts = repository.getScripts()
+
+			assertEquals(
+				listOf(
+					ScriptsRepository.Script(
+						label = "Dark mode",
+						script = "adb shell cmd uimode night yes",
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+					ScriptsRepository.Script(
+						label = "Light mode",
+						script = "adb shell cmd uimode night no",
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+					ScriptsRepository.Script(
+						label = "Switch dark to light to dark mode",
+						script =
+							"adb shell cmd uimode night no && sleep 1 && adb shell cmd uimode night yes " +
+								"&& sleep 1 && adb shell cmd uimode night no",
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+				),
+				scripts.scripts,
+			)
+			assertNotNull(scripts.throwable)
 		}
 
 	@Test
@@ -109,8 +150,9 @@ class ScriptsRepositoryImplTest {
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
-				scripts,
+				scripts.scripts,
 			)
+			assertNull(scripts.throwable)
 		}
 
 	@Test
@@ -158,8 +200,9 @@ class ScriptsRepositoryImplTest {
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
-				scripts,
+				scripts.scripts,
 			)
+			assertNull(scripts.throwable)
 		}
 
 	@Test
@@ -215,8 +258,8 @@ class ScriptsRepositoryImplTest {
 
 			repository.saveScript(script = newScript)
 
-			assertEquals(4, repository.getScripts().size)
-			assertEquals(newScript, repository.getScripts().first())
+			assertEquals(4, repository.getScripts().scripts.size)
+			assertEquals(newScript, repository.getScripts().scripts.first())
 		}
 
 	@Test
@@ -228,13 +271,13 @@ class ScriptsRepositoryImplTest {
 					addLoggingUseCase = addLoggingUseCaseMock,
 				)
 
-			val scripts = repository.getScripts()
+			val scripts = repository.getScripts().scripts
 			val scriptToRemove = scripts.first()
 
 			repository.removeScript(script = scriptToRemove)
 
-			assertEquals(2, repository.getScripts().size)
-			assertFalse(repository.getScripts().contains(scriptToRemove))
+			assertEquals(2, repository.getScripts().scripts.size)
+			assertFalse(repository.getScripts().scripts.contains(scriptToRemove))
 		}
 
 	@Test
@@ -247,14 +290,14 @@ class ScriptsRepositoryImplTest {
 				)
 
 			val scripts = repository.getScripts()
-			val oldScript = scripts.first()
+			val oldScript = scripts.scripts.first()
 
 			val scriptToUpdate = oldScript.copy(label = "bar")
 			repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
 
 			val updatedScripts = repository.getScripts()
-			assertEquals(3, updatedScripts.size)
-			assertFalse(updatedScripts.contains(oldScript))
-			assertTrue(updatedScripts.contains(scriptToUpdate))
+			assertEquals(3, updatedScripts.scripts.size)
+			assertFalse(updatedScripts.scripts.contains(oldScript))
+			assertTrue(updatedScripts.scripts.contains(scriptToUpdate))
 		}
 }

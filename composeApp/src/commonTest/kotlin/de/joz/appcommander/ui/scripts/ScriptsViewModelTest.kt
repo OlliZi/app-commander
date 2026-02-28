@@ -56,12 +56,16 @@ class ScriptsViewModelTest {
 		coEvery {
 			getUserScriptsUseCaseMock()
 		} returns
-			listOf(
-				ScriptsRepository.Script(
-					label = "my script",
-					script = "foo",
-					platform = ScriptsRepository.Platform.ANDROID,
-				),
+			ScriptsRepository.JsonParseResult(
+				scripts =
+					listOf(
+						ScriptsRepository.Script(
+							label = "my script",
+							script = "foo",
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
+					),
+				throwable = null,
 			)
 	}
 
@@ -414,7 +418,7 @@ class ScriptsViewModelTest {
 	@Test
 	fun `should reload scripts automatically when script are changed in the file`() =
 		runTest {
-			val mutableSharedFlow = MutableSharedFlow<List<ScriptsRepository.Script>>()
+			val mutableSharedFlow = MutableSharedFlow<ScriptsRepository.JsonParseResult>()
 			coEvery {
 				trackScriptsFileChangesUseCaseMock()
 			} returns mutableSharedFlow
@@ -422,12 +426,16 @@ class ScriptsViewModelTest {
 			coEvery {
 				getUserScriptsUseCaseMock()
 			} returns
-				listOf(
-					ScriptsRepository.Script(
-						label = "my script",
-						script = "foo",
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
+				ScriptsRepository.JsonParseResult(
+					scripts =
+						listOf(
+							ScriptsRepository.Script(
+								label = "my script",
+								script = "foo",
+								platform = ScriptsRepository.Platform.ANDROID,
+							),
+						),
+					throwable = null,
 				)
 
 			val viewModel = createViewModel()
@@ -443,17 +451,21 @@ class ScriptsViewModelTest {
 			runCurrent()
 
 			mutableSharedFlow.emit(
-				listOf(
-					ScriptsRepository.Script(
-						label = "my script",
-						script = "foo",
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-					ScriptsRepository.Script(
-						label = "abc",
-						script = "123",
-						platform = ScriptsRepository.Platform.IOS,
-					),
+				ScriptsRepository.JsonParseResult(
+					scripts =
+						listOf(
+							ScriptsRepository.Script(
+								label = "my script",
+								script = "foo",
+								platform = ScriptsRepository.Platform.ANDROID,
+							),
+							ScriptsRepository.Script(
+								label = "abc",
+								script = "123",
+								platform = ScriptsRepository.Platform.IOS,
+							),
+						),
+					throwable = null,
 				),
 			)
 
