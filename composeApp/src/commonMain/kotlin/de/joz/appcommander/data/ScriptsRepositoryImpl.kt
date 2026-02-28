@@ -1,6 +1,7 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.ScriptsRepository.JsonParseResult
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import kotlinx.serialization.json.Json
 import okio.FileNotFoundException
@@ -19,7 +20,7 @@ class ScriptsRepositoryImpl(
 			ignoreUnknownKeys = true
 		}
 
-	override fun getScripts(): List<ScriptsRepository.Script> {
+	override fun getScripts(): JsonParseResult {
 		val jsonFile = File(scriptFile)
 
 		if (!jsonFile.exists()) {
@@ -27,8 +28,16 @@ class ScriptsRepositoryImpl(
 		}
 
 		return runCatching {
-			prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
-		}.getOrDefault(DEFAULT_SCRIPTS)
+			JsonParseResult(
+				scripts = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText()),
+				throwable = null,
+			)
+		}.getOrElse { error ->
+			JsonParseResult(
+				scripts = DEFAULT_SCRIPTS,
+				throwable = error,
+			)
+		}
 	}
 
 	override fun openScriptFile() {
@@ -47,15 +56,15 @@ class ScriptsRepositoryImpl(
 		script: ScriptsRepository.Script,
 		oldScript: ScriptsRepository.Script,
 	) {
-		writeScriptsToFile(listOf(script) + getScripts() - oldScript)
+		writeScriptsToFile(listOf(script) + getScripts().scripts - oldScript)
 	}
 
 	override fun saveScript(script: ScriptsRepository.Script) {
-		writeScriptsToFile(listOf(script) + getScripts())
+		writeScriptsToFile(listOf(script) + getScripts().scripts)
 	}
 
 	override fun removeScript(script: ScriptsRepository.Script) {
-		writeScriptsToFile(getScripts() - script)
+		writeScriptsToFile(getScripts().scripts - script)
 	}
 
 	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {

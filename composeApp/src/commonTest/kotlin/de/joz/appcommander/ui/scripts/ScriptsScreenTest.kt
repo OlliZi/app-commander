@@ -318,6 +318,23 @@ class ScriptsScreenTest {
 		}
 	}
 
+	@Test
+	fun `should error if JSON contains invalid scripts`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						jsonParsingError = "Cannot find field 'platform'.",
+					),
+			)
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "json_error",
+			)
+		}
+	}
+
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
 		onDeviceSelect: (ScriptsViewModel.Device) -> Unit = {},

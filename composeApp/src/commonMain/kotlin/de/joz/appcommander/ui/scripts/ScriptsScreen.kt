@@ -45,6 +45,7 @@ import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
+import de.joz.appcommander.resources.scripts_json_parsing_error
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_placeholder
@@ -170,6 +171,7 @@ internal fun ScriptsContent(
 
 			ScriptsSection(
 				scripts = uiState.scripts,
+				jsonParsingError = uiState.jsonParsingError,
 				isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
 				modifier = Modifier.weight(1f).then(paddingInline),
 				onExecuteScript = onExecuteScript,
@@ -228,12 +230,22 @@ private fun ConnectedDevices(
 @Composable
 private fun ScriptsSection(
 	scripts: List<Script>,
+	jsonParsingError: String?,
 	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScript: (Script) -> Unit,
 	onEditScript: (Script) -> Unit,
 	onExpand: (Script) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	if (jsonParsingError != null) {
+		TextLabel(
+			modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+			text = stringResource(Res.string.scripts_json_parsing_error, jsonParsingError),
+			textLabelType = TextLabelType.BodyLarge,
+			textColor = Color.Red,
+		)
+	}
+
 	LazyColumn(
 		modifier = modifier,
 		verticalArrangement = Arrangement.spacedBy(8.dp),

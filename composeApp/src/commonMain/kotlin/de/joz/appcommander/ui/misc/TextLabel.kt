@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,6 +26,7 @@ fun TextLabel(
 	maxLines: Int = Int.MAX_VALUE,
 	textAlign: TextAlign = TextAlign.Start,
 	overflow: TextOverflow = TextOverflow.Clip,
+	textColor: Color = MaterialTheme.colorScheme.onSurface,
 ) {
 	Text(
 		text = text,
@@ -34,19 +36,19 @@ fun TextLabel(
 		overflow = overflow,
 		style =
 			when (textLabelType) {
-				TextLabelType.BodyLarge -> MaterialTheme.typography.bodyLarge.applyThemeColor()
-				TextLabelType.BodyMedium -> MaterialTheme.typography.bodyMedium.applyThemeColor()
-				TextLabelType.BodySmall -> MaterialTheme.typography.bodySmall.applyThemeColor()
-				TextLabelType.HeadlineLarge -> MaterialTheme.typography.headlineLarge.applyThemeColor()
-				TextLabelType.HeadlineSmall -> MaterialTheme.typography.headlineSmall.applyThemeColor()
+				TextLabelType.BodyLarge -> MaterialTheme.typography.bodyLarge.applyThemeColor(textColor)
+				TextLabelType.BodyMedium -> MaterialTheme.typography.bodyMedium.applyThemeColor(textColor)
+				TextLabelType.BodySmall -> MaterialTheme.typography.bodySmall.applyThemeColor(textColor)
+				TextLabelType.HeadlineLarge -> MaterialTheme.typography.headlineLarge.applyThemeColor(textColor)
+				TextLabelType.HeadlineSmall -> MaterialTheme.typography.headlineSmall.applyThemeColor(textColor)
 			},
 	)
 }
 
 @Composable
-private fun TextStyle.applyThemeColor(): TextStyle =
+private fun TextStyle.applyThemeColor(color: Color): TextStyle =
 	copy(
-		color = MaterialTheme.colorScheme.onSurface,
+		color = color,
 	)
 
 enum class TextLabelType {
@@ -82,6 +84,12 @@ internal fun PreviewTextLabel(
 					textLabelType = it,
 				)
 			}
+
+			TextLabel(
+				text = "some error",
+				textLabelType = TextLabelType.BodyLarge,
+				textColor = Color.Red,
+			)
 		}
 	}
 }

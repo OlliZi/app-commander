@@ -13,9 +13,9 @@ class TrackScriptsFileChangesUseCase(
 	private val getUserScriptsUseCase: GetUserScriptsUseCase,
 	private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
-	operator fun invoke(): Flow<List<ScriptsRepository.Script>> =
+	operator fun invoke(): Flow<ScriptsRepository.JsonParseResult> =
 		flow {
-			var scripts: List<ScriptsRepository.Script>? = null
+			var scripts: ScriptsRepository.JsonParseResult? = null
 			while (true) {
 				val prefsValueInSeconds =
 					getPreferenceUseCase.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, 1).toLong()
@@ -25,7 +25,7 @@ class TrackScriptsFileChangesUseCase(
 				val newLoadedScripts = getUserScriptsUseCase()
 				if (scripts == null) {
 					scripts = newLoadedScripts
-				} else if (scripts != newLoadedScripts) {
+				} else if (scripts.scripts != newLoadedScripts.scripts) {
 					scripts = newLoadedScripts
 					emit(newLoadedScripts)
 				}

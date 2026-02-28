@@ -26,14 +26,14 @@ class TrackScriptsFileChangesUseCaseTest {
 
 			val emittedScripts = trackScriptsFileChangesUseCase().first()
 
-			assertEquals(2, emittedScripts.size)
+			assertEquals(2, emittedScripts.scripts.size)
 			assertEquals(
-				createDummyScripts(2)[0],
-				emittedScripts[0],
+				createDummyScripts(2).scripts[0],
+				emittedScripts.scripts[0],
 			)
 			assertEquals(
-				createDummyScripts(2)[1],
-				emittedScripts[1],
+				createDummyScripts(2).scripts[1],
+				emittedScripts.scripts[1],
 			)
 		}
 
@@ -47,7 +47,7 @@ class TrackScriptsFileChangesUseCaseTest {
 			val job =
 				launch {
 					trackScriptsFileChangesUseCase().collect {
-						collectedScripts.add(it)
+						collectedScripts.add(it.scripts)
 					}
 				}
 
@@ -58,14 +58,18 @@ class TrackScriptsFileChangesUseCaseTest {
 			job.cancel()
 		}
 
-	private fun createDummyScripts(count: Int): List<ScriptsRepository.Script> =
-		(1..count).map {
-			ScriptsRepository.Script(
-				label = "foo $it",
-				script = "echo $it",
-				platform = ScriptsRepository.Platform.ANDROID,
-			)
-		}
+	private fun createDummyScripts(count: Int) =
+		ScriptsRepository.JsonParseResult(
+			scripts =
+				(1..count).map {
+					ScriptsRepository.Script(
+						label = "foo $it",
+						script = "echo $it",
+						platform = ScriptsRepository.Platform.ANDROID,
+					)
+				},
+			throwable = null,
+		)
 
 	private fun createUseCase(): TrackScriptsFileChangesUseCase {
 		coEvery {
