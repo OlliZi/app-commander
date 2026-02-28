@@ -498,6 +498,23 @@ class ScriptsViewModelTest {
 			)
 		}
 
+	@Test
+	fun `should return an error when JSON contains invalid scripts`() =
+		runTest {
+			coEvery {
+				getUserScriptsUseCaseMock()
+			} returns
+				ScriptsRepository.JsonParseResult(
+					scripts = emptyList(),
+					throwable = Exception("Cannot parse JSON"),
+				)
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			assertEquals("Cannot parse JSON", viewModel.uiState.value.jsonParsingError)
+		}
+
 	private fun createViewModel(): ScriptsViewModel =
 		ScriptsViewModel(
 			navController = navControllerMock,
