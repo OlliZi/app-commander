@@ -70,8 +70,8 @@ class ScriptsViewModel(
 		}
 
 		viewModelScope.launch(mainDispatcher) {
-			val keys = ToolSection.entries.map { it.name }
-			getPreferenceUseCase.getAsFlow(keys = keys.toTypedArray()).collect { changedValues ->
+			val keys = ToolSection.entries.map { it.name }.toTypedArray()
+			getPreferenceUseCase.getAsFlow(keys = keys).collect { changedValues ->
 				onRefreshToolSections(changedValues)
 			}
 		}
