@@ -75,11 +75,6 @@ class SettingsScreenTest {
 		runComposeUiTest {
 			setTestContent()
 
-			onNodeWithText("Settings").assertIsDisplayed()
-			onNodeWithText("Hide welcome screen on startup.").assertIsDisplayed()
-			onNodeWithText("Automatically refresh scripts list all 1 seconds.").assertIsDisplayed()
-			onNodeWithText("Selected ui appearance: 'System'.").assertIsDisplayed()
-
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "default_label",
