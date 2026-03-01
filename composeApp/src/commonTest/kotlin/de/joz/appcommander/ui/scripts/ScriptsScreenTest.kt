@@ -353,6 +353,32 @@ class ScriptsScreenTest {
 		}
 	}
 
+	@Test
+	fun `should filter scripts when filter is typed`() {
+		runComposeUiTest {
+			var filterText = ""
+
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onEvent = {
+					if (it is ScriptsViewModel.Event.OnFilterScripts) {
+						filterText = it.filter
+					}
+				},
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button_filter",
+			).assertIsDisplayed().performClick()
+
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
+			onNodeWithTag(testTag = "text_field_simple_text").performTextClearance()
+			onNodeWithTag(testTag = "text_field_simple_text").performTextInput("filter")
+
+			assertEquals(filterText, "filter")
+		}
+	}
+
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
 		onEvent: (ScriptsViewModel.Event) -> Unit = {},
