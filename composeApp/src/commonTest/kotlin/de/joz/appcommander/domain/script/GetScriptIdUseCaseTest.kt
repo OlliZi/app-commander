@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.script
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,18 +1,18 @@
 package de.joz.appcommander.ui.scripts
 
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.ExecuteScriptUseCase
-import de.joz.appcommander.domain.GetConnectedDevicesUseCase
-import de.joz.appcommander.domain.GetScriptIdUseCase
-import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
-import de.joz.appcommander.domain.OpenScriptFileUseCase
-import de.joz.appcommander.domain.ScriptsRepository
-import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.script.GetScriptIdUseCase
+import de.joz.appcommander.domain.script.GetUserScriptsUseCase
+import de.joz.appcommander.domain.script.OpenScriptFileUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery
 import io.mockk.coVerify

@@ -1,7 +1,7 @@
 package de.joz.appcommander.data
 
-import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
