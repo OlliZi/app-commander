@@ -1,9 +1,9 @@
 package de.joz.appcommander.ui.scripts
 
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.NavigationScreens
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase

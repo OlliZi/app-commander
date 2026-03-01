@@ -12,8 +12,8 @@ class ExecuteScriptUseCase(
 	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) {
 	operator fun invoke(
-        script: ScriptsRepository.Script,
-        selectedDevice: String = "",
+		script: ScriptsRepository.Script,
+		selectedDevice: String = "",
 	): Result {
 		val allSubScripts = script.script.split("&&").map { it.trim() }
 
@@ -65,9 +65,9 @@ class ExecuteScriptUseCase(
 			.readText()
 
 	private fun injectDeviceId(
-        script: String,
-        platform: ScriptsRepository.Platform,
-        selectedDevice: String,
+		script: String,
+		platform: ScriptsRepository.Platform,
+		selectedDevice: String,
 	): String {
 		if (selectedDevice.isEmpty()) {
 			return script

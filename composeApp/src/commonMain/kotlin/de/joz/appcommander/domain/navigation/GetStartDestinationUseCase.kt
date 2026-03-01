@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.navigation
 
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.settings.SettingsViewModel
@@ -17,7 +17,7 @@ class GetStartDestinationUseCase(
 
 	private suspend fun getStartDestination(): NavigationScreens =
 		if (getPreferenceUseCase.get(
-				key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+				key = SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY,
 				defaultValue = false,
 			)
 		) {

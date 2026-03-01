@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.misc
 
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import io.mockk.coEvery

@@ -8,8 +8,8 @@ class SaveUserScriptUseCase(
 	private val getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
 ) {
 	operator fun invoke(
-        script: ScriptsRepository.Script,
-        scriptKey: Int?,
+		script: ScriptsRepository.Script,
+		scriptKey: Int?,
 	) {
 		val oldScript = getUserScriptByKeyUseCase(scriptKey)
 		if (oldScript != null) {

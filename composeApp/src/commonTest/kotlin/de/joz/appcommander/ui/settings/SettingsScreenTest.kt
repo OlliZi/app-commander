@@ -8,8 +8,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.ManageUiAppearanceUseCase
-import de.joz.appcommander.domain.ManageUiAppearanceUseCase.Companion.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase.Companion.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase

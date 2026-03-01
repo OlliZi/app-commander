@@ -11,8 +11,8 @@ import kotlin.math.min
 
 @Factory
 class TrackScriptsFileChangesUseCase(
-    private val getUserScriptsUseCase: GetUserScriptsUseCase,
-    private val getPreferenceUseCase: GetPreferenceUseCase,
+	private val getUserScriptsUseCase: GetUserScriptsUseCase,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
 	operator fun invoke(): Flow<ScriptsRepository.JsonParseResult> =
 		flow {
