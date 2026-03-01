@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.script
 
 import org.koin.core.annotation.Factory
 
@@ -6,7 +6,7 @@ import org.koin.core.annotation.Factory
 class OpenScriptFileUseCase(
 	private val scriptsRepository: ScriptsRepository,
 ) {
-	suspend operator fun invoke() {
+	operator fun invoke() {
 		scriptsRepository.openScriptFile()
 	}
 }

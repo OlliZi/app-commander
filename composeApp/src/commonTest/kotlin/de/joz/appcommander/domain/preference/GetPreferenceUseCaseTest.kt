@@ -1,8 +1,5 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.preference
 
-import de.joz.appcommander.domain.preference.ChangedPreference
-import de.joz.appcommander.domain.preference.GetPreferenceUseCase
-import de.joz.appcommander.domain.preference.PreferencesRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

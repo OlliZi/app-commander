@@ -1,7 +1,5 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.preference
 
-import de.joz.appcommander.domain.preference.PreferencesRepository
-import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

@@ -12,7 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.navigation.NavController
 import de.joz.appcommander.DependencyInjection
-import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.ScreenshotVerifier

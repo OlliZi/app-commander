@@ -10,9 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import de.joz.appcommander.domain.GetStartDestinationUseCase
-import de.joz.appcommander.domain.ManageUiAppearanceUseCase
-import de.joz.appcommander.domain.NavigationScreens
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
+import de.joz.appcommander.domain.navigation.GetStartDestinationUseCase
+import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.ui.edit.EditScriptScreen
 import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.scripts.ScriptsScreen

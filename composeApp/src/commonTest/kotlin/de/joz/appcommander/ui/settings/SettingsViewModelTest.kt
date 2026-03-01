@@ -1,7 +1,7 @@
 package de.joz.appcommander.ui.settings
 
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.ManageUiAppearanceUseCase
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res

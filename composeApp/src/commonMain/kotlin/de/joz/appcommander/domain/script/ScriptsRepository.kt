@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.script
 
 import kotlinx.serialization.Serializable
 

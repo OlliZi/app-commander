@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.navigation
 
 import kotlinx.serialization.Serializable
 

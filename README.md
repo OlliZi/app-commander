@@ -99,9 +99,8 @@ App-Commander is built with modern technologies and best practices:
 
 ## 👷TODOs
 - Refactoring: Collapse UI
-- move domain classes to packages
 - script als Array
-- moved classes -> fixed also unit tests?
+- script-JSON-field as Array
 - Create a video showing the UI with emulator and a real device
 - Settings: Checkboxes to show sections (Terminal, Logging, Filter)
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 

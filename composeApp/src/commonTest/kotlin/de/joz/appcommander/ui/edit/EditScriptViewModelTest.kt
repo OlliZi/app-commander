@@ -1,12 +1,12 @@
 package de.joz.appcommander.ui.edit
 
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.ExecuteScriptUseCase
-import de.joz.appcommander.domain.GetScriptIdUseCase
-import de.joz.appcommander.domain.GetUserScriptByKeyUseCase
-import de.joz.appcommander.domain.RemoveUserScriptUseCase
-import de.joz.appcommander.domain.SaveUserScriptUseCase
-import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetScriptIdUseCase
+import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
+import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
+import de.joz.appcommander.domain.script.SaveUserScriptUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk

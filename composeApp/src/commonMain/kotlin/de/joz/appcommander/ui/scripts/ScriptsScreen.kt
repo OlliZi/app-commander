@@ -39,7 +39,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Edit
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
-import de.joz.appcommander.domain.ScriptsRepository
+import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_filter_section_title

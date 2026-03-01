@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY

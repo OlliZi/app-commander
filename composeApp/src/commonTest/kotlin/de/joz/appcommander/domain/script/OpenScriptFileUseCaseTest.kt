@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.script
 
 import io.mockk.coVerify
 import io.mockk.mockk

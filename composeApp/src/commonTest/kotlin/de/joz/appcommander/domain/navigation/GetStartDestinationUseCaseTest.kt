@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.navigation
 
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.settings.SettingsViewModel
@@ -33,7 +33,7 @@ class GetStartDestinationUseCaseTest {
 
 			coVerify {
 				getPreferenceUseCaseMock.get(
-					key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+					key = SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY,
 					defaultValue = false,
 				)
 			}
@@ -59,7 +59,7 @@ class GetStartDestinationUseCaseTest {
 
 			coVerify {
 				getPreferenceUseCaseMock.get(
-					key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
+					key = SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY,
 					defaultValue = false,
 				)
 			}

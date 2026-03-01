@@ -1,8 +1,8 @@
 package de.joz.appcommander.data
 
-import de.joz.appcommander.domain.ScriptsRepository
-import de.joz.appcommander.domain.ScriptsRepository.JsonParseResult
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
 import kotlinx.serialization.json.Json
 import okio.FileNotFoundException
 import org.koin.core.annotation.Single
