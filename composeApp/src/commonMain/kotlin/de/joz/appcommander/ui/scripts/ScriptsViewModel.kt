@@ -7,6 +7,7 @@ import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
@@ -16,6 +17,7 @@ import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +37,7 @@ class ScriptsViewModel(
 	private val trackScriptsFileChangesUseCase: TrackScriptsFileChangesUseCase,
 	private val clearLoggingUseCase: ClearLoggingUseCase,
 	private val getLoggingUseCase: GetLoggingUseCase,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -62,6 +65,12 @@ class ScriptsViewModel(
 							},
 					)
 				}
+			}
+		}
+
+		viewModelScope.launch(mainDispatcher) {
+			getPreferenceUseCase.getAsFlow().collect {
+				onRefreshToolSections()
 			}
 		}
 	}
@@ -131,6 +140,20 @@ class ScriptsViewModel(
 							isSelected =
 								devices.size == 1 ||
 									oldState.connectedDevices.any { it.id == device.id && it.isSelected },
+						)
+					},
+			)
+		}
+	}
+
+	private suspend fun onRefreshToolSections() {
+		_uiState.update { oldState ->
+			oldState.copy(
+				toolSections =
+					ToolSection.entries.filter {
+						getPreferenceUseCase.get(
+							key = it.name,
+							defaultValue = it.isDefaultActive,
 						)
 					},
 			)
@@ -300,6 +323,7 @@ class ScriptsViewModel(
 		val connectedDevices: List<Device> = emptyList(),
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
+		val toolSections: List<ToolSection> = emptyList(),
 		val jsonParsingError: String? = null,
 	)
 

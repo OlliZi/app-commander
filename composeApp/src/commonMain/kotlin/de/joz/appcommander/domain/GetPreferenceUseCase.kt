@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain
 
+import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
 
 @Factory
@@ -10,6 +11,8 @@ class GetPreferenceUseCase(
 		key: String,
 		defaultValue: Boolean = false,
 	): Boolean = preferencesRepository.get(key, defaultValue)
+
+	suspend fun getAsFlow(): Flow<Unit> = preferencesRepository.getAsFlow()
 
 	suspend fun get(
 		key: String,

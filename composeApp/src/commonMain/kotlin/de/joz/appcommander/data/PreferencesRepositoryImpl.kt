@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import de.joz.appcommander.domain.PreferencesRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
@@ -26,6 +27,8 @@ internal class PreferencesRepositoryImpl(
 			.map { preferences ->
 				preferences[booleanPreferencesKey(key)] ?: defaultValue
 			}.first()
+
+	override suspend fun getAsFlow(): Flow<Unit> = dataStore.data.map { Unit }
 
 	override suspend fun get(
 		key: String,
