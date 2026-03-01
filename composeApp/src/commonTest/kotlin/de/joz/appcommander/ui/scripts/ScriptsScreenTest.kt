@@ -31,13 +31,15 @@ class ScriptsScreenTest {
 	fun `should show default label when no devices are connected`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState = ScriptsViewModel.UiState(),
+				uiState =
+					ScriptsViewModel.UiState(),
 			)
 
 			onNodeWithText("Your scripts").assertIsDisplayed()
 			onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
 			onNodeWithText("Connect your devices over USB and click refresh.").assertIsDisplayed()
 			onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
+			onNodeWithText("Filter").assertIsDisplayed()
 			onNodeWithText("Terminal").assertIsDisplayed()
 			onNodeWithText("Logging").assertIsDisplayed()
 

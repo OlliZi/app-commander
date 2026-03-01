@@ -325,7 +325,7 @@ class ScriptsViewModel(
 		val connectedDevices: List<Device> = emptyList(),
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
-		val toolSections: List<ToolSection> = emptyList(),
+		val toolSections: List<ToolSection> = ToolSection.entries,
 		val jsonParsingError: String? = null,
 	)
 
