@@ -7,7 +7,6 @@ import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.ExecuteScriptUseCase
 import de.joz.appcommander.domain.GetConnectedDevicesUseCase
-import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.GetScriptIdUseCase
 import de.joz.appcommander.domain.GetUserScriptsUseCase
 import de.joz.appcommander.domain.NavigationScreens
@@ -16,6 +15,8 @@ import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.preference.ChangedPreference
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
@@ -69,8 +70,9 @@ class ScriptsViewModel(
 		}
 
 		viewModelScope.launch(mainDispatcher) {
-			getPreferenceUseCase.getAsFlow().collect {
-				onRefreshToolSections()
+			val keys = ToolSection.entries.map { it.name }
+			getPreferenceUseCase.getAsFlow(moreKeys = keys.toTypedArray()).collect { changedValues ->
+				onRefreshToolSections(changedValues)
 			}
 		}
 	}
@@ -146,15 +148,15 @@ class ScriptsViewModel(
 		}
 	}
 
-	private suspend fun onRefreshToolSections() {
+	private fun onRefreshToolSections(changedValues: List<ChangedPreference>) {
 		_uiState.update { oldState ->
 			oldState.copy(
 				toolSections =
-					ToolSection.entries.filter {
-						getPreferenceUseCase.get(
-							key = it.name,
-							defaultValue = it.isDefaultActive,
-						)
+					ToolSection.entries.filter { toolSection ->
+						changedValues
+							.firstOrNull {
+								it.key == toolSection.name
+							}?.value as? Boolean ?: toolSection.isDefaultActive
 					},
 			)
 		}

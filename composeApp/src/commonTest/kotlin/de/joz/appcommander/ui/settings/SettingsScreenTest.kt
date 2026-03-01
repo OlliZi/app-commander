@@ -8,11 +8,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase.Companion.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
-import de.joz.appcommander.domain.PreferencesRepository
-import de.joz.appcommander.domain.SavePreferenceUseCase
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.PreferencesRepository
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_ui_appearance_light

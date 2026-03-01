@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.preference
 
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Factory
@@ -12,7 +12,10 @@ class GetPreferenceUseCase(
 		defaultValue: Boolean = false,
 	): Boolean = preferencesRepository.get(key, defaultValue)
 
-	suspend fun getAsFlow(): Flow<Unit> = preferencesRepository.getAsFlow()
+	suspend fun getAsFlow(vararg moreKeys: String): Flow<List<ChangedPreference>> =
+		preferencesRepository.getAsFlow(
+			moreKeys = moreKeys,
+		)
 
 	suspend fun get(
 		key: String,

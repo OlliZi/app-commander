@@ -1,9 +1,9 @@
 package de.joz.appcommander.ui.settings
 
 import androidx.navigation.NavController
-import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
-import de.joz.appcommander.domain.SavePreferenceUseCase
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
