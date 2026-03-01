@@ -22,7 +22,7 @@ class PreferencesRepositoryImplTest {
 		)
 
 	@Test
-	@Ignore()
+	@Ignore
 	fun `should save value when store is called`() =
 		runTest {
 			every { dataStoreMock.data } returns

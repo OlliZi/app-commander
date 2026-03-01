@@ -11,6 +11,7 @@ import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -37,6 +38,7 @@ class ScriptsViewModelTest {
 	private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
 	private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
 	private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
+	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
 	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
 		mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
@@ -574,6 +576,7 @@ class ScriptsViewModelTest {
 			getLoggingUseCase = getLoggingUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
 			mainDispatcher = Dispatchers.Unconfined,
+			getPreferenceUseCase = getPreferenceUseCaseMock,
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }

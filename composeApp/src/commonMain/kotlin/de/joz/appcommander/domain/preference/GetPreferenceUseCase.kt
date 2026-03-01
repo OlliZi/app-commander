@@ -12,9 +12,9 @@ class GetPreferenceUseCase(
 		defaultValue: Boolean = false,
 	): Boolean = preferencesRepository.get(key, defaultValue)
 
-	suspend fun getAsFlow(vararg moreKeys: String): Flow<List<ChangedPreference>> =
+	suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> =
 		preferencesRepository.getAsFlow(
-			moreKeys = moreKeys,
+			keys = keys,
 		)
 
 	suspend fun get(

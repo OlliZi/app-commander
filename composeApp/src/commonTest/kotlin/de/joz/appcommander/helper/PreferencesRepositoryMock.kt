@@ -12,7 +12,7 @@ class PreferencesRepositoryMock : PreferencesRepository {
 		defaultValue: Boolean,
 	): Boolean = lastStoredValues[key] as? Boolean ?: defaultValue
 
-	override suspend fun getAsFlow(vararg moreKeys: String): Flow<List<ChangedPreference>> {
+	override suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> {
 		TODO("Not yet implemented")
 	}
 

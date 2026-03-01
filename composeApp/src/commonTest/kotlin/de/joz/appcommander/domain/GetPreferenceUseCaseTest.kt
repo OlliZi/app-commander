@@ -1,10 +1,13 @@
 package de.joz.appcommander.domain
 
+import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -48,5 +51,28 @@ class GetPreferenceUseCaseTest {
 			coVerify {
 				preferencesRepositoryMock.get(key = "key", defaultValue = false)
 			}
+		}
+
+	@Test
+	fun `should observe repository when use case is executed`() =
+		runTest {
+			val preferencesRepositoryMock: PreferencesRepository = mockk()
+
+			coEvery { preferencesRepositoryMock.getAsFlow("key", "key 2") } returns
+				flowOf(
+					listOf(ChangedPreference(key = "key", value = true)),
+				)
+
+			val getPreferenceUseCase =
+				GetPreferenceUseCase(
+					preferencesRepository = preferencesRepositoryMock,
+				)
+
+			val result = getPreferenceUseCase.getAsFlow("key", "key 2").firstOrNull()
+
+			assertEquals(
+				listOf(ChangedPreference(key = "key", value = true)),
+				result,
+			)
 		}
 }

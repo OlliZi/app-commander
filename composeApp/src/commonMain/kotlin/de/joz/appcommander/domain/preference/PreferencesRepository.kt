@@ -8,7 +8,7 @@ interface PreferencesRepository {
 		defaultValue: Boolean,
 	): Boolean
 
-	suspend fun getAsFlow(vararg moreKeys: String): Flow<List<ChangedPreference>>
+	suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>>
 
 	suspend fun get(
 		key: String,

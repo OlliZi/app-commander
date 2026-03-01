@@ -29,10 +29,10 @@ internal class PreferencesRepositoryImpl(
 				preferences[booleanPreferencesKey(key)] ?: defaultValue
 			}.first()
 
-	override suspend fun getAsFlow(vararg moreKeys: String): Flow<List<ChangedPreference>> =
+	override suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> =
 		dataStore.data
 			.map { pref ->
-				moreKeys.map {
+				keys.map {
 					ChangedPreference(
 						key = it,
 						value = pref[booleanPreferencesKey(it)] ?: pref[intPreferencesKey(it)],
