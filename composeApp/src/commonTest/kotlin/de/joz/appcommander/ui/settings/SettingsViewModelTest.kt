@@ -5,12 +5,16 @@ import de.joz.appcommander.domain.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.settings_preference_show_filter_section
+import de.joz.appcommander.resources.settings_preference_show_logging_section
+import de.joz.appcommander.resources.settings_preference_show_terminal_section
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_dark
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
+import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.settings.SettingsViewModel.LabelValue.StringRes
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -68,7 +72,7 @@ class SettingsViewModelTest {
 
 			val uiState = viewModel.uiState.value
 
-			assertEquals(1, uiState.togglePreferences.size)
+			assertEquals(4, uiState.togglePreferences.size)
 			assertEquals(2, uiState.sliderPreferences.size)
 
 			assertEquals(
@@ -77,7 +81,34 @@ class SettingsViewModelTest {
 					label = Res.string.settings_preference_show_welcome_screen,
 					key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
 				),
-				uiState.togglePreferences.first(),
+				uiState.togglePreferences[0],
+			)
+
+			assertEquals(
+				SettingsViewModel.ToggleItem(
+					isChecked = false,
+					label = Res.string.settings_preference_show_filter_section,
+					key = ToolSection.FILTER.name,
+				),
+				uiState.togglePreferences[1],
+			)
+
+			assertEquals(
+				SettingsViewModel.ToggleItem(
+					isChecked = false,
+					label = Res.string.settings_preference_show_terminal_section,
+					key = ToolSection.TERMINAL.name,
+				),
+				uiState.togglePreferences[2],
+			)
+
+			assertEquals(
+				SettingsViewModel.ToggleItem(
+					isChecked = false,
+					label = Res.string.settings_preference_show_logging_section,
+					key = ToolSection.LOGGING.name,
+				),
+				uiState.togglePreferences[3],
 			)
 
 			assertEquals(

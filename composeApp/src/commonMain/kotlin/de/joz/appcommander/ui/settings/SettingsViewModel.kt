@@ -208,7 +208,7 @@ class SettingsViewModel(
 	private suspend fun createToggleItem(
 		label: StringResource,
 		key: String,
-		defaultValue: Boolean = false,
+		defaultValue: Boolean,
 	) = ToggleItem(
 		label = label,
 		key = key,
