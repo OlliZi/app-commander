@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.NavigationScreens
-import de.joz.appcommander.domain.SavePreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

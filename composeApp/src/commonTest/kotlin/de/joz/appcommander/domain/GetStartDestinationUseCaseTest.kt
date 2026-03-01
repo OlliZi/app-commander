@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain
 
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify

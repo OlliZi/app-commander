@@ -20,6 +20,7 @@ App-Commander is a powerful desktop application built with Kotlin Multiplatform 
     *   Light and Dark modes to suit your preference.
     *   Settings screen to customize the app behavior.
     *   Automatic refresh of scripts when you edit them externally.
+    *   Toggle tools sections (Terminal, Logging, Filter) in the scripts screen.
 *   **External Script Editing:** For advanced users, you can directly edit the `scripts.json` file.
 
 ## 🎥 First Impressions I
@@ -98,6 +99,9 @@ App-Commander is built with modern technologies and best practices:
 
 ## 👷TODOs
 - Refactoring: Collapse UI
+- move domain classes to packages
+- script als Array
+- moved classes -> fixed also unit tests?
 - Create a video showing the UI with emulator and a real device
 - Settings: Checkboxes to show sections (Terminal, Logging, Filter)
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 

@@ -31,13 +31,15 @@ class ScriptsScreenTest {
 	fun `should show default label when no devices are connected`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState = ScriptsViewModel.UiState(),
+				uiState =
+					ScriptsViewModel.UiState(),
 			)
 
 			onNodeWithText("Your scripts").assertIsDisplayed()
 			onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
 			onNodeWithText("Connect your devices over USB and click refresh.").assertIsDisplayed()
 			onNodeWithText("Refresh").assertIsDisplayed().assertHasClickAction()
+			onNodeWithText("Filter").assertIsDisplayed()
 			onNodeWithText("Terminal").assertIsDisplayed()
 			onNodeWithText("Logging").assertIsDisplayed()
 
@@ -348,6 +350,32 @@ class ScriptsScreenTest {
 			onNodeWithTag(
 				testTag = "expand_button_filter",
 			).assertIsDisplayed().performClick()
+		}
+	}
+
+	@Test
+	fun `should filter scripts when filter is typed`() {
+		runComposeUiTest {
+			var filterText = ""
+
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onEvent = {
+					if (it is ScriptsViewModel.Event.OnFilterScripts) {
+						filterText = it.filter
+					}
+				},
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button_filter",
+			).assertIsDisplayed().performClick()
+
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
+			onNodeWithTag(testTag = "text_field_simple_text").performTextClearance()
+			onNodeWithTag(testTag = "text_field_simple_text").performTextInput("filter")
+
+			assertEquals(filterText, "filter")
 		}
 	}
 

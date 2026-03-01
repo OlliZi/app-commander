@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.MainDispatcher
-import de.joz.appcommander.domain.GetPreferenceUseCase
 import de.joz.appcommander.domain.ManageUiAppearanceUseCase
-import de.joz.appcommander.domain.SavePreferenceUseCase
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
@@ -15,6 +15,7 @@ import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +28,7 @@ import org.koin.core.annotation.InjectedParam
 @KoinViewModel
 class SettingsViewModel(
 	@InjectedParam private val navController: NavController,
-	getPreferenceUseCase: GetPreferenceUseCase,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
 	private val savePreferenceUseCase: SavePreferenceUseCase,
 	private val manageUiAppearanceUseCase: ManageUiAppearanceUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
@@ -41,17 +42,24 @@ class SettingsViewModel(
 			_uiState.update { oldState ->
 				oldState.copy(
 					togglePreferences =
-						listOf(
-							ToggleItem(
-								label = Res.string.settings_preference_show_welcome_screen,
-								key = HIDE_WELCOME_SCREEN_PREF_KEY,
-								isChecked =
-									getPreferenceUseCase.get(
-										key = HIDE_WELCOME_SCREEN_PREF_KEY,
-										defaultValue = false,
-									),
-							),
-						),
+						buildList {
+							add(
+								createToggleItem(
+									label = Res.string.settings_preference_show_welcome_screen,
+									key = HIDE_WELCOME_SCREEN_PREF_KEY,
+									defaultValue = false,
+								),
+							)
+							addAll(
+								ToolSection.entries.map {
+									createToggleItem(
+										label = it.label,
+										key = it.name,
+										defaultValue = it.isDefaultActive,
+									)
+								},
+							)
+						},
 					sliderPreferences =
 						listOf(
 							getPreferenceUseCase
@@ -189,6 +197,20 @@ class SettingsViewModel(
 			}
 		}
 	}
+
+	private suspend fun createToggleItem(
+		label: StringResource,
+		key: String,
+		defaultValue: Boolean,
+	) = ToggleItem(
+		label = label,
+		key = key,
+		isChecked =
+			getPreferenceUseCase.get(
+				key = key,
+				defaultValue = defaultValue,
+			),
+	)
 
 	sealed interface Event {
 		data object OnNavigateBack : Event

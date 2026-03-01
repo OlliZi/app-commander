@@ -64,6 +64,7 @@ import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.TitleBarAction
+import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -153,29 +154,35 @@ internal fun ScriptsContent(
 				},
 			)
 
-			FilterSection(
-				onFilterScripts = {
-					onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
-				},
-			)
+			if (uiState.toolSections.contains(ToolSection.FILTER)) {
+				FilterSection(
+					onFilterScripts = {
+						onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
+					},
+				)
+			}
 
-			TerminalSection(
-				onExecuteScriptText = { scriptText, platform ->
-					onEvent(
-						ScriptsViewModel.Event.OnExecuteScriptText(
-							script = scriptText,
-							platform = platform,
-						),
-					)
-				},
-			)
+			if (uiState.toolSections.contains(ToolSection.TERMINAL)) {
+				TerminalSection(
+					onExecuteScriptText = { scriptText, platform ->
+						onEvent(
+							ScriptsViewModel.Event.OnExecuteScriptText(
+								script = scriptText,
+								platform = platform,
+							),
+						)
+					},
+				)
+			}
 
-			LoggingSection(
-				logging = uiState.logging,
-				onClearLogging = {
-					onEvent(ScriptsViewModel.Event.OnClearLogging)
-				},
-			)
+			if (uiState.toolSections.contains(ToolSection.LOGGING)) {
+				LoggingSection(
+					logging = uiState.logging,
+					onClearLogging = {
+						onEvent(ScriptsViewModel.Event.OnClearLogging)
+					},
+				)
+			}
 		}
 	}
 }

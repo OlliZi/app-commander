@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain
 
+import de.joz.appcommander.domain.preference.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
@@ -22,7 +23,7 @@ class ManageUiAppearanceUseCase(
 	}
 
 	private suspend fun updateUiAppearance() {
-		_uiAppearanceType.update { oldState ->
+		_uiAppearanceType.update {
 			val savedUiAppearance =
 				preferencesRepository.get(
 					key = STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,

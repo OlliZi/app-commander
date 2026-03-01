@@ -11,6 +11,9 @@ import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.preference.ChangedPreference
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -19,6 +22,7 @@ import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -37,6 +41,7 @@ class ScriptsViewModelTest {
 	private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
 	private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
 	private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
+	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
 	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
 		mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
@@ -562,6 +567,55 @@ class ScriptsViewModelTest {
 			assertEquals("Cannot parse JSON", viewModel.uiState.value.jsonParsingError)
 		}
 
+	@Test
+	fun `should update tool section items when preferences are changed`() =
+		runTest {
+			val keys = ToolSection.entries.map { it.name }
+			val mutableFlow =
+				MutableStateFlow(
+					listOf(
+						ChangedPreference(
+							key = ToolSection.TERMINAL.name,
+							value = true,
+						),
+					),
+				)
+
+			coEvery {
+				getPreferenceUseCaseMock.getAsFlow(keys = keys.toTypedArray())
+			} returns mutableFlow
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			assertEquals(
+				ToolSection.entries,
+				viewModel.uiState.value.toolSections,
+			)
+
+			mutableFlow.emit(
+				listOf(
+					ChangedPreference(
+						key = ToolSection.TERMINAL.name,
+						value = true,
+					),
+					ChangedPreference(
+						key = ToolSection.FILTER.name,
+						value = false,
+					),
+					ChangedPreference(
+						key = ToolSection.LOGGING.name,
+						value = false,
+					),
+				),
+			)
+
+			assertEquals(
+				listOf(ToolSection.TERMINAL),
+				viewModel.uiState.value.toolSections,
+			)
+		}
+
 	private fun createViewModel(): ScriptsViewModel =
 		ScriptsViewModel(
 			navController = navControllerMock,
@@ -574,6 +628,7 @@ class ScriptsViewModelTest {
 			getLoggingUseCase = getLoggingUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
 			mainDispatcher = Dispatchers.Unconfined,
+			getPreferenceUseCase = getPreferenceUseCaseMock,
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }

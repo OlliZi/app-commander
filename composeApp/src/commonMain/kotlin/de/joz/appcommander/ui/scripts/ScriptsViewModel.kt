@@ -15,7 +15,10 @@ import de.joz.appcommander.domain.ScriptsRepository
 import de.joz.appcommander.domain.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.preference.ChangedPreference
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +38,7 @@ class ScriptsViewModel(
 	private val trackScriptsFileChangesUseCase: TrackScriptsFileChangesUseCase,
 	private val clearLoggingUseCase: ClearLoggingUseCase,
 	private val getLoggingUseCase: GetLoggingUseCase,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -62,6 +66,13 @@ class ScriptsViewModel(
 							},
 					)
 				}
+			}
+		}
+
+		viewModelScope.launch(mainDispatcher) {
+			val keys = ToolSection.entries.map { it.name }.toTypedArray()
+			getPreferenceUseCase.getAsFlow(keys = keys).collect { changedValues ->
+				onRefreshToolSections(changedValues)
 			}
 		}
 	}
@@ -132,6 +143,20 @@ class ScriptsViewModel(
 								devices.size == 1 ||
 									oldState.connectedDevices.any { it.id == device.id && it.isSelected },
 						)
+					},
+			)
+		}
+	}
+
+	private fun onRefreshToolSections(changedValues: List<ChangedPreference>) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				toolSections =
+					ToolSection.entries.filter { toolSection ->
+						changedValues
+							.firstOrNull {
+								it.key == toolSection.name
+							}?.value as? Boolean ?: toolSection.isDefaultActive
 					},
 			)
 		}
@@ -300,6 +325,7 @@ class ScriptsViewModel(
 		val connectedDevices: List<Device> = emptyList(),
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
+		val toolSections: List<ToolSection> = ToolSection.entries,
 		val jsonParsingError: String? = null,
 	)
 

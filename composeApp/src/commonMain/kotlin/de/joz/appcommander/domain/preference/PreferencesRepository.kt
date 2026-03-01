@@ -1,10 +1,14 @@
-package de.joz.appcommander.domain
+package de.joz.appcommander.domain.preference
+
+import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
 	suspend fun get(
 		key: String,
 		defaultValue: Boolean,
 	): Boolean
+
+	suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>>
 
 	suspend fun get(
 		key: String,
