@@ -205,14 +205,14 @@ class ScriptsViewModel(
 	}
 
 	private fun onExecuteScript(script: Script) {
-		viewModelScope.launch(ioDispatcher) {
-			_uiState.value.connectedDevices
-				.filter {
-					it.isSelected
-				}.forEach { device ->
+		_uiState.value.connectedDevices
+			.filter {
+				it.isSelected
+			}.forEach { device ->
+				viewModelScope.launch(ioDispatcher) {
 					executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
 				}
-		}
+			}
 	}
 
 	private fun onExecuteScriptText(

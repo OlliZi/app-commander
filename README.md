@@ -99,6 +99,7 @@ App-Commander is built with modern technologies and best practices:
 
 ## 👷TODOs
 - script-JSON-field as array
+- fix filter when script list is reloaded in the background
 - Create a video showing the UI with emulator and a real device
 - Settings: Checkboxes to show sections (Terminal, Logging, Filter)
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 
