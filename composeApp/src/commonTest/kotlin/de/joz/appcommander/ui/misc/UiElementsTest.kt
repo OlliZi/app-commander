@@ -54,6 +54,12 @@ class UiElementsTest {
 		}
 
 	@Test
+	fun `should render PreviewCollapsable in all modes`() =
+		setupTestUiElement("PreviewCollapsable") {
+			PreviewCollapsable()
+		}
+
+	@Test
 	fun `should render Confirmation in dark mode`() =
 		setupTestUiElement("PreviewConfirmation_dark") {
 			PreviewConfirmation(darkTheme = true)

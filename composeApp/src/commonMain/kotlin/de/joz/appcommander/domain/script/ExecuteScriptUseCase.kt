@@ -1,6 +1,7 @@
 package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
+import kotlinx.coroutines.delay
 import org.koin.core.annotation.Factory
 import java.io.File
 import kotlin.math.max
@@ -11,7 +12,7 @@ class ExecuteScriptUseCase(
 	private val workingDir: File = File("."),
 	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) {
-	operator fun invoke(
+	suspend operator fun invoke(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
 	): Result {
@@ -29,6 +30,7 @@ class ExecuteScriptUseCase(
 				val plainCommand = removeSpecialCommands(commands)
 
 				(1..loopCount).forEach { _ ->
+					delay((if (loopCount > 1) 200 else 0))
 					addLoggingUseCase("Execute script: '${plainCommand.joinToString(" ")}' on device '$selectedDevice'.")
 					outputs.add("- ${innerExecuteScript(plainCommand)}")
 				}
