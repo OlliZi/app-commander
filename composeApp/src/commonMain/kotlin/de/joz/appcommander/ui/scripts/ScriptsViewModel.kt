@@ -172,7 +172,10 @@ class ScriptsViewModel(
 				scripts =
 					jsonParseResult.scripts
 						.filter {
-							it.label.contains(filter.orEmpty()) || it.script.contains(filter.orEmpty())
+							it.label.lowercase().contains(filter) || it.script.lowercase().contains(filter) ||
+								it.platform.name
+									.lowercase()
+									.contains(filter)
 						}.map { script ->
 							Script(
 								description = script.label,
