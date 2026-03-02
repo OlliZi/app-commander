@@ -174,7 +174,8 @@ class ScriptsViewModel(
 				scripts =
 					jsonParseResult.scripts
 						.filter {
-							it.label.lowercase().contains(filter) || it.script.lowercase().contains(filter) ||
+							it.label.lowercase().contains(filter) ||
+								it.script.lowercase().contains(filter) ||
 								it.platform.name
 									.lowercase()
 									.contains(filter)
