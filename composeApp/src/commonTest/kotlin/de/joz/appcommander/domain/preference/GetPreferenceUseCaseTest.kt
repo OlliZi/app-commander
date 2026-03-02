@@ -47,7 +47,7 @@ class GetPreferenceUseCaseTest {
 			assertEquals("123", getPreferenceUseCase.get(key = "key", defaultValue = ""))
 
 			coVerify {
-				preferencesRepositoryMock.get(key = "key", defaultValue = -1)
+				preferencesRepositoryMock.get(key = "key", defaultValue = "")
 			}
 		}
 
