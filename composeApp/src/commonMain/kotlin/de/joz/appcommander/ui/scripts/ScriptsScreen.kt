@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -247,7 +248,7 @@ private fun ScriptsSection(
 			) {
 				if (script.isExpanded) {
 					Row(
-						modifier = Modifier.fillMaxWidth(),
+						modifier = Modifier.fillMaxWidth().offset(x = (-12).dp),
 						verticalAlignment = Alignment.CenterVertically,
 					) {
 						Column(
@@ -264,20 +265,16 @@ private fun ScriptsSection(
 								textLabelType = TextLabelType.BodyMedium,
 							)
 						}
-						EditButtonItem(
-							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
-							onClick = { onEditScript(script) },
-						)
-						Spacer(modifier = Modifier.width(8.dp))
-						ExpandButtonItem(
+						ScriptItemToolIcons(
 							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 							isExpanded = true,
 							onExpand = { onExpand(script) },
+							onEditScript = { onEditScript(script) },
 						)
 					}
 				} else {
 					Row(
-						modifier = Modifier.fillMaxWidth(),
+						modifier = Modifier.fillMaxWidth().offset(x = (-12).dp),
 						verticalAlignment = Alignment.CenterVertically,
 						horizontalArrangement = Arrangement.SpaceBetween,
 					) {
@@ -296,20 +293,40 @@ private fun ScriptsSection(
 							overflow = TextOverflow.Ellipsis,
 							textLabelType = TextLabelType.BodyMedium,
 						)
-						EditButtonItem(
-							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
-							onClick = { onEditScript(script) },
-						)
-						Spacer(modifier = Modifier.width(8.dp))
-						ExpandButtonItem(
+
+						ScriptItemToolIcons(
 							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 							isExpanded = false,
 							onExpand = { onExpand(script) },
+							onEditScript = { onEditScript(script) },
 						)
 					}
 				}
 			}
 		}
+	}
+}
+
+@Composable
+private fun ScriptItemToolIcons(
+	isAtMinimumOneDeviceSelected: Boolean,
+	isExpanded: Boolean,
+	onEditScript: () -> Unit,
+	onExpand: () -> Unit,
+) {
+	Row(
+		modifier = Modifier.offset(x = 20.dp),
+	) {
+		EditButtonItem(
+			isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+			onClick = onEditScript,
+		)
+		Spacer(modifier = Modifier.width(8.dp))
+		ExpandButtonItem(
+			isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+			isExpanded = isExpanded,
+			onExpand = onExpand,
+		)
 	}
 }
 
