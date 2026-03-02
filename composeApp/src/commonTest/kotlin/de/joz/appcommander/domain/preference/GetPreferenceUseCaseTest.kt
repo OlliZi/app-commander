@@ -32,6 +32,26 @@ class GetPreferenceUseCaseTest {
 		}
 
 	@Test
+	fun `should execute repository for string when use case is executed`() =
+		runTest {
+			val preferencesRepositoryMock: PreferencesRepository = mockk()
+			coEvery {
+				preferencesRepositoryMock.get("key", defaultValue = "")
+			} returns "123"
+
+			val getPreferenceUseCase =
+				GetPreferenceUseCase(
+					preferencesRepository = preferencesRepositoryMock,
+				)
+
+			assertEquals("123", getPreferenceUseCase.get(key = "key", defaultValue = ""))
+
+			coVerify {
+				preferencesRepositoryMock.get(key = "key", defaultValue = -1)
+			}
+		}
+
+	@Test
 	fun `should execute repository for boolean when use case is executed`() =
 		runTest {
 			val preferencesRepositoryMock: PreferencesRepository = mockk()
