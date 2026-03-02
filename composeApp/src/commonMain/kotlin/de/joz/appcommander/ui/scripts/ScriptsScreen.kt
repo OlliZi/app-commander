@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -30,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,6 +52,7 @@ import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
+import de.joz.appcommander.ui.misc.Collapsable
 import de.joz.appcommander.ui.misc.DevicesBar
 import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
@@ -154,35 +153,32 @@ internal fun ScriptsContent(
 				},
 			)
 
-			if (uiState.toolSections.contains(ToolSection.FILTER)) {
-				FilterSection(
-					onFilterScripts = {
-						onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
-					},
-				)
-			}
+			FilterSection(
+				show = uiState.toolSections.contains(ToolSection.FILTER),
+				onFilterScripts = {
+					onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
+				},
+			)
 
-			if (uiState.toolSections.contains(ToolSection.TERMINAL)) {
-				TerminalSection(
-					onExecuteScriptText = { scriptText, platform ->
-						onEvent(
-							ScriptsViewModel.Event.OnExecuteScriptText(
-								script = scriptText,
-								platform = platform,
-							),
-						)
-					},
-				)
-			}
+			TerminalSection(
+				show = uiState.toolSections.contains(ToolSection.TERMINAL),
+				onExecuteScriptText = { scriptText, platform ->
+					onEvent(
+						ScriptsViewModel.Event.OnExecuteScriptText(
+							script = scriptText,
+							platform = platform,
+						),
+					)
+				},
+			)
 
-			if (uiState.toolSections.contains(ToolSection.LOGGING)) {
-				LoggingSection(
-					logging = uiState.logging,
-					onClearLogging = {
-						onEvent(ScriptsViewModel.Event.OnClearLogging)
-					},
-				)
-			}
+			LoggingSection(
+				show = uiState.toolSections.contains(ToolSection.LOGGING),
+				logging = uiState.logging,
+				onClearLogging = {
+					onEvent(ScriptsViewModel.Event.OnClearLogging)
+				},
+			)
 		}
 	}
 }
@@ -328,66 +324,43 @@ private fun JsonParsingError(jsonParsingError: String?) {
 }
 
 @Composable
-private fun FilterSection(onFilterScripts: (String) -> Unit) {
-	var isExpanded by rememberSaveable { mutableStateOf(false) }
+private fun FilterSection(
+	show: Boolean,
+	onFilterScripts: (String) -> Unit,
+) {
 	var scriptFilter by rememberSaveable { mutableStateOf("") }
+	if (show.not()) {
+		return
+	}
 
-	Column(
-		modifier =
-			Modifier
-				.background(
-					MaterialTheme.colorScheme.background,
-				).padding(8.dp),
+	Collapsable(
+		title = Res.string.scripts_filter_section_title,
+		testTag = "expand_button_filter",
 	) {
-		Row(
-			modifier = Modifier.height(36.dp),
-			verticalAlignment = Alignment.CenterVertically,
+		SimpleTextInput(
+			value = scriptFilter,
 		) {
-			TextLabel(
-				text = stringResource(Res.string.scripts_filter_section_title),
-				modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
-				textLabelType = TextLabelType.BodyLarge,
-			)
-			ExpandButton(
-				isExpanded = isExpanded,
-				modifier = Modifier.testTag("expand_button_filter"),
-				onClick = { isExpanded = !isExpanded },
-			)
-		}
-		AnimatedVisibility(visible = isExpanded) {
-			SimpleTextInput(
-				value = scriptFilter,
-			) {
-				scriptFilter = it
-				onFilterScripts(it)
-			}
+			scriptFilter = it
+			onFilterScripts(it)
 		}
 	}
 }
 
 @Composable
 private fun LoggingSection(
+	show: Boolean,
 	logging: List<String>,
 	onClearLogging: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	var isExpanded by rememberSaveable { mutableStateOf(false) }
-	Column(
-		modifier =
-			modifier
-				.background(
-					MaterialTheme.colorScheme.background,
-				).padding(8.dp),
-	) {
-		Row(
-			modifier = Modifier.height(36.dp),
-			verticalAlignment = Alignment.CenterVertically,
-		) {
-			TextLabel(
-				text = stringResource(Res.string.scripts_logging_section_title),
-				modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
-				textLabelType = TextLabelType.BodyLarge,
-			)
+	if (show.not()) {
+		return
+	}
+
+	Collapsable(
+		title = Res.string.scripts_logging_section_title,
+		testTag = "expand_button_logging",
+		toolbar = { isExpanded ->
 			AnimatedVisibility(visible = isExpanded) {
 				IconButton(
 					onClick = onClearLogging,
@@ -399,71 +372,50 @@ private fun LoggingSection(
 					)
 				}
 			}
-			ExpandButton(
-				modifier = Modifier.testTag("expand_button_logging"),
-				isExpanded = isExpanded,
-				onClick = { isExpanded = !isExpanded },
-			)
-		}
-		AnimatedVisibility(visible = isExpanded) {
-			LazyColumn(
-				modifier = modifier.heightIn(max = 250.dp).wrapContentHeight(),
-			) {
-				items(logging) { item ->
-					TextLabel(
-						text = item,
-						textLabelType = TextLabelType.BodySmall,
-					)
-				}
+		},
+	) {
+		LazyColumn(
+			modifier = modifier.heightIn(max = 250.dp).wrapContentHeight(),
+		) {
+			items(logging) { item ->
+				TextLabel(
+					text = item,
+					textLabelType = TextLabelType.BodySmall,
+				)
 			}
 		}
 	}
 }
 
 @Composable
-private fun TerminalSection(onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit) {
-	var isExpanded by rememberSaveable { mutableStateOf(false) }
+private fun TerminalSection(
+	show: Boolean,
+	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
+) {
 	var selectedPlatform by rememberSaveable { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
+	if (show.not()) {
+		return
+	}
 
-	Column(
-		modifier =
-			Modifier
-				.background(
-					MaterialTheme.colorScheme.background,
-				).padding(8.dp),
+	Collapsable(
+		title = Res.string.scripts_terminal_section_title,
+		testTag = "expand_button_terminal",
 	) {
-		Row(
-			modifier = Modifier.height(36.dp),
-			verticalAlignment = Alignment.CenterVertically,
+		Column(
+			modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 		) {
-			TextLabel(
-				text = stringResource(Res.string.scripts_terminal_section_title),
-				modifier = Modifier.padding(horizontal = 8.dp).weight(1f),
-				textLabelType = TextLabelType.BodyLarge,
+			ScriptInput(
+				script = stringResource(Res.string.scripts_terminal_placeholder),
+				onExecuteScriptText = {
+					onExecuteScriptText(it, selectedPlatform)
+				},
 			)
-			ExpandButton(
-				isExpanded = isExpanded,
-				modifier = Modifier.testTag("expand_button_terminal"),
-				onClick = { isExpanded = !isExpanded },
+			PlatformSelection(
+				selectedPlatform = selectedPlatform,
+				onSelectPlatform = {
+					selectedPlatform = it
+				},
 			)
-		}
-		AnimatedVisibility(visible = isExpanded) {
-			Column(
-				modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
-			) {
-				ScriptInput(
-					script = stringResource(Res.string.scripts_terminal_placeholder),
-					onExecuteScriptText = {
-						onExecuteScriptText(it, selectedPlatform)
-					},
-				)
-				PlatformSelection(
-					selectedPlatform = selectedPlatform,
-					onSelectPlatform = {
-						selectedPlatform = it
-					},
-				)
-			}
 		}
 	}
 }
@@ -521,106 +473,113 @@ private fun ExpandButtonItem(
 @Preview
 @Composable
 private fun PreviewScriptScreen_Dark() {
-	AppCommanderTheme(
+	RenderPreview(
 		darkTheme = true,
-	) {
-		ScriptsContent(
-			uiState =
-				ScriptsViewModel.UiState(
-					connectedDevices =
-						listOf(
-							ScriptsViewModel.Device(
-								label = "Pixel 9",
-								isSelected = true,
-								id = "1",
-							),
-							ScriptsViewModel.Device(
-								label = "Pixel 8",
-								isSelected = false,
-								id = "2",
-							),
+		uiState =
+			ScriptsViewModel.UiState(
+				connectedDevices =
+					listOf(
+						ScriptsViewModel.Device(
+							label = "Pixel 9",
+							isSelected = true,
+							id = "1",
 						),
-					scripts =
-						listOf(
-							Script(
-								description = "my script",
-								scriptText = "adb devices",
-								isExpanded = false,
-								originalScript =
-									ScriptsRepository.Script(
-										label = "",
-										script = "",
-										platform = ScriptsRepository.Platform.ANDROID,
-									),
-							),
-							Script(
-								description = "my script",
-								scriptText = "adb long long long long long long long long long long long long script",
-								isExpanded = true,
-								originalScript =
-									ScriptsRepository.Script(
-										label = "",
-										script = "",
-										platform = ScriptsRepository.Platform.ANDROID,
-									),
-							),
+						ScriptsViewModel.Device(
+							label = "Pixel 8",
+							isSelected = false,
+							id = "2",
 						),
-					logging = listOf("log 1", "log 2", "log 3"),
-				),
-			onEvent = {},
-		)
-	}
+					),
+				scripts =
+					listOf(
+						Script(
+							description = "my script",
+							scriptText = "adb devices",
+							isExpanded = false,
+							originalScript =
+								ScriptsRepository.Script(
+									label = "",
+									script = "",
+									platform = ScriptsRepository.Platform.ANDROID,
+								),
+						),
+						Script(
+							description = "my script",
+							scriptText = "adb long long long long long long long long long long long long script",
+							isExpanded = true,
+							originalScript =
+								ScriptsRepository.Script(
+									label = "",
+									script = "",
+									platform = ScriptsRepository.Platform.ANDROID,
+								),
+						),
+					),
+				logging = listOf("log 1", "log 2", "log 3"),
+			),
+	)
 }
 
 @Preview
 @Composable
 private fun PreviewScriptScreen_Light() {
-	AppCommanderTheme(
+	RenderPreview(
 		darkTheme = false,
+		uiState =
+			ScriptsViewModel.UiState(
+				connectedDevices =
+					listOf(
+						ScriptsViewModel.Device(
+							label = "Pixel 9",
+							isSelected = true,
+							id = "1",
+						),
+						ScriptsViewModel.Device(
+							label = "Pixel 8",
+							isSelected = false,
+							id = "2",
+						),
+					),
+				scripts =
+					listOf(
+						Script(
+							description = "my script",
+							scriptText = "adb devices",
+							isExpanded = false,
+							originalScript =
+								ScriptsRepository.Script(
+									label = "",
+									script = "",
+									platform = ScriptsRepository.Platform.ANDROID,
+								),
+						),
+						Script(
+							description = "my script",
+							scriptText = "adb long long long long long long long long long long long long script",
+							isExpanded = true,
+							originalScript =
+								ScriptsRepository.Script(
+									label = "",
+									script = "",
+									platform = ScriptsRepository.Platform.ANDROID,
+								),
+						),
+					),
+				logging = listOf("log 1", "log 2", "log 3"),
+			),
+	)
+}
+
+@Composable
+private fun RenderPreview(
+	darkTheme: Boolean,
+	uiState: ScriptsViewModel.UiState,
+) {
+	AppCommanderTheme(
+		darkTheme = darkTheme,
 	) {
 		ScriptsContent(
-			uiState =
-				ScriptsViewModel.UiState(
-					connectedDevices =
-						listOf(
-							ScriptsViewModel.Device(
-								label = "Pixel 9",
-								isSelected = true,
-								id = "1",
-							),
-							ScriptsViewModel.Device(
-								label = "Pixel 8",
-								isSelected = false,
-								id = "2",
-							),
-						),
-					scripts =
-						listOf(
-							Script(
-								description = "my script",
-								scriptText = "adb devices",
-								isExpanded = false,
-								originalScript =
-									ScriptsRepository.Script(
-										label = "",
-										script = "",
-										platform = ScriptsRepository.Platform.ANDROID,
-									),
-							),
-							Script(
-								description = "my script",
-								scriptText = "adb long long long long long long long long long long long long script",
-								isExpanded = true,
-								originalScript =
-									ScriptsRepository.Script(
-										label = "",
-										script = "",
-										platform = ScriptsRepository.Platform.ANDROID,
-									),
-							),
-						),
-					logging = listOf("log 1", "log 2", "log 3"),
-				),
+			uiState = uiState,
 			onEvent = {},
 		)
 	}
