@@ -6,7 +6,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val BRAND_COLOR = Color(0xFF57B9FF)
+private val BRAND_COLOR = Color(0xFF2E7DAA)
 
 val darkColorScheme =
 	darkColorScheme(
