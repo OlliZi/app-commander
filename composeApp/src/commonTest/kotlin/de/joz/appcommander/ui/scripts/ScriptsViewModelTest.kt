@@ -6,6 +6,7 @@ import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
@@ -13,6 +14,7 @@ import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
+import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -37,11 +39,13 @@ class ScriptsViewModelTest {
 	private val navControllerMock: NavController = mockk(relaxed = true)
 	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
-	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
+	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk(relaxed = true)
 	private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
 	private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
 	private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
+	private val preferencesRepositoryMock = PreferencesRepositoryMock()
+	private val savePreferenceUseCaseMock = SavePreferenceUseCase(preferencesRepositoryMock)
 	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
 		mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
@@ -125,6 +129,7 @@ class ScriptsViewModelTest {
 			coVerify {
 				getConnectedDevicesUseCaseMock()
 				getUserScriptsUseCaseMock()
+				getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "")
 			}
 		}
 
@@ -145,16 +150,20 @@ class ScriptsViewModelTest {
 	fun `should filter scripts when event 'OnFilterScripts' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
+
+			// test label of script
+			val filter1 = "BaR"
+			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter1
+
 			assertEquals(2, viewModel.uiState.value.scripts.size)
 
 			viewModel.onEvent(
 				event =
 					ScriptsViewModel.Event.OnFilterScripts(
-						filter = "bar",
+						filter = filter1,
 					),
 			)
 			runCurrent()
-
 			assertEquals(1, viewModel.uiState.value.scripts.size)
 			assertTrue(
 				viewModel.uiState.value.scripts
@@ -168,7 +177,47 @@ class ScriptsViewModelTest {
 						it.description.contains("foo") || it.scriptText.contains("foo")
 					},
 			)
-			verify {
+
+			// test platform of script
+			val filter2 = ScriptsRepository.Platform.IOS.name
+			coEvery {
+				getPreferenceUseCaseMock.get(
+					ScriptsViewModel.SCRIPT_FILTER_PREF_KEY,
+					"",
+				)
+			} returns filter2.lowercase()
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnFilterScripts(
+						filter = ScriptsRepository.Platform.IOS.name,
+					),
+			)
+			runCurrent()
+			assertTrue(
+				viewModel.uiState.value.scripts
+					.isEmpty(),
+			)
+			assertEquals(
+				filter2,
+				preferencesRepositoryMock.lastStoredValues.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY),
+			)
+
+			// test description of script
+			val filter3 = "my another script"
+			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter3
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnFilterScripts(
+						filter = filter3,
+					),
+			)
+			runCurrent()
+			assertEquals(
+				filter3,
+				preferencesRepositoryMock.lastStoredValues.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY),
+			)
+
+			verify(exactly = 4) {
 				getUserScriptsUseCaseMock.invoke()
 			}
 		}
@@ -629,6 +678,7 @@ class ScriptsViewModelTest {
 			getScriptIdUseCase = getScriptIdUseCaseMock,
 			mainDispatcher = Dispatchers.Unconfined,
 			getPreferenceUseCase = getPreferenceUseCaseMock,
+			savePreferenceUseCase = savePreferenceUseCaseMock,
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }
