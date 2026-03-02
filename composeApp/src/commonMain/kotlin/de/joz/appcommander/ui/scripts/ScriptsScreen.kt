@@ -156,6 +156,7 @@ internal fun ScriptsContent(
 
 			FilterSection(
 				show = uiState.toolSections.contains(ToolSection.FILTER),
+				filter = uiState.filter,
 				onFilterScripts = {
 					onEvent(ScriptsViewModel.Event.OnFilterScripts(filter = it))
 				},
@@ -343,9 +344,9 @@ private fun JsonParsingError(jsonParsingError: String?) {
 @Composable
 private fun FilterSection(
 	show: Boolean,
+	filter: String,
 	onFilterScripts: (String) -> Unit,
 ) {
-	var scriptFilter by rememberSaveable { mutableStateOf("") }
 	if (show.not()) {
 		return
 	}
@@ -355,9 +356,8 @@ private fun FilterSection(
 		testTag = "expand_button_filter",
 	) {
 		SimpleTextInput(
-			value = scriptFilter,
+			value = filter,
 		) {
-			scriptFilter = it
 			onFilterScripts(it)
 		}
 	}

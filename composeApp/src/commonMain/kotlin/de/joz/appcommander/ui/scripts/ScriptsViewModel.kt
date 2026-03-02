@@ -10,6 +10,7 @@ import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
@@ -39,6 +40,7 @@ class ScriptsViewModel(
 	private val clearLoggingUseCase: ClearLoggingUseCase,
 	private val getLoggingUseCase: GetLoggingUseCase,
 	private val getPreferenceUseCase: GetPreferenceUseCase,
+	private val savePreferenceUseCase: SavePreferenceUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -162,13 +164,13 @@ class ScriptsViewModel(
 		}
 	}
 
-	private fun onRefreshScripts(
-		jsonParseResult: ScriptsRepository.JsonParseResult,
-		filter: String? = "",
-	) {
+	private suspend fun onRefreshScripts(jsonParseResult: ScriptsRepository.JsonParseResult) {
+		val filter = getPreferenceUseCase.get(SCRIPT_FILTER_PREF_KEY, "").lowercase()
+
 		_uiState.update { oldState ->
 			oldState.copy(
 				jsonParsingError = jsonParseResult.throwable?.message,
+				filter = filter,
 				scripts =
 					jsonParseResult.scripts
 						.filter {
@@ -265,8 +267,9 @@ class ScriptsViewModel(
 		)
 	}
 
-	private fun onFilterScripts(filter: String) {
-		onRefreshScripts(jsonParseResult = getUserScriptsUseCase(), filter = filter)
+	private suspend fun onFilterScripts(filter: String) {
+		savePreferenceUseCase(SCRIPT_FILTER_PREF_KEY, filter)
+		onRefreshScripts(jsonParseResult = getUserScriptsUseCase())
 	}
 
 	private fun onOpenScriptFile() {
@@ -329,6 +332,7 @@ class ScriptsViewModel(
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
 		val toolSections: List<ToolSection> = ToolSection.entries,
+		val filter: String = "",
 		val jsonParsingError: String? = null,
 	)
 
@@ -344,4 +348,8 @@ class ScriptsViewModel(
 		val originalScript: ScriptsRepository.Script,
 		val isExpanded: Boolean = false,
 	)
+
+	companion object {
+		const val SCRIPT_FILTER_PREF_KEY = "SCRIPT_FILTER"
+	}
 }
