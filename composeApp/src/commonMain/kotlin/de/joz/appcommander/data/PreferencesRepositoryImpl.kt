@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +30,24 @@ internal class PreferencesRepositoryImpl(
 				preferences[booleanPreferencesKey(key)] ?: defaultValue
 			}.first()
 
+	override suspend fun get(
+		key: String,
+		defaultValue: Int,
+	): Int =
+		dataStore.data
+			.map { preferences ->
+				preferences[intPreferencesKey(key)] ?: defaultValue
+			}.first()
+
+	override suspend fun get(
+		key: String,
+		defaultValue: String,
+	): String =
+		dataStore.data
+			.map { preferences ->
+				preferences[stringPreferencesKey(key)] ?: defaultValue
+			}.first()
+
 	override suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> =
 		dataStore.data
 			.map { pref ->
@@ -40,15 +59,6 @@ internal class PreferencesRepositoryImpl(
 				}
 			}
 
-	override suspend fun get(
-		key: String,
-		defaultValue: Int,
-	): Int =
-		dataStore.data
-			.map { preferences ->
-				preferences[intPreferencesKey(key)] ?: defaultValue
-			}.first()
-
 	override suspend fun <T> store(
 		key: String,
 		value: T,
@@ -57,6 +67,7 @@ internal class PreferencesRepositoryImpl(
 			when (value) {
 				is Boolean -> preferences[booleanPreferencesKey(key)] = value
 				is Int -> preferences[intPreferencesKey(key)] = value
+				is String -> preferences[stringPreferencesKey(key)] = value
 				else -> throw IllegalArgumentException("Unsupported type")
 			}
 		}
