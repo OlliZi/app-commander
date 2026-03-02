@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun Collapsable(
 	title: StringResource,
-	testTag: String = "",
+	testTag: String,
 	toolbar: @Composable (Boolean) -> Unit = {},
 	content: @Composable () -> Unit,
 ) {
@@ -85,6 +85,7 @@ internal fun PreviewCollapsable(
 	) {
 		Collapsable(
 			title = Res.string.scripts_filter_section_title,
+			testTag = "",
 		) {
 			TextLabel(
 				text = "some content",
