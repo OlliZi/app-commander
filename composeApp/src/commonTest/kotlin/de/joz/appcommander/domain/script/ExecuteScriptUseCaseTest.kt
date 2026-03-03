@@ -46,7 +46,13 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "echo foo && echo bar && #LOOP_2 echo loop && echo test",
+					script = "echo foo",
+					multiScripts =
+						listOf(
+							"echo bar",
+							"#LOOP_2 echo loop",
+							"echo test",
+						),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 

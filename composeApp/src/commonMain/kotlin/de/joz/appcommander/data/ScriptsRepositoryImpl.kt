@@ -1,7 +1,6 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
-import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
 import de.joz.appcommander.domain.script.ScriptsRepository.ParsingMetaData
@@ -76,7 +75,7 @@ class ScriptsRepositoryImpl(
 	}
 
 	private fun checkScriptContainsTrimmer(scripts: List<ScriptsRepository.Script>): ParsingMetaData? =
-		if (scripts.any { it.script.contains(ExecuteScriptUseCase.SCRIPT_TRIMMER) }) {
+		if (scripts.any { it.script.contains(SCRIPT_TRIMMER) }) {
 			ParsingMetaData.MultiScriptsHint
 		} else {
 			null
@@ -109,7 +108,7 @@ class ScriptsRepositoryImpl(
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			)
-
+		private const val SCRIPT_TRIMMER = "&&"
 		internal const val JSON_FILE_NAME = "scripts.json"
 	}
 }

@@ -16,7 +16,7 @@ class ExecuteScriptUseCase(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
 	): Result {
-		val allSubScripts = script.script.split(SCRIPT_TRIMMER).map { it.trim() }
+		val allSubScripts = (listOf(script.script) + script.multiScripts).map { it.trim() }
 
 		return runCatching {
 			val outputs = mutableListOf<String>()
@@ -102,6 +102,5 @@ class ExecuteScriptUseCase(
 
 	companion object {
 		private val LOOP_COMMAND_REGEX = """#LOOP_(\d+)""".toRegex()
-		const val SCRIPT_TRIMMER = "&&"
 	}
 }
