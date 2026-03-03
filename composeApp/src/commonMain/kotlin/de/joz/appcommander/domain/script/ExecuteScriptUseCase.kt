@@ -16,12 +16,12 @@ class ExecuteScriptUseCase(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
 	): Result {
-		val allSubScripts = (listOf(script.script) + script.multiScripts).map { it.trim() }
+		val subScripts = (listOf(script.script) + script.multiScripts).map { it.trim() }
 
 		return runCatching {
 			val outputs = mutableListOf<String>()
 
-			allSubScripts.forEach { subScript ->
+			subScripts.forEach { subScript ->
 				val scriptForSelectedDevice =
 					injectDeviceId(script = subScript, platform = script.platform, selectedDevice)
 
