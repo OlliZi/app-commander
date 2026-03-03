@@ -57,7 +57,7 @@ class ScriptsRepositoryImplTest {
 							listOf(
 								"sleep 1",
 								"adb shell cmd uimode night yes",
-								"sleep1 1",
+								"sleep 1",
 								"adb shell cmd uimode night no",
 							),
 						platform = ScriptsRepository.Platform.ANDROID,
@@ -95,13 +95,12 @@ class ScriptsRepositoryImplTest {
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						script =
-							"adb shell cmd uimode night no",
+						script = "adb shell cmd uimode night no",
 						multiScripts =
 							listOf(
 								"sleep 1",
 								"adb shell cmd uimode night yes",
-								"sleep1 1",
+								"sleep 1",
 								"adb shell cmd uimode night no",
 							),
 						platform = ScriptsRepository.Platform.ANDROID,
@@ -128,7 +127,7 @@ class ScriptsRepositoryImplTest {
 						"label": "Light mode",
 						"script": "adb shell cmd uimode night no && sleep 1",
 						"platform": "ANDROID"
-					},
+					}
 				]
 				""".trimIndent(),
 			)
@@ -138,8 +137,8 @@ class ScriptsRepositoryImplTest {
 			assertEquals(
 				listOf(
 					ScriptsRepository.Script(
-						label = "Dark mode",
-						script = "adb shell cmd uimode night yes && sleep 1",
+						label = "Light mode",
+						script = "adb shell cmd uimode night no && sleep 1",
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
