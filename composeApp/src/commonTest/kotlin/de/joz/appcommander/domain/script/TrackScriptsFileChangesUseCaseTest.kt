@@ -69,7 +69,7 @@ class TrackScriptsFileChangesUseCaseTest {
 						platform = ScriptsRepository.Platform.ANDROID,
 					)
 				},
-			throwable = null,
+			parsingMetaData = null,
 		)
 
 	private fun createUseCase(): TrackScriptsFileChangesUseCase {

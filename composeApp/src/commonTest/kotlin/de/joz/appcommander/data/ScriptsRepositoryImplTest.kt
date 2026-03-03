@@ -52,15 +52,20 @@ class ScriptsRepositoryImplTest {
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						script =
-							"adb shell cmd uimode night no && sleep 1 && adb shell cmd uimode night yes " +
-								"&& sleep 1 && adb shell cmd uimode night no",
+						script = "adb shell cmd uimode night no",
+						multiScripts =
+							listOf(
+								"sleep 1",
+								"adb shell cmd uimode night yes",
+								"sleep1 1",
+								"adb shell cmd uimode night no",
+							),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
 				scripts.scripts,
 			)
-			assertNull(scripts.throwable)
+			assertNull(scripts.parsingMetaData)
 		}
 
 	@Test
@@ -91,14 +96,57 @@ class ScriptsRepositoryImplTest {
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
 						script =
-							"adb shell cmd uimode night no && sleep 1 && adb shell cmd uimode night yes " +
-								"&& sleep 1 && adb shell cmd uimode night no",
+							"adb shell cmd uimode night no",
+						multiScripts =
+							listOf(
+								"sleep 1",
+								"adb shell cmd uimode night yes",
+								"sleep1 1",
+								"adb shell cmd uimode night no",
+							),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
 				scripts.scripts,
 			)
-			assertNotNull(scripts.throwable)
+			assertNotNull(scripts.parsingMetaData)
+		}
+
+	@Test
+	fun `should return scripts and hint when scripts contains scripts trimmer`() =
+		runTest {
+			val repository =
+				ScriptsRepositoryImpl(
+					scriptFile = testFile.absolutePath,
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+
+			testFile.writeText(
+				"""
+				[
+					 {
+						"label": "Light mode",
+						"script": "adb shell cmd uimode night no && sleep 1",
+						"platform": "ANDROID"
+					},
+				]
+				""".trimIndent(),
+			)
+
+			val scripts = repository.getScripts()
+
+			assertEquals(
+				listOf(
+					ScriptsRepository.Script(
+						label = "Dark mode",
+						script = "adb shell cmd uimode night yes && sleep 1",
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+				),
+				scripts.scripts,
+			)
+
+			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.MultiScriptsHint)
 		}
 
 	@Test
@@ -152,7 +200,7 @@ class ScriptsRepositoryImplTest {
 				),
 				scripts.scripts,
 			)
-			assertNull(scripts.throwable)
+			assertNull(scripts.parsingMetaData)
 		}
 
 	@Test
@@ -202,7 +250,7 @@ class ScriptsRepositoryImplTest {
 				),
 				scripts.scripts,
 			)
-			assertNull(scripts.throwable)
+			assertNull(scripts.parsingMetaData)
 		}
 
 	@Test

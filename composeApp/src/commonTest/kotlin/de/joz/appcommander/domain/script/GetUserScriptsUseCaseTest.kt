@@ -24,7 +24,7 @@ class GetUserScriptsUseCaseTest {
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 						),
-					throwable = null,
+					parsingMetaData = null,
 				)
 
 			val getUserScriptsUseCase =

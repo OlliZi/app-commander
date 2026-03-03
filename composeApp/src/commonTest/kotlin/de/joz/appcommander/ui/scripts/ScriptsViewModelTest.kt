@@ -15,6 +15,7 @@ import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -79,7 +80,7 @@ class ScriptsViewModelTest {
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
-				throwable = null,
+				parsingMetaData = null,
 			)
 	}
 
@@ -536,7 +537,7 @@ class ScriptsViewModelTest {
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 						),
-					throwable = null,
+					parsingMetaData = null,
 				)
 
 			val viewModel = createViewModel()
@@ -566,7 +567,7 @@ class ScriptsViewModelTest {
 								platform = ScriptsRepository.Platform.IOS,
 							),
 						),
-					throwable = null,
+					parsingMetaData = null,
 				),
 			)
 
@@ -607,13 +608,13 @@ class ScriptsViewModelTest {
 			} returns
 				ScriptsRepository.JsonParseResult(
 					scripts = emptyList(),
-					throwable = Exception("Cannot parse JSON"),
+					parsingMetaData = ScriptsRepository.ParsingMetaData.ParsingError(Exception("Cannot parse JSON")),
 				)
 
 			val viewModel = createViewModel()
 			runCurrent()
 
-			assertEquals("Cannot parse JSON", viewModel.uiState.value.jsonParsingError)
+			assertEquals("Cannot parse JSON", (viewModel.uiState.value.hint as Hint.Error).throwable.message)
 		}
 
 	@Test

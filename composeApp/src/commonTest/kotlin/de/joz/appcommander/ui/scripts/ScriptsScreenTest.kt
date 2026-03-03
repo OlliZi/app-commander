@@ -15,6 +15,7 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.mockk
 import kotlin.test.Test
@@ -328,7 +329,7 @@ class ScriptsScreenTest {
 			setTestContent(
 				uiState =
 					ScriptsViewModel.UiState(
-						jsonParsingError = "Cannot find field 'platform'.",
+						hint = Hint.Error(Exception("Cannot find field 'platform'.")),
 					),
 			)
 
