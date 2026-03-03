@@ -187,7 +187,6 @@ class ScriptsViewModel(
 								scriptText = formatScripts(script),
 								originalScript = script,
 								isExpanded =
-									// handle mutlisript
 									_uiState.value.scripts.any {
 										(it.description == script.label || it.scriptText == script.script) && it.isExpanded
 									},
