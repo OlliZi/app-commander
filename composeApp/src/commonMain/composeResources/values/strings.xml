@@ -18,6 +18,7 @@
     <string name="scripts_logging_section_title">Logging</string>
     <string name="scripts_terminal_placeholder">adb devices</string>
     <string name="scripts_json_parsing_error">The scripts-file cannot parse. Only default scripts are loaded. Please fix the error:\n%1$s</string>
+    <string name="scripts_json_multi_scripts">The scripts-file contains multiple scripts, splitted by "&amp;&amp;". Please migrate to "multiScripts" and put each script into an array.</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_preference_show_welcome_screen">Hide welcome screen on startup.</string>

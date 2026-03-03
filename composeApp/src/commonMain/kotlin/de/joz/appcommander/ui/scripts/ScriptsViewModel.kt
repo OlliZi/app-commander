@@ -19,6 +19,7 @@ import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -141,9 +142,7 @@ class ScriptsViewModel(
 						Device(
 							id = device.id,
 							label = device.label,
-							isSelected =
-								devices.size == 1 ||
-									oldState.connectedDevices.any { it.id == device.id && it.isSelected },
+							isSelected = devices.size == 1 || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
 						)
 					},
 			)
@@ -169,12 +168,15 @@ class ScriptsViewModel(
 
 		_uiState.update { oldState ->
 			oldState.copy(
-				jsonParsingError = jsonParseResult.throwable?.message,
+				hint = map(jsonParseResult),
 				filter = filter,
 				scripts =
 					jsonParseResult.scripts
 						.filter {
 							it.label.lowercase().contains(filter) ||
+								it.multiScripts.any {
+									it.lowercase().contains(filter)
+								} ||
 								it.script.lowercase().contains(filter) ||
 								it.platform.name
 									.lowercase()
@@ -182,12 +184,12 @@ class ScriptsViewModel(
 						}.map { script ->
 							Script(
 								description = script.label,
-								scriptText = script.script,
+								scriptText = formatScripts(script),
 								originalScript = script,
 								isExpanded =
+									// handle mutlisript
 									_uiState.value.scripts.any {
-										(it.description == script.label || it.scriptText == script.script) &&
-											it.isExpanded
+										(it.description == script.label || it.scriptText == script.script) && it.isExpanded
 									},
 							)
 						},
@@ -291,6 +293,16 @@ class ScriptsViewModel(
 		clearLoggingUseCase()
 	}
 
+	private fun formatScripts(script: ScriptsRepository.Script): String =
+		(listOf(script.script) + script.multiScripts).joinToString("\n")
+
+	private fun map(jsonResult: ScriptsRepository.JsonParseResult) =
+		when (val parsingMetaData = jsonResult.parsingMetaData) {
+			is ScriptsRepository.ParsingMetaData.ParsingError -> Hint.Error(throwable = parsingMetaData.throwable)
+			is ScriptsRepository.ParsingMetaData.MultiScriptsHint -> Hint.MultiScripts
+			else -> null
+		}
+
 	sealed interface Event {
 		data object OnNavigateToSettings : Event
 
@@ -334,7 +346,7 @@ class ScriptsViewModel(
 		val logging: List<String> = emptyList(),
 		val toolSections: List<ToolSection> = ToolSection.entries,
 		val filter: String = "",
-		val jsonParsingError: String? = null,
+		val hint: Hint? = null,
 	)
 
 	data class Device(

@@ -99,7 +99,7 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- script-JSON-field as array
+- script-JSON-field as array (tests anpassen, edit scripts ui)
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 
 - UI-tests (EditScriptContent, ...)
