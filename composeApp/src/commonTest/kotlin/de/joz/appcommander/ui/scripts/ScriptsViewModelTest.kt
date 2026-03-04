@@ -618,6 +618,40 @@ class ScriptsViewModelTest {
 		}
 
 	@Test
+	fun `should return an hint when JSON contains an old script field`() =
+		runTest {
+			coEvery {
+				getUserScriptsUseCaseMock()
+			} returns
+				ScriptsRepository.JsonParseResult(
+					scripts = emptyList(),
+					parsingMetaData = ScriptsRepository.ParsingMetaData.OldScriptFieldHint,
+				)
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			assertEquals(Hint.OldScriptFieldHint, viewModel.uiState.value.hint)
+		}
+
+	@Test
+	fun `should return an hint when JSON contains scripts trimmer`() =
+		runTest {
+			coEvery {
+				getUserScriptsUseCaseMock()
+			} returns
+				ScriptsRepository.JsonParseResult(
+					scripts = emptyList(),
+					parsingMetaData = ScriptsRepository.ParsingMetaData.MultiScriptsHint,
+				)
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			assertEquals(Hint.OldScriptFieldHint, viewModel.uiState.value.hint)
+		}
+
+	@Test
 	fun `should update tool section items when preferences are changed`() =
 		runTest {
 			val keys = ToolSection.entries.map { it.name }

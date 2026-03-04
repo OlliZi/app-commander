@@ -46,6 +46,7 @@ import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_json_multi_scripts
+import de.joz.appcommander.resources.scripts_json_old_script_field
 import de.joz.appcommander.resources.scripts_json_parsing_error
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
@@ -339,6 +340,7 @@ private fun Hint(hint: Hint?) {
 		when (hint) {
 			is Hint.Error -> stringResource(Res.string.scripts_json_parsing_error, hint.throwable.message.orEmpty())
 			is Hint.MultiScripts -> stringResource(Res.string.scripts_json_multi_scripts)
+			is Hint.OldScriptFieldHint -> stringResource(Res.string.scripts_json_old_script_field)
 		}
 
 	TextLabel(
@@ -524,7 +526,7 @@ private fun PreviewScriptScreen_Dark() {
 							originalScript =
 								ScriptsRepository.Script(
 									label = "",
-									script = "",
+									multiScripts = emptyList(),
 									platform = ScriptsRepository.Platform.ANDROID,
 								),
 						),
@@ -535,7 +537,7 @@ private fun PreviewScriptScreen_Dark() {
 							originalScript =
 								ScriptsRepository.Script(
 									label = "",
-									script = "",
+									multiScripts = emptyList(),
 									platform = ScriptsRepository.Platform.ANDROID,
 								),
 						),
@@ -574,7 +576,7 @@ private fun PreviewScriptScreen_Light() {
 							originalScript =
 								ScriptsRepository.Script(
 									label = "",
-									script = "",
+									multiScripts = emptyList(),
 									platform = ScriptsRepository.Platform.ANDROID,
 								),
 						),
@@ -585,7 +587,7 @@ private fun PreviewScriptScreen_Light() {
 							originalScript =
 								ScriptsRepository.Script(
 									label = "",
-									script = "",
+									multiScripts = emptyList(),
 									platform = ScriptsRepository.Platform.ANDROID,
 								),
 						),

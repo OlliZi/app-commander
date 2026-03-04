@@ -168,16 +168,15 @@ class ScriptsViewModel(
 
 		_uiState.update { oldState ->
 			oldState.copy(
-				hint = map(jsonParseResult),
+				hint = mapHint(jsonParseResult.parsingMetaData),
 				filter = filter,
 				scripts =
 					jsonParseResult.scripts
 						.filter {
 							it.label.lowercase().contains(filter) ||
-								it.multiScripts.any {
-									it.lowercase().contains(filter)
+								it.multiScripts.any { script ->
+									script.lowercase().contains(filter)
 								} ||
-								it.script.lowercase().contains(filter) ||
 								it.platform.name
 									.lowercase()
 									.contains(filter)
@@ -188,7 +187,7 @@ class ScriptsViewModel(
 								originalScript = script,
 								isExpanded =
 									_uiState.value.scripts.any {
-										(it.description == script.label || it.scriptText == script.script) && it.isExpanded
+										(it.description == script.label || it.scriptText == formatScripts(script)) && it.isExpanded
 									},
 							)
 						},
@@ -235,7 +234,7 @@ class ScriptsViewModel(
 						script =
 							ScriptsRepository.Script(
 								label = "entered by terminal script",
-								script = script,
+								multiScripts = listOf(script),
 								platform = platform,
 							),
 						selectedDevice = device.id,
@@ -292,15 +291,19 @@ class ScriptsViewModel(
 		clearLoggingUseCase()
 	}
 
-	private fun formatScripts(script: ScriptsRepository.Script): String =
-		(listOf(script.script) + script.multiScripts).joinToString("\n")
+	private fun formatScripts(script: ScriptsRepository.Script): String = script.multiScripts.joinToString("\n")
 
-	private fun map(jsonResult: ScriptsRepository.JsonParseResult) =
-		when (val parsingMetaData = jsonResult.parsingMetaData) {
-			is ScriptsRepository.ParsingMetaData.ParsingError -> Hint.Error(throwable = parsingMetaData.throwable)
-			is ScriptsRepository.ParsingMetaData.MultiScriptsHint -> Hint.MultiScripts
-			else -> null
+	private fun mapHint(parsingMetaData: ScriptsRepository.ParsingMetaData?): Hint? {
+		if (parsingMetaData == null) {
+			return null
 		}
+
+		return when (parsingMetaData) {
+			is ScriptsRepository.ParsingMetaData.MultiScriptsHint -> Hint.MultiScripts
+			is ScriptsRepository.ParsingMetaData.OldScriptFieldHint -> Hint.OldScriptFieldHint
+			is ScriptsRepository.ParsingMetaData.ParsingError -> Hint.Error(throwable = parsingMetaData.throwable)
+		}
+	}
 
 	sealed interface Event {
 		data object OnNavigateToSettings : Event

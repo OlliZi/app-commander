@@ -6,4 +6,6 @@ sealed interface Hint {
 	) : Hint
 
 	data object MultiScripts : Hint
+
+	data object OldScriptFieldHint : Hint
 }
