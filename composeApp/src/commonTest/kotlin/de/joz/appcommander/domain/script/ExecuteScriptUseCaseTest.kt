@@ -25,7 +25,7 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "echo foo",
+					multiScripts = listOf("echo foo"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
@@ -46,9 +46,9 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "echo foo",
 					multiScripts =
 						listOf(
+							"echo foo",
 							"echo bar",
 							"#LOOP_2 echo loop",
 							"echo test",
@@ -79,7 +79,7 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "#LOOP_3 echo foo",
+					multiScripts = listOf("#LOOP_3 echo foo"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
@@ -100,7 +100,7 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "foo_bar_unknown_command",
+					multiScripts = listOf("foo_bar_unknown_command"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
@@ -127,7 +127,7 @@ class ExecuteScriptUseCaseTest {
 			val script =
 				ScriptsRepository.Script(
 					label = "Test",
-					script = "adb devices",
+					multiScripts = listOf("adb devices"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
