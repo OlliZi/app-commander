@@ -12,6 +12,9 @@ trim_trailing_whitespace = true
 [DesktopApp.kt]
 ktlint_standard_no-wildcard-imports = disabled
 
+[AppTest.kt]
+ktlint_standard_no-wildcard-imports = disabled
+
 [WelcomeScreenTest.kt]
 ktlint_standard_no-wildcard-imports = disabled
 
