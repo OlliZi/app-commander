@@ -36,7 +36,7 @@ class PreferencesRepositoryImplTest {
 			preferencesRepository.store("foo", 123)
 
 			coVerify {
-				dataStoreMock.edit { }
+				dataStoreMock.edit {}
 			}
 		}
 }

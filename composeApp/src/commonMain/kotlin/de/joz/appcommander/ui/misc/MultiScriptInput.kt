@@ -66,7 +66,7 @@ internal fun PreviewMultiScriptInput(
 		MultiScriptInput(
 			multiScripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
 			onExecuteScriptText = {},
-			onExecuteAllScriptsText = { },
+			onExecuteAllScriptsText = {},
 		)
 	}
 }

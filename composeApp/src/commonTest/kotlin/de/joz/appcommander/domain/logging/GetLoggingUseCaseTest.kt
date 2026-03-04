@@ -16,7 +16,7 @@ class GetLoggingUseCaseTest {
 					loggingRepository = loggingRepositoryMock,
 				)
 
-			useCase().collect { }
+			useCase().collect {}
 
 			verify { loggingRepositoryMock.logging }
 		}
