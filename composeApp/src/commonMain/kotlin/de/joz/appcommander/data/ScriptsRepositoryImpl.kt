@@ -89,7 +89,7 @@ class ScriptsRepositoryImpl(
 		}
 
 	companion object {
-		private val DEFAULT_SCRIPTS =
+		val DEFAULT_SCRIPTS =
 			listOf(
 				ScriptsRepository.Script(
 					label = "Dark mode",
