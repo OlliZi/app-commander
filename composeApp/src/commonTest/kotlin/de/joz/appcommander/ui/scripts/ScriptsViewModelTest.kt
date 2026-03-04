@@ -618,7 +618,7 @@ class ScriptsViewModelTest {
 		}
 
 	@Test
-	fun `should return an hint when JSON contains an old script field`() =
+	fun `should return a hint when JSON contains an old script field`() =
 		runTest {
 			coEvery {
 				getUserScriptsUseCaseMock()
@@ -635,7 +635,7 @@ class ScriptsViewModelTest {
 		}
 
 	@Test
-	fun `should return an hint when JSON contains scripts trimmer`() =
+	fun `should return a hint when JSON contains scripts trimmer`() =
 		runTest {
 			coEvery {
 				getUserScriptsUseCaseMock()
