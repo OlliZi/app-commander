@@ -44,9 +44,10 @@ class EditScriptViewModel(
 			when (event) {
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
-				is Event.OnChangeScript -> onChangeScript(event.script)
+				is Event.OnChangeScript -> onChangeScript(event.multiScripts)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
-				is Event.OnExecuteScript -> onExecuteScript()
+				is Event.OnExecuteSingleScript -> onExecuteSingleScript(event.script)
+				is Event.OnExecuteAllScripts -> onExecuteAllScripts()
 				is Event.OnSaveScript -> onSaveScript()
 				is Event.OnRemoveScript -> onRemoveScript()
 			}
@@ -65,10 +66,10 @@ class EditScriptViewModel(
 		}
 	}
 
-	private fun onChangeScript(script: String) {
+	private fun onChangeScript(multiScripts: List<String>) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				script = script,
+				multiScripts = multiScripts,
 			)
 		}
 	}
@@ -81,13 +82,27 @@ class EditScriptViewModel(
 		}
 	}
 
-	private fun onExecuteScript() {
+	private fun onExecuteSingleScript(script: String) {
 		viewModelScope.launch(ioDispatcher) {
 			executeScriptUseCase(
 				script =
 					ScriptsRepository.Script(
 						label = _uiState.value.scriptName,
-						script = _uiState.value.script,
+						multiScripts = listOf(script),
+						platform = _uiState.value.selectedPlatform,
+					),
+				selectedDevice = "TODO",
+			)
+		}
+	}
+
+	private fun onExecuteAllScripts() {
+		viewModelScope.launch(ioDispatcher) {
+			executeScriptUseCase(
+				script =
+					ScriptsRepository.Script(
+						label = _uiState.value.scriptName,
+						multiScripts = _uiState.value.multiScripts,
 						platform = _uiState.value.selectedPlatform,
 					),
 				selectedDevice = "TODO",
@@ -100,7 +115,7 @@ class EditScriptViewModel(
 			val scriptToSave =
 				ScriptsRepository.Script(
 					label = _uiState.value.scriptName,
-					script = _uiState.value.script,
+					multiScripts = _uiState.value.multiScripts,
 					platform = _uiState.value.selectedPlatform,
 				)
 			saveUserScriptUseCase(
@@ -120,7 +135,7 @@ class EditScriptViewModel(
 				script =
 					ScriptsRepository.Script(
 						label = _uiState.value.scriptName,
-						script = _uiState.value.script,
+						multiScripts = _uiState.value.multiScripts,
 						platform = _uiState.value.selectedPlatform,
 					),
 			)
@@ -132,7 +147,7 @@ class EditScriptViewModel(
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			scriptName = script?.label.orEmpty(),
-			script = script?.script.orEmpty(),
+			multiScripts = script?.multiScripts.orEmpty(),
 			selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
 		)
 
@@ -143,10 +158,14 @@ class EditScriptViewModel(
 
 		data object OnRemoveScript : Event
 
-		data object OnExecuteScript : Event
+		data class OnExecuteSingleScript(
+			val script: String,
+		) : Event
+
+		data object OnExecuteAllScripts : Event
 
 		data class OnChangeScript(
-			val script: String,
+			val multiScripts: List<String>,
 		) : Event
 
 		data class OnChangeScriptName(
@@ -159,7 +178,7 @@ class EditScriptViewModel(
 	}
 
 	data class UiState(
-		val script: String = "",
+		val multiScripts: List<String> = emptyList(),
 		val scriptName: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
 	)
