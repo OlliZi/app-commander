@@ -39,7 +39,7 @@ class TrackScriptsFileChangesUseCaseTest {
 		}
 
 	@Test
-	fun `invoke emits a script list when a parsing error is detected`() =
+	fun `invoke emits a script list when a parsing hint is detected`() =
 		runTest {
 			val firstError = ScriptsRepository.ParsingMetaData.MultiScriptsHint
 			val secondError = ScriptsRepository.ParsingMetaData.OldScriptFieldHint
