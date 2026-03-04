@@ -591,7 +591,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "abc",
-								multiScripts = listOf("bar"),
+								multiScripts = listOf("123"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 					),
@@ -648,7 +648,7 @@ class ScriptsViewModelTest {
 			val viewModel = createViewModel()
 			runCurrent()
 
-			assertEquals(Hint.OldScriptFieldHint, viewModel.uiState.value.hint)
+			assertEquals(Hint.MultiScripts, viewModel.uiState.value.hint)
 		}
 
 	@Test

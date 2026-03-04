@@ -53,8 +53,12 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
 **Example Script:**
 ```json
 {
-  "label": "Toggle Dark Mode On",
-  "script": "adb shell cmd uimode night yes",
+  "label": "Toggle Dark Mode On and Off",
+  "multiScripts": [
+    "adb shell cmd uimode night yes",
+    "sleep 1",
+    "adb shell cmd uimode night no"
+  ],
   "platform": "ANDROID"
 }
 ```
@@ -66,10 +70,6 @@ Unleash the full potential of App-Commander with these special commands in your 
 *   **Looping:** To run a script multiple times, prefix it with `#LOOP_N`, where `N` is the number of repetitions.
     ```
     #LOOP_10 adb shell input swipe 500 500 1000 500
-    ```
-*   **Command Chaining:** Use `&&` to link multiple commands together for sequential execution.
-    ```
-    adb shell input swipe 500 500 1000 500 && adb shell input tap 500 500
     ```
 
 ## 🛠️ Installation and Running
@@ -99,12 +99,11 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- script-JSON-field as array (tests anpassen, edit scripts ui)
 - Create a video showing the UI with emulator and a real device
-- Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 
+- Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable 
 - UI-tests (EditScriptContent, ...)
 - Unit-test for PreferencesRepositoryImpl 
-- Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
+- Open-icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
 
 ## 🤝 Contributing
 
