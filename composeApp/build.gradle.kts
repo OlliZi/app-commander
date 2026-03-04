@@ -71,7 +71,7 @@ ksp {
 
 compose.desktop {
 	application {
-		mainClass = "de.joz.appcommander.DesktopAppKt"
+		mainClass = "de.joz.appcommander.launch.DesktopAppKt"
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg)
@@ -98,12 +98,12 @@ kover {
 	reports {
 		filters {
 			excludes {
-				packages("org.koin.ksp.generated", "de.joz.appcommander.resources")
+				packages("org.koin.ksp.generated", "de.joz.appcommander.resources", "de.joz.appcommander.launch")
 				classes("**ComposableSingletons**")
 			}
 		}
 		verify {
-			val lineCoverage = 80
+			val lineCoverage = 84
 			rule("Minimal line coverage rate in percent.") {
 				minBound(lineCoverage)
 			}
