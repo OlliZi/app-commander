@@ -108,8 +108,8 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should append device id in script execution`() =
 		runTest {
-			if (!isLocalTestRunUseCase() && !isJenkinsTestRunUseCase()) {
-				println("Cannot run test on github.")
+			if (!isLocalTestRunUseCase()) {
+				println("Cannot run test neither on github nore on jenkins.")
 				return@runTest
 			}
 
