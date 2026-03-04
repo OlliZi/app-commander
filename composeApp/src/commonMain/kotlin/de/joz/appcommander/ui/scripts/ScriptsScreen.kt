@@ -502,48 +502,6 @@ private fun ExpandButtonItem(
 private fun PreviewScriptScreen_Dark() {
 	RenderPreview(
 		darkTheme = true,
-		uiState =
-			ScriptsViewModel.UiState(
-				connectedDevices =
-					listOf(
-						ScriptsViewModel.Device(
-							label = "Pixel 9",
-							isSelected = true,
-							id = "1",
-						),
-						ScriptsViewModel.Device(
-							label = "Pixel 8",
-							isSelected = false,
-							id = "2",
-						),
-					),
-				scripts =
-					listOf(
-						Script(
-							description = "my script",
-							scriptText = "adb devices",
-							isExpanded = false,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									multiScripts = emptyList(),
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-						Script(
-							description = "my script",
-							scriptText = "adb long long long long long long long long long long long long script",
-							isExpanded = true,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									multiScripts = emptyList(),
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-					),
-				logging = listOf("log 1", "log 2", "log 3"),
-			),
 	)
 }
 
@@ -552,61 +510,57 @@ private fun PreviewScriptScreen_Dark() {
 private fun PreviewScriptScreen_Light() {
 	RenderPreview(
 		darkTheme = false,
-		uiState =
-			ScriptsViewModel.UiState(
-				connectedDevices =
-					listOf(
-						ScriptsViewModel.Device(
-							label = "Pixel 9",
-							isSelected = true,
-							id = "1",
-						),
-						ScriptsViewModel.Device(
-							label = "Pixel 8",
-							isSelected = false,
-							id = "2",
-						),
-					),
-				scripts =
-					listOf(
-						Script(
-							description = "my script",
-							scriptText = "adb devices",
-							isExpanded = false,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									multiScripts = emptyList(),
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-						Script(
-							description = "my script",
-							scriptText = "adb long long long long long long long long long long long long script",
-							isExpanded = true,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									multiScripts = emptyList(),
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-					),
-				logging = listOf("log 1", "log 2", "log 3"),
-			),
 	)
 }
 
 @Composable
-private fun RenderPreview(
-	darkTheme: Boolean,
-	uiState: ScriptsViewModel.UiState,
-) {
+private fun RenderPreview(darkTheme: Boolean) {
 	AppCommanderTheme(
 		darkTheme = darkTheme,
 	) {
 		ScriptsContent(
-			uiState = uiState,
+			uiState =
+				ScriptsViewModel.UiState(
+					connectedDevices =
+						listOf(
+							ScriptsViewModel.Device(
+								label = "Pixel 9",
+								isSelected = true,
+								id = "1",
+							),
+							ScriptsViewModel.Device(
+								label = "Pixel 8",
+								isSelected = false,
+								id = "2",
+							),
+						),
+					scripts =
+						listOf(
+							Script(
+								description = "my script",
+								scriptText = "adb devices",
+								isExpanded = false,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										multiScripts = emptyList(),
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+							Script(
+								description = "my script",
+								scriptText = "adb long long long long long long long long long long long long script",
+								isExpanded = true,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										multiScripts = emptyList(),
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+						),
+					logging = listOf("log 1", "log 2", "log 3"),
+				),
 			onEvent = {},
 		)
 	}

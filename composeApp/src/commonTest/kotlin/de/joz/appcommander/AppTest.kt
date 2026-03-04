@@ -1,3 +1,5 @@
+@file:Suppress("WildcardImport")
+
 package de.joz.appcommander
 
 import androidx.compose.ui.test.ExperimentalTestApi
