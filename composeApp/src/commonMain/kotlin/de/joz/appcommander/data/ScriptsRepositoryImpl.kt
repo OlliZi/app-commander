@@ -29,10 +29,11 @@ class ScriptsRepositoryImpl(
 		}
 
 		return runCatching {
-			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
+			val scriptsFromFile = jsonFile.readText()
+			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
 			JsonParseResult(
 				scripts = script,
-				parsingMetaData = checkScriptContainsTrimmer(script),
+				parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile),
 			)
 		}.getOrElse { error ->
 			JsonParseResult(
@@ -74,9 +75,14 @@ class ScriptsRepositoryImpl(
 		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
 	}
 
-	private fun checkScriptContainsTrimmer(scripts: List<ScriptsRepository.Script>): ParsingMetaData? =
-		if (scripts.any { it.script.contains(SCRIPT_TRIMMER) }) {
+	private fun checkScriptContainsTrimmer(
+		scripts: List<ScriptsRepository.Script>,
+		fileJsonContent: String,
+	): ParsingMetaData? =
+		if (scripts.any { it.multiScripts.contains(SCRIPT_TRIMMER) }) {
 			ParsingMetaData.MultiScriptsHint
+		} else if (fileJsonContent.contains(""""script""")) {
+			ParsingMetaData.OldScriptFieldHint
 		} else {
 			null
 		}
@@ -86,20 +92,21 @@ class ScriptsRepositoryImpl(
 			listOf(
 				ScriptsRepository.Script(
 					label = "Dark mode",
-					script = "adb shell cmd uimode night yes",
+					multiScripts =
+						listOf("adb shell cmd uimode night yes"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "Light mode",
-					script = "adb shell cmd uimode night no",
+					multiScripts =
+						listOf("adb shell cmd uimode night nu"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "Switch dark to light to dark mode",
-					script =
-						"adb shell cmd uimode night no",
 					multiScripts =
 						listOf(
+							"adb shell cmd uimode night no",
 							"sleep 1",
 							"adb shell cmd uimode night yes",
 							"sleep 1",

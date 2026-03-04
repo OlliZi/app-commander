@@ -34,6 +34,8 @@ interface ScriptsRepository {
 		) : ParsingMetaData
 
 		data object MultiScriptsHint : ParsingMetaData
+
+		data object OldScriptFieldHint : ParsingMetaData
 	}
 
 	enum class Platform(

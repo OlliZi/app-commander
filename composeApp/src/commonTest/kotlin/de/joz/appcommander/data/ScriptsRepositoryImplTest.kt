@@ -42,19 +42,19 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						script = "adb shell cmd uimode night yes",
+						multiScripts = listOf("adb shell cmd uimode night yes"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						script = "adb shell cmd uimode night no",
+						multiScripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						script = "adb shell cmd uimode night no",
 						multiScripts =
 							listOf(
+								"adb shell cmd uimode night no",
 								"sleep 1",
 								"adb shell cmd uimode night yes",
 								"sleep 1",
@@ -85,19 +85,19 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						script = "adb shell cmd uimode night yes",
+						multiScripts = listOf("adb shell cmd uimode night yes"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						script = "adb shell cmd uimode night no",
+						multiScripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						script = "adb shell cmd uimode night no",
 						multiScripts =
 							listOf(
+								"adb shell cmd uimode night no",
 								"sleep 1",
 								"adb shell cmd uimode night yes",
 								"sleep 1",
@@ -138,7 +138,7 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						script = "adb shell cmd uimode night no && sleep 1",
+						multiScripts = listOf("adb shell cmd uimode night no && sleep 1"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -146,6 +146,43 @@ class ScriptsRepositoryImplTest {
 			)
 
 			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.MultiScriptsHint)
+		}
+
+	@Test
+	fun `should return scripts and hint when scripts contains old 'script' field`() =
+		runTest {
+			val repository =
+				ScriptsRepositoryImpl(
+					scriptFile = testFile.absolutePath,
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+
+			testFile.writeText(
+				"""
+				[
+					 {
+						"label": "Light mode",
+						"script": "adb shell cmd uimode night no",
+						"platform": "ANDROID"
+					}
+				]
+				""".trimIndent(),
+			)
+
+			val scripts = repository.getScripts()
+
+			assertEquals(
+				listOf(
+					ScriptsRepository.Script(
+						label = "Light mode",
+						multiScripts = listOf("adb shell cmd uimode night no"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+				),
+				scripts.scripts,
+			)
+
+			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.OldScriptFieldHint)
 		}
 
 	@Test
@@ -161,12 +198,12 @@ class ScriptsRepositoryImplTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "my script",
-								script = "foo",
+								multiScripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 							ScriptsRepository.Script(
 								label = "my script abc",
-								script = "bar",
+								multiScripts = listOf("bar"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 						),
@@ -188,12 +225,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						script = "foo",
+						multiScripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						script = "bar",
+						multiScripts = listOf("bar"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
@@ -238,12 +275,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						script = "foo",
+						multiScripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						script = "bar",
+						multiScripts = listOf("bar"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
@@ -298,7 +335,7 @@ class ScriptsRepositoryImplTest {
 
 			val newScript =
 				ScriptsRepository.Script(
-					script = "bar",
+					multiScripts = listOf("bar"),
 					label = "my script abc",
 					platform = ScriptsRepository.Platform.IOS,
 				)
