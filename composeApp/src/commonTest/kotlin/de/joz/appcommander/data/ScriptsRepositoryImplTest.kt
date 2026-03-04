@@ -253,13 +253,13 @@ class ScriptsRepositoryImplTest {
 						"    {\n" +
 						"        \"unknown\": \"null\",\n" +
 						"        \"label\": \"my script\",\n" +
-						"        \"multiScript\": [\"foo\"],\n" +
+						"        \"multiScripts\": [\"foo\"],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
 						"    {\n" +
 						"        \"unknown\": \"\",\n" +
 						"        \"label\": \"my script abc\",\n" +
-						"        \"multiScript\": [\"bar\"],\n" +
+						"        \"multiScripts\": [\"bar\"],\n" +
 						"        \"platform\": \"IOS\"\n" +
 						"    }\n" +
 						"]",
