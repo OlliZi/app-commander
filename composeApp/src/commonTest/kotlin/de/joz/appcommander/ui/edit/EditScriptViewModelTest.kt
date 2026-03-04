@@ -71,12 +71,12 @@ class EditScriptViewModelTest {
 			viewModel.onEvent(
 				event =
 					EditScriptViewModel.Event.OnChangeScript(
-						script = "foo",
+						multiScripts = listOf("foo"),
 					),
 			)
 			runCurrent()
 
-			assertEquals("foo", viewModel.uiState.value.script)
+			assertEquals(listOf("foo"), viewModel.uiState.value.multiScripts)
 		}
 
 	@Test
@@ -133,7 +133,7 @@ class EditScriptViewModelTest {
 		runTest {
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns
 				ScriptsRepository.Script(
-					script = "foo",
+					multiScripts = listOf("foo"),
 					label = "bar",
 					platform = ScriptsRepository.Platform.IOS,
 				)
@@ -143,7 +143,7 @@ class EditScriptViewModelTest {
 					scriptKey = 1,
 				)
 
-			assertEquals("foo", viewModel.uiState.value.script)
+			assertEquals(listOf("foo"), viewModel.uiState.value.multiScripts)
 			assertEquals("bar", viewModel.uiState.value.scriptName)
 			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.selectedPlatform)
 
@@ -172,7 +172,7 @@ class EditScriptViewModelTest {
 
 			viewModel.onEvent(
 				event =
-					EditScriptViewModel.Event.OnExecuteScript,
+					EditScriptViewModel.Event.OnExecuteAllScripts,
 			)
 			runCurrent()
 

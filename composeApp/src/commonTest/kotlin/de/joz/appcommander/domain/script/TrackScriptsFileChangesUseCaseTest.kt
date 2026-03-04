@@ -65,7 +65,7 @@ class TrackScriptsFileChangesUseCaseTest {
 				(1..count).map {
 					ScriptsRepository.Script(
 						label = "foo $it",
-						script = "echo $it",
+						multiScripts = listOf("echo $it"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					)
 				},

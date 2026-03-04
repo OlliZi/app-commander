@@ -19,7 +19,7 @@ class GetUserScriptByKeyUseCaseTest {
 				scripts =
 					listOf(
 						ScriptsRepository.Script(
-							script = "",
+							multiScripts = emptyList(),
 							label = "",
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
