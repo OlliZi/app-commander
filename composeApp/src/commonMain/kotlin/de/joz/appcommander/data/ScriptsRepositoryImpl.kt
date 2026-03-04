@@ -31,9 +31,10 @@ class ScriptsRepositoryImpl(
 		return runCatching {
 			val scriptsFromFile = jsonFile.readText()
 			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
+			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
 			JsonParseResult(
 				scripts = script,
-				parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile),
+				parsingMetaData = parsingMetaData,
 			)
 		}.getOrElse { error ->
 			JsonParseResult(
@@ -79,9 +80,9 @@ class ScriptsRepositoryImpl(
 		scripts: List<ScriptsRepository.Script>,
 		fileJsonContent: String,
 	): ParsingMetaData? =
-		if (scripts.any { it.multiScripts.contains(SCRIPT_TRIMMER) }) {
+		if (scripts.any { it.multiScripts.any { script -> script.contains(SCRIPT_TRIMMER) } }) {
 			ParsingMetaData.MultiScriptsHint
-		} else if (fileJsonContent.contains(""""script""")) {
+		} else if (fileJsonContent.contains(OLD_SCRIPT_FIELD)) {
 			ParsingMetaData.OldScriptFieldHint
 		} else {
 			null
@@ -99,7 +100,7 @@ class ScriptsRepositoryImpl(
 				ScriptsRepository.Script(
 					label = "Light mode",
 					multiScripts =
-						listOf("adb shell cmd uimode night nu"),
+						listOf("adb shell cmd uimode night no"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
@@ -116,6 +117,7 @@ class ScriptsRepositoryImpl(
 				),
 			)
 		private const val SCRIPT_TRIMMER = "&&"
+		private const val OLD_SCRIPT_FIELD = "\"script\""
 		internal const val JSON_FILE_NAME = "scripts.json"
 	}
 }

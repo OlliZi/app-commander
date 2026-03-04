@@ -125,7 +125,9 @@ class ScriptsRepositoryImplTest {
 				[
 					 {
 						"label": "Light mode",
-						"script": "adb shell cmd uimode night no && sleep 1",
+						"multiScripts": [
+							"adb shell cmd uimode night no && sleep 1"
+						],
 						"platform": "ANDROID"
 					}
 				]
@@ -162,7 +164,10 @@ class ScriptsRepositoryImplTest {
 				[
 					 {
 						"label": "Light mode",
-						"script": "adb shell cmd uimode night no",
+						"script": "ERROR",
+						"multiScripts": [
+							 "adb shell cmd uimode night no"
+						],
 						"platform": "ANDROID"
 					}
 				]
@@ -248,13 +253,13 @@ class ScriptsRepositoryImplTest {
 						"    {\n" +
 						"        \"unknown\": \"null\",\n" +
 						"        \"label\": \"my script\",\n" +
-						"        \"script\": \"foo\",\n" +
+						"        \"multiScript\": [\"foo\"],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
 						"    {\n" +
 						"        \"unknown\": \"\",\n" +
 						"        \"label\": \"my script abc\",\n" +
-						"        \"script\": \"bar\",\n" +
+						"        \"multiScript\": [\"bar\"],\n" +
 						"        \"platform\": \"IOS\"\n" +
 						"    }\n" +
 						"]",
