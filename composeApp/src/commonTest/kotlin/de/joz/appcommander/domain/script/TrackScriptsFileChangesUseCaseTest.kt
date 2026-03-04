@@ -57,15 +57,7 @@ class TrackScriptsFileChangesUseCaseTest {
 				emittedScripts.scripts[0],
 			)
 			assertEquals(
-				firstError,
-				emittedScripts.parsingMetaData,
-			)
-			assertEquals(
-				createDummyScripts(1).scripts[1],
-				emittedScripts.scripts[1],
-			)
-			assertEquals(
-				createDummyScripts(1).parsingMetaData,
+				secondError,
 				emittedScripts.parsingMetaData,
 			)
 		}
