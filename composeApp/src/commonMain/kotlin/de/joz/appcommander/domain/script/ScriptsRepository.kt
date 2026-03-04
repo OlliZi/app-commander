@@ -20,8 +20,7 @@ interface ScriptsRepository {
 	data class Script(
 		val label: String,
 		val platform: Platform,
-		val script: String,
-		val multiScripts: List<String> = emptyList(),
+		val multiScripts: List<String>,
 	)
 
 	data class JsonParseResult(
