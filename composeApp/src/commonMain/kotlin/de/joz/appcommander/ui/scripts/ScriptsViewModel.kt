@@ -174,7 +174,7 @@ class ScriptsViewModel(
 					jsonParseResult.scripts
 						.filter {
 							it.label.lowercase().contains(filter) ||
-								it.multiScripts.any { script ->
+								it.scripts.any { script ->
 									script.lowercase().contains(filter)
 								} ||
 								it.platform.name
@@ -234,7 +234,7 @@ class ScriptsViewModel(
 						script =
 							ScriptsRepository.Script(
 								label = "entered by terminal script",
-								multiScripts = listOf(script),
+								scripts = listOf(script),
 								platform = platform,
 							),
 						selectedDevice = device.id,
@@ -291,7 +291,7 @@ class ScriptsViewModel(
 		clearLoggingUseCase()
 	}
 
-	private fun formatScripts(script: ScriptsRepository.Script): String = script.multiScripts.joinToString("\n")
+	private fun formatScripts(script: ScriptsRepository.Script): String = script.scripts.joinToString("\n")
 
 	private fun mapHint(parsingMetaData: ScriptsRepository.ParsingMetaData?): Hint? {
 		if (parsingMetaData == null) {

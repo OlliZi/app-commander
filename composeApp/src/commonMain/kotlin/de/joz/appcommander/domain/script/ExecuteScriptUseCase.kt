@@ -16,7 +16,7 @@ class ExecuteScriptUseCase(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
 	): Result {
-		val subScripts = script.multiScripts.map { it.trim() }
+		val subScripts = script.scripts.map { it.trim() }
 
 		return runCatching {
 			val outputs = mutableListOf<String>()

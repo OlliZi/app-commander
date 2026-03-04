@@ -13,7 +13,7 @@ class GetScriptIdUseCaseTest {
 			getScriptIdUseCase(
 				script =
 					ScriptsRepository.Script(
-						multiScripts = emptyList(),
+						scripts = emptyList(),
 						label = "",
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
@@ -22,7 +22,7 @@ class GetScriptIdUseCaseTest {
 		assertEquals(
 			ScriptsRepository
 				.Script(
-					multiScripts = emptyList(),
+					scripts = emptyList(),
 					label = "",
 					platform = ScriptsRepository.Platform.ANDROID,
 				).hashCode(),
@@ -34,13 +34,13 @@ class GetScriptIdUseCaseTest {
 	fun `should return same script id`() {
 		val script =
 			ScriptsRepository.Script(
-				multiScripts = listOf("foo"),
+				scripts = listOf("foo"),
 				label = "bar",
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 		val scriptModified =
 			script.copy(
-				multiScripts = listOf("bar"),
+				scripts = listOf("bar"),
 				platform = ScriptsRepository.Platform.IOS,
 			)
 
@@ -60,7 +60,7 @@ class GetScriptIdUseCaseTest {
 			getScriptIdUseCase(
 				script =
 					scriptModified.copy(
-						multiScripts = listOf("foo"),
+						scripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 			),

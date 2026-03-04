@@ -71,12 +71,12 @@ class ScriptsViewModelTest {
 					listOf(
 						ScriptsRepository.Script(
 							label = "my script",
-							multiScripts = listOf("foo"),
+							scripts = listOf("foo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 						ScriptsRepository.Script(
 							label = "my another script",
-							multiScripts = listOf("bar"),
+							scripts = listOf("bar"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
@@ -109,7 +109,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "my script",
-								multiScripts = listOf("foo"),
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
@@ -119,7 +119,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "my another script",
-								multiScripts = listOf("bar"),
+								scripts = listOf("bar"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
@@ -376,7 +376,7 @@ class ScriptsViewModelTest {
 					script =
 						ScriptsRepository.Script(
 							label = "entered by terminal script",
-							multiScripts = listOf("echo"),
+							scripts = listOf("echo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					selectedDevice = "p7",
@@ -400,7 +400,7 @@ class ScriptsViewModelTest {
 			val testScript =
 				ScriptsRepository.Script(
 					label = "my script",
-					multiScripts = listOf("foo"),
+					scripts = listOf("foo"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
@@ -533,7 +533,7 @@ class ScriptsViewModelTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "my script",
-								multiScripts = listOf("foo"),
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 						),
@@ -558,12 +558,12 @@ class ScriptsViewModelTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "my script",
-								multiScripts = listOf("foo"),
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 							ScriptsRepository.Script(
 								label = "abc",
-								multiScripts = listOf("123"),
+								scripts = listOf("123"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 						),
@@ -580,7 +580,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "my script",
-								multiScripts = listOf("foo"),
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
@@ -591,7 +591,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "abc",
-								multiScripts = listOf("123"),
+								scripts = listOf("123"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 					),

@@ -20,7 +20,7 @@ class GetUserScriptsUseCaseTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "foo",
-								multiScripts = listOf("echo"),
+								scripts = listOf("echo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 						),
@@ -36,7 +36,7 @@ class GetUserScriptsUseCaseTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "foo",
-						multiScripts = listOf("echo"),
+						scripts = listOf("echo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),

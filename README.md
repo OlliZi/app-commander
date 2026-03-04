@@ -54,7 +54,7 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
 ```json
 {
   "label": "Toggle Dark Mode On and Off",
-  "multiScripts": [
+  "scripts": [
     "adb shell cmd uimode night yes",
     "sleep 1",
     "adb shell cmd uimode night no"

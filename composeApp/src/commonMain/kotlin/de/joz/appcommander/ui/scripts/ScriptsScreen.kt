@@ -543,7 +543,7 @@ private fun RenderPreview(darkTheme: Boolean) {
 								originalScript =
 									ScriptsRepository.Script(
 										label = "",
-										multiScripts = emptyList(),
+										scripts = emptyList(),
 										platform = ScriptsRepository.Platform.ANDROID,
 									),
 							),
@@ -554,7 +554,7 @@ private fun RenderPreview(darkTheme: Boolean) {
 								originalScript =
 									ScriptsRepository.Script(
 										label = "",
-										multiScripts = emptyList(),
+										scripts = emptyList(),
 										platform = ScriptsRepository.Platform.ANDROID,
 									),
 							),

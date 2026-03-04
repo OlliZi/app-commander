@@ -42,17 +42,17 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						multiScripts = listOf("adb shell cmd uimode night yes"),
+						scripts = listOf("adb shell cmd uimode night yes"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						multiScripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						multiScripts =
+						scripts =
 							listOf(
 								"adb shell cmd uimode night no",
 								"sleep 1",
@@ -85,17 +85,17 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						multiScripts = listOf("adb shell cmd uimode night yes"),
+						scripts = listOf("adb shell cmd uimode night yes"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						multiScripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						multiScripts =
+						scripts =
 							listOf(
 								"adb shell cmd uimode night no",
 								"sleep 1",
@@ -125,7 +125,7 @@ class ScriptsRepositoryImplTest {
 				[
 					 {
 						"label": "Light mode",
-						"multiScripts": [
+						"scripts": [
 							"adb shell cmd uimode night no && sleep 1"
 						],
 						"platform": "ANDROID"
@@ -140,7 +140,7 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						multiScripts = listOf("adb shell cmd uimode night no && sleep 1"),
+						scripts = listOf("adb shell cmd uimode night no && sleep 1"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -165,7 +165,7 @@ class ScriptsRepositoryImplTest {
 					 {
 						"label": "Light mode",
 						"script": "ERROR",
-						"multiScripts": [
+						"scripts": [
 							 "adb shell cmd uimode night no"
 						],
 						"platform": "ANDROID"
@@ -180,7 +180,7 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						multiScripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -203,12 +203,12 @@ class ScriptsRepositoryImplTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "my script",
-								multiScripts = listOf("foo"),
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 							ScriptsRepository.Script(
 								label = "my script abc",
-								multiScripts = listOf("bar"),
+								scripts = listOf("bar"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 						),
@@ -230,12 +230,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						multiScripts = listOf("foo"),
+						scripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						multiScripts = listOf("bar"),
+						scripts = listOf("bar"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
@@ -253,13 +253,13 @@ class ScriptsRepositoryImplTest {
 						"    {\n" +
 						"        \"unknown\": \"null\",\n" +
 						"        \"label\": \"my script\",\n" +
-						"        \"multiScripts\": [\"foo\"],\n" +
+						"        \"scripts\": [\"foo\"],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
 						"    {\n" +
 						"        \"unknown\": \"\",\n" +
 						"        \"label\": \"my script abc\",\n" +
-						"        \"multiScripts\": [\"bar\"],\n" +
+						"        \"scripts\": [\"bar\"],\n" +
 						"        \"platform\": \"IOS\"\n" +
 						"    }\n" +
 						"]",
@@ -280,12 +280,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						multiScripts = listOf("foo"),
+						scripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						multiScripts = listOf("bar"),
+						scripts = listOf("bar"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
@@ -340,7 +340,7 @@ class ScriptsRepositoryImplTest {
 
 			val newScript =
 				ScriptsRepository.Script(
-					multiScripts = listOf("bar"),
+					scripts = listOf("bar"),
 					label = "my script abc",
 					platform = ScriptsRepository.Platform.IOS,
 				)

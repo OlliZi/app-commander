@@ -59,13 +59,13 @@ class GetConnectedDevicesUseCase(
 		val ANDROID_GET_DEVICES_SCRIPT =
 			ScriptsRepository.Script(
 				label = "Get connected Android devices",
-				multiScripts = listOf("adb devices"),
+				scripts = listOf("adb devices"),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 		val IOS_GET_DEVICES_SCRIPT =
 			ScriptsRepository.Script(
 				label = "Get connected iOS devices",
-				multiScripts = listOf("TODO for iOS"),
+				scripts = listOf("TODO for iOS"),
 				platform = ScriptsRepository.Platform.IOS,
 			)
 	}

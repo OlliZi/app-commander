@@ -80,7 +80,7 @@ class ScriptsRepositoryImpl(
 		scripts: List<ScriptsRepository.Script>,
 		fileJsonContent: String,
 	): ParsingMetaData? =
-		if (scripts.any { it.multiScripts.any { script -> script.contains(SCRIPT_TRIMMER) } }) {
+		if (scripts.any { it.scripts.any { script -> script.contains(SCRIPT_TRIMMER) } }) {
 			ParsingMetaData.MultiScriptsHint
 		} else if (fileJsonContent.contains(OLD_SCRIPT_FIELD)) {
 			ParsingMetaData.OldScriptFieldHint
@@ -93,19 +93,19 @@ class ScriptsRepositoryImpl(
 			listOf(
 				ScriptsRepository.Script(
 					label = "Dark mode",
-					multiScripts =
+					scripts =
 						listOf("adb shell cmd uimode night yes"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "Light mode",
-					multiScripts =
+					scripts =
 						listOf("adb shell cmd uimode night no"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "Switch dark to light to dark mode",
-					multiScripts =
+					scripts =
 						listOf(
 							"adb shell cmd uimode night no",
 							"sleep 1",

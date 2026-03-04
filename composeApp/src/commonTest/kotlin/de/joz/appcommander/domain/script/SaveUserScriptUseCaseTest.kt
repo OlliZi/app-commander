@@ -27,7 +27,7 @@ class SaveUserScriptUseCaseTest {
 				script =
 					ScriptsRepository.Script(
 						label = "key",
-						multiScripts = listOf("foo"),
+						scripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				scriptKey = null,
@@ -38,7 +38,7 @@ class SaveUserScriptUseCaseTest {
 					script =
 						ScriptsRepository.Script(
 							label = "key",
-							multiScripts = listOf("foo"),
+							scripts = listOf("foo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 				)
@@ -54,13 +54,13 @@ class SaveUserScriptUseCaseTest {
 			val newScript =
 				ScriptsRepository.Script(
 					label = "key",
-					multiScripts = listOf("foo"),
+					scripts = listOf("foo"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 			val oldScript =
 				ScriptsRepository.Script(
 					label = "key",
-					multiScripts = listOf("bar"),
+					scripts = listOf("bar"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
@@ -84,7 +84,7 @@ class SaveUserScriptUseCaseTest {
 					script =
 						ScriptsRepository.Script(
 							label = "key",
-							multiScripts = listOf("foo"),
+							scripts = listOf("foo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					oldScript = oldScript,

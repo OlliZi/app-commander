@@ -125,10 +125,10 @@ internal fun EditScriptContent(
 				textLabelType = TextLabelType.BodyLarge,
 			)
 			MultiScriptInput(
-				multiScripts = uiState.multiScripts,
-				onChangeScriptText = { script, multiScripts ->
+				scripts = uiState.scripts,
+				onChangeScriptText = { script, scripts ->
 					// TODO
-					onEvent(EditScriptViewModel.Event.OnChangeScript(multiScripts = multiScripts))
+					onEvent(EditScriptViewModel.Event.OnChangeScript(scripts = scripts))
 				},
 				onExecuteScriptText = {
 					onEvent(EditScriptViewModel.Event.OnExecuteSingleScript(script = it))

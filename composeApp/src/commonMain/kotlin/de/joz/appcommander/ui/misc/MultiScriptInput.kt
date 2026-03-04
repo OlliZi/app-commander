@@ -19,21 +19,21 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 fun MultiScriptInput(
 	onExecuteScriptText: (String) -> Unit,
 	onExecuteAllScriptsText: () -> Unit,
-	multiScripts: List<String>,
+	scripts: List<String>,
 	onChangeScriptText: (String, List<String>) -> Unit = { _, _ -> },
 ) {
 	LazyColumn(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		itemsIndexed(multiScripts) { index, script ->
+		itemsIndexed(scripts) { index, script ->
 			ScriptInput(
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = {
-					onChangeScriptText(it, multiScripts)
+					onChangeScriptText(it, scripts)
 				},
 			)
-			if (index < multiScripts.lastIndex) {
+			if (index < scripts.lastIndex) {
 				ScriptDivider()
 			}
 		}
@@ -64,7 +64,7 @@ internal fun PreviewMultiScriptInput(
 		darkTheme = previewData.uiState,
 	) {
 		MultiScriptInput(
-			multiScripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
+			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
 			onExecuteScriptText = {},
 			onExecuteAllScriptsText = {},
 		)
