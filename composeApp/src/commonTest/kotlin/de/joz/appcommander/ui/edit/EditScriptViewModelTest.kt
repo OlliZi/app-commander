@@ -71,12 +71,13 @@ class EditScriptViewModelTest {
 			viewModel.onEvent(
 				event =
 					EditScriptViewModel.Event.OnChangeScript(
-						scripts = listOf("foo"),
+						index = 0,
+						script = "new script",
 					),
 			)
 			runCurrent()
 
-			assertEquals(listOf("foo"), viewModel.uiState.value.scripts)
+			assertEquals(listOf("new script"), viewModel.uiState.value.scripts)
 		}
 
 	@Test
