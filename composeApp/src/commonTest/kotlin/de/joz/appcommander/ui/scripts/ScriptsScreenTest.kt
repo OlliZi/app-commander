@@ -138,6 +138,40 @@ class ScriptsScreenTest {
 	}
 
 	@Test
+	fun `should all scripts when script is expanded`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						scripts =
+							listOf(
+								ScriptsViewModel.Script(
+									description = "some sxirpt",
+									scriptText =
+										"adb shell cmd uimode night no\n" +
+											"sleep 1\n" +
+											"adb shell cmd uimode night yes\n" +
+											"sleep 1\n" +
+											"adb shell cmd uimode night no",
+									originalScript = mockk(),
+									isExpanded = true,
+								),
+							),
+					),
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button",
+			).assertIsDisplayed().performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "expanded_script",
+			)
+		}
+	}
+
+	@Test
 	fun `should clear log when clear button is executed`() {
 		runComposeUiTest {
 			var isClearClicked = 0
