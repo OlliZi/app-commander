@@ -102,8 +102,7 @@ App-Commander is built with modern technologies and best practices:
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable 
 - UI-tests (EditScriptContent, ...)
-- Unit-test for PreferencesRepositoryImpl 
-- Open-icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
+- Unit-test for PreferencesRepositoryImpl
 
 ## 🤝 Contributing
 
