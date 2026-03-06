@@ -1,6 +1,6 @@
 [versions]
 androidx-lifecycle = "2.9.6"
-composeMultiplatform = "1.10.1"
+composeMultiplatform = "1.10.2"
 material3 = "1.9.0"
 kotlin = "2.3.10"
 kotlinx-coroutines = "1.10.2"
