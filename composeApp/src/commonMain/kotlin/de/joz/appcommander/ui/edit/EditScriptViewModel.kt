@@ -44,7 +44,7 @@ class EditScriptViewModel(
 			when (event) {
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
-				is Event.OnChangeScript -> onChangeScript(event.scripts)
+				is Event.OnChangeScript -> onChangeScript(event.index, event.script)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnExecuteSingleScript -> onExecuteSingleScript(event.script)
 				is Event.OnExecuteAllScripts -> onExecuteAllScripts()
@@ -66,10 +66,20 @@ class EditScriptViewModel(
 		}
 	}
 
-	private fun onChangeScript(scripts: List<String>) {
+	private fun onChangeScript(
+		index: Int,
+		script: String,
+	) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				scripts = scripts,
+				scripts =
+					oldState.scripts.mapIndexed { oldIndex, oldScript ->
+						if (oldIndex == index) {
+							script
+						} else {
+							oldScript
+						}
+					},
 			)
 		}
 	}
@@ -165,7 +175,8 @@ class EditScriptViewModel(
 		data object OnExecuteAllScripts : Event
 
 		data class OnChangeScript(
-			val scripts: List<String>,
+			val index: Int,
+			val script: String,
 		) : Event
 
 		data class OnChangeScriptName(

@@ -21,7 +21,6 @@ import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_remove
-import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
@@ -120,15 +119,10 @@ internal fun EditScriptContent(
 
 			SectionDivider()
 
-			TextLabel(
-				text = stringResource(Res.string.edit_enter_or_edit),
-				textLabelType = TextLabelType.BodyLarge,
-			)
 			MultiScriptInput(
 				scripts = uiState.scripts,
-				onChangeScriptText = { script, scripts ->
-					// TODO
-					onEvent(EditScriptViewModel.Event.OnChangeScript(scripts = scripts))
+				onChangeScriptText = { index, script ->
+					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
 				},
 				onExecuteScriptText = {
 					onEvent(EditScriptViewModel.Event.OnExecuteSingleScript(script = it))
