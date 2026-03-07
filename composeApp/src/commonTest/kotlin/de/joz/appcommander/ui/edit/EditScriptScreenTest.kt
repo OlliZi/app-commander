@@ -19,12 +19,6 @@ import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
-import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.confirmation_no
-import de.joz.appcommander.resources.confirmation_yes
-import de.joz.appcommander.resources.edit_action_abort
-import de.joz.appcommander.resources.edit_action_remove
-import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -32,7 +26,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
-import org.jetbrains.compose.resources.getString
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -129,7 +122,7 @@ class EditScriptScreenTest {
 			}
 			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performClick()
 
-			onNodeWithText(text = getString(Res.string.edit_action_save)).performClick()
+			onNodeWithText(text = "Save script").performClick()
 
 			verify {
 				scriptsRepositoryMock.updateScript(
@@ -208,8 +201,8 @@ class EditScriptScreenTest {
 			setupData()
 			setTestContent()
 
-			onNodeWithText(text = getString(Res.string.edit_action_remove)).performClick()
-			onNodeWithText(text = getString(Res.string.confirmation_yes)).performClick()
+			onNodeWithText(text = "Remove script").performClick()
+			onNodeWithText(text = "Yes").performClick()
 
 			verify { scriptsRepositoryMock.removeScript(any()) }
 		}
@@ -221,8 +214,8 @@ class EditScriptScreenTest {
 			setupData()
 			setTestContent()
 
-			onNodeWithText(text = getString(Res.string.edit_action_remove)).performClick()
-			onNodeWithText(text = getString(Res.string.confirmation_no)).performClick()
+			onNodeWithText(text = "Remove script").performClick()
+			onNodeWithText(text = "No").performClick()
 
 			verify(exactly = 0) { scriptsRepositoryMock.removeScript(any()) }
 		}
@@ -246,7 +239,7 @@ class EditScriptScreenTest {
 			setupData()
 			setTestContent()
 
-			onNodeWithText(text = getString(Res.string.edit_action_abort)).performClick()
+			onNodeWithText(text = "Close").performClick()
 
 			verify { navControllerMock.navigateUp() }
 		}
