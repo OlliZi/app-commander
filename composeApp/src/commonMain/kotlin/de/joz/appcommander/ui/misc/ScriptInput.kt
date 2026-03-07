@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
+import compose.icons.feathericons.FilePlus
 import compose.icons.feathericons.Play
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
@@ -34,6 +35,7 @@ fun ScriptInput(
 	script: String = "",
 	onChangeScriptText: (String) -> Unit = { _ -> },
 	onRemoveScript: (() -> Unit)? = null,
+	onAddScript: (() -> Unit)? = null,
 ) {
 	var inputValue by remember { mutableStateOf(script) }
 	TextField(
@@ -59,6 +61,9 @@ fun ScriptInput(
 				RemoveIcon(
 					onRemoveScript = onRemoveScript,
 				)
+				AddIcon(
+					onAddScript = onAddScript,
+				)
 				PlayIcon(
 					onExecuteScriptText = {
 						onExecuteScriptText(inputValue)
@@ -82,6 +87,23 @@ private fun RemoveIcon(onRemoveScript: (() -> Unit)?) {
 			imageVector = FeatherIcons.Trash,
 			tint = MaterialTheme.colorScheme.primary,
 			contentDescription = "Remove script",
+		)
+	}
+}
+
+@Composable
+private fun AddIcon(onAddScript: (() -> Unit)?) {
+	if (onAddScript == null) {
+		return
+	}
+
+	IconButton(
+		onClick = onAddScript,
+	) {
+		Icon(
+			imageVector = FeatherIcons.FilePlus,
+			tint = MaterialTheme.colorScheme.primary,
+			contentDescription = "Add script",
 		)
 	}
 }

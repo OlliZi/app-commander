@@ -28,11 +28,12 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MultiScriptInput(
-	onExecuteScriptText: (String) -> Unit,
-	onRemoveScript: (Int) -> Unit,
-	onExecuteAllScriptsText: () -> Unit,
 	scripts: List<String>,
-	onChangeScriptText: (Int, String) -> Unit = { _, _ -> },
+	onExecuteAllScriptsText: () -> Unit,
+	onChangeScriptText: (Int, String) -> Unit,
+	onRemoveScript: (Int) -> Unit,
+	onAddScriptText: (Int) -> Unit,
+	onExecuteScriptText: (String) -> Unit,
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
@@ -68,6 +69,9 @@ fun MultiScriptInput(
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
 					onChangeScriptText(index, editedScript)
+				},
+				onAddScript = {
+					onAddScriptText(index)
 				},
 				onRemoveScript = {
 					onRemoveScript(index)
@@ -108,6 +112,8 @@ internal fun PreviewMultiScriptInput(
 			onRemoveScript = {},
 			onExecuteScriptText = {},
 			onExecuteAllScriptsText = {},
+			onAddScriptText = {},
+			onChangeScriptText = { _, _ -> },
 		)
 	}
 }

@@ -45,6 +45,7 @@ class EditScriptViewModel(
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
 				is Event.OnChangeScript -> onChangeScript(event.index, event.script)
+				is Event.OnAddSubScript -> onAddSubScript(event.index)
 				is Event.OnRemoveSubScript -> onRemoveSubScript(event.index)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnExecuteSingleScript -> onExecuteSingleScript(event.script)
@@ -81,6 +82,19 @@ class EditScriptViewModel(
 							oldScript
 						}
 					},
+			)
+		}
+	}
+
+	private fun onAddSubScript(index: Int) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				scripts =
+					oldState.scripts
+						.toMutableList()
+						.apply {
+							add(index + 1, "<enter new script>")
+						}.toList(),
 			)
 		}
 	}
@@ -193,6 +207,10 @@ class EditScriptViewModel(
 		data class OnChangeScript(
 			val index: Int,
 			val script: String,
+		) : Event
+
+		data class OnAddSubScript(
+			val index: Int,
 		) : Event
 
 		data class OnRemoveSubScript(
