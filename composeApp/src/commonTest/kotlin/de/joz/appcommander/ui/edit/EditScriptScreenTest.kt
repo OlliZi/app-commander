@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.edit
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -18,10 +19,14 @@ import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.confirmation_no
+import de.joz.appcommander.resources.confirmation_yes
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -45,7 +50,7 @@ class EditScriptScreenTest {
 			scriptsRepository = scriptsRepositoryMock,
 			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 		)
-	private val removeUserScriptUseCaseMock: RemoveUserScriptUseCase = mockk(relaxed = true)
+	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
 
 	private val screenshotVerifier =
 		ScreenshotVerifier(
@@ -55,7 +60,7 @@ class EditScriptScreenTest {
 	@Test
 	fun `show default ui when no script was selected for editing before`() {
 		runComposeUiTest {
-			setupData(script = null)
+			setupData()
 			setTestContent()
 
 			screenshotVerifier.verifyScreenshot(
@@ -137,37 +142,73 @@ class EditScriptScreenTest {
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
+			val removeScript =
+				ScriptsRepository.Script(
+					label = "Toggle Dark Mode On and Off",
+					platform = ScriptsRepository.Platform.ANDROID,
+					scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+				)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+
+			setupData(script = removeScript)
+			setTestContent(scriptKey = removeScript.hashCode())
+
+			onNodeWithContentDescription(label = "Execute all scripts").performClick()
+
+			coVerify { executeScriptUseCaseMock(script = removeScript, selectedDevice = "TODO") }
 		}
 	}
 
 	@Test
 	fun `run one script when run button is clicked`() {
 		runComposeUiTest {
-		}
-	}
-
-	@Test
-	fun `delete script when delete button is clicked`() {
-		runComposeUiTest {
 			val removeScript =
 				ScriptsRepository.Script(
 					label = "Toggle Dark Mode On and Off",
 					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+					scripts = listOf("echo Hello", "echo world"),
 				)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+
 			setupData(script = removeScript)
+			setTestContent(scriptKey = removeScript.hashCode())
+
+			// onNodeWithContentDescription(label = .performClick()
+
+			coVerify { executeScriptUseCaseMock(script = removeScript, selectedDevice = "TODO") }
+		}
+	}
+
+	@Test
+	fun `delete script when delete button is clicked and confirmation approved`() {
+		runComposeUiTest {
+			setupData()
 			setTestContent()
 
 			onNodeWithText(text = getString(Res.string.edit_action_remove)).performClick()
+			onNodeWithText(text = getString(Res.string.confirmation_yes)).performClick()
 
-			verify { removeUserScriptUseCaseMock.invoke(removeScript) }
+			verify { scriptsRepositoryMock.removeScript(any()) }
+		}
+	}
+
+	@Test
+	fun `delete script not when delete button is clicked but confirmation aborted`() {
+		runComposeUiTest {
+			setupData()
+			setTestContent()
+
+			onNodeWithText(text = getString(Res.string.edit_action_remove)).performClick()
+			onNodeWithText(text = getString(Res.string.confirmation_no)).performClick()
+
+			verify(exactly = 0) { scriptsRepositoryMock.removeScript(any()) }
 		}
 	}
 
 	@Test
 	fun `close screen when back button is clicked`() {
 		runComposeUiTest {
-			setupData(script = null)
+			setupData()
 			setTestContent()
 
 			onNodeWithTag(testTag = "back_button").performClick()
@@ -179,7 +220,7 @@ class EditScriptScreenTest {
 	@Test
 	fun `close screen when close button is clicked`() {
 		runComposeUiTest {
-			setupData(script = null)
+			setupData()
 			setTestContent()
 
 			onNodeWithText(text = getString(Res.string.edit_action_abort)).performClick()
@@ -188,7 +229,7 @@ class EditScriptScreenTest {
 		}
 	}
 
-	private fun setupData(script: ScriptsRepository.Script?) {
+	private fun setupData(script: ScriptsRepository.Script? = null) {
 		every { getScriptIdUseCaseMock.invoke(any()) } returns (script?.hashCode() ?: 0)
 		every { scriptsRepositoryMock.getScripts() } returns
 			ScriptsRepository.JsonParseResult(
