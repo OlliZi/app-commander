@@ -124,6 +124,9 @@ internal fun EditScriptContent(
 				onChangeScriptText = { index, script ->
 					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
 				},
+				onRemoveScript = { index ->
+					onEvent(EditScriptViewModel.Event.OnRemoveSubScript(index = index))
+				},
 				onExecuteScriptText = {
 					onEvent(EditScriptViewModel.Event.OnExecuteSingleScript(script = it))
 				},

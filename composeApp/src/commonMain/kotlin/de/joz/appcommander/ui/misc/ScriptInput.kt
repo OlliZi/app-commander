@@ -2,6 +2,7 @@ package de.joz.appcommander.ui.misc
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Play
+import compose.icons.feathericons.Trash
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
@@ -31,6 +33,7 @@ fun ScriptInput(
 	onExecuteScriptText: (String) -> Unit,
 	script: String = "",
 	onChangeScriptText: (String) -> Unit = { _ -> },
+	onRemoveScript: (() -> Unit)? = null,
 ) {
 	var inputValue by remember { mutableStateOf(script) }
 	TextField(
@@ -52,19 +55,48 @@ fun ScriptInput(
 			onChangeScriptText(it)
 		},
 		trailingIcon = {
-			IconButton(
-				onClick = {
-					onExecuteScriptText(inputValue)
-				},
-			) {
-				Icon(
-					imageVector = FeatherIcons.Play,
-					tint = MaterialTheme.colorScheme.primary,
-					contentDescription = "Execute script text",
+			Row {
+				RemoveIcon(
+					onRemoveScript = onRemoveScript,
+				)
+				PlayIcon(
+					onExecuteScriptText = {
+						onExecuteScriptText(inputValue)
+					},
 				)
 			}
 		},
 	)
+}
+
+@Composable
+private fun RemoveIcon(onRemoveScript: (() -> Unit)?) {
+	if (onRemoveScript == null) {
+		return
+	}
+
+	IconButton(
+		onClick = onRemoveScript,
+	) {
+		Icon(
+			imageVector = FeatherIcons.Trash,
+			tint = MaterialTheme.colorScheme.primary,
+			contentDescription = "Remove script",
+		)
+	}
+}
+
+@Composable
+private fun PlayIcon(onExecuteScriptText: () -> Unit) {
+	IconButton(
+		onClick = onExecuteScriptText,
+	) {
+		Icon(
+			imageVector = FeatherIcons.Play,
+			tint = MaterialTheme.colorScheme.primary,
+			contentDescription = "Execute script text",
+		)
+	}
 }
 
 @Preview

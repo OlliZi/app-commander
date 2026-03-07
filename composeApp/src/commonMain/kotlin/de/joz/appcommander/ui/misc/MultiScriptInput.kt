@@ -29,6 +29,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun MultiScriptInput(
 	onExecuteScriptText: (String) -> Unit,
+	onRemoveScript: (Int) -> Unit,
 	onExecuteAllScriptsText: () -> Unit,
 	scripts: List<String>,
 	onChangeScriptText: (Int, String) -> Unit = { _, _ -> },
@@ -61,12 +62,15 @@ fun MultiScriptInput(
 	LazyColumn(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		itemsIndexed(scripts) { index, script ->
+		itemsIndexed(scripts, key = { index, script -> "${index}_$script" }) { index, script ->
 			ScriptInput(
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
 					onChangeScriptText(index, editedScript)
+				},
+				onRemoveScript = {
+					onRemoveScript(index)
 				},
 			)
 			if (index < scripts.lastIndex) {
@@ -101,6 +105,7 @@ internal fun PreviewMultiScriptInput(
 	) {
 		MultiScriptInput(
 			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
+			onRemoveScript = {},
 			onExecuteScriptText = {},
 			onExecuteAllScriptsText = {},
 		)
