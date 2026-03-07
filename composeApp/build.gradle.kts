@@ -99,7 +99,7 @@ kover {
 		filters {
 			excludes {
 				packages("org.koin.ksp.generated", "de.joz.appcommander.resources", "de.joz.appcommander.launch")
-				classes("**ComposableSingletons**")
+				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
 			}
 		}
 		verify {
