@@ -169,7 +169,7 @@ class EditScriptViewModel(
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			scriptName = script?.label.orEmpty(),
-			scripts = script?.scripts.orEmpty(),
+			scripts = script?.scripts ?: listOf(""),
 			selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
 		)
 
