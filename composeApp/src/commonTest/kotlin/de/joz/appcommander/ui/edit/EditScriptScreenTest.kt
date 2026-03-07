@@ -18,6 +18,8 @@ import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.every
@@ -129,6 +131,60 @@ class EditScriptScreenTest {
 					oldScript = baseScript,
 				)
 			}
+		}
+	}
+
+	@Test
+	fun `run all scripts when run button is clicked`() {
+		runComposeUiTest {
+		}
+	}
+
+	@Test
+	fun `run one script when run button is clicked`() {
+		runComposeUiTest {
+		}
+	}
+
+	@Test
+	fun `delete script when delete button is clicked`() {
+		runComposeUiTest {
+			val removeScript =
+				ScriptsRepository.Script(
+					label = "Toggle Dark Mode On and Off",
+					platform = ScriptsRepository.Platform.ANDROID,
+					scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				)
+			setupData(script = removeScript)
+			setTestContent()
+
+			onNodeWithText(text = getString(Res.string.edit_action_remove)).performClick()
+
+			verify { removeUserScriptUseCaseMock.invoke(removeScript) }
+		}
+	}
+
+	@Test
+	fun `close screen when back button is clicked`() {
+		runComposeUiTest {
+			setupData(script = null)
+			setTestContent()
+
+			onNodeWithTag(testTag = "back_button").performClick()
+
+			verify { navControllerMock.navigateUp() }
+		}
+	}
+
+	@Test
+	fun `close screen when close button is clicked`() {
+		runComposeUiTest {
+			setupData(script = null)
+			setTestContent()
+
+			onNodeWithText(text = getString(Res.string.edit_action_abort)).performClick()
+
+			verify { navControllerMock.navigateUp() }
 		}
 	}
 
