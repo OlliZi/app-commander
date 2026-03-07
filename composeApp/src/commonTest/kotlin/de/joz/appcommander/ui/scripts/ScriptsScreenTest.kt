@@ -153,7 +153,12 @@ class ScriptsScreenTest {
 											"adb shell cmd uimode night yes\n" +
 											"sleep 1\n" +
 											"adb shell cmd uimode night no",
-									originalScript = mockk(),
+									originalScript =
+										ScriptsRepository.Script(
+											label = "needed for platform",
+											platform = ScriptsRepository.Platform.ANDROID,
+											scripts = emptyList(),
+										),
 									isExpanded = true,
 								),
 							),

@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -103,7 +105,11 @@ internal fun EditScriptContent(
 		},
 	) { paddingValues ->
 		Column(
-			Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
+			Modifier
+				.fillMaxSize()
+				.padding(paddingValues)
+				.padding(16.dp)
+				.verticalScroll(rememberScrollState()),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
 			TextLabel(
@@ -123,6 +129,12 @@ internal fun EditScriptContent(
 				scripts = uiState.scripts,
 				onChangeScriptText = { index, script ->
 					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
+				},
+				onAddScriptText = { index ->
+					onEvent(EditScriptViewModel.Event.OnAddSubScript(index = index))
+				},
+				onRemoveScript = { index ->
+					onEvent(EditScriptViewModel.Event.OnRemoveSubScript(index = index))
 				},
 				onExecuteScriptText = {
 					onEvent(EditScriptViewModel.Event.OnExecuteSingleScript(script = it))

@@ -1,10 +1,9 @@
 package de.joz.appcommander.ui.misc
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,10 +27,12 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MultiScriptInput(
-	onExecuteScriptText: (String) -> Unit,
-	onExecuteAllScriptsText: () -> Unit,
 	scripts: List<String>,
-	onChangeScriptText: (Int, String) -> Unit = { _, _ -> },
+	onExecuteAllScriptsText: () -> Unit,
+	onChangeScriptText: (Int, String) -> Unit,
+	onRemoveScript: (Int) -> Unit,
+	onAddScriptText: (Int) -> Unit,
+	onExecuteScriptText: (String) -> Unit,
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
@@ -41,32 +42,37 @@ fun MultiScriptInput(
 			textLabelType = TextLabelType.BodyLarge,
 			modifier = Modifier.weight(1f),
 		)
-		if (scripts.size > 1) {
-			TextLabel(
-				text = stringResource(Res.string.edit_run_all_scripts),
-				textLabelType = TextLabelType.BodyLarge,
+
+		TextLabel(
+			text = stringResource(Res.string.edit_run_all_scripts),
+			textLabelType = TextLabelType.BodyLarge,
+		)
+		IconButton(
+			onClick = onExecuteAllScriptsText,
+		) {
+			Icon(
+				imageVector = FeatherIcons.Play,
+				tint = MaterialTheme.colorScheme.primary,
+				contentDescription = "Execute all scripts",
 			)
-			IconButton(
-				onClick = onExecuteAllScriptsText,
-			) {
-				Icon(
-					imageVector = FeatherIcons.Play,
-					tint = MaterialTheme.colorScheme.primary,
-					contentDescription = "Execute all scripts",
-				)
-			}
 		}
 	}
 
-	LazyColumn(
+	Column(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		itemsIndexed(scripts) { index, script ->
+		scripts.forEachIndexed { index, script ->
 			ScriptInput(
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
 					onChangeScriptText(index, editedScript)
+				},
+				onAddScript = {
+					onAddScriptText(index)
+				},
+				onRemoveScript = {
+					onRemoveScript(index)
 				},
 			)
 			if (index < scripts.lastIndex) {
@@ -101,8 +107,11 @@ internal fun PreviewMultiScriptInput(
 	) {
 		MultiScriptInput(
 			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
+			onRemoveScript = {},
 			onExecuteScriptText = {},
 			onExecuteAllScriptsText = {},
+			onAddScriptText = {},
+			onChangeScriptText = { _, _ -> },
 		)
 	}
 }

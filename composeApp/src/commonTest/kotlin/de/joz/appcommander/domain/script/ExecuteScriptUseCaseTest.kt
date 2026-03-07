@@ -1,7 +1,6 @@
 package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
-import de.joz.appcommander.helper.IsJenkinsTestRunUseCase
 import de.joz.appcommander.helper.IsLocalTestRunUseCase
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,7 +12,6 @@ import kotlin.test.assertTrue
 class ExecuteScriptUseCaseTest {
 	private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
 	private val isLocalTestRunUseCase = IsLocalTestRunUseCase()
-	private val isJenkinsTestRunUseCase = IsJenkinsTestRunUseCase()
 
 	@Test
 	fun `should execute script when launched`() =
@@ -88,6 +86,25 @@ class ExecuteScriptUseCaseTest {
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
 			assertEquals("- foo\n- foo\n- foo\n", result.output)
 			verify(exactly = 3) { addLoggingUseCaseMock.invoke("Execute script: 'echo foo' on device 'Pixel7'.") }
+		}
+
+	@Test
+	fun `should not log device when no devive provided`() =
+		runTest {
+			val executeScriptUseCase =
+				ExecuteScriptUseCase(
+					addLoggingUseCase = addLoggingUseCaseMock,
+				)
+			val script =
+				ScriptsRepository.Script(
+					label = "Test",
+					scripts = listOf("echo foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				)
+
+			executeScriptUseCase(script = script, selectedDevice = "")
+
+			verify { addLoggingUseCaseMock.invoke("Execute script: 'echo foo'.") }
 		}
 
 	@Test

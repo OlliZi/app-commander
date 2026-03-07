@@ -211,14 +211,20 @@ class ScriptsViewModel(
 	}
 
 	private fun onExecuteScript(script: Script) {
-		_uiState.value.connectedDevices
-			.filter {
-				it.isSelected
-			}.forEach { device ->
-				viewModelScope.launch(ioDispatcher) {
-					executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
-				}
+		if (script.originalScript.platform == ScriptsRepository.Platform.DESKTOP) {
+			viewModelScope.launch(ioDispatcher) {
+				executeScriptUseCase(script = script.originalScript)
 			}
+		} else {
+			_uiState.value.connectedDevices
+				.filter {
+					it.isSelected
+				}.forEach { device ->
+					viewModelScope.launch(ioDispatcher) {
+						executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
+					}
+				}
+		}
 	}
 
 	private fun onExecuteScriptText(
@@ -226,21 +232,41 @@ class ScriptsViewModel(
 		platform: ScriptsRepository.Platform,
 	) {
 		viewModelScope.launch(ioDispatcher) {
-			_uiState.value.connectedDevices
-				.filter {
-					it.isSelected
-				}.forEach { device ->
-					executeScriptUseCase(
-						script =
-							ScriptsRepository.Script(
-								label = "entered by terminal script",
-								scripts = listOf(script),
-								platform = platform,
-							),
-						selectedDevice = device.id,
-					)
-				}
+			if (platform == ScriptsRepository.Platform.DESKTOP) {
+				executeScript(
+					script = script,
+					platform = platform,
+					device = "",
+				)
+			} else {
+				_uiState.value.connectedDevices
+					.filter {
+						it.isSelected
+					}.forEach { device ->
+						executeScript(
+							script = script,
+							platform = platform,
+							device = device.id,
+						)
+					}
+			}
 		}
+	}
+
+	private suspend fun executeScript(
+		script: String,
+		platform: ScriptsRepository.Platform,
+		device: String = "",
+	) {
+		executeScriptUseCase(
+			script =
+				ScriptsRepository.Script(
+					label = "entered by terminal script",
+					scripts = listOf(script),
+					platform = platform,
+				),
+			selectedDevice = device,
+		)
 	}
 
 	private fun onExpandScript(script: Script) {
