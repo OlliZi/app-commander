@@ -67,15 +67,16 @@ class EditScriptScreenTest {
 	@Test
 	fun `show ui with selected script when a script was selected for editing before`() {
 		runComposeUiTest {
+			val testScript =
+				ScriptsRepository.Script(
+					label = "Toggle Dark Mode On and Off",
+					platform = ScriptsRepository.Platform.ANDROID,
+					scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				)
 			setupData(
-				script =
-					ScriptsRepository.Script(
-						label = "Toggle Dark Mode On and Off",
-						platform = ScriptsRepository.Platform.ANDROID,
-						scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
-					),
+				script = testScript,
 			)
-			setTestContent()
+			setTestContent(scriptKey = setupData().hashCode())
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
