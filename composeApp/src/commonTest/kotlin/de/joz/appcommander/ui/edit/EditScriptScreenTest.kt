@@ -4,6 +4,7 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -11,6 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
@@ -76,7 +78,8 @@ class EditScriptScreenTest {
 			setupData(
 				script = testScript,
 			)
-			setTestContent(scriptKey = setupData().hashCode())
+			setTestContent(scriptKey = testScript.hashCode())
+			waitUntilAtLeastOneExists(hasText(text = testScript.label))
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
