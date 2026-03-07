@@ -89,8 +89,12 @@ class EditScriptViewModel(
 		_uiState.update { oldState ->
 			oldState.copy(
 				scripts =
-					oldState.scripts.filterIndexed { oldIndex, _ ->
-						oldIndex != index
+					if (oldState.scripts.size == 1) {
+						listOf("")
+					} else {
+						oldState.scripts.filterIndexed { oldIndex, _ ->
+							oldIndex != index
+						}
 					},
 			)
 		}
