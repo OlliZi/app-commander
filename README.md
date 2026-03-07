@@ -107,7 +107,6 @@ App-Commander is built with modern technologies and best practices:
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable 
 - Unit-test for PreferencesRepositoryImpl
-- Enable button if platform is "Desktop"
 
 ## 🤝 Contributing
 
