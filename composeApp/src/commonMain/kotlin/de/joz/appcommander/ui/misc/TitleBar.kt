@@ -107,17 +107,3 @@ internal fun PreviewTitleBar(
 		}
 	}
 }
-
-internal class PreviewParams :
-	AppCommanderPreviewParameterProvider<Boolean>(
-		listOf(
-			PreviewData(
-				label = "Light",
-				uiState = false,
-			),
-			PreviewData(
-				label = "Dark",
-				uiState = true,
-			),
-		),
-	)
