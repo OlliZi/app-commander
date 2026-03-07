@@ -45,6 +45,8 @@ import de.joz.appcommander.resources.scripts_filter_section_title
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
+import de.joz.appcommander.resources.scripts_json_multi_scripts
+import de.joz.appcommander.resources.scripts_json_old_script_field
 import de.joz.appcommander.resources.scripts_json_parsing_error
 import de.joz.appcommander.resources.scripts_logging_section_title
 import de.joz.appcommander.resources.scripts_open_script_file
@@ -64,6 +66,7 @@ import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.TitleBarAction
+import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import de.joz.appcommander.ui.theme.AppCommanderTheme
@@ -140,7 +143,7 @@ internal fun ScriptsContent(
 
 			ScriptsSection(
 				scripts = uiState.scripts,
-				jsonParsingError = uiState.jsonParsingError,
+				hint = uiState.hint,
 				isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
 				modifier = Modifier.weight(1f).then(paddingInline),
 				onExecuteScript = {
@@ -224,14 +227,14 @@ private fun ConnectedDevices(
 @Composable
 private fun ScriptsSection(
 	scripts: List<Script>,
-	jsonParsingError: String?,
+	hint: Hint?,
 	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScript: (Script) -> Unit,
 	onEditScript: (Script) -> Unit,
 	onExpand: (Script) -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	JsonParsingError(jsonParsingError)
+	Hint(hint)
 
 	LazyColumn(
 		modifier = modifier,
@@ -328,14 +331,21 @@ private fun ScriptItemToolIcons(
 }
 
 @Composable
-private fun JsonParsingError(jsonParsingError: String?) {
-	if (jsonParsingError.isNullOrEmpty()) {
+private fun Hint(hint: Hint?) {
+	if (hint == null) {
 		return
 	}
 
+	val text =
+		when (hint) {
+			is Hint.Error -> stringResource(Res.string.scripts_json_parsing_error, hint.throwable.message.orEmpty())
+			is Hint.MultiScripts -> stringResource(Res.string.scripts_json_multi_scripts)
+			is Hint.OldScriptFieldHint -> stringResource(Res.string.scripts_json_old_script_field)
+		}
+
 	TextLabel(
 		modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
-		text = stringResource(Res.string.scripts_json_parsing_error, jsonParsingError),
+		text = text,
 		textLabelType = TextLabelType.BodyLarge,
 		textColor = Color.Red,
 	)
@@ -492,48 +502,6 @@ private fun ExpandButtonItem(
 private fun PreviewScriptScreen_Dark() {
 	RenderPreview(
 		darkTheme = true,
-		uiState =
-			ScriptsViewModel.UiState(
-				connectedDevices =
-					listOf(
-						ScriptsViewModel.Device(
-							label = "Pixel 9",
-							isSelected = true,
-							id = "1",
-						),
-						ScriptsViewModel.Device(
-							label = "Pixel 8",
-							isSelected = false,
-							id = "2",
-						),
-					),
-				scripts =
-					listOf(
-						Script(
-							description = "my script",
-							scriptText = "adb devices",
-							isExpanded = false,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-						Script(
-							description = "my script",
-							scriptText = "adb long long long long long long long long long long long long script",
-							isExpanded = true,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-					),
-				logging = listOf("log 1", "log 2", "log 3"),
-			),
 	)
 }
 
@@ -542,61 +510,57 @@ private fun PreviewScriptScreen_Dark() {
 private fun PreviewScriptScreen_Light() {
 	RenderPreview(
 		darkTheme = false,
-		uiState =
-			ScriptsViewModel.UiState(
-				connectedDevices =
-					listOf(
-						ScriptsViewModel.Device(
-							label = "Pixel 9",
-							isSelected = true,
-							id = "1",
-						),
-						ScriptsViewModel.Device(
-							label = "Pixel 8",
-							isSelected = false,
-							id = "2",
-						),
-					),
-				scripts =
-					listOf(
-						Script(
-							description = "my script",
-							scriptText = "adb devices",
-							isExpanded = false,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-						Script(
-							description = "my script",
-							scriptText = "adb long long long long long long long long long long long long script",
-							isExpanded = true,
-							originalScript =
-								ScriptsRepository.Script(
-									label = "",
-									script = "",
-									platform = ScriptsRepository.Platform.ANDROID,
-								),
-						),
-					),
-				logging = listOf("log 1", "log 2", "log 3"),
-			),
 	)
 }
 
 @Composable
-private fun RenderPreview(
-	darkTheme: Boolean,
-	uiState: ScriptsViewModel.UiState,
-) {
+private fun RenderPreview(darkTheme: Boolean) {
 	AppCommanderTheme(
 		darkTheme = darkTheme,
 	) {
 		ScriptsContent(
-			uiState = uiState,
+			uiState =
+				ScriptsViewModel.UiState(
+					connectedDevices =
+						listOf(
+							ScriptsViewModel.Device(
+								label = "Pixel 9",
+								isSelected = true,
+								id = "1",
+							),
+							ScriptsViewModel.Device(
+								label = "Pixel 8",
+								isSelected = false,
+								id = "2",
+							),
+						),
+					scripts =
+						listOf(
+							Script(
+								description = "my script",
+								scriptText = "adb devices",
+								isExpanded = false,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										scripts = emptyList(),
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+							Script(
+								description = "my script",
+								scriptText = "adb long long long long long long long long long long long long script",
+								isExpanded = true,
+								originalScript =
+									ScriptsRepository.Script(
+										label = "",
+										scripts = emptyList(),
+										platform = ScriptsRepository.Platform.ANDROID,
+									),
+							),
+						),
+					logging = listOf("log 1", "log 2", "log 3"),
+				),
 			onEvent = {},
 		)
 	}

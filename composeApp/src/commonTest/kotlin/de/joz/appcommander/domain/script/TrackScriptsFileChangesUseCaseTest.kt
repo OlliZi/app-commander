@@ -38,6 +38,30 @@ class TrackScriptsFileChangesUseCaseTest {
 			)
 		}
 
+	@Test
+	fun `invoke emits a script list when a parsing hint is detected`() =
+		runTest {
+			val firstError = ScriptsRepository.ParsingMetaData.MultiScriptsHint
+			val secondError = ScriptsRepository.ParsingMetaData.OldScriptFieldHint
+
+			coEvery { getUserScriptsUseCaseMock() } returns
+				createDummyScripts(1, parsingMetaData = firstError) andThen
+				createDummyScripts(1, parsingMetaData = secondError)
+			val trackScriptsFileChangesUseCase = createUseCase()
+
+			val emittedScripts = trackScriptsFileChangesUseCase().first()
+
+			assertEquals(1, emittedScripts.scripts.size)
+			assertEquals(
+				createDummyScripts(1).scripts[0],
+				emittedScripts.scripts[0],
+			)
+			assertEquals(
+				secondError,
+				emittedScripts.parsingMetaData,
+			)
+		}
+
 	@OptIn(ExperimentalCoroutinesApi::class)
 	@Test
 	fun `invoke does not emit when script list has not changed`() =
@@ -59,18 +83,20 @@ class TrackScriptsFileChangesUseCaseTest {
 			job.cancel()
 		}
 
-	private fun createDummyScripts(count: Int) =
-		ScriptsRepository.JsonParseResult(
-			scripts =
-				(1..count).map {
-					ScriptsRepository.Script(
-						label = "foo $it",
-						script = "echo $it",
-						platform = ScriptsRepository.Platform.ANDROID,
-					)
-				},
-			throwable = null,
-		)
+	private fun createDummyScripts(
+		count: Int,
+		parsingMetaData: ScriptsRepository.ParsingMetaData? = null,
+	) = ScriptsRepository.JsonParseResult(
+		scripts =
+			(1..count).map {
+				ScriptsRepository.Script(
+					label = "foo $it",
+					scripts = listOf("echo $it"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				)
+			},
+		parsingMetaData = parsingMetaData,
+	)
 
 	private fun createUseCase(): TrackScriptsFileChangesUseCase {
 		coEvery {

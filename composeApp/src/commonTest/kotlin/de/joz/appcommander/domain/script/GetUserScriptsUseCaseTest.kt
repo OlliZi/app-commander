@@ -20,11 +20,11 @@ class GetUserScriptsUseCaseTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "foo",
-								script = "echo",
+								scripts = listOf("echo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 						),
-					throwable = null,
+					parsingMetaData = null,
 				)
 
 			val getUserScriptsUseCase =
@@ -36,7 +36,7 @@ class GetUserScriptsUseCaseTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "foo",
-						script = "echo",
+						scripts = listOf("echo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),

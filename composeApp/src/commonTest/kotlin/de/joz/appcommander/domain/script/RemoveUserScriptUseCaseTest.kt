@@ -19,7 +19,7 @@ class RemoveUserScriptUseCaseTest {
 				script =
 					ScriptsRepository.Script(
 						label = "key",
-						script = "foo",
+						scripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 			)
@@ -29,7 +29,7 @@ class RemoveUserScriptUseCaseTest {
 					script =
 						ScriptsRepository.Script(
 							label = "key",
-							script = "foo",
+							scripts = listOf("foo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 				)

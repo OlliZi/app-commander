@@ -15,6 +15,7 @@ import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -70,16 +71,16 @@ class ScriptsViewModelTest {
 					listOf(
 						ScriptsRepository.Script(
 							label = "my script",
-							script = "foo",
+							scripts = listOf("foo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 						ScriptsRepository.Script(
 							label = "my another script",
-							script = "bar",
+							scripts = listOf("bar"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
-				throwable = null,
+				parsingMetaData = null,
 			)
 	}
 
@@ -108,7 +109,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "my script",
-								script = "foo",
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
@@ -118,7 +119,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "my another script",
-								script = "bar",
+								scripts = listOf("bar"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
@@ -375,7 +376,7 @@ class ScriptsViewModelTest {
 					script =
 						ScriptsRepository.Script(
 							label = "entered by terminal script",
-							script = "echo",
+							scripts = listOf("echo"),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					selectedDevice = "p7",
@@ -399,7 +400,7 @@ class ScriptsViewModelTest {
 			val testScript =
 				ScriptsRepository.Script(
 					label = "my script",
-					script = "foo",
+					scripts = listOf("foo"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				)
 
@@ -532,11 +533,11 @@ class ScriptsViewModelTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "my script",
-								script = "foo",
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 						),
-					throwable = null,
+					parsingMetaData = null,
 				)
 
 			val viewModel = createViewModel()
@@ -557,16 +558,16 @@ class ScriptsViewModelTest {
 						listOf(
 							ScriptsRepository.Script(
 								label = "my script",
-								script = "foo",
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 							ScriptsRepository.Script(
 								label = "abc",
-								script = "123",
+								scripts = listOf("123"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 						),
-					throwable = null,
+					parsingMetaData = null,
 				),
 			)
 
@@ -579,7 +580,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "my script",
-								script = "foo",
+								scripts = listOf("foo"),
 								platform = ScriptsRepository.Platform.ANDROID,
 							),
 					),
@@ -590,7 +591,7 @@ class ScriptsViewModelTest {
 						originalScript =
 							ScriptsRepository.Script(
 								label = "abc",
-								script = "123",
+								scripts = listOf("123"),
 								platform = ScriptsRepository.Platform.IOS,
 							),
 					),
@@ -607,13 +608,47 @@ class ScriptsViewModelTest {
 			} returns
 				ScriptsRepository.JsonParseResult(
 					scripts = emptyList(),
-					throwable = Exception("Cannot parse JSON"),
+					parsingMetaData = ScriptsRepository.ParsingMetaData.ParsingError(Exception("Cannot parse JSON")),
 				)
 
 			val viewModel = createViewModel()
 			runCurrent()
 
-			assertEquals("Cannot parse JSON", viewModel.uiState.value.jsonParsingError)
+			assertEquals("Cannot parse JSON", (viewModel.uiState.value.hint as Hint.Error).throwable.message)
+		}
+
+	@Test
+	fun `should return a hint when JSON contains an old script field`() =
+		runTest {
+			coEvery {
+				getUserScriptsUseCaseMock()
+			} returns
+				ScriptsRepository.JsonParseResult(
+					scripts = emptyList(),
+					parsingMetaData = ScriptsRepository.ParsingMetaData.OldScriptFieldHint,
+				)
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			assertEquals(Hint.OldScriptFieldHint, viewModel.uiState.value.hint)
+		}
+
+	@Test
+	fun `should return a hint when JSON contains scripts trimmer`() =
+		runTest {
+			coEvery {
+				getUserScriptsUseCaseMock()
+			} returns
+				ScriptsRepository.JsonParseResult(
+					scripts = emptyList(),
+					parsingMetaData = ScriptsRepository.ParsingMetaData.MultiScriptsHint,
+				)
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			assertEquals(Hint.MultiScripts, viewModel.uiState.value.hint)
 		}
 
 	@Test

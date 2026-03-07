@@ -26,7 +26,9 @@ class TrackScriptsFileChangesUseCase(
 				val newLoadedScripts = getUserScriptsUseCase()
 				if (scripts == null) {
 					scripts = newLoadedScripts
-				} else if (scripts.scripts != newLoadedScripts.scripts) {
+				} else if (scripts.scripts != newLoadedScripts.scripts ||
+					scripts.parsingMetaData != newLoadedScripts.parsingMetaData
+				) {
 					scripts = newLoadedScripts
 					emit(newLoadedScripts)
 				}

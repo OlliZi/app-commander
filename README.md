@@ -4,7 +4,7 @@
 
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
 
-App-Commander is a powerful desktop application built with Kotlin Multiplatform that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
+App-Commander is a powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
 
 ## ✨ Key Features
 
@@ -58,8 +58,12 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
 **Example Script:**
 ```json
 {
-  "label": "Toggle Dark Mode On",
-  "script": "adb shell cmd uimode night yes",
+  "label": "Toggle Dark Mode On and Off",
+  "scripts": [
+    "adb shell cmd uimode night yes",
+    "sleep 1",
+    "adb shell cmd uimode night no"
+  ],
   "platform": "ANDROID"
 }
 ```
@@ -71,10 +75,6 @@ Unleash the full potential of App-Commander with these special commands in your 
 *   **Looping:** To run a script multiple times, prefix it with `#LOOP_N`, where `N` is the number of repetitions.
     ```
     #LOOP_10 adb shell input swipe 500 500 1000 500
-    ```
-*   **Command Chaining:** Use `&&` to link multiple commands together for sequential execution.
-    ```
-    adb shell input swipe 500 500 1000 500 && adb shell input tap 500 500
     ```
 
 ## 🛠️ Installation and Running
@@ -98,18 +98,16 @@ App-Commander is built with modern technologies and best practices:
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
-    *   Code Coverage.
+    *   Code Coverage with Kover.
     *   Execute code quality locally (on my jenkins) and in github-cloud
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- script-JSON-field as array
 - Create a video showing the UI with emulator and a real device
-- Solve selectedDevice = "TODO" (EditScriptVM) + Make device section in edit script-screen workable 
+- Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable 
 - UI-tests (EditScriptContent, ...)
-- Unit-test for PreferencesRepositoryImpl 
-- Open-Icons for Logging and Terminal https://joebirch.co/android/exploring-material-3-for-compose-floating-action-button-menu/
+- Unit-test for PreferencesRepositoryImpl
 
 ## 🤝 Contributing
 

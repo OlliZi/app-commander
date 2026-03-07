@@ -21,9 +21,7 @@ import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_remove
-import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_script_name
-import de.joz.appcommander.resources.edit_script_placeholder
 import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
@@ -33,8 +31,8 @@ import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
 import de.joz.appcommander.ui.misc.DevicesBar
+import de.joz.appcommander.ui.misc.MultiScriptInput
 import de.joz.appcommander.ui.misc.PlatformSelection
-import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TextLabel
@@ -121,22 +119,16 @@ internal fun EditScriptContent(
 
 			SectionDivider()
 
-			TextLabel(
-				text = stringResource(Res.string.edit_enter_or_edit),
-				textLabelType = TextLabelType.BodyLarge,
-			)
-			ScriptInput(
-				script =
-					uiState.script.ifEmpty {
-						stringResource(
-							Res.string.edit_script_placeholder,
-						)
-					},
-				onChangeScriptText = {
-					onEvent(EditScriptViewModel.Event.OnChangeScript(script = it))
+			MultiScriptInput(
+				scripts = uiState.scripts,
+				onChangeScriptText = { index, script ->
+					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
 				},
 				onExecuteScriptText = {
-					onEvent(EditScriptViewModel.Event.OnExecuteScript)
+					onEvent(EditScriptViewModel.Event.OnExecuteSingleScript(script = it))
+				},
+				onExecuteAllScriptsText = {
+					onEvent(EditScriptViewModel.Event.OnExecuteAllScripts)
 				},
 			)
 

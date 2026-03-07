@@ -3,6 +3,7 @@ package de.joz.appcommander.data
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
+import de.joz.appcommander.domain.script.ScriptsRepository.ParsingMetaData
 import kotlinx.serialization.json.Json
 import okio.FileNotFoundException
 import org.koin.core.annotation.Single
@@ -28,14 +29,17 @@ class ScriptsRepositoryImpl(
 		}
 
 		return runCatching {
+			val scriptsFromFile = jsonFile.readText()
+			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
+			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
 			JsonParseResult(
-				scripts = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText()),
-				throwable = null,
+				scripts = script,
+				parsingMetaData = parsingMetaData,
 			)
 		}.getOrElse { error ->
 			JsonParseResult(
 				scripts = DEFAULT_SCRIPTS,
-				throwable = error,
+				parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
 			)
 		}
 	}
@@ -72,28 +76,48 @@ class ScriptsRepositoryImpl(
 		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
 	}
 
+	private fun checkScriptContainsTrimmer(
+		scripts: List<ScriptsRepository.Script>,
+		fileJsonContent: String,
+	): ParsingMetaData? =
+		if (scripts.any { it.scripts.any { script -> script.contains(SCRIPT_TRIMMER) } }) {
+			ParsingMetaData.MultiScriptsHint
+		} else if (fileJsonContent.contains(OLD_SCRIPT_FIELD)) {
+			ParsingMetaData.OldScriptFieldHint
+		} else {
+			null
+		}
+
 	companion object {
-		private val DEFAULT_SCRIPTS =
+		val DEFAULT_SCRIPTS =
 			listOf(
 				ScriptsRepository.Script(
 					label = "Dark mode",
-					script = "adb shell cmd uimode night yes",
+					scripts =
+						listOf("adb shell cmd uimode night yes"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "Light mode",
-					script = "adb shell cmd uimode night no",
+					scripts =
+						listOf("adb shell cmd uimode night no"),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "Switch dark to light to dark mode",
-					script =
-						"adb shell cmd uimode night no && sleep 1 && adb shell cmd uimode night yes && " +
-							"sleep 1 && adb shell cmd uimode night no",
+					scripts =
+						listOf(
+							"adb shell cmd uimode night no",
+							"sleep 1",
+							"adb shell cmd uimode night yes",
+							"sleep 1",
+							"adb shell cmd uimode night no",
+						),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			)
-
+		private const val SCRIPT_TRIMMER = "&&"
+		private const val OLD_SCRIPT_FIELD = "\"script\""
 		internal const val JSON_FILE_NAME = "scripts.json"
 	}
 }

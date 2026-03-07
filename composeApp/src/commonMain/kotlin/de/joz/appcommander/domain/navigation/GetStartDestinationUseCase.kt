@@ -17,7 +17,7 @@ class GetStartDestinationUseCase(
 
 	private suspend fun getStartDestination(): NavigationScreens =
 		if (getPreferenceUseCase.get(
-				key = SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY,
+				key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
 				defaultValue = false,
 			)
 		) {

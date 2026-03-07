@@ -7,6 +7,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
@@ -25,9 +26,10 @@ fun ExpandButton(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 	direction: ExpandButtonDirection = ExpandButtonDirection.BOTTOM_TO_TOP,
+	testTag: String = "expand_button",
 ) {
 	IconButton(
-		modifier = modifier,
+		modifier = modifier.testTag(testTag),
 		onClick = onClick,
 	) {
 		Icon(

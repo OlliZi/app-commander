@@ -81,7 +81,7 @@ internal fun PreviewScriptInput(
 	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
 ) {
 	AppCommanderTheme(
-		darkTheme = false,
+		darkTheme = previewData.uiState,
 	) {
 		Column(
 			verticalArrangement = Arrangement.SpaceBetween,

@@ -19,14 +19,24 @@ interface ScriptsRepository {
 	@Serializable
 	data class Script(
 		val label: String,
-		val script: String,
 		val platform: Platform,
+		val scripts: List<String>,
 	)
 
 	data class JsonParseResult(
 		val scripts: List<Script>,
-		val throwable: Throwable?,
+		val parsingMetaData: ParsingMetaData?,
 	)
+
+	sealed interface ParsingMetaData {
+		data class ParsingError(
+			val throwable: Throwable,
+		) : ParsingMetaData
+
+		data object MultiScriptsHint : ParsingMetaData
+
+		data object OldScriptFieldHint : ParsingMetaData
+	}
 
 	enum class Platform(
 		val label: String,

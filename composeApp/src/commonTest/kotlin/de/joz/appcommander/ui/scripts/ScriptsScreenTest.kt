@@ -15,6 +15,7 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.mockk
 import kotlin.test.Test
@@ -132,6 +133,40 @@ class ScriptsScreenTest {
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "see_log",
+			)
+		}
+	}
+
+	@Test
+	fun `should all scripts when script is expanded`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						scripts =
+							listOf(
+								ScriptsViewModel.Script(
+									description = "some sxirpt",
+									scriptText =
+										"adb shell cmd uimode night no\n" +
+											"sleep 1\n" +
+											"adb shell cmd uimode night yes\n" +
+											"sleep 1\n" +
+											"adb shell cmd uimode night no",
+									originalScript = mockk(),
+									isExpanded = true,
+								),
+							),
+					),
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button",
+			).assertIsDisplayed().performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "expanded_script",
 			)
 		}
 	}
@@ -328,7 +363,7 @@ class ScriptsScreenTest {
 			setTestContent(
 				uiState =
 					ScriptsViewModel.UiState(
-						jsonParsingError = "Cannot find field 'platform'.",
+						hint = Hint.Error(Exception("Cannot find field 'platform'.")),
 					),
 			)
 

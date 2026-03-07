@@ -18,6 +18,8 @@
     <string name="scripts_logging_section_title">Logging</string>
     <string name="scripts_terminal_placeholder">adb devices</string>
     <string name="scripts_json_parsing_error">The scripts-file cannot parse. Only default scripts are loaded. Please fix the error:\n%1$s</string>
+    <string name="scripts_json_multi_scripts">The scripts-file contains multiple scripts, splitted by "&amp;&amp;". Please migrate to "scripts" and put each script into an array.</string>
+    <string name="scripts_json_old_script_field">The scripts-file contains an old field "script". Please migrate to "scripts" and put each script into an array.</string>
 
     <string name="settings_title">Settings</string>
     <string name="settings_preference_show_welcome_screen">Hide welcome screen on startup.</string>
@@ -32,8 +34,9 @@
 
     <string name="edit_title">Change or add a script</string>
     <string name="edit_script_name">Name or description of your script</string>
-    <string name="edit_enter_or_edit">Enter or edit your script</string>
-    <string name="edit_script_placeholder">adb shell cmd </string>
+    <string name="edit_enter_or_edit">Enter or edit your script(s)</string>
+    <string name="edit_run_all_scripts">run all scripts in order</string>
+    <string name="edit_script_placeholder">adb shell input tap </string>
     <string name="edit_select_platform">Select affected platform</string>
     <string name="edit_select_devices">Select device for testing your script</string>
     <string name="edit_action_save">Save script</string>

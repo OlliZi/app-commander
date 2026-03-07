@@ -19,12 +19,12 @@ class GetUserScriptByKeyUseCaseTest {
 				scripts =
 					listOf(
 						ScriptsRepository.Script(
-							script = "",
+							scripts = emptyList(),
 							label = "",
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
-				throwable = null,
+				parsingMetaData = null,
 			)
 	}
 
@@ -54,7 +54,7 @@ class GetUserScriptByKeyUseCaseTest {
 		every { scriptsRepositoryMock.getScripts() } returns
 			ScriptsRepository.JsonParseResult(
 				scripts = emptyList(),
-				throwable = null,
+				parsingMetaData = null,
 			)
 
 		val useCase = createUseCase()

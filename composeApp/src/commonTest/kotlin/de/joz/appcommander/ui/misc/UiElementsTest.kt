@@ -54,6 +54,12 @@ class UiElementsTest {
 		}
 
 	@Test
+	fun `should render PreviewMultiScriptInput in all modes`() =
+		setupTestUiElement("PreviewMultiScriptInput") {
+			PreviewMultiScriptInput()
+		}
+
+	@Test
 	fun `should render PreviewCollapsable in all modes`() =
 		setupTestUiElement("PreviewCollapsable") {
 			PreviewCollapsable()
