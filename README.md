@@ -98,7 +98,7 @@ App-Commander is built with modern technologies and best practices:
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
-    *   Code Coverage with Kover.
+    *   Code Coverage with Kover (~90 %).
     *   Execute code quality locally (on my jenkins) and in github-cloud
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
@@ -106,7 +106,6 @@ App-Commander is built with modern technologies and best practices:
 ## 👷TODOs
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable 
-- UI-tests (EditScriptContent, ...)
 - Unit-test for PreferencesRepositoryImpl
 
 ## 🤝 Contributing
