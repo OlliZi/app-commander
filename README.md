@@ -24,6 +24,11 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
     *   Scripts filtering.
 *   **External Script Editing:** For advanced users, you can directly edit the `scripts.json` file.
 
+## 💻 Supported Platform
+*   **Android**
+*   **iOS**
+*   **Desktop**
+
 ## 🎥 First Impressions I
 <kbd><img src="preview_overview.gif" width="500"/></kbd>
 
