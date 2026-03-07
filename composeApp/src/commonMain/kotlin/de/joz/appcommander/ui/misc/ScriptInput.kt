@@ -37,7 +37,7 @@ fun ScriptInput(
 	onRemoveScript: (() -> Unit)? = null,
 	onAddScript: (() -> Unit)? = null,
 ) {
-	var inputValue by remember { mutableStateOf(script) }
+	var inputValue by remember(script) { mutableStateOf(script) }
 	TextField(
 		value = inputValue,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_script_input"),
