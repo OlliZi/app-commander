@@ -87,6 +87,10 @@ class ExecuteScriptUseCase(
 			ScriptsRepository.Platform.IOS -> {
 				script
 			}
+
+			ScriptsRepository.Platform.DESKTOP -> {
+				script
+			}
 		}
 	}
 

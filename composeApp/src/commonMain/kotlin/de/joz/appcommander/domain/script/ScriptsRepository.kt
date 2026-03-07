@@ -33,5 +33,6 @@ interface ScriptsRepository {
 	) {
 		ANDROID("Android"),
 		IOS("iOS"),
+		DESKTOP("Desktop"),
 	}
 }
