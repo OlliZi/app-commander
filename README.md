@@ -25,9 +25,9 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **External Script Editing:** For advanced users, you can directly edit the `scripts.json` file.
 
 ## 💻 Supported Platform
-*   **Android**
-*   **iOS**
-*   **Desktop**
+*   **🤖 Android**
+*   **🍏 iOS**
+*   **💻 Desktop**
 
 ## 🎥 First Impressions I
 <kbd><img src="preview_overview.gif" width="500"/></kbd>
@@ -98,15 +98,14 @@ App-Commander is built with modern technologies and best practices:
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
-    *   Code Coverage with Kover.
-    *   Execute code quality locally (on my jenkins) and in github-cloud
+    *   Code Coverage with Kover (~90 %).
+    *   Execute code quality locally (on my jenkins) and in github-cloud.
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable 
-- UI-tests (EditScriptContent, ...)
 - Unit-test for PreferencesRepositoryImpl
 
 ## 🤝 Contributing
