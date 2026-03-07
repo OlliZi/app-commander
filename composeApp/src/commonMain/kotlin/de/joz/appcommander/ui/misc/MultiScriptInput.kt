@@ -43,20 +43,19 @@ fun MultiScriptInput(
 			textLabelType = TextLabelType.BodyLarge,
 			modifier = Modifier.weight(1f),
 		)
-		if (scripts.size > 1) {
-			TextLabel(
-				text = stringResource(Res.string.edit_run_all_scripts),
-				textLabelType = TextLabelType.BodyLarge,
+
+		TextLabel(
+			text = stringResource(Res.string.edit_run_all_scripts),
+			textLabelType = TextLabelType.BodyLarge,
+		)
+		IconButton(
+			onClick = onExecuteAllScriptsText,
+		) {
+			Icon(
+				imageVector = FeatherIcons.Play,
+				tint = MaterialTheme.colorScheme.primary,
+				contentDescription = "Execute all scripts",
 			)
-			IconButton(
-				onClick = onExecuteAllScriptsText,
-			) {
-				Icon(
-					imageVector = FeatherIcons.Play,
-					tint = MaterialTheme.colorScheme.primary,
-					contentDescription = "Execute all scripts",
-				)
-			}
 		}
 	}
 
