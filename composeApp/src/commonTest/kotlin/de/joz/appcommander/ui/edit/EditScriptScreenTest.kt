@@ -2,6 +2,7 @@ package de.joz.appcommander.ui.edit
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -164,18 +165,40 @@ class EditScriptScreenTest {
 		runComposeUiTest {
 			val removeScript =
 				ScriptsRepository.Script(
-					label = "Toggle Dark Mode On and Off",
-					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("echo Hello", "echo world"),
+					label = "Test",
+					platform = ScriptsRepository.Platform.DESKTOP,
+					scripts = listOf("echo Hello", "echo world!"),
 				)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = removeScript)
 			setTestContent(scriptKey = removeScript.hashCode())
 
-			// onNodeWithContentDescription(label = .performClick()
+			onAllNodes(hasContentDescription("Execute script text")).apply {
+				get(0).performClick()
+				get(1).performClick()
+			}
 
-			coVerify { executeScriptUseCaseMock(script = removeScript, selectedDevice = "TODO") }
+			coVerify {
+				executeScriptUseCaseMock(
+					script =
+						ScriptsRepository.Script(
+							label = "Test",
+							scripts = listOf("echo Hello"),
+							platform = ScriptsRepository.Platform.DESKTOP,
+						),
+					selectedDevice = "TODO",
+				)
+				executeScriptUseCaseMock(
+					script =
+						ScriptsRepository.Script(
+							label = "Test",
+							scripts = listOf("echo world!"),
+							platform = ScriptsRepository.Platform.DESKTOP,
+						),
+					selectedDevice = "TODO",
+				)
+			}
 		}
 	}
 
