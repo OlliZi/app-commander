@@ -124,8 +124,7 @@ class ScreenshotVerifier<T>(
 				if (result.fraction > IMAGE_DIFF_THRESHOLD) {
 					val diffFile = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_diff.png")
 					diffFile.writeBytes(convertToPng(result.diffBitmap)!!)
-					val currentScreenshot =
-						File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_current.png")
+					val currentScreenshot = File(goldenImage.parentFile, goldenImage.name)
 					Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
 					fail(
 						"Screenshots differs. Take a look at the diff image.\n" +
