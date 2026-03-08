@@ -177,57 +177,31 @@ class ScriptsScreenTest {
 	}
 
 	@Test
-	fun `should always activate button for Desktop scripts regardless there are connected devices`() {
+	fun `should always activate button for Desktop scripts regardless of connected devices`() {
 		runComposeUiTest {
 			setTestContent(
 				uiState =
 					ScriptsViewModel.UiState(
 						scripts =
-							listOf(
+							ScriptsRepository.Platform.entries.map {
 								ScriptsViewModel.Script(
-									description = "some script for Desktop",
+									description = "some script for ${it.label}",
 									scriptText = "echo Hello App-Commander!",
 									originalScript =
 										ScriptsRepository.Script(
 											label = "",
-											platform = ScriptsRepository.Platform.DESKTOP,
+											platform = it,
 											scripts = emptyList(),
 										),
 									isExpanded = false,
-								),
-								ScriptsViewModel.Script(
-									description = "some script for Android",
-									scriptText = "foo",
-									originalScript =
-										ScriptsRepository.Script(
-											label = "",
-											platform = ScriptsRepository.Platform.ANDROID,
-											scripts = emptyList(),
-										),
-									isExpanded = false,
-								),
-								ScriptsViewModel.Script(
-									description = "some script for iOS",
-									scriptText = "foo",
-									originalScript =
-										ScriptsRepository.Script(
-											label = "",
-											platform = ScriptsRepository.Platform.IOS,
-											scripts = emptyList(),
-										),
-									isExpanded = false,
-								),
-							),
+								)
+							},
 					),
 			)
 
-			onNodeWithTag(
-				testTag = "expand_button",
-			).assertIsDisplayed().performClick()
-
 			screenshotVerifier.verifyScreenshot(
 				source = this,
-				screenshotName = "expanded_script",
+				screenshotName = "activated_scripts",
 			)
 		}
 	}
