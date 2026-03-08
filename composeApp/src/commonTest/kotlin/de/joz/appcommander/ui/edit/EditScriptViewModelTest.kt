@@ -117,7 +117,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should add a new script under existing script when event 'OnChangeScriptName' is fired`() =
+	fun `should add a new script under existing script when event 'OnAddSubScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
 
