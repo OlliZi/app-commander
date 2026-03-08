@@ -146,7 +146,7 @@ class ScriptsScreenTest {
 						scripts =
 							listOf(
 								ScriptsViewModel.Script(
-									description = "some sxirpt",
+									description = "some script",
 									scriptText =
 										"adb shell cmd uimode night no\n" +
 											"sleep 1\n" +
@@ -160,6 +160,62 @@ class ScriptsScreenTest {
 											scripts = emptyList(),
 										),
 									isExpanded = true,
+								),
+							),
+					),
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button",
+			).assertIsDisplayed().performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "expanded_script",
+			)
+		}
+	}
+
+	@Test
+	fun `should always activate button for Desktop scripts regardless there are connected devices`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						scripts =
+							listOf(
+								ScriptsViewModel.Script(
+									description = "some script for Desktop",
+									scriptText = "echo Hello App-Commander!",
+									originalScript =
+										ScriptsRepository.Script(
+											label = "",
+											platform = ScriptsRepository.Platform.DESKTOP,
+											scripts = emptyList(),
+										),
+									isExpanded = false,
+								),
+								ScriptsViewModel.Script(
+									description = "some script for Android",
+									scriptText = "foo",
+									originalScript =
+										ScriptsRepository.Script(
+											label = "",
+											platform = ScriptsRepository.Platform.ANDROID,
+											scripts = emptyList(),
+										),
+									isExpanded = false,
+								),
+								ScriptsViewModel.Script(
+									description = "some script for iOS",
+									scriptText = "foo",
+									originalScript =
+										ScriptsRepository.Script(
+											label = "",
+											platform = ScriptsRepository.Platform.IOS,
+											scripts = emptyList(),
+										),
+									isExpanded = false,
 								),
 							),
 					),
