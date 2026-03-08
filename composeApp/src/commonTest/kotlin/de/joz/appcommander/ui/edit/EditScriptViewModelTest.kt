@@ -125,6 +125,25 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should remove script when event 'OnRemoveSubScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnRemoveSubScript(
+						index = 0,
+					),
+			)
+			runCurrent()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertEquals("", viewModel.uiState.value.scripts[0])
+		}
+
+	@Test
 	fun `should save script when event 'OnSaveScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
