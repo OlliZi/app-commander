@@ -144,6 +144,33 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should remove script on correct index when event 'OnRemoveSubScript' is fired`() =
+		runTest {
+			val testScript =
+				ScriptsRepository.Script(
+					label = "label",
+					scripts = listOf("script 1", "script 2", "script 3"),
+					platform = ScriptsRepository.Platform.IOS,
+				)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			val viewModel = createViewModel()
+
+			assertEquals(3, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnRemoveSubScript(
+						index = 1,
+					),
+			)
+			runCurrent()
+
+			assertEquals(2, viewModel.uiState.value.scripts.size)
+			assertEquals("script 1", viewModel.uiState.value.scripts[0])
+			assertEquals("script 3", viewModel.uiState.value.scripts[1])
+		}
+
+	@Test
 	fun `should save script when event 'OnSaveScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
