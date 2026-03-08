@@ -31,7 +31,10 @@ class ExecuteScriptUseCase(
 
 				(1..loopCount).forEach { _ ->
 					delay((if (loopCount > 1) 200 else 0))
-					addLoggingUseCase("Execute script: '${plainCommand.joinToString(" ")}' on device '$selectedDevice'.")
+					addLoggingUseCase(
+						"Execute script: '${plainCommand.joinToString(" ")}'" +
+							(if (selectedDevice.isNotEmpty()) " on device '$selectedDevice'." else "."),
+					)
 					outputs.add("- ${innerExecuteScript(plainCommand)}")
 				}
 			}

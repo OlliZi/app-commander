@@ -34,6 +34,17 @@ class EditScriptViewModelTest {
 	}
 
 	@Test
+	fun `should at least add at minimum one empty script when there was no script provided for the edit session`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertEquals("", viewModel.uiState.value.scripts[0])
+			assertEquals("", viewModel.uiState.value.scriptName)
+			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.selectedPlatform)
+		}
+
+	@Test
 	fun `should navigate back when event 'OnNavigateBack' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
@@ -103,6 +114,71 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			assertEquals("new name", viewModel.uiState.value.scriptName)
+		}
+
+	@Test
+	fun `should add a new script under existing script when event 'OnAddSubScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnAddSubScript(
+						index = 0,
+					),
+			)
+			runCurrent()
+
+			assertEquals(2, viewModel.uiState.value.scripts.size)
+			assertEquals("<enter new script>", viewModel.uiState.value.scripts[1])
+		}
+
+	@Test
+	fun `should remove script when event 'OnRemoveSubScript' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnRemoveSubScript(
+						index = 0,
+					),
+			)
+			runCurrent()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertEquals("", viewModel.uiState.value.scripts[0])
+		}
+
+	@Test
+	fun `should remove script on correct index when event 'OnRemoveSubScript' is fired`() =
+		runTest {
+			val testScript =
+				ScriptsRepository.Script(
+					label = "label",
+					scripts = listOf("script 1", "script 2", "script 3"),
+					platform = ScriptsRepository.Platform.IOS,
+				)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			val viewModel = createViewModel()
+
+			assertEquals(3, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnRemoveSubScript(
+						index = 1,
+					),
+			)
+			runCurrent()
+
+			assertEquals(2, viewModel.uiState.value.scripts.size)
+			assertEquals("script 1", viewModel.uiState.value.scripts[0])
+			assertEquals("script 3", viewModel.uiState.value.scripts[1])
 		}
 
 	@Test

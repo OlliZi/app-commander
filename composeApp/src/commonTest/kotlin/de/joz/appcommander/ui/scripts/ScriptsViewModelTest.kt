@@ -700,6 +700,69 @@ class ScriptsViewModelTest {
 			)
 		}
 
+	@Test
+	fun `should run script for Desktop never on a device`() =
+		runTest {
+			val testScript =
+				ScriptsRepository.Script(
+					label = "desktop script",
+					scripts = listOf("echo"),
+					platform = ScriptsRepository.Platform.DESKTOP,
+				)
+			val viewModel = createViewModel()
+			runCurrent()
+
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnExecuteScript(
+						script =
+							ScriptsViewModel.Script(
+								description = "desktop script",
+								scriptText = "echo",
+								originalScript = testScript,
+							),
+					),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "",
+				)
+			}
+		}
+
+	@Test
+	fun `should run script text for Desktop never on a device`() =
+		runTest {
+			val desktop = ScriptsRepository.Platform.DESKTOP
+			val testScript =
+				ScriptsRepository.Script(
+					label = "entered by terminal script",
+					scripts = listOf("echo"),
+					platform = desktop,
+				)
+			val viewModel = createViewModel()
+			runCurrent()
+
+			viewModel.onEvent(
+				event =
+					ScriptsViewModel.Event.OnExecuteScriptText(
+						script = "echo",
+						platform = desktop,
+					),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "",
+				)
+			}
+		}
+
 	private fun createViewModel(): ScriptsViewModel =
 		ScriptsViewModel(
 			navController = navControllerMock,

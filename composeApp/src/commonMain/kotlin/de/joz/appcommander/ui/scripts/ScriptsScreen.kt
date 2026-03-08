@@ -241,8 +241,11 @@ private fun ScriptsSection(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		items(scripts) { script ->
+			val isButtonActive =
+				isAtMinimumOneDeviceSelected || script.originalScript.platform == ScriptsRepository.Platform.DESKTOP
+
 			Button(
-				enabled = isAtMinimumOneDeviceSelected,
+				enabled = isButtonActive,
 				shape = RoundedCornerShape(10.dp),
 				onClick = { onExecuteScript(script) },
 			) {
@@ -266,7 +269,7 @@ private fun ScriptsSection(
 							)
 						}
 						ScriptItemToolIcons(
-							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+							isActive = isButtonActive,
 							isExpanded = true,
 							onExpand = { onExpand(script) },
 							onEditScript = { onEditScript(script) },
@@ -295,7 +298,7 @@ private fun ScriptsSection(
 						)
 
 						ScriptItemToolIcons(
-							isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+							isActive = isButtonActive,
 							isExpanded = false,
 							onExpand = { onExpand(script) },
 							onEditScript = { onEditScript(script) },
@@ -309,7 +312,7 @@ private fun ScriptsSection(
 
 @Composable
 private fun ScriptItemToolIcons(
-	isAtMinimumOneDeviceSelected: Boolean,
+	isActive: Boolean,
 	isExpanded: Boolean,
 	onEditScript: () -> Unit,
 	onExpand: () -> Unit,
@@ -318,12 +321,12 @@ private fun ScriptItemToolIcons(
 		modifier = Modifier.offset(x = 20.dp),
 	) {
 		EditButtonItem(
-			isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+			isActive = isActive,
 			onClick = onEditScript,
 		)
 		Spacer(modifier = Modifier.width(8.dp))
 		ExpandButtonItem(
-			isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+			isActive = isActive,
 			isExpanded = isExpanded,
 			onExpand = onExpand,
 		)
@@ -449,13 +452,13 @@ private fun TerminalSection(
 
 @Composable
 private fun EditButtonItem(
-	isAtMinimumOneDeviceSelected: Boolean,
+	isActive: Boolean,
 	onClick: () -> Unit,
 ) {
 	IconButton(
 		modifier =
 			Modifier.then(
-				if (isAtMinimumOneDeviceSelected) {
+				if (isActive) {
 					Modifier.background(
 						Color.White,
 						CircleShape,
@@ -476,14 +479,14 @@ private fun EditButtonItem(
 
 @Composable
 private fun ExpandButtonItem(
-	isAtMinimumOneDeviceSelected: Boolean,
+	isActive: Boolean,
 	isExpanded: Boolean,
 	onExpand: () -> Unit,
 ) {
 	ExpandButton(
 		modifier =
 			Modifier.then(
-				if (isAtMinimumOneDeviceSelected) {
+				if (isActive) {
 					Modifier.background(
 						Color.White,
 						CircleShape,

@@ -146,14 +146,19 @@ class ScriptsScreenTest {
 						scripts =
 							listOf(
 								ScriptsViewModel.Script(
-									description = "some sxirpt",
+									description = "some script",
 									scriptText =
 										"adb shell cmd uimode night no\n" +
 											"sleep 1\n" +
 											"adb shell cmd uimode night yes\n" +
 											"sleep 1\n" +
 											"adb shell cmd uimode night no",
-									originalScript = mockk(),
+									originalScript =
+										ScriptsRepository.Script(
+											label = "needed for platform",
+											platform = ScriptsRepository.Platform.ANDROID,
+											scripts = emptyList(),
+										),
 									isExpanded = true,
 								),
 							),
@@ -167,6 +172,36 @@ class ScriptsScreenTest {
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "expanded_script",
+			)
+		}
+	}
+
+	@Test
+	fun `should always activate button for Desktop scripts regardless of connected devices`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState =
+					ScriptsViewModel.UiState(
+						scripts =
+							ScriptsRepository.Platform.entries.map {
+								ScriptsViewModel.Script(
+									description = "some script for ${it.label}",
+									scriptText = "echo Hello App-Commander!",
+									originalScript =
+										ScriptsRepository.Script(
+											label = "",
+											platform = it,
+											scripts = emptyList(),
+										),
+									isExpanded = false,
+								)
+							},
+					),
+			)
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "activated_scripts",
 			)
 		}
 	}

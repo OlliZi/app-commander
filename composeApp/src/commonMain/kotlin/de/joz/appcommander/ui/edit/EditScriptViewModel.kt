@@ -45,6 +45,8 @@ class EditScriptViewModel(
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
 				is Event.OnChangeScript -> onChangeScript(event.index, event.script)
+				is Event.OnAddSubScript -> onAddSubScript(event.index)
+				is Event.OnRemoveSubScript -> onRemoveSubScript(event.index)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnExecuteSingleScript -> onExecuteSingleScript(event.script)
 				is Event.OnExecuteAllScripts -> onExecuteAllScripts()
@@ -78,6 +80,34 @@ class EditScriptViewModel(
 							script
 						} else {
 							oldScript
+						}
+					},
+			)
+		}
+	}
+
+	private fun onAddSubScript(index: Int) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				scripts =
+					oldState.scripts
+						.toMutableList()
+						.apply {
+							add(index + 1, "<enter new script>")
+						}.toList(),
+			)
+		}
+	}
+
+	private fun onRemoveSubScript(index: Int) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				scripts =
+					if (oldState.scripts.size == 1) {
+						listOf("")
+					} else {
+						oldState.scripts.filterIndexed { oldIndex, _ ->
+							oldIndex != index
 						}
 					},
 			)
@@ -157,7 +187,7 @@ class EditScriptViewModel(
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			scriptName = script?.label.orEmpty(),
-			scripts = script?.scripts.orEmpty(),
+			scripts = script?.scripts ?: listOf(""),
 			selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
 		)
 
@@ -177,6 +207,14 @@ class EditScriptViewModel(
 		data class OnChangeScript(
 			val index: Int,
 			val script: String,
+		) : Event
+
+		data class OnAddSubScript(
+			val index: Int,
+		) : Event
+
+		data class OnRemoveSubScript(
+			val index: Int,
 		) : Event
 
 		data class OnChangeScriptName(
