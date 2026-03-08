@@ -5,6 +5,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -154,6 +155,32 @@ class EditScriptScreenTest {
 			onNodeWithContentDescription(label = "Execute all scripts").performClick()
 
 			coVerify { executeScriptUseCaseMock(script = removeScript, selectedDevice = "TODO") }
+		}
+	}
+
+	@Test
+	fun `run remove script when remove script button for a script is clicked`() {
+		runComposeUiTest {
+			val removeScript =
+				ScriptsRepository.Script(
+					label = "",
+					platform = ScriptsRepository.Platform.ANDROID,
+					scripts = listOf("script 1", "script 2"),
+				)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+
+			setupData(script = removeScript)
+			setTestContent(scriptKey = removeScript.hashCode())
+
+			onNodeWithText("script 1").isDisplayed()
+			onNodeWithText("script 2").isDisplayed()
+
+			onAllNodes(hasContentDescription("Remove script"))[0].apply {
+				performClick()
+			}
+
+			onNodeWithText("script 1").assertDoesNotExist()
+			onNodeWithText("script 2").isDisplayed()
 		}
 	}
 
