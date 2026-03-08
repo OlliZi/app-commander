@@ -106,6 +106,25 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should add a new script under existing script when event 'OnChangeScriptName' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+
+			viewModel.onEvent(
+				event =
+					EditScriptViewModel.Event.OnAddSubScript(
+						index = 0,
+					),
+			)
+			runCurrent()
+
+			assertEquals(2, viewModel.uiState.value.scripts.size)
+			assertEquals("<enter new script>", viewModel.uiState.value.scripts[1])
+		}
+
+	@Test
 	fun `should save script when event 'OnSaveScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
