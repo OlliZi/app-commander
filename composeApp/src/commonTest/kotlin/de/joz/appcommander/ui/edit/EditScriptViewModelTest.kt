@@ -34,6 +34,17 @@ class EditScriptViewModelTest {
 	}
 
 	@Test
+	fun `should at least add at minimum one empty script when there was no script provided for the edit session`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertEquals("", viewModel.uiState.value.scripts[0])
+			assertEquals("", viewModel.uiState.value.scriptName)
+			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.selectedPlatform)
+		}
+
+	@Test
 	fun `should navigate back when event 'OnNavigateBack' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
