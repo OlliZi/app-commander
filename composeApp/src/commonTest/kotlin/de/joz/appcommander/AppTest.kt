@@ -19,10 +19,9 @@ import org.koin.ksp.generated.*
 import kotlin.test.Test
 
 class AppTest {
-	private val screenshotVerifier =
-		ScreenshotVerifier(
-			testClass = javaClass,
-		)
+	private val screenshotVerifier = ScreenshotVerifier(
+		testClass = javaClass,
+	)
 
 	@OptIn(ExperimentalTestApi::class)
 	@Test
@@ -36,11 +35,10 @@ class AppTest {
 							module {
 								single<ScriptsRepository> {
 									mockk {
-										every { getScripts() } returns
-											ScriptsRepository.JsonParseResult(
-												scripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS,
-												parsingMetaData = null,
-											)
+										every { getScripts() } returns ScriptsRepository.JsonParseResult(
+											scripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS,
+											parsingMetaData = null,
+										)
 									}
 								}
 							},

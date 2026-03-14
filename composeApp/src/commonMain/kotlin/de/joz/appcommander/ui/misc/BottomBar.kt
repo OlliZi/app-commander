@@ -31,12 +31,11 @@ fun BottomBar(
 	modifier: Modifier = Modifier,
 ) {
 	Row(
-		modifier =
-			modifier
-				.navigationBarsPadding()
-				.fillMaxWidth()
-				.background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f))
-				.padding(16.dp),
+		modifier = modifier
+			.navigationBarsPadding()
+			.fillMaxWidth()
+			.background(MaterialTheme.colorScheme.background.lighter(factor = 1.1f))
+			.padding(16.dp),
 	) {
 		actions.forEachIndexed { index, action ->
 			Button(
@@ -76,21 +75,20 @@ internal fun PreviewBottomBar(
 		darkTheme = previewData.uiState,
 	) {
 		BottomBar(
-			actions =
-				listOf(
-					BottomBarAction(
-						label = Res.string.edit_action_save,
-						action = {},
-					),
-					BottomBarAction(
-						label = Res.string.edit_action_abort,
-						action = {},
-					),
-					BottomBarAction(
-						label = Res.string.edit_action_remove,
-						action = {},
-					),
+			actions = listOf(
+				BottomBarAction(
+					label = Res.string.edit_action_save,
+					action = {},
 				),
+				BottomBarAction(
+					label = Res.string.edit_action_abort,
+					action = {},
+				),
+				BottomBarAction(
+					label = Res.string.edit_action_remove,
+					action = {},
+				),
+			),
 		)
 	}
 }

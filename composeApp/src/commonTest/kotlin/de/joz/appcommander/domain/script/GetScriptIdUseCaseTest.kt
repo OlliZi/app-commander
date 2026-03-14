@@ -9,15 +9,13 @@ class GetScriptIdUseCaseTest {
 
 	@Test
 	fun `should return script id`() {
-		val scriptId =
-			getScriptIdUseCase(
-				script =
-					ScriptsRepository.Script(
-						scripts = emptyList(),
-						label = "",
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-			)
+		val scriptId = getScriptIdUseCase(
+			script = ScriptsRepository.Script(
+				scripts = emptyList(),
+				label = "",
+				platform = ScriptsRepository.Platform.ANDROID,
+			),
+		)
 
 		assertEquals(
 			ScriptsRepository
@@ -32,17 +30,15 @@ class GetScriptIdUseCaseTest {
 
 	@Test
 	fun `should return same script id`() {
-		val script =
-			ScriptsRepository.Script(
-				scripts = listOf("foo"),
-				label = "bar",
-				platform = ScriptsRepository.Platform.ANDROID,
-			)
-		val scriptModified =
-			script.copy(
-				scripts = listOf("bar"),
-				platform = ScriptsRepository.Platform.IOS,
-			)
+		val script = ScriptsRepository.Script(
+			scripts = listOf("foo"),
+			label = "bar",
+			platform = ScriptsRepository.Platform.ANDROID,
+		)
+		val scriptModified = script.copy(
+			scripts = listOf("bar"),
+			platform = ScriptsRepository.Platform.IOS,
+		)
 
 		assertNotEquals(
 			getScriptIdUseCase(
@@ -58,11 +54,10 @@ class GetScriptIdUseCaseTest {
 				script = script,
 			),
 			getScriptIdUseCase(
-				script =
-					scriptModified.copy(
-						scripts = listOf("foo"),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
+				script = scriptModified.copy(
+					scripts = listOf("foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
 			),
 		)
 	}

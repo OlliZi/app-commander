@@ -47,41 +47,37 @@ class ScriptsViewModelTest {
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
 	private val savePreferenceUseCaseMock = SavePreferenceUseCase(preferencesRepositoryMock)
-	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase =
-		mockk(relaxed = true)
+	private val trackScriptsFileChangesUseCaseMock: TrackScriptsFileChangesUseCase = mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
 		coEvery {
 			getConnectedDevicesUseCaseMock()
-		} returns
-			listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(
-					id = "p7",
-					label = "pixel 7",
-				),
-			)
+		} returns listOf(
+			GetConnectedDevicesUseCase.ConnectedDevice(
+				id = "p7",
+				label = "pixel 7",
+			),
+		)
 
 		coEvery {
 			getUserScriptsUseCaseMock()
-		} returns
-			ScriptsRepository.JsonParseResult(
-				scripts =
-					listOf(
-						ScriptsRepository.Script(
-							label = "my script",
-							scripts = listOf("foo"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
-						ScriptsRepository.Script(
-							label = "my another script",
-							scripts = listOf("bar"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
-					),
-				parsingMetaData = null,
-			)
+		} returns ScriptsRepository.JsonParseResult(
+			scripts = listOf(
+				ScriptsRepository.Script(
+					label = "my script",
+					scripts = listOf("foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+				ScriptsRepository.Script(
+					label = "my another script",
+					scripts = listOf("bar"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+			),
+			parsingMetaData = null,
+		)
 	}
 
 	@Test
@@ -106,22 +102,20 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my script",
 						scriptText = "foo",
-						originalScript =
-							ScriptsRepository.Script(
-								label = "my script",
-								scripts = listOf("foo"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
+						originalScript = ScriptsRepository.Script(
+							label = "my script",
+							scripts = listOf("foo"),
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
 					),
 					ScriptsViewModel.Script(
 						description = "my another script",
 						scriptText = "bar",
-						originalScript =
-							ScriptsRepository.Script(
-								label = "my another script",
-								scripts = listOf("bar"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
+						originalScript = ScriptsRepository.Script(
+							label = "my another script",
+							scripts = listOf("bar"),
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
 					),
 				),
 				viewModel.uiState.value.scripts,
@@ -159,24 +153,21 @@ class ScriptsViewModelTest {
 			assertEquals(2, viewModel.uiState.value.scripts.size)
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnFilterScripts(
-						filter = filter1,
-					),
+				event = ScriptsViewModel.Event.OnFilterScripts(
+					filter = filter1,
+				),
 			)
 			runCurrent()
 			assertEquals(1, viewModel.uiState.value.scripts.size)
 			assertTrue(
-				viewModel.uiState.value.scripts
-					.all {
-						it.description.contains("bar") || it.scriptText.contains("bar")
-					},
+				viewModel.uiState.value.scripts.all {
+					it.description.contains("bar") || it.scriptText.contains("bar")
+				},
 			)
 			assertFalse(
-				viewModel.uiState.value.scripts
-					.any {
-						it.description.contains("foo") || it.scriptText.contains("foo")
-					},
+				viewModel.uiState.value.scripts.any {
+					it.description.contains("foo") || it.scriptText.contains("foo")
+				},
 			)
 
 			// test platform of script
@@ -188,10 +179,9 @@ class ScriptsViewModelTest {
 				)
 			} returns filter2.lowercase()
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnFilterScripts(
-						filter = ScriptsRepository.Platform.IOS.name,
-					),
+				event = ScriptsViewModel.Event.OnFilterScripts(
+					filter = ScriptsRepository.Platform.IOS.name,
+				),
 			)
 			runCurrent()
 			assertTrue(
@@ -207,10 +197,9 @@ class ScriptsViewModelTest {
 			val filter3 = "my another script"
 			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter3
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnFilterScripts(
-						filter = filter3,
-					),
+				event = ScriptsViewModel.Event.OnFilterScripts(
+					filter = filter3,
+				),
 			)
 			runCurrent()
 			assertEquals(
@@ -227,9 +216,8 @@ class ScriptsViewModelTest {
 	fun `should select device when event 'OnDeviceSelected' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
-			val device =
-				viewModel.uiState.value.connectedDevices
-					.first()
+			val device = viewModel.uiState.value.connectedDevices
+				.first()
 			val preSelectedState = device.isSelected
 
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
@@ -267,12 +255,10 @@ class ScriptsViewModelTest {
 			every { getScriptIdUseCaseMock(any()) } returns 123
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnEditScript(
-						script =
-							viewModel.uiState.value.scripts
-								.first(),
-					),
+				event = ScriptsViewModel.Event.OnEditScript(
+					script = viewModel.uiState.value.scripts
+						.first(),
+				),
 			)
 			runCurrent()
 
@@ -289,9 +275,8 @@ class ScriptsViewModelTest {
 	fun `should expand script when event 'OnExpandScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
-			val script =
-				viewModel.uiState.value.scripts
-					.first()
+			val script = viewModel.uiState.value.scripts
+				.first()
 			val preExpandedState = script.isExpanded
 
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnExpandScript(script = script))
@@ -309,9 +294,8 @@ class ScriptsViewModelTest {
 	fun `should execute script when event 'OnExecuteScript' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
-			val script =
-				viewModel.uiState.value.scripts
-					.first()
+			val script = viewModel.uiState.value.scripts
+				.first()
 
 			coEvery {
 				executeScriptUseCaseMock(
@@ -363,22 +347,20 @@ class ScriptsViewModelTest {
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnExecuteScriptText(
-						script = "echo",
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
+				event = ScriptsViewModel.Event.OnExecuteScriptText(
+					script = "echo",
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
 			)
 			runCurrent()
 
 			coVerify {
 				executeScriptUseCaseMock(
-					script =
-						ScriptsRepository.Script(
-							label = "entered by terminal script",
-							scripts = listOf("echo"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
+					script = ScriptsRepository.Script(
+						label = "entered by terminal script",
+						scripts = listOf("echo"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
 					selectedDevice = "p7",
 				)
 			}
@@ -397,21 +379,19 @@ class ScriptsViewModelTest {
 	@Test
 	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
 		runTest {
-			val testScript =
-				ScriptsRepository.Script(
-					label = "my script",
-					scripts = listOf("foo"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "my script",
+				scripts = listOf("foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			coEvery {
 				getConnectedDevicesUseCaseMock()
-			} returns
-				listOf(
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-				)
+			} returns listOf(
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
+			)
 			coEvery {
 				executeScriptUseCaseMock(
 					script = testScript,
@@ -428,34 +408,28 @@ class ScriptsViewModelTest {
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnDeviceSelected(
-						device =
-							viewModel.uiState.value.connectedDevices
-								.first(),
-					),
+				event = ScriptsViewModel.Event.OnDeviceSelected(
+					device = viewModel.uiState.value.connectedDevices
+						.first(),
+				),
 			)
 			runCurrent()
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnDeviceSelected(
-						device =
-							viewModel.uiState.value.connectedDevices
-								.last(),
-					),
+				event = ScriptsViewModel.Event.OnDeviceSelected(
+					device = viewModel.uiState.value.connectedDevices
+						.last(),
+				),
 			)
 			runCurrent()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnExecuteScript(
-						script =
-							ScriptsViewModel.Script(
-								originalScript = testScript,
-								description = "",
-								scriptText = "",
-							),
+				event = ScriptsViewModel.Event.OnExecuteScript(
+					script = ScriptsViewModel.Script(
+						originalScript = testScript,
+						description = "",
+						scriptText = "",
 					),
+				),
 			)
 			runCurrent()
 
@@ -476,29 +450,26 @@ class ScriptsViewModelTest {
 		runTest {
 			coEvery {
 				getConnectedDevicesUseCaseMock()
-			} returns
-				listOf(
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-				)
+			} returns listOf(
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+			)
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnDeviceSelected(
-						device = viewModel.uiState.value.connectedDevices[1],
-					),
+				event = ScriptsViewModel.Event.OnDeviceSelected(
+					device = viewModel.uiState.value.connectedDevices[1],
+				),
 			)
 			runCurrent()
 
 			coEvery {
 				getConnectedDevicesUseCaseMock()
-			} returns
-				listOf(
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-					GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-				)
+			} returns listOf(
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
+			)
 
 			viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
 			runCurrent()
@@ -527,46 +498,42 @@ class ScriptsViewModelTest {
 
 			coEvery {
 				getUserScriptsUseCaseMock()
-			} returns
-				ScriptsRepository.JsonParseResult(
-					scripts =
-						listOf(
-							ScriptsRepository.Script(
-								label = "my script",
-								scripts = listOf("foo"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
-						),
-					parsingMetaData = null,
-				)
+			} returns ScriptsRepository.JsonParseResult(
+				scripts = listOf(
+					ScriptsRepository.Script(
+						label = "my script",
+						scripts = listOf("foo"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+				),
+				parsingMetaData = null,
+			)
 
 			val viewModel = createViewModel()
 			runCurrent()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnExpandScript(
-						viewModel.uiState.value.scripts
-							.first(),
-					),
+				event = ScriptsViewModel.Event.OnExpandScript(
+					viewModel.uiState.value.scripts
+						.first(),
+				),
 			)
 			runCurrent()
 
 			mutableSharedFlow.emit(
 				ScriptsRepository.JsonParseResult(
-					scripts =
-						listOf(
-							ScriptsRepository.Script(
-								label = "my script",
-								scripts = listOf("foo"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
-							ScriptsRepository.Script(
-								label = "abc",
-								scripts = listOf("123"),
-								platform = ScriptsRepository.Platform.IOS,
-							),
+					scripts = listOf(
+						ScriptsRepository.Script(
+							label = "my script",
+							scripts = listOf("foo"),
+							platform = ScriptsRepository.Platform.ANDROID,
 						),
+						ScriptsRepository.Script(
+							label = "abc",
+							scripts = listOf("123"),
+							platform = ScriptsRepository.Platform.IOS,
+						),
+					),
 					parsingMetaData = null,
 				),
 			)
@@ -577,23 +544,21 @@ class ScriptsViewModelTest {
 						description = "my script",
 						scriptText = "foo",
 						isExpanded = true,
-						originalScript =
-							ScriptsRepository.Script(
-								label = "my script",
-								scripts = listOf("foo"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
+						originalScript = ScriptsRepository.Script(
+							label = "my script",
+							scripts = listOf("foo"),
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
 					),
 					ScriptsViewModel.Script(
 						description = "abc",
 						scriptText = "123",
 						isExpanded = false,
-						originalScript =
-							ScriptsRepository.Script(
-								label = "abc",
-								scripts = listOf("123"),
-								platform = ScriptsRepository.Platform.IOS,
-							),
+						originalScript = ScriptsRepository.Script(
+							label = "abc",
+							scripts = listOf("123"),
+							platform = ScriptsRepository.Platform.IOS,
+						),
 					),
 				),
 				viewModel.uiState.value.scripts,
@@ -605,11 +570,10 @@ class ScriptsViewModelTest {
 		runTest {
 			coEvery {
 				getUserScriptsUseCaseMock()
-			} returns
-				ScriptsRepository.JsonParseResult(
-					scripts = emptyList(),
-					parsingMetaData = ScriptsRepository.ParsingMetaData.ParsingError(Exception("Cannot parse JSON")),
-				)
+			} returns ScriptsRepository.JsonParseResult(
+				scripts = emptyList(),
+				parsingMetaData = ScriptsRepository.ParsingMetaData.ParsingError(Exception("Cannot parse JSON")),
+			)
 
 			val viewModel = createViewModel()
 			runCurrent()
@@ -622,11 +586,10 @@ class ScriptsViewModelTest {
 		runTest {
 			coEvery {
 				getUserScriptsUseCaseMock()
-			} returns
-				ScriptsRepository.JsonParseResult(
-					scripts = emptyList(),
-					parsingMetaData = ScriptsRepository.ParsingMetaData.OldScriptFieldHint,
-				)
+			} returns ScriptsRepository.JsonParseResult(
+				scripts = emptyList(),
+				parsingMetaData = ScriptsRepository.ParsingMetaData.OldScriptFieldHint,
+			)
 
 			val viewModel = createViewModel()
 			runCurrent()
@@ -639,11 +602,10 @@ class ScriptsViewModelTest {
 		runTest {
 			coEvery {
 				getUserScriptsUseCaseMock()
-			} returns
-				ScriptsRepository.JsonParseResult(
-					scripts = emptyList(),
-					parsingMetaData = ScriptsRepository.ParsingMetaData.MultiScriptsHint,
-				)
+			} returns ScriptsRepository.JsonParseResult(
+				scripts = emptyList(),
+				parsingMetaData = ScriptsRepository.ParsingMetaData.MultiScriptsHint,
+			)
 
 			val viewModel = createViewModel()
 			runCurrent()
@@ -655,15 +617,14 @@ class ScriptsViewModelTest {
 	fun `should update tool section items when preferences are changed`() =
 		runTest {
 			val keys = ToolSection.entries.map { it.name }
-			val mutableFlow =
-				MutableStateFlow(
-					listOf(
-						ChangedPreference(
-							key = ToolSection.TERMINAL.name,
-							value = true,
-						),
+			val mutableFlow = MutableStateFlow(
+				listOf(
+					ChangedPreference(
+						key = ToolSection.TERMINAL.name,
+						value = true,
 					),
-				)
+				),
+			)
 
 			coEvery {
 				getPreferenceUseCaseMock.getAsFlow(keys = keys.toTypedArray())
@@ -703,25 +664,22 @@ class ScriptsViewModelTest {
 	@Test
 	fun `should run script for Desktop never on a device`() =
 		runTest {
-			val testScript =
-				ScriptsRepository.Script(
-					label = "desktop script",
-					scripts = listOf("echo"),
-					platform = ScriptsRepository.Platform.DESKTOP,
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "desktop script",
+				scripts = listOf("echo"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
 			val viewModel = createViewModel()
 			runCurrent()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnExecuteScript(
-						script =
-							ScriptsViewModel.Script(
-								description = "desktop script",
-								scriptText = "echo",
-								originalScript = testScript,
-							),
+				event = ScriptsViewModel.Event.OnExecuteScript(
+					script = ScriptsViewModel.Script(
+						description = "desktop script",
+						scriptText = "echo",
+						originalScript = testScript,
 					),
+				),
 			)
 			runCurrent()
 
@@ -737,21 +695,19 @@ class ScriptsViewModelTest {
 	fun `should run script text for Desktop never on a device`() =
 		runTest {
 			val desktop = ScriptsRepository.Platform.DESKTOP
-			val testScript =
-				ScriptsRepository.Script(
-					label = "entered by terminal script",
-					scripts = listOf("echo"),
-					platform = desktop,
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "entered by terminal script",
+				scripts = listOf("echo"),
+				platform = desktop,
+			)
 			val viewModel = createViewModel()
 			runCurrent()
 
 			viewModel.onEvent(
-				event =
-					ScriptsViewModel.Event.OnExecuteScriptText(
-						script = "echo",
-						platform = desktop,
-					),
+				event = ScriptsViewModel.Event.OnExecuteScriptText(
+					script = "echo",
+					platform = desktop,
+				),
 			)
 			runCurrent()
 

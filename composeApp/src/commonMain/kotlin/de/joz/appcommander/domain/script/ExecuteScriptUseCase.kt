@@ -22,8 +22,11 @@ class ExecuteScriptUseCase(
 			val outputs = mutableListOf<String>()
 
 			scripts.forEach { subScript ->
-				val scriptForSelectedDevice =
-					injectDeviceId(script = subScript, platform = script.platform, selectedDevice)
+				val scriptForSelectedDevice = injectDeviceId(
+					script = subScript,
+					platform = script.platform,
+					selectedDevice,
+				)
 
 				val commands = scriptForSelectedDevice.split(" ")
 				val loopCount = getLoopCount(commands)

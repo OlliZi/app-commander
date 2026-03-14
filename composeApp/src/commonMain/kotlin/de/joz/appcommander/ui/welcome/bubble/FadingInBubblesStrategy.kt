@@ -12,10 +12,9 @@ import kotlin.math.sin
 
 class FadingInBubblesStrategy : BubblesStrategy {
 	private val darkOrange = Color(red = 199, green = 110, blue = 0).copy(alpha = 0.5f)
-	private val bubbles =
-		BubblesStrategy.createRandomBubbles(
-			color = darkOrange,
-		)
+	private val bubbles = BubblesStrategy.createRandomBubbles(
+		color = darkOrange,
+	)
 
 	override fun drawBubbles(
 		drawScope: DrawScope,

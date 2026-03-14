@@ -16,16 +16,14 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should execute script when launched`() =
 		runTest {
-			val executeScriptUseCase =
-				ExecuteScriptUseCase(
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
-			val script =
-				ScriptsRepository.Script(
-					label = "Test",
-					scripts = listOf("echo foo"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val executeScriptUseCase = ExecuteScriptUseCase(
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("echo foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
@@ -37,22 +35,19 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should chain multiples scripts when scripts are chained by special command &&`() =
 		runTest {
-			val executeScriptUseCase =
-				ExecuteScriptUseCase(
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
-			val script =
-				ScriptsRepository.Script(
-					label = "Test",
-					scripts =
-						listOf(
-							"echo foo",
-							"echo bar",
-							"#LOOP_2 echo loop",
-							"echo test",
-						),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val executeScriptUseCase = ExecuteScriptUseCase(
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf(
+					"echo foo",
+					"echo bar",
+					"#LOOP_2 echo loop",
+					"echo test",
+				),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
@@ -70,16 +65,14 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should execute script multiple times when special command '#LOOP_X' is prefixed`() =
 		runTest {
-			val executeScriptUseCase =
-				ExecuteScriptUseCase(
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
-			val script =
-				ScriptsRepository.Script(
-					label = "Test",
-					scripts = listOf("#LOOP_3 echo foo"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val executeScriptUseCase = ExecuteScriptUseCase(
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("#LOOP_3 echo foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
@@ -91,16 +84,14 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should not log device when no devive provided`() =
 		runTest {
-			val executeScriptUseCase =
-				ExecuteScriptUseCase(
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
-			val script =
-				ScriptsRepository.Script(
-					label = "Test",
-					scripts = listOf("echo foo"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val executeScriptUseCase = ExecuteScriptUseCase(
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("echo foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			executeScriptUseCase(script = script, selectedDevice = "")
 
@@ -110,16 +101,14 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should return an failure if script execution fails`() =
 		runTest {
-			val executeScriptUseCase =
-				ExecuteScriptUseCase(
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
-			val script =
-				ScriptsRepository.Script(
-					label = "Test",
-					scripts = listOf("foo_bar_unknown_command"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val executeScriptUseCase = ExecuteScriptUseCase(
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("foo_bar_unknown_command"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "")
 
@@ -136,17 +125,15 @@ class ExecuteScriptUseCaseTest {
 				return@runTest
 			}
 
-			val executeScriptUseCase =
-				ExecuteScriptUseCase(
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val executeScriptUseCase = ExecuteScriptUseCase(
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
-			val script =
-				ScriptsRepository.Script(
-					label = "Test",
-					scripts = listOf("adb devices"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("adb devices"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 

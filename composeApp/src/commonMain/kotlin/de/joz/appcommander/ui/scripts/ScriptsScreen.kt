@@ -92,34 +92,32 @@ internal fun ScriptsContent(
 		topBar = {
 			TitleBar(
 				title = stringResource(Res.string.scripts_title),
-				actions =
-					listOf(
-						TitleBarAction(
-							action = {
-								onEvent(ScriptsViewModel.Event.OnNavigateToSettings)
-							},
-							icon = FeatherIcons.Settings,
-						),
+				actions = listOf(
+					TitleBarAction(
+						action = {
+							onEvent(ScriptsViewModel.Event.OnNavigateToSettings)
+						},
+						icon = FeatherIcons.Settings,
 					),
+				),
 			)
 		},
 		bottomBar = {
 			BottomBar(
-				actions =
-					listOf(
-						BottomBarAction(
-							label = Res.string.scripts_open_script_file,
-							action = {
-								onEvent(ScriptsViewModel.Event.OnOpenScriptFile)
-							},
-						),
-						BottomBarAction(
-							label = Res.string.scripts_add_new_script,
-							action = {
-								onEvent(ScriptsViewModel.Event.OnNewScript)
-							},
-						),
+				actions = listOf(
+					BottomBarAction(
+						label = Res.string.scripts_open_script_file,
+						action = {
+							onEvent(ScriptsViewModel.Event.OnOpenScriptFile)
+						},
 					),
+					BottomBarAction(
+						label = Res.string.scripts_add_new_script,
+						action = {
+							onEvent(ScriptsViewModel.Event.OnNewScript)
+						},
+					),
+				),
 			)
 		},
 	) { paddingValues ->
@@ -200,14 +198,13 @@ private fun ConnectedDevices(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		TextLabel(
-			text =
-				stringResource(
-					if (connectedDevices.isNotEmpty()) {
-						Res.string.scripts_hint_devices
-					} else {
-						Res.string.scripts_hint_no_devices
-					},
-				),
+			text = stringResource(
+				if (connectedDevices.isNotEmpty()) {
+					Res.string.scripts_hint_devices
+				} else {
+					Res.string.scripts_hint_no_devices
+				},
+			),
 			textLabelType = TextLabelType.BodyLarge,
 		)
 
@@ -339,12 +336,11 @@ private fun Hint(hint: Hint?) {
 		return
 	}
 
-	val text =
-		when (hint) {
-			is Hint.Error -> stringResource(Res.string.scripts_json_parsing_error, hint.throwable.message.orEmpty())
-			is Hint.MultiScripts -> stringResource(Res.string.scripts_json_multi_scripts)
-			is Hint.OldScriptFieldHint -> stringResource(Res.string.scripts_json_old_script_field)
-		}
+	val text = when (hint) {
+		is Hint.Error -> stringResource(Res.string.scripts_json_parsing_error, hint.throwable.message.orEmpty())
+		is Hint.MultiScripts -> stringResource(Res.string.scripts_json_multi_scripts)
+		is Hint.OldScriptFieldHint -> stringResource(Res.string.scripts_json_old_script_field)
+	}
 
 	TextLabel(
 		modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
@@ -456,17 +452,16 @@ private fun EditButtonItem(
 	onClick: () -> Unit,
 ) {
 	IconButton(
-		modifier =
-			Modifier.then(
-				if (isActive) {
-					Modifier.background(
-						Color.White,
-						CircleShape,
-					)
-				} else {
-					Modifier
-				},
-			),
+		modifier = Modifier.then(
+			if (isActive) {
+				Modifier.background(
+					Color.White,
+					CircleShape,
+				)
+			} else {
+				Modifier
+			},
+		),
 		onClick = onClick,
 	) {
 		Icon(
@@ -484,17 +479,16 @@ private fun ExpandButtonItem(
 	onExpand: () -> Unit,
 ) {
 	ExpandButton(
-		modifier =
-			Modifier.then(
-				if (isActive) {
-					Modifier.background(
-						Color.White,
-						CircleShape,
-					)
-				} else {
-					Modifier
-				},
-			),
+		modifier = Modifier.then(
+			if (isActive) {
+				Modifier.background(
+					Color.White,
+					CircleShape,
+				)
+			} else {
+				Modifier
+			},
+		),
 		isExpanded = isExpanded,
 		onClick = onExpand,
 	)
@@ -522,48 +516,43 @@ private fun RenderPreview(darkTheme: Boolean) {
 		darkTheme = darkTheme,
 	) {
 		ScriptsContent(
-			uiState =
-				ScriptsViewModel.UiState(
-					connectedDevices =
-						listOf(
-							ScriptsViewModel.Device(
-								label = "Pixel 9",
-								isSelected = true,
-								id = "1",
-							),
-							ScriptsViewModel.Device(
-								label = "Pixel 8",
-								isSelected = false,
-								id = "2",
-							),
-						),
-					scripts =
-						listOf(
-							Script(
-								description = "my script",
-								scriptText = "adb devices",
-								isExpanded = false,
-								originalScript =
-									ScriptsRepository.Script(
-										label = "",
-										scripts = emptyList(),
-										platform = ScriptsRepository.Platform.ANDROID,
-									),
-							),
-							Script(
-								description = "my script",
-								scriptText = "adb long long long long long long long long long long long long script",
-								isExpanded = true,
-								originalScript =
-									ScriptsRepository.Script(
-										label = "",
-										scripts = emptyList(),
-										platform = ScriptsRepository.Platform.ANDROID,
-									),
-							),
-						),
-					logging = listOf("log 1", "log 2", "log 3"),
+			uiState = ScriptsViewModel.UiState(
+				connectedDevices = listOf(
+					ScriptsViewModel.Device(
+						label = "Pixel 9",
+						isSelected = true,
+						id = "1",
+					),
+					ScriptsViewModel.Device(
+						label = "Pixel 8",
+						isSelected = false,
+						id = "2",
+					),
 				),
+				scripts = listOf(
+					Script(
+						description = "my script",
+						scriptText = "adb devices",
+						isExpanded = false,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
+					),
+					Script(
+						description = "my script",
+						scriptText = "adb long long long long long long long long long long long long script",
+						isExpanded = true,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
+					),
+				),
+				logging = listOf("log 1", "log 2", "log 3"),
+			),
 			onEvent = {},
 		)
 	}

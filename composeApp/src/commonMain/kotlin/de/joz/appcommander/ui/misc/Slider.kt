@@ -74,32 +74,29 @@ internal fun PreviewSlider(
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			Slider(
-				sliderItem =
-					SettingsViewModel.SliderItem(
-						sliderValue = 5f,
-						maximum = 10f,
-						minimum = 0f,
-						steps = 20,
-						label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-						labelValue = SettingsViewModel.LabelValue.IntRes(5),
-						key = "",
-					),
+				sliderItem = SettingsViewModel.SliderItem(
+					sliderValue = 5f,
+					maximum = 10f,
+					minimum = 0f,
+					steps = 20,
+					label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
+					labelValue = SettingsViewModel.LabelValue.IntRes(5),
+					key = "",
+				),
 				onValueChange = {},
 			)
 			Slider(
-				sliderItem =
-					SettingsViewModel.SliderItem(
-						sliderValue = 5f,
-						maximum = 10f,
-						minimum = 0f,
-						steps = 20,
-						label = Res.string.settings_preference_ui_appearance_label,
-						labelValue =
-							SettingsViewModel.LabelValue.StringRes(
-								Res.string.settings_preference_ui_appearance_system,
-							),
-						key = "",
+				sliderItem = SettingsViewModel.SliderItem(
+					sliderValue = 5f,
+					maximum = 10f,
+					minimum = 0f,
+					steps = 20,
+					label = Res.string.settings_preference_ui_appearance_label,
+					labelValue = SettingsViewModel.LabelValue.StringRes(
+						Res.string.settings_preference_ui_appearance_system,
 					),
+					key = "",
+				),
 				onValueChange = {},
 			)
 		}

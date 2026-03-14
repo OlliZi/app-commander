@@ -19,10 +19,9 @@ class GetPreferenceUseCaseTest {
 				preferencesRepositoryMock.get("key", defaultValue = -1)
 			} returns 123
 
-			val getPreferenceUseCase =
-				GetPreferenceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val getPreferenceUseCase = GetPreferenceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			assertEquals(123, getPreferenceUseCase.get(key = "key", defaultValue = -1))
 
@@ -39,10 +38,9 @@ class GetPreferenceUseCaseTest {
 				preferencesRepositoryMock.get("key", defaultValue = "")
 			} returns "123"
 
-			val getPreferenceUseCase =
-				GetPreferenceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val getPreferenceUseCase = GetPreferenceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			assertEquals("123", getPreferenceUseCase.get(key = "key", defaultValue = ""))
 
@@ -59,10 +57,9 @@ class GetPreferenceUseCaseTest {
 				preferencesRepositoryMock.get("key", defaultValue = false)
 			} returns true
 
-			val getPreferenceUseCase =
-				GetPreferenceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val getPreferenceUseCase = GetPreferenceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 			assertTrue(getPreferenceUseCase.get(key = "key", defaultValue = false))
 
 			coVerify {
@@ -75,15 +72,13 @@ class GetPreferenceUseCaseTest {
 		runTest {
 			val preferencesRepositoryMock: PreferencesRepository = mockk()
 
-			coEvery { preferencesRepositoryMock.getAsFlow("key", "key 2") } returns
-				flowOf(
-					listOf(ChangedPreference(key = "key", value = true)),
-				)
+			coEvery { preferencesRepositoryMock.getAsFlow("key", "key 2") } returns flowOf(
+				listOf(ChangedPreference(key = "key", value = true)),
+			)
 
-			val getPreferenceUseCase =
-				GetPreferenceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val getPreferenceUseCase = GetPreferenceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			val result = getPreferenceUseCase.getAsFlow("key", "key 2").firstOrNull()
 

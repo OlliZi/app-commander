@@ -63,10 +63,9 @@ class ScriptsViewModel(
 			getLoggingUseCase().collect { logging ->
 				_uiState.update { oldState ->
 					oldState.copy(
-						logging =
-							logging.mapIndexed { index, log ->
-								"${index + 1}. $log"
-							},
+						logging = logging.mapIndexed { index, log ->
+							"${index + 1}. $log"
+						},
 					)
 				}
 			}
@@ -137,14 +136,13 @@ class ScriptsViewModel(
 		_uiState.update { oldState ->
 			val devices = getConnectedDevicesUseCase()
 			oldState.copy(
-				connectedDevices =
-					devices.map { device ->
-						Device(
-							id = device.id,
-							label = device.label,
-							isSelected = devices.size == 1 || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
-						)
-					},
+				connectedDevices = devices.map { device ->
+					Device(
+						id = device.id,
+						label = device.label,
+						isSelected = devices.size == 1 || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
+					)
+				},
 			)
 		}
 	}
@@ -152,13 +150,12 @@ class ScriptsViewModel(
 	private fun onRefreshToolSections(changedValues: List<ChangedPreference>) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				toolSections =
-					ToolSection.entries.filter { toolSection ->
-						changedValues
-							.firstOrNull {
-								it.key == toolSection.name
-							}?.value as? Boolean ?: toolSection.isDefaultActive
-					},
+				toolSections = ToolSection.entries.filter { toolSection ->
+					changedValues
+						.firstOrNull {
+							it.key == toolSection.name
+						}?.value as? Boolean ?: toolSection.isDefaultActive
+				},
 			)
 		}
 	}
@@ -170,27 +167,25 @@ class ScriptsViewModel(
 			oldState.copy(
 				hint = mapHint(jsonParseResult.parsingMetaData),
 				filter = filter,
-				scripts =
-					jsonParseResult.scripts
-						.filter {
-							it.label.lowercase().contains(filter) ||
-								it.scripts.any { script ->
-									script.lowercase().contains(filter)
-								} ||
-								it.platform.name
-									.lowercase()
-									.contains(filter)
-						}.map { script ->
-							Script(
-								description = script.label,
-								scriptText = formatScripts(script),
-								originalScript = script,
-								isExpanded =
-									_uiState.value.scripts.any {
-										(it.description == script.label || it.scriptText == formatScripts(script)) && it.isExpanded
-									},
-							)
-						},
+				scripts = jsonParseResult.scripts
+					.filter {
+						it.label.lowercase().contains(filter) ||
+							it.scripts.any { script ->
+								script.lowercase().contains(filter)
+							} ||
+							it.platform.name
+								.lowercase()
+								.contains(filter)
+					}.map { script ->
+						Script(
+							description = script.label,
+							scriptText = formatScripts(script),
+							originalScript = script,
+							isExpanded = _uiState.value.scripts.any {
+								(it.description == script.label || it.scriptText == formatScripts(script)) && it.isExpanded
+							},
+						)
+					},
 			)
 		}
 	}
@@ -198,14 +193,13 @@ class ScriptsViewModel(
 	private fun onDeviceSelected(device: Device) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				connectedDevices =
-					oldState.connectedDevices.map {
-						if (it.id == device.id) {
-							it.copy(isSelected = it.isSelected.not())
-						} else {
-							it
-						}
-					},
+				connectedDevices = oldState.connectedDevices.map {
+					if (it.id == device.id) {
+						it.copy(isSelected = it.isSelected.not())
+					} else {
+						it
+					}
+				},
 			)
 		}
 	}
@@ -259,12 +253,11 @@ class ScriptsViewModel(
 		device: String = "",
 	) {
 		executeScriptUseCase(
-			script =
-				ScriptsRepository.Script(
-					label = "entered by terminal script",
-					scripts = listOf(script),
-					platform = platform,
-				),
+			script = ScriptsRepository.Script(
+				label = "entered by terminal script",
+				scripts = listOf(script),
+				platform = platform,
+			),
 			selectedDevice = device,
 		)
 	}
@@ -272,16 +265,15 @@ class ScriptsViewModel(
 	private fun onExpandScript(script: Script) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				scripts =
-					oldState.scripts.map { currentScript ->
-						if (currentScript == script) {
-							currentScript.copy(
-								isExpanded = script.isExpanded.not(),
-							)
-						} else {
-							currentScript
-						}
-					},
+				scripts = oldState.scripts.map { currentScript ->
+					if (currentScript == script) {
+						currentScript.copy(
+							isExpanded = script.isExpanded.not(),
+						)
+					} else {
+						currentScript
+					}
+				},
 			)
 		}
 	}

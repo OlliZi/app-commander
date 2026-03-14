@@ -27,11 +27,10 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return default scripts when file does not exist`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			assertFalse(testFile.exists())
 
@@ -52,14 +51,13 @@ class ScriptsRepositoryImplTest {
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						scripts =
-							listOf(
-								"adb shell cmd uimode night no",
-								"sleep 1",
-								"adb shell cmd uimode night yes",
-								"sleep 1",
-								"adb shell cmd uimode night no",
-							),
+						scripts = listOf(
+							"adb shell cmd uimode night no",
+							"sleep 1",
+							"adb shell cmd uimode night yes",
+							"sleep 1",
+							"adb shell cmd uimode night no",
+						),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -71,11 +69,10 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return default scripts and error when file contains invalid JSON`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			testFile.writeText("{ key : invalid JSON, }")
 
@@ -95,14 +92,13 @@ class ScriptsRepositoryImplTest {
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
-						scripts =
-							listOf(
-								"adb shell cmd uimode night no",
-								"sleep 1",
-								"adb shell cmd uimode night yes",
-								"sleep 1",
-								"adb shell cmd uimode night no",
-							),
+						scripts = listOf(
+							"adb shell cmd uimode night no",
+							"sleep 1",
+							"adb shell cmd uimode night yes",
+							"sleep 1",
+							"adb shell cmd uimode night no",
+						),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -114,11 +110,10 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return scripts and hint when scripts contains scripts trimmer`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			testFile.writeText(
 				"""
@@ -153,11 +148,10 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return scripts and hint when scripts contains old 'script' field`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			testFile.writeText(
 				"""
@@ -193,33 +187,30 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return custom scripts when file contains custom scripts`() =
 		runTest {
-			val prettyJson =
-				Json {
-					prettyPrint = true
-				}
+			val prettyJson = Json {
+				prettyPrint = true
+			}
 			testFile.writeText(
-				text =
-					prettyJson.encodeToString(
-						listOf(
-							ScriptsRepository.Script(
-								label = "my script",
-								scripts = listOf("foo"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
-							ScriptsRepository.Script(
-								label = "my script abc",
-								scripts = listOf("bar"),
-								platform = ScriptsRepository.Platform.IOS,
-							),
+				text = prettyJson.encodeToString(
+					listOf(
+						ScriptsRepository.Script(
+							label = "my script",
+							scripts = listOf("foo"),
+							platform = ScriptsRepository.Platform.ANDROID,
+						),
+						ScriptsRepository.Script(
+							label = "my script abc",
+							scripts = listOf("bar"),
+							platform = ScriptsRepository.Platform.IOS,
 						),
 					),
+				),
 			)
 
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			assertTrue(testFile.exists())
 
@@ -249,10 +240,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			testFile.writeText(
 				text =
-					"[\n" +
-						"    {\n" +
-						"        \"unknown\": \"null\",\n" +
-						"        \"label\": \"my script\",\n" +
+					"[\n" + "    {\n" + "        \"unknown\": \"null\",\n" + "        \"label\": \"my script\",\n" +
 						"        \"scripts\": [\"foo\"],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
@@ -265,11 +253,10 @@ class ScriptsRepositoryImplTest {
 						"]",
 			)
 
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			assertTrue(testFile.exists())
 
@@ -332,18 +319,16 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should save script when method is called`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
-			val newScript =
-				ScriptsRepository.Script(
-					scripts = listOf("bar"),
-					label = "my script abc",
-					platform = ScriptsRepository.Platform.IOS,
-				)
+			val newScript = ScriptsRepository.Script(
+				scripts = listOf("bar"),
+				label = "my script abc",
+				platform = ScriptsRepository.Platform.IOS,
+			)
 
 			repository.saveScript(script = newScript)
 
@@ -354,11 +339,10 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should remove script when method is called`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			val scripts = repository.getScripts().scripts
 			val scriptToRemove = scripts.first()
@@ -372,11 +356,10 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should update script when method is called`() =
 		runTest {
-			val repository =
-				ScriptsRepositoryImpl(
-					scriptFile = testFile.absolutePath,
-					addLoggingUseCase = addLoggingUseCaseMock,
-				)
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
 
 			val scripts = repository.getScripts()
 			val oldScript = scripts.scripts.first()

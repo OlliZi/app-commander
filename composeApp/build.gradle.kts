@@ -103,7 +103,7 @@ kover {
 			}
 		}
 		verify {
-			val lineCoverage = 93
+			val lineCoverage = 94
 			rule("Minimal line coverage rate in percent.") {
 				minBound(lineCoverage)
 			}

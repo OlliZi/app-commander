@@ -79,22 +79,19 @@ internal fun WelcomeContent(
 		containerColor = MaterialTheme.colorScheme.surface,
 		modifier = modifier,
 	) {
-		val yOffset =
-			rememberInfiniteTransition(label = "bubble")
-				.animateFloat(
-					initialValue = -0.25f,
-					targetValue = 1.5f,
-					animationSpec =
-						infiniteRepeatable(
-							repeatMode = RepeatMode.Restart,
-							animation =
-								tween(
-									durationMillis = 4000,
-									easing = LinearEasing,
-								),
-						),
-					label = "bubble",
-				).value
+		val yOffset = rememberInfiniteTransition(label = "bubble")
+			.animateFloat(
+				initialValue = -0.25f,
+				targetValue = 1.5f,
+				animationSpec = infiniteRepeatable(
+					repeatMode = RepeatMode.Restart,
+					animation = tween(
+						durationMillis = 4000,
+						easing = LinearEasing,
+					),
+				),
+				label = "bubble",
+			).value
 
 		Column(
 			Modifier
@@ -137,10 +134,7 @@ internal fun WelcomeContent(
 
 			var isChecked by remember { mutableStateOf(false) }
 			LabelledSwitch(
-				modifier =
-					Modifier
-						.padding(all = 16.dp)
-						.navigationBarsPadding(),
+				modifier = Modifier.padding(all = 16.dp).navigationBarsPadding(),
 				label = stringResource(Res.string.welcome_do_not_show_again),
 				checked = isChecked,
 				onCheckedChange = {

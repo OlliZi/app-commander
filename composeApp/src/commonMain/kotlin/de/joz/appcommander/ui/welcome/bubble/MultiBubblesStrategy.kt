@@ -6,11 +6,10 @@ import org.koin.core.annotation.Factory
 
 @Factory
 class MultiBubblesStrategy : BubblesStrategy {
-	private val clients =
-		listOf(
-			FallingBubblesStrategy(),
-			FadingInBubblesStrategy(),
-		)
+	private val clients = listOf(
+		FallingBubblesStrategy(),
+		FadingInBubblesStrategy(),
+	)
 
 	override fun drawBubbles(
 		drawScope: DrawScope,

@@ -33,16 +33,15 @@ fun ExpandButton(
 		onClick = onClick,
 	) {
 		Icon(
-			imageVector =
-				when (direction) {
-					ExpandButtonDirection.BOTTOM_TO_TOP -> {
-						if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown
-					}
+			imageVector = when (direction) {
+				ExpandButtonDirection.BOTTOM_TO_TOP -> {
+					if (isExpanded) FeatherIcons.ArrowUp else FeatherIcons.ArrowDown
+				}
 
-					ExpandButtonDirection.LEFT_TO_RIGHT -> {
-						if (isExpanded) FeatherIcons.ArrowRight else FeatherIcons.ArrowLeft
-					}
-				},
+				ExpandButtonDirection.LEFT_TO_RIGHT -> {
+					if (isExpanded) FeatherIcons.ArrowRight else FeatherIcons.ArrowLeft
+				}
+			},
 			contentDescription = "Expand button",
 			tint = MaterialTheme.colorScheme.primary,
 		)

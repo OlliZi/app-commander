@@ -67,19 +67,18 @@ internal fun PreviewDevicesBar(
 		darkTheme = previewData.uiState,
 	) {
 		DevicesBar(
-			connectedDevices =
-				listOf(
-					ScriptsViewModel.Device(
-						id = "1",
-						label = "Device A",
-						isSelected = true,
-					),
-					ScriptsViewModel.Device(
-						id = "2",
-						label = "Device B",
-						isSelected = false,
-					),
+			connectedDevices = listOf(
+				ScriptsViewModel.Device(
+					id = "1",
+					label = "Device A",
+					isSelected = true,
 				),
+				ScriptsViewModel.Device(
+					id = "2",
+					label = "Device B",
+					isSelected = false,
+				),
+			),
 			onDeviceSelect = {},
 			onRefreshDevices = {},
 		)

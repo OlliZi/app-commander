@@ -15,11 +15,10 @@ class ScriptsRepositoryImpl(
 	private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
 	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
-	private val prettyJson =
-		Json {
-			prettyPrint = true
-			ignoreUnknownKeys = true
-		}
+	private val prettyJson = Json {
+		prettyPrint = true
+		ignoreUnknownKeys = true
+	}
 
 	override fun getScripts(): JsonParseResult {
 		val jsonFile = File(scriptFile)
@@ -89,33 +88,29 @@ class ScriptsRepositoryImpl(
 		}
 
 	companion object {
-		val DEFAULT_SCRIPTS =
-			listOf(
-				ScriptsRepository.Script(
-					label = "Dark mode",
-					scripts =
-						listOf("adb shell cmd uimode night yes"),
-					platform = ScriptsRepository.Platform.ANDROID,
+		val DEFAULT_SCRIPTS = listOf(
+			ScriptsRepository.Script(
+				label = "Dark mode",
+				scripts = listOf("adb shell cmd uimode night yes"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			),
+			ScriptsRepository.Script(
+				label = "Light mode",
+				scripts = listOf("adb shell cmd uimode night no"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			),
+			ScriptsRepository.Script(
+				label = "Switch dark to light to dark mode",
+				scripts = listOf(
+					"adb shell cmd uimode night no",
+					"sleep 1",
+					"adb shell cmd uimode night yes",
+					"sleep 1",
+					"adb shell cmd uimode night no",
 				),
-				ScriptsRepository.Script(
-					label = "Light mode",
-					scripts =
-						listOf("adb shell cmd uimode night no"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				),
-				ScriptsRepository.Script(
-					label = "Switch dark to light to dark mode",
-					scripts =
-						listOf(
-							"adb shell cmd uimode night no",
-							"sleep 1",
-							"adb shell cmd uimode night yes",
-							"sleep 1",
-							"adb shell cmd uimode night no",
-						),
-					platform = ScriptsRepository.Platform.ANDROID,
-				),
-			)
+				platform = ScriptsRepository.Platform.ANDROID,
+			),
+		)
 		private const val SCRIPT_TRIMMER = "&&"
 		private const val OLD_SCRIPT_FIELD = "\"script\""
 		internal const val JSON_FILE_NAME = "scripts.json"

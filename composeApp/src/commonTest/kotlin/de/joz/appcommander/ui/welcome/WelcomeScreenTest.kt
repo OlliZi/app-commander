@@ -34,25 +34,22 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class WelcomeScreenTest {
-	private val screenshotVerifier =
-		ScreenshotVerifier(
-			testClass = javaClass,
-		)
+	private val screenshotVerifier = ScreenshotVerifier(
+		testClass = javaClass,
+	)
 	private lateinit var koin: Koin
 
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
 
 	@BeforeTest
 	fun setup() {
-		koin =
-			startKoin {
-				modules(
-					DependencyInjection().module +
-						module {
-							single<PreferencesRepository> { preferencesRepositoryMock }
-						},
-				)
-			}.koin
+		koin = startKoin {
+			modules(
+				DependencyInjection().module + module {
+					single<PreferencesRepository> { preferencesRepositoryMock }
+				},
+			)
+		}.koin
 	}
 
 	@AfterTest
@@ -160,25 +157,23 @@ class WelcomeScreenTest {
 				darkTheme = true,
 				content = {
 					WelcomeScreen(
-						viewModel =
-							WelcomeViewModel(
-								navController = navController,
-								savePreferenceUseCase = koin.get(),
-							),
-						bubblesStrategy =
-							if (useCustomBubbleStrategy) {
-								object : BubblesStrategy {
-									override fun drawBubbles(
-										drawScope: DrawScope,
-										size: Size,
-										step: Float,
-									) {
-										drawScope.drawCircle(Color.LightGray)
-									}
+						viewModel = WelcomeViewModel(
+							navController = navController,
+							savePreferenceUseCase = koin.get(),
+						),
+						bubblesStrategy = if (useCustomBubbleStrategy) {
+							object : BubblesStrategy {
+								override fun drawBubbles(
+									drawScope: DrawScope,
+									size: Size,
+									step: Float,
+								) {
+									drawScope.drawCircle(Color.LightGray)
 								}
-							} else {
-								koin.get()
-							},
+							}
+						} else {
+							koin.get()
+						},
 						isInTextExecution = true,
 					)
 				},

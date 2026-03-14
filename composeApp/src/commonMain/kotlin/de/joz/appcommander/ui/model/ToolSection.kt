@@ -10,7 +10,13 @@ enum class ToolSection(
 	val label: StringResource,
 	val isDefaultActive: Boolean,
 ) {
-	FILTER(isDefaultActive = true, label = Res.string.settings_preference_show_filter_section),
+	FILTER(
+		isDefaultActive = true,
+		label = Res.string.settings_preference_show_filter_section,
+	),
 	TERMINAL(isDefaultActive = true, label = Res.string.settings_preference_show_terminal_section),
-	LOGGING(isDefaultActive = true, label = Res.string.settings_preference_show_logging_section),
+	LOGGING(
+		isDefaultActive = true,
+		label = Res.string.settings_preference_show_logging_section,
+	),
 }

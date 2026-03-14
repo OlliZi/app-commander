@@ -26,17 +26,15 @@ interface BubblesStrategy {
 		fun createRandomBubbles(color: Color = BUBBLE_COLOR): List<Bubble> =
 			List(BUBBLE_COUNT) {
 				Bubble(
-					color =
-						color.copy(
-							alpha =
-								min(
-									MAX_BUBBLE_COLOR_ALPHA,
-									max(
-										MIN_BUBBLE_COLOR_ALPHA,
-										RANDOM.nextFloat(),
-									),
-								),
+					color = color.copy(
+						alpha = min(
+							MAX_BUBBLE_COLOR_ALPHA,
+							max(
+								MIN_BUBBLE_COLOR_ALPHA,
+								RANDOM.nextFloat(),
+							),
 						),
+					),
 					size = max(MIN_SIZE, RANDOM.nextFloat() * MAX_SIZE),
 					x = RANDOM.nextFloat(),
 					y = RANDOM.nextFloat(),

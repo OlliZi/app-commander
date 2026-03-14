@@ -41,17 +41,15 @@ fun ScriptInput(
 	TextField(
 		value = inputValue,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_script_input"),
-		colors =
-			TextFieldDefaults.colors(
-				unfocusedContainerColor = Color.White,
-				focusedContainerColor = Color.White,
-				focusedIndicatorColor = Color.Transparent,
-				unfocusedIndicatorColor = Color.Transparent,
-			),
-		textStyle =
-			TextStyle.Default.copy(
-				color = Color.Black,
-			),
+		colors = TextFieldDefaults.colors(
+			unfocusedContainerColor = Color.White,
+			focusedContainerColor = Color.White,
+			focusedIndicatorColor = Color.Transparent,
+			unfocusedIndicatorColor = Color.Transparent,
+		),
+		textStyle = TextStyle.Default.copy(
+			color = Color.Black,
+		),
 		onValueChange = {
 			inputValue = it
 			onChangeScriptText(it)

@@ -38,10 +38,9 @@ class ManageUiAppearanceUseCaseTest {
 				)
 			} returns -1
 
-			val manageUiAppearanceUseCase =
-				ManageUiAppearanceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val manageUiAppearanceUseCase = ManageUiAppearanceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			assertEquals(
 				ManageUiAppearanceUseCase.UiAppearance.SYSTEM,
@@ -61,10 +60,9 @@ class ManageUiAppearanceUseCaseTest {
 				)
 			} returns ManageUiAppearanceUseCase.UiAppearance.LIGHT.optionIndex
 
-			val manageUiAppearanceUseCase =
-				ManageUiAppearanceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val manageUiAppearanceUseCase = ManageUiAppearanceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			assertEquals(
 				ManageUiAppearanceUseCase.UiAppearance.LIGHT,
@@ -84,10 +82,9 @@ class ManageUiAppearanceUseCaseTest {
 				)
 			} returns ManageUiAppearanceUseCase.UiAppearance.LIGHT.optionIndex
 
-			val manageUiAppearanceUseCase =
-				ManageUiAppearanceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val manageUiAppearanceUseCase = ManageUiAppearanceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			manageUiAppearanceUseCase(uiAppearance = ManageUiAppearanceUseCase.UiAppearance.DARK)
 

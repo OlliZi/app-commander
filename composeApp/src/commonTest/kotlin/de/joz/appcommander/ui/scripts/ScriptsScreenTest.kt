@@ -23,17 +23,15 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ScriptsScreenTest {
-	private val screenshotVerifier =
-		ScreenshotVerifier(
-			testClass = javaClass,
-		)
+	private val screenshotVerifier = ScreenshotVerifier(
+		testClass = javaClass,
+	)
 
 	@Test
 	fun `should show default label when no devices are connected`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(),
+				uiState = ScriptsViewModel.UiState(),
 			)
 
 			onNodeWithText("Your scripts").assertIsDisplayed()
@@ -55,51 +53,48 @@ class ScriptsScreenTest {
 	fun `should show scripts label when scripts are available`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						connectedDevices =
-							listOf(
-								ScriptsViewModel.Device(
-									label = "emulator-5555",
-									id = "1",
-									isSelected = true,
-								),
-								ScriptsViewModel.Device(
-									label = "emulator-5556",
-									id = "2",
-									isSelected = false,
-								),
-								ScriptsViewModel.Device(
-									label = "Google Pixel 10",
-									id = "3",
-									isSelected = true,
-								),
-							),
-						scripts =
-							listOf(
-								ScriptsViewModel.Script(
-									description = "Dark mode",
-									scriptText = "adb shell cmd uimode night yes",
-									originalScript = mockk(),
-								),
-								ScriptsViewModel.Script(
-									description = "Light mode",
-									scriptText = "adb shell cmd uimode night no",
-									originalScript = mockk(),
-								),
-								ScriptsViewModel.Script(
-									description = "Login into app",
-									scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
-									originalScript = mockk(),
-								),
-								ScriptsViewModel.Script(
-									description = "Swipe through app",
-									scriptText = "#LOOP_10 adb shell input swipe 500 500 500 500",
-									originalScript = mockk(),
-								),
-							),
-						logging = listOf("1. adb devices", "2. adb shell cmd uimode night yes"),
+				uiState = ScriptsViewModel.UiState(
+					connectedDevices = listOf(
+						ScriptsViewModel.Device(
+							label = "emulator-5555",
+							id = "1",
+							isSelected = true,
+						),
+						ScriptsViewModel.Device(
+							label = "emulator-5556",
+							id = "2",
+							isSelected = false,
+						),
+						ScriptsViewModel.Device(
+							label = "Google Pixel 10",
+							id = "3",
+							isSelected = true,
+						),
 					),
+					scripts = listOf(
+						ScriptsViewModel.Script(
+							description = "Dark mode",
+							scriptText = "adb shell cmd uimode night yes",
+							originalScript = mockk(),
+						),
+						ScriptsViewModel.Script(
+							description = "Light mode",
+							scriptText = "adb shell cmd uimode night no",
+							originalScript = mockk(),
+						),
+						ScriptsViewModel.Script(
+							description = "Login into app",
+							scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
+							originalScript = mockk(),
+						),
+						ScriptsViewModel.Script(
+							description = "Swipe through app",
+							scriptText = "#LOOP_10 adb shell input swipe 500 500 500 500",
+							originalScript = mockk(),
+						),
+					),
+					logging = listOf("1. adb devices", "2. adb shell cmd uimode night yes"),
+				),
 			)
 
 			onNodeWithTag(
@@ -117,10 +112,9 @@ class ScriptsScreenTest {
 	fun `should show log if expand button is clicked`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						logging = listOf("Log abc", "Log 123"),
-					),
+				uiState = ScriptsViewModel.UiState(
+					logging = listOf("Log abc", "Log 123"),
+				),
 			)
 
 			onNodeWithTag(
@@ -141,28 +135,22 @@ class ScriptsScreenTest {
 	fun `should all scripts when script is expanded`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						scripts =
-							listOf(
-								ScriptsViewModel.Script(
-									description = "some script",
-									scriptText =
-										"adb shell cmd uimode night no\n" +
-											"sleep 1\n" +
-											"adb shell cmd uimode night yes\n" +
-											"sleep 1\n" +
-											"adb shell cmd uimode night no",
-									originalScript =
-										ScriptsRepository.Script(
-											label = "needed for platform",
-											platform = ScriptsRepository.Platform.ANDROID,
-											scripts = emptyList(),
-										),
-									isExpanded = true,
-								),
+				uiState = ScriptsViewModel.UiState(
+					scripts = listOf(
+						ScriptsViewModel.Script(
+							description = "some script",
+							scriptText =
+								"adb shell cmd uimode night no\n" + "sleep 1\n" + "adb shell cmd uimode night yes\n" + "sleep 1\n" +
+									"adb shell cmd uimode night no",
+							originalScript = ScriptsRepository.Script(
+								label = "needed for platform",
+								platform = ScriptsRepository.Platform.ANDROID,
+								scripts = emptyList(),
 							),
+							isExpanded = true,
+						),
 					),
+				),
 			)
 
 			onNodeWithTag(
@@ -180,23 +168,20 @@ class ScriptsScreenTest {
 	fun `should always activate button for Desktop scripts regardless of connected devices`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						scripts =
-							ScriptsRepository.Platform.entries.map {
-								ScriptsViewModel.Script(
-									description = "some script for ${it.label}",
-									scriptText = "echo Hello App-Commander!",
-									originalScript =
-										ScriptsRepository.Script(
-											label = "",
-											platform = it,
-											scripts = emptyList(),
-										),
-									isExpanded = false,
-								)
-							},
-					),
+				uiState = ScriptsViewModel.UiState(
+					scripts = ScriptsRepository.Platform.entries.map {
+						ScriptsViewModel.Script(
+							description = "some script for ${it.label}",
+							scriptText = "echo Hello App-Commander!",
+							originalScript = ScriptsRepository.Script(
+								label = "",
+								platform = it,
+								scripts = emptyList(),
+							),
+							isExpanded = false,
+						)
+					},
+				),
 			)
 
 			screenshotVerifier.verifyScreenshot(
@@ -211,10 +196,9 @@ class ScriptsScreenTest {
 		runComposeUiTest {
 			var isClearClicked = 0
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						logging = listOf("Log abc", "Log 123"),
-					),
+				uiState = ScriptsViewModel.UiState(
+					logging = listOf("Log abc", "Log 123"),
+				),
 				onEvent = {
 					isClearClicked++
 				},
@@ -238,10 +222,9 @@ class ScriptsScreenTest {
 	fun `should collapse log when collapse button is executed`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						logging = listOf("Log abc", "Log 123"),
-					),
+				uiState = ScriptsViewModel.UiState(
+					logging = listOf("Log abc", "Log 123"),
+				),
 			)
 
 			onNodeWithTag(
@@ -264,17 +247,15 @@ class ScriptsScreenTest {
 	fun `should show connected devices`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						connectedDevices =
-							listOf(
-								ScriptsViewModel.Device(
-									label = "Device A",
-									id = "1",
-									isSelected = true,
-								),
-							),
+				uiState = ScriptsViewModel.UiState(
+					connectedDevices = listOf(
+						ScriptsViewModel.Device(
+							label = "Device A",
+							id = "1",
+							isSelected = true,
+						),
 					),
+				),
 			)
 
 			onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
@@ -396,10 +377,9 @@ class ScriptsScreenTest {
 	fun `should error if JSON contains invalid scripts`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					ScriptsViewModel.UiState(
-						hint = Hint.Error(Exception("Cannot find field 'platform'.")),
-					),
+				uiState = ScriptsViewModel.UiState(
+					hint = Hint.Error(Exception("Cannot find field 'platform'.")),
+				),
 			)
 
 			screenshotVerifier.verifyScreenshot(

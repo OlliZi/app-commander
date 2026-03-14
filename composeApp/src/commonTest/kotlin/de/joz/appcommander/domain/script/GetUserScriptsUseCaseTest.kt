@@ -14,23 +14,20 @@ class GetUserScriptsUseCaseTest {
 			val scriptsRepositoryMock: ScriptsRepository = mockk()
 			coEvery {
 				scriptsRepositoryMock.getScripts()
-			} returns
-				ScriptsRepository.JsonParseResult(
-					scripts =
-						listOf(
-							ScriptsRepository.Script(
-								label = "foo",
-								scripts = listOf("echo"),
-								platform = ScriptsRepository.Platform.ANDROID,
-							),
-						),
-					parsingMetaData = null,
-				)
+			} returns ScriptsRepository.JsonParseResult(
+				scripts = listOf(
+					ScriptsRepository.Script(
+						label = "foo",
+						scripts = listOf("echo"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
+				),
+				parsingMetaData = null,
+			)
 
-			val getUserScriptsUseCase =
-				GetUserScriptsUseCase(
-					scriptsRepository = scriptsRepositoryMock,
-				)
+			val getUserScriptsUseCase = GetUserScriptsUseCase(
+				scriptsRepository = scriptsRepositoryMock,
+			)
 
 			assertEquals(
 				listOf(

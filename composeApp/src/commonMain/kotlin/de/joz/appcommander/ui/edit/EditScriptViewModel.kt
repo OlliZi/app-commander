@@ -33,10 +33,9 @@ class EditScriptViewModel(
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<EditScriptViewModel.UiState, EditScriptViewModel.Event> {
-	private val _uiState =
-		MutableStateFlow(
-			mapToUiState(getUserScriptByKeyUseCase(scriptKey)),
-		)
+	private val _uiState = MutableStateFlow(
+		mapToUiState(getUserScriptByKeyUseCase(scriptKey)),
+	)
 	private val originalUiState = _uiState.value
 
 	override val uiState = _uiState.asStateFlow()
@@ -71,38 +70,35 @@ class EditScriptViewModel(
 		script: String,
 	) {
 		updateUiState(
-			scripts =
-				_uiState.value.scriptUiState.scripts.mapIndexed { oldIndex, oldScript ->
-					if (oldIndex == index) {
-						script
-					} else {
-						oldScript
-					}
-				},
+			scripts = _uiState.value.scriptUiState.scripts.mapIndexed { oldIndex, oldScript ->
+				if (oldIndex == index) {
+					script
+				} else {
+					oldScript
+				}
+			},
 		)
 	}
 
 	private fun onAddSubScript(index: Int) {
 		updateUiState(
-			scripts =
-				_uiState.value.scriptUiState.scripts
-					.toMutableList()
-					.apply {
-						add(index + 1, "<enter new script>")
-					}.toList(),
+			scripts = _uiState.value.scriptUiState.scripts
+				.toMutableList()
+				.apply {
+					add(index + 1, "<enter new script>")
+				}.toList(),
 		)
 	}
 
 	private fun onRemoveSubScript(index: Int) {
 		updateUiState(
-			scripts =
-				if (_uiState.value.scriptUiState.scripts.size == 1) {
-					listOf("")
-				} else {
-					_uiState.value.scriptUiState.scripts.filterIndexed { oldIndex, _ ->
-						oldIndex != index
-					}
-				},
+			scripts = if (_uiState.value.scriptUiState.scripts.size == 1) {
+				listOf("")
+			} else {
+				_uiState.value.scriptUiState.scripts.filterIndexed { oldIndex, _ ->
+					oldIndex != index
+				}
+			},
 		)
 	}
 
@@ -116,12 +112,11 @@ class EditScriptViewModel(
 		selectedPlatform: ScriptsRepository.Platform? = null,
 	) {
 		_uiState.update { oldState ->
-			val newScript =
-				oldState.scriptUiState.copy(
-					scriptName = scriptName ?: oldState.scriptUiState.scriptName,
-					scripts = scripts ?: oldState.scriptUiState.scripts,
-					selectedPlatform = selectedPlatform ?: oldState.scriptUiState.selectedPlatform,
-				)
+			val newScript = oldState.scriptUiState.copy(
+				scriptName = scriptName ?: oldState.scriptUiState.scriptName,
+				scripts = scripts ?: oldState.scriptUiState.scripts,
+				selectedPlatform = selectedPlatform ?: oldState.scriptUiState.selectedPlatform,
+			)
 			oldState.copy(
 				hasChanges = newScript != originalUiState.scriptUiState,
 				scriptUiState = newScript,
@@ -132,12 +127,11 @@ class EditScriptViewModel(
 	private fun onExecuteSingleScript(script: String) {
 		viewModelScope.launch(ioDispatcher) {
 			executeScriptUseCase(
-				script =
-					ScriptsRepository.Script(
-						label = _uiState.value.scriptUiState.scriptName,
-						scripts = listOf(script),
-						platform = _uiState.value.scriptUiState.selectedPlatform,
-					),
+				script = ScriptsRepository.Script(
+					label = _uiState.value.scriptUiState.scriptName,
+					scripts = listOf(script),
+					platform = _uiState.value.scriptUiState.selectedPlatform,
+				),
 				selectedDevice = "TODO",
 			)
 		}
@@ -179,12 +173,11 @@ class EditScriptViewModel(
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			hasChanges = false,
-			scriptUiState =
-				ScriptUiState(
-					scriptName = script?.label.orEmpty(),
-					scripts = script?.scripts ?: listOf(""),
-					selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
-				),
+			scriptUiState = ScriptUiState(
+				scriptName = script?.label.orEmpty(),
+				scripts = script?.scripts ?: listOf(""),
+				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
+			),
 		)
 
 	sealed interface Event {
