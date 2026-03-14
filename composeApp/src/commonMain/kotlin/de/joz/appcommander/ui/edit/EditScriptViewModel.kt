@@ -118,7 +118,7 @@ class EditScriptViewModel(
 				selectedPlatform = selectedPlatform ?: oldState.scriptUiState.selectedPlatform,
 			)
 			oldState.copy(
-				hasChanges = newScript != originalUiState.scriptUiState,
+				scriptChanged = newScript != originalUiState.scriptUiState,
 				scriptUiState = newScript,
 			)
 		}
@@ -172,7 +172,7 @@ class EditScriptViewModel(
 
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
-			hasChanges = false,
+			scriptChanged = false,
 			scriptUiState = ScriptUiState(
 				scriptName = script?.label.orEmpty(),
 				scripts = script?.scripts ?: listOf(""),
@@ -216,7 +216,7 @@ class EditScriptViewModel(
 	}
 
 	data class UiState(
-		val hasChanges: Boolean = false,
+		val scriptChanged: Boolean = false,
 		val scriptUiState: ScriptUiState = ScriptUiState(),
 	)
 

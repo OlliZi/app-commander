@@ -18,6 +18,8 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class EditScriptViewModelTest {
@@ -55,6 +57,52 @@ class EditScriptViewModelTest {
 			verify {
 				navControllerMock.navigateUp()
 			}
+		}
+
+	@Test
+	fun `should detect no changes when script was not changed`() =
+		runTest {
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
+
+			val viewModel = createViewModel()
+
+			assertFalse(viewModel.uiState.value.scriptChanged)
+		}
+
+	@Test
+	fun `should detect changes when script was changed`() =
+		runTest {
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScriptName("new name"))
+			assertTrue(viewModel.uiState.value.scriptChanged)
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScriptName("label"))
+			assertFalse(viewModel.uiState.value.scriptChanged)
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnSelectPlatform(ScriptsRepository.Platform.ANDROID))
+			assertTrue(viewModel.uiState.value.scriptChanged)
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnSelectPlatform(ScriptsRepository.Platform.IOS))
+			assertFalse(viewModel.uiState.value.scriptChanged)
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScript(0, "foo"))
+			assertTrue(viewModel.uiState.value.scriptChanged)
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnChangeScript(0, "script 1"))
+			assertFalse(viewModel.uiState.value.scriptChanged)
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnAddSubScript(0))
+			assertTrue(viewModel.uiState.value.scriptChanged)
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnRemoveSubScript(1))
+			assertFalse(viewModel.uiState.value.scriptChanged)
 		}
 
 	@Test
