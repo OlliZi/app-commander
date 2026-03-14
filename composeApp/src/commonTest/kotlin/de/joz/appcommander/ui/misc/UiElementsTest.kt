@@ -16,10 +16,9 @@ import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class UiElementsTest {
-	private val screenshotVerifier =
-		ScreenshotVerifier(
-			testClass = javaClass,
-		)
+	private val screenshotVerifier = ScreenshotVerifier(
+		testClass = javaClass,
+	)
 
 	@Test
 	fun `should render all ui elements correctly in dark mode`() {

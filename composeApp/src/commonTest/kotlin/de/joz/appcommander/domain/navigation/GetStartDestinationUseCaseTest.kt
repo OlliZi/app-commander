@@ -24,10 +24,9 @@ class GetStartDestinationUseCaseTest {
 				)
 			} returns false
 
-			val getStartDestination =
-				GetStartDestinationUseCase(
-					getPreferenceUseCase = getPreferenceUseCaseMock,
-				)
+			val getStartDestination = GetStartDestinationUseCase(
+				getPreferenceUseCase = getPreferenceUseCaseMock,
+			)
 
 			assertEquals(NavigationScreens.WelcomeScreen, getStartDestination(TestScope()))
 
@@ -50,10 +49,9 @@ class GetStartDestinationUseCaseTest {
 				)
 			} returns true
 
-			val getStartDestination =
-				GetStartDestinationUseCase(
-					getPreferenceUseCase = getPreferenceUseCaseMock,
-				)
+			val getStartDestination = GetStartDestinationUseCase(
+				getPreferenceUseCase = getPreferenceUseCaseMock,
+			)
 
 			assertEquals(NavigationScreens.ScriptsScreen, getStartDestination(TestScope()))
 

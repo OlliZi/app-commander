@@ -17,10 +17,9 @@ import org.koin.ksp.generated.*
 
 fun main() =
 	application {
-		val windowState =
-			rememberWindowState(
-				size = DpSize(600.dp, 1000.dp),
-			)
+		val windowState = rememberWindowState(
+			size = DpSize(600.dp, 1000.dp),
+		)
 
 		Window(
 			state = windowState,

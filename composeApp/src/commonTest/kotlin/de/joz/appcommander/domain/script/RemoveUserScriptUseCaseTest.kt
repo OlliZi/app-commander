@@ -10,28 +10,25 @@ class RemoveUserScriptUseCaseTest {
 	fun `should execute repository when use case is executed`() =
 		runTest {
 			val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
-			val removeUserScriptUseCase =
-				RemoveUserScriptUseCase(
-					scriptsRepository = scriptsRepositoryMock,
-				)
+			val removeUserScriptUseCase = RemoveUserScriptUseCase(
+				scriptsRepository = scriptsRepositoryMock,
+			)
 
 			removeUserScriptUseCase(
-				script =
-					ScriptsRepository.Script(
-						label = "key",
-						scripts = listOf("foo"),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
+				script = ScriptsRepository.Script(
+					label = "key",
+					scripts = listOf("foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
 			)
 
 			verify {
 				scriptsRepositoryMock.removeScript(
-					script =
-						ScriptsRepository.Script(
-							label = "key",
-							scripts = listOf("foo"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
+					script = ScriptsRepository.Script(
+						label = "key",
+						scripts = listOf("foo"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
 				)
 			}
 		}

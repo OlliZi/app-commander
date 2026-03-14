@@ -33,10 +33,9 @@ fun App(
 	manageUiAppearanceUseCase: ManageUiAppearanceUseCase = koinInject(),
 ) {
 	val coroutineScope = rememberCoroutineScope()
-	val uiAppearanceType =
-		manageUiAppearanceUseCase.uiAppearanceType.collectAsStateWithLifecycle(
-			initialValue = ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE,
-		)
+	val uiAppearanceType = manageUiAppearanceUseCase.uiAppearanceType.collectAsStateWithLifecycle(
+		initialValue = ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE,
+	)
 
 	AppCommanderTheme(
 		darkTheme = isDarkThemeEnabled(uiAppearanceType.value),
@@ -46,10 +45,9 @@ fun App(
 			startDestination = getStartDestination(coroutineScope),
 		) {
 			composable<NavigationScreens.WelcomeScreen> {
-				val viewModel: WelcomeViewModel =
-					koinViewModel {
-						parametersOf(navHostController)
-					}
+				val viewModel: WelcomeViewModel = koinViewModel {
+					parametersOf(navHostController)
+				}
 
 				WelcomeScreen(
 					viewModel = viewModel,
@@ -57,30 +55,27 @@ fun App(
 				)
 			}
 			composable<NavigationScreens.ScriptsScreen> {
-				val viewModel: ScriptsViewModel =
-					koinViewModel {
-						parametersOf(navHostController)
-					}
+				val viewModel: ScriptsViewModel = koinViewModel {
+					parametersOf(navHostController)
+				}
 
 				ScriptsScreen(
 					viewModel = viewModel,
 				)
 			}
 			composable<NavigationScreens.NewScriptScreen> {
-				val viewModel: EditScriptViewModel =
-					koinViewModel {
-						parametersOf(navHostController, it.toRoute<NavigationScreens.NewScriptScreen>().scriptKey)
-					}
+				val viewModel: EditScriptViewModel = koinViewModel {
+					parametersOf(navHostController, it.toRoute<NavigationScreens.NewScriptScreen>().scriptKey)
+				}
 
 				EditScriptScreen(
 					viewModel = viewModel,
 				)
 			}
 			composable<NavigationScreens.SettingsScreen> {
-				val viewModel: SettingsViewModel =
-					koinViewModel {
-						parametersOf(navHostController)
-					}
+				val viewModel: SettingsViewModel = koinViewModel {
+					parametersOf(navHostController)
+				}
 
 				SettingsScreen(
 					viewModel = viewModel,

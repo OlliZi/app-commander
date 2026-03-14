@@ -32,11 +32,10 @@ class ScreenshotVerifier<T>(
 		source: ComposeUiTest,
 		screenshotName: String,
 	) {
-		val screenshotResult =
-			takeScreenshot(
-				source = source,
-				screenshotName = screenshotName,
-			)
+		val screenshotResult = takeScreenshot(
+			source = source,
+			screenshotName = screenshotName,
+		)
 
 		when (screenshotResult) {
 			is ScreenshotResult.Success -> {
@@ -58,16 +57,15 @@ class ScreenshotVerifier<T>(
 		runCatching {
 			val dialog = source.onNode(isDialog())
 
-			val node =
-				try {
-					if (dialog.isDisplayed()) {
-						dialog
-					} else {
-						source.onNode(isRoot())
-					}
-				} catch (_: Throwable) {
+			val node = try {
+				if (dialog.isDisplayed()) {
+					dialog
+				} else {
 					source.onNode(isRoot())
 				}
+			} catch (_: Throwable) {
+				source.onNode(isRoot())
+			}
 
 			val pngByteArray = convertToPng(node.captureToImage().asSkiaBitmap())
 
@@ -83,25 +81,22 @@ class ScreenshotVerifier<T>(
 		}
 
 	private fun verifyAgainstGoldenImage(screenshotFile: File) {
-		val goldenImage =
-			readGoldenImageFromSrcDir(
-				screenshotFileName = screenshotFile.name,
-			)
+		val goldenImage = readGoldenImageFromSrcDir(
+			screenshotFileName = screenshotFile.name,
+		)
 
 		if (!goldenImage.exists()) {
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath())
 			fail(
-				"Golden image does not exist. Copied for your. Check your VCS.\n" +
-					"Current: ${screenshotFile.absolutePath}\n" +
+				"Golden image does not exist. Copied for your. Check your VCS.\n" + "Current: ${screenshotFile.absolutePath}\n" +
 					"Golden: ${goldenImage.absolutePath}",
 			)
 		}
 
-		val result =
-			createScreenshotDifferenceUseCase(
-				currentScreenshot = createBitmapFromScreenshot(screenshotFile = screenshotFile),
-				goldenScreenshot = createBitmapFromScreenshot(screenshotFile = goldenImage),
-			)
+		val result = createScreenshotDifferenceUseCase(
+			currentScreenshot = createBitmapFromScreenshot(screenshotFile = screenshotFile),
+			goldenScreenshot = createBitmapFromScreenshot(screenshotFile = goldenImage),
+		)
 		when (result) {
 			is CreateScreenshotDifferenceUseCase.Result.IdenticalScreenshots -> {
 				// success case
@@ -127,8 +122,7 @@ class ScreenshotVerifier<T>(
 					val currentScreenshot = File(goldenImage.parentFile, goldenImage.name)
 					Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
 					fail(
-						"Screenshots differs. Take a look at the diff image.\n" +
-							"Fraction: ${result.fraction}\n" +
+						"Screenshots differs. Take a look at the diff image.\n" + "Fraction: ${result.fraction}\n" +
 							"Diff: ${diffFile.absolutePath}\n" +
 							"Current: ${screenshotFile.absolutePath}\n" +
 							"Golden: ${goldenImage.absolutePath}",
@@ -139,14 +133,12 @@ class ScreenshotVerifier<T>(
 	}
 
 	private fun readGoldenImageFromSrcDir(screenshotFileName: String): File {
-		val sourceDirectory =
-			testClass.name
-				.split(".") // split class name into parts
-				.dropLast(1) // remove class name
-				.joinToString("/") // convert to directory path
+		val sourceDirectory = testClass.name
+			.split(".") // split class name into parts
+			.dropLast(1) // remove class name
+			.joinToString("/") // convert to directory path
 
-		val parentScreenshotDir =
-			File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/screenshots/"))
+		val parentScreenshotDir = File(goldenImageDirectory.absolutePath.plus("/$sourceDirectory/screenshots/"))
 		parentScreenshotDir.mkdir()
 
 		return File(parentScreenshotDir, screenshotFileName)
@@ -163,10 +155,7 @@ class ScreenshotVerifier<T>(
 	}
 
 	private fun convertToPng(bitmap: Bitmap): ByteArray? =
-		Image
-			.makeFromBitmap(bitmap)
-			.encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)
-			?.bytes
+		Image.makeFromBitmap(bitmap).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
 
 	private sealed interface ScreenshotResult {
 		data class Success(

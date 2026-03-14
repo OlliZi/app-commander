@@ -15,11 +15,10 @@ class FallingBubblesStrategy : BubblesStrategy {
 		bubbles.forEach { bubble ->
 			drawScope.drawOval(
 				color = bubble.color,
-				topLeft =
-					Offset(
-						x = bubble.x * size.width - bubble.size / 4,
-						y = bubble.y * size.height * step,
-					),
+				topLeft = Offset(
+					x = bubble.x * size.width - bubble.size / 4,
+					y = bubble.y * size.height * step,
+				),
 				size = Size(bubble.size, bubble.size),
 			)
 		}

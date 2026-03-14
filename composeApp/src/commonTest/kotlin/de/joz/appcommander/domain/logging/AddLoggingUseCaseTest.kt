@@ -9,10 +9,9 @@ class AddLoggingUseCaseTest {
 	fun `should log to repository`() {
 		val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
 
-		val useCase =
-			AddLoggingUseCase(
-				loggingRepository = loggingRepositoryMock,
-			)
+		val useCase = AddLoggingUseCase(
+			loggingRepository = loggingRepositoryMock,
+		)
 
 		useCase(log = "foo")
 

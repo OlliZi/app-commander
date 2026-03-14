@@ -33,17 +33,15 @@ fun SimpleTextInput(
 	TextField(
 		value = inputValue,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_simple_text"),
-		colors =
-			TextFieldDefaults.colors(
-				unfocusedContainerColor = Color.White,
-				focusedContainerColor = Color.White,
-				focusedIndicatorColor = Color.Transparent,
-				unfocusedIndicatorColor = Color.Transparent,
-			),
-		textStyle =
-			TextStyle.Default.copy(
-				color = Color.Black,
-			),
+		colors = TextFieldDefaults.colors(
+			unfocusedContainerColor = Color.White,
+			focusedContainerColor = Color.White,
+			focusedIndicatorColor = Color.Transparent,
+			unfocusedIndicatorColor = Color.Transparent,
+		),
+		textStyle = TextStyle.Default.copy(
+			color = Color.Black,
+		),
 		onValueChange = {
 			inputValue = it
 			onChangeTextChange(it)

@@ -17,30 +17,27 @@ class SaveUserScriptUseCaseTest {
 				getUserScriptByKeyUseCaseMock(any())
 			} returns null
 
-			val savePreferenceUseCase =
-				SaveUserScriptUseCase(
-					getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
-					scriptsRepository = scriptsRepositoryMock,
-				)
+			val savePreferenceUseCase = SaveUserScriptUseCase(
+				getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+				scriptsRepository = scriptsRepositoryMock,
+			)
 
 			savePreferenceUseCase(
-				script =
-					ScriptsRepository.Script(
-						label = "key",
-						scripts = listOf("foo"),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
+				script = ScriptsRepository.Script(
+					label = "key",
+					scripts = listOf("foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
 				scriptKey = null,
 			)
 
 			verify {
 				scriptsRepositoryMock.saveScript(
-					script =
-						ScriptsRepository.Script(
-							label = "key",
-							scripts = listOf("foo"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
+					script = ScriptsRepository.Script(
+						label = "key",
+						scripts = listOf("foo"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
 				)
 			}
 		}
@@ -51,28 +48,25 @@ class SaveUserScriptUseCaseTest {
 			val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
 			val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = true)
 
-			val newScript =
-				ScriptsRepository.Script(
-					label = "key",
-					scripts = listOf("foo"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
-			val oldScript =
-				ScriptsRepository.Script(
-					label = "key",
-					scripts = listOf("bar"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
+			val newScript = ScriptsRepository.Script(
+				label = "key",
+				scripts = listOf("foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+			val oldScript = ScriptsRepository.Script(
+				label = "key",
+				scripts = listOf("bar"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
 
 			every {
 				getUserScriptByKeyUseCaseMock(oldScript.hashCode())
 			} returns oldScript
 
-			val savePreferenceUseCase =
-				SaveUserScriptUseCase(
-					getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
-					scriptsRepository = scriptsRepositoryMock,
-				)
+			val savePreferenceUseCase = SaveUserScriptUseCase(
+				getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+				scriptsRepository = scriptsRepositoryMock,
+			)
 
 			savePreferenceUseCase(
 				script = newScript,
@@ -81,12 +75,11 @@ class SaveUserScriptUseCaseTest {
 
 			verify {
 				scriptsRepositoryMock.updateScript(
-					script =
-						ScriptsRepository.Script(
-							label = "key",
-							scripts = listOf("foo"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
+					script = ScriptsRepository.Script(
+						label = "key",
+						scripts = listOf("foo"),
+						platform = ScriptsRepository.Platform.ANDROID,
+					),
 					oldScript = oldScript,
 				)
 			}

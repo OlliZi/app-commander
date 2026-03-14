@@ -160,11 +160,10 @@ class SettingsViewModelTest {
 
 			viewModel.uiState.value.togglePreferences.forEach {
 				viewModel.onEvent(
-					event =
-						SettingsViewModel.Event.OnToggleItem(
-							isChecked = true,
-							toggleItem = it,
-						),
+					event = SettingsViewModel.Event.OnToggleItem(
+						isChecked = true,
+						toggleItem = it,
+					),
 				)
 				runCurrent()
 			}
@@ -178,11 +177,10 @@ class SettingsViewModelTest {
 
 			viewModel.uiState.value.togglePreferences.forEach {
 				viewModel.onEvent(
-					event =
-						SettingsViewModel.Event.OnToggleItem(
-							isChecked = false,
-							toggleItem = it,
-						),
+					event = SettingsViewModel.Event.OnToggleItem(
+						isChecked = false,
+						toggleItem = it,
+					),
 				)
 				runCurrent()
 			}
@@ -203,11 +201,10 @@ class SettingsViewModelTest {
 
 			viewModel.uiState.value.sliderPreferences.forEach {
 				viewModel.onEvent(
-					event =
-						SettingsViewModel.Event.OnSliderItem(
-							value = it.maximum,
-							sliderItem = it,
-						),
+					event = SettingsViewModel.Event.OnSliderItem(
+						value = it.maximum,
+						sliderItem = it,
+					),
 				)
 				runCurrent()
 
@@ -228,11 +225,10 @@ class SettingsViewModelTest {
 
 			viewModel.uiState.value.sliderPreferences.forEach {
 				viewModel.onEvent(
-					event =
-						SettingsViewModel.Event.OnSliderItem(
-							value = it.minimum,
-							sliderItem = it,
-						),
+					event = SettingsViewModel.Event.OnSliderItem(
+						value = it.minimum,
+						sliderItem = it,
+					),
 				)
 				runCurrent()
 
@@ -258,32 +254,28 @@ class SettingsViewModelTest {
 			val viewModel = createViewModel()
 			runCurrent()
 
-			val uiAppearanceSlider =
-				viewModel.uiState.value.sliderPreferences.find {
-					it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
-				}
+			val uiAppearanceSlider = viewModel.uiState.value.sliderPreferences.find {
+				it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+			}
 			assertNotNull(uiAppearanceSlider)
 
 			(uiAppearanceSlider.minimum.toInt()..uiAppearanceSlider.maximum.toInt()).forEach { sliderValue ->
 				viewModel.onEvent(
-					event =
-						SettingsViewModel.Event.OnSliderItem(
-							value = sliderValue.toFloat(),
-							sliderItem = uiAppearanceSlider,
-						),
+					event = SettingsViewModel.Event.OnSliderItem(
+						value = sliderValue.toFloat(),
+						sliderItem = uiAppearanceSlider,
+					),
 				)
 				runCurrent()
 
-				val slider =
-					viewModel.uiState.value.sliderPreferences.find {
-						it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
-					}
+				val slider = viewModel.uiState.value.sliderPreferences.find {
+					it.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE
+				}
 				assertEquals(sliderValue.toFloat(), slider?.sliderValue)
 
-				val expectedUiAppearance =
-					ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
-						it.optionIndex == sliderValue
-					}
+				val expectedUiAppearance = ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
+					it.optionIndex == sliderValue
+				}
 
 				assertEquals(
 					when (expectedUiAppearance) {

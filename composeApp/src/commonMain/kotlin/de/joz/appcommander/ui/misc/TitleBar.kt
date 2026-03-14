@@ -96,13 +96,12 @@ internal fun PreviewTitleBar(
 			TitleBar(
 				title = "Title bar with back + actions",
 				onBackNavigation = {},
-				actions =
-					listOf(
-						TitleBarAction(
-							action = {},
-							icon = FeatherIcons.Settings,
-						),
+				actions = listOf(
+					TitleBarAction(
+						action = {},
+						icon = FeatherIcons.Settings,
 					),
+				),
 			)
 		}
 	}

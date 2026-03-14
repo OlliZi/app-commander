@@ -64,10 +64,9 @@ class EditScriptViewModelTest {
 			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnSelectPlatform(
-						platform = ScriptsRepository.Platform.IOS,
-					),
+				event = EditScriptViewModel.Event.OnSelectPlatform(
+					platform = ScriptsRepository.Platform.IOS,
+				),
 			)
 			runCurrent()
 
@@ -77,21 +76,19 @@ class EditScriptViewModelTest {
 	@Test
 	fun `should change script when event 'OnChangeScript' is fired`() =
 		runTest {
-			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns
-				ScriptsRepository.Script(
-					label = "label",
-					scripts = listOf("script 1", "script 2"),
-					platform = ScriptsRepository.Platform.IOS,
-				)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
 
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnChangeScript(
-						index = 1,
-						script = "new script 2",
-					),
+				event = EditScriptViewModel.Event.OnChangeScript(
+					index = 1,
+					script = "new script 2",
+				),
 			)
 			runCurrent()
 
@@ -106,10 +103,9 @@ class EditScriptViewModelTest {
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnChangeScriptName(
-						scriptName = "new name",
-					),
+				event = EditScriptViewModel.Event.OnChangeScriptName(
+					scriptName = "new name",
+				),
 			)
 			runCurrent()
 
@@ -124,10 +120,9 @@ class EditScriptViewModelTest {
 			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnAddSubScript(
-						index = 0,
-					),
+				event = EditScriptViewModel.Event.OnAddSubScript(
+					index = 0,
+				),
 			)
 			runCurrent()
 
@@ -143,10 +138,9 @@ class EditScriptViewModelTest {
 			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnRemoveSubScript(
-						index = 0,
-					),
+				event = EditScriptViewModel.Event.OnRemoveSubScript(
+					index = 0,
+				),
 			)
 			runCurrent()
 
@@ -157,22 +151,20 @@ class EditScriptViewModelTest {
 	@Test
 	fun `should remove script on correct index when event 'OnRemoveSubScript' is fired`() =
 		runTest {
-			val testScript =
-				ScriptsRepository.Script(
-					label = "label",
-					scripts = listOf("script 1", "script 2", "script 3"),
-					platform = ScriptsRepository.Platform.IOS,
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1", "script 2", "script 3"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
 			val viewModel = createViewModel()
 
 			assertEquals(3, viewModel.uiState.value.scriptUiState.scripts.size)
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnRemoveSubScript(
-						index = 1,
-					),
+				event = EditScriptViewModel.Event.OnRemoveSubScript(
+					index = 1,
+				),
 			)
 			runCurrent()
 
@@ -187,8 +179,7 @@ class EditScriptViewModelTest {
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnSaveScript,
+				event = EditScriptViewModel.Event.OnSaveScript,
 			)
 			runCurrent()
 
@@ -199,14 +190,12 @@ class EditScriptViewModelTest {
 	@Test
 	fun `should save script with script id when event 'OnSaveScript' is fired`() =
 		runTest {
-			val viewModel =
-				createViewModel(
-					scriptKey = 1,
-				)
+			val viewModel = createViewModel(
+				scriptKey = 1,
+			)
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnSaveScript,
+				event = EditScriptViewModel.Event.OnSaveScript,
 			)
 			runCurrent()
 
@@ -217,17 +206,15 @@ class EditScriptViewModelTest {
 	@Test
 	fun `should apply script when script is loaded over constructor`() =
 		runTest {
-			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns
-				ScriptsRepository.Script(
-					scripts = listOf("foo"),
-					label = "bar",
-					platform = ScriptsRepository.Platform.IOS,
-				)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns ScriptsRepository.Script(
+				scripts = listOf("foo"),
+				label = "bar",
+				platform = ScriptsRepository.Platform.IOS,
+			)
 
-			val viewModel =
-				createViewModel(
-					scriptKey = 1,
-				)
+			val viewModel = createViewModel(
+				scriptKey = 1,
+			)
 
 			assertEquals(listOf("foo"), viewModel.uiState.value.scriptUiState.scripts)
 			assertEquals("bar", viewModel.uiState.value.scriptUiState.scriptName)
@@ -242,8 +229,7 @@ class EditScriptViewModelTest {
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnRemoveScript,
+				event = EditScriptViewModel.Event.OnRemoveScript,
 			)
 			runCurrent()
 
@@ -254,19 +240,17 @@ class EditScriptViewModelTest {
 	@Test
 	fun `should execute script when event 'OnExecuteAllScripts' is fired`() =
 		runTest {
-			val testScript =
-				ScriptsRepository.Script(
-					label = "label",
-					scripts = listOf("script 1", "script 2"),
-					platform = ScriptsRepository.Platform.IOS,
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
 
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnExecuteAllScripts,
+				event = EditScriptViewModel.Event.OnExecuteAllScripts,
 			)
 			runCurrent()
 
@@ -276,18 +260,16 @@ class EditScriptViewModelTest {
 	@Test
 	fun `should execute script when event 'OnExecuteSingleScript' is fired`() =
 		runTest {
-			val testScript =
-				ScriptsRepository.Script(
-					label = "label",
-					scripts = listOf("script 1", "script 2"),
-					platform = ScriptsRepository.Platform.IOS,
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event =
-					EditScriptViewModel.Event.OnExecuteSingleScript("script 2"),
+				event = EditScriptViewModel.Event.OnExecuteSingleScript("script 2"),
 			)
 			runCurrent()
 

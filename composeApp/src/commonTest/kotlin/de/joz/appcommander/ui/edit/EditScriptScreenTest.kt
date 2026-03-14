@@ -36,23 +36,20 @@ class EditScriptScreenTest {
 	private val navControllerMock: NavController = mockk(relaxed = true)
 	private val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
-	private val getUserScriptByKeyUseCaseMock =
-		GetUserScriptByKeyUseCase(
-			scriptsRepository = scriptsRepositoryMock,
-			getScriptIdUseCase = getScriptIdUseCaseMock,
-		)
+	private val getUserScriptByKeyUseCaseMock = GetUserScriptByKeyUseCase(
+		scriptsRepository = scriptsRepositoryMock,
+		getScriptIdUseCase = getScriptIdUseCaseMock,
+	)
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
-	private val saveUserScriptUseCaseMock =
-		SaveUserScriptUseCase(
-			scriptsRepository = scriptsRepositoryMock,
-			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
-		)
+	private val saveUserScriptUseCaseMock = SaveUserScriptUseCase(
+		scriptsRepository = scriptsRepositoryMock,
+		getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+	)
 	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
 
-	private val screenshotVerifier =
-		ScreenshotVerifier(
-			testClass = javaClass,
-		)
+	private val screenshotVerifier = ScreenshotVerifier(
+		testClass = javaClass,
+	)
 
 	@Test
 	fun `show default ui when no script was selected for editing before`() {
@@ -70,12 +67,11 @@ class EditScriptScreenTest {
 	@Test
 	fun `show ui with selected script when a script was selected for editing before`() {
 		runComposeUiTest {
-			val testScript =
-				ScriptsRepository.Script(
-					label = "Toggle Dark Mode On and Off",
-					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
-				)
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
 			setupData(
 				script = testScript,
 			)
@@ -92,18 +88,16 @@ class EditScriptScreenTest {
 	@Test
 	fun `change script when a script was selected for editing`() {
 		runComposeUiTest {
-			val baseScript =
-				ScriptsRepository.Script(
-					label = "Toggle Dark Mode On and Off",
-					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
-				)
-			val expectedScript =
-				ScriptsRepository.Script(
-					label = "new script name",
-					platform = ScriptsRepository.Platform.DESKTOP,
-					scripts = listOf("new script 1", "sleep 0", "new script 2"),
-				)
+			val baseScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			val expectedScript = ScriptsRepository.Script(
+				label = "new script name",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("new script 1", "sleep 0", "new script 2"),
+			)
 			setupData(
 				script = baseScript,
 			)
@@ -141,12 +135,11 @@ class EditScriptScreenTest {
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
-			val removeScript =
-				ScriptsRepository.Script(
-					label = "Toggle Dark Mode On and Off",
-					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
-				)
+			val removeScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = removeScript)
@@ -161,12 +154,11 @@ class EditScriptScreenTest {
 	@Test
 	fun `remove script when remove script button for a script is clicked`() {
 		runComposeUiTest {
-			val removeScript =
-				ScriptsRepository.Script(
-					label = "",
-					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("script 1", "script 2"),
-				)
+			val removeScript = ScriptsRepository.Script(
+				label = "",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("script 1", "script 2"),
+			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = removeScript)
@@ -187,12 +179,11 @@ class EditScriptScreenTest {
 	@Test
 	fun `add a new script when add script button for a script is clicked`() {
 		runComposeUiTest {
-			val removeScript =
-				ScriptsRepository.Script(
-					label = "",
-					platform = ScriptsRepository.Platform.ANDROID,
-					scripts = listOf("script 1", "script 2"),
-				)
+			val removeScript = ScriptsRepository.Script(
+				label = "",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("script 1", "script 2"),
+			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = removeScript)
@@ -215,12 +206,11 @@ class EditScriptScreenTest {
 	@Test
 	fun `run one script when run button is clicked`() {
 		runComposeUiTest {
-			val removeScript =
-				ScriptsRepository.Script(
-					label = "Test",
-					platform = ScriptsRepository.Platform.DESKTOP,
-					scripts = listOf("echo Hello", "echo world!"),
-				)
+			val removeScript = ScriptsRepository.Script(
+				label = "Test",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("echo Hello", "echo world!"),
+			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = removeScript)
@@ -233,21 +223,19 @@ class EditScriptScreenTest {
 
 			coVerify {
 				executeScriptUseCaseMock(
-					script =
-						ScriptsRepository.Script(
-							label = "Test",
-							scripts = listOf("echo Hello"),
-							platform = ScriptsRepository.Platform.DESKTOP,
-						),
+					script = ScriptsRepository.Script(
+						label = "Test",
+						scripts = listOf("echo Hello"),
+						platform = ScriptsRepository.Platform.DESKTOP,
+					),
 					selectedDevice = "TODO",
 				)
 				executeScriptUseCaseMock(
-					script =
-						ScriptsRepository.Script(
-							label = "Test",
-							scripts = listOf("echo world!"),
-							platform = ScriptsRepository.Platform.DESKTOP,
-						),
+					script = ScriptsRepository.Script(
+						label = "Test",
+						scripts = listOf("echo world!"),
+						platform = ScriptsRepository.Platform.DESKTOP,
+					),
 					selectedDevice = "TODO",
 				)
 			}
@@ -306,11 +294,10 @@ class EditScriptScreenTest {
 
 	private fun setupData(script: ScriptsRepository.Script? = null) {
 		every { getScriptIdUseCaseMock.invoke(any()) } returns (script?.hashCode() ?: 0)
-		every { scriptsRepositoryMock.getScripts() } returns
-			ScriptsRepository.JsonParseResult(
-				scripts = if (script != null) listOf(script) else emptyList(),
-				parsingMetaData = null,
-			)
+		every { scriptsRepositoryMock.getScripts() } returns ScriptsRepository.JsonParseResult(
+			scripts = if (script != null) listOf(script) else emptyList(),
+			parsingMetaData = null,
+		)
 	}
 
 	private fun ComposeUiTest.setTestContent(scriptKey: Int? = null) {
@@ -319,18 +306,17 @@ class EditScriptScreenTest {
 				darkTheme = true,
 				content = {
 					EditScriptScreen(
-						viewModel =
-							EditScriptViewModel(
-								navController = navControllerMock,
-								getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
-								getScriptIdUseCase = getScriptIdUseCaseMock,
-								executeScriptUseCase = executeScriptUseCaseMock,
-								saveUserScriptUseCase = saveUserScriptUseCaseMock,
-								removeUserScriptUseCase = removeUserScriptUseCaseMock,
-								mainDispatcher = Dispatchers.Unconfined,
-								ioDispatcher = Dispatchers.Unconfined,
-								scriptKey = scriptKey,
-							),
+						viewModel = EditScriptViewModel(
+							navController = navControllerMock,
+							getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+							getScriptIdUseCase = getScriptIdUseCaseMock,
+							executeScriptUseCase = executeScriptUseCaseMock,
+							saveUserScriptUseCase = saveUserScriptUseCaseMock,
+							removeUserScriptUseCase = removeUserScriptUseCaseMock,
+							mainDispatcher = Dispatchers.Unconfined,
+							ioDispatcher = Dispatchers.Unconfined,
+							scriptKey = scriptKey,
+						),
 					)
 				},
 			)

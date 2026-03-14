@@ -49,15 +49,14 @@ internal class PreferencesRepositoryImpl(
 			}.first()
 
 	override suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> =
-		dataStore.data
-			.map { pref ->
-				keys.map {
-					ChangedPreference(
-						key = it,
-						value = pref[booleanPreferencesKey(it)] ?: pref[intPreferencesKey(it)],
-					)
-				}
+		dataStore.data.map { pref ->
+			keys.map {
+				ChangedPreference(
+					key = it,
+					value = pref[booleanPreferencesKey(it)] ?: pref[intPreferencesKey(it)],
+				)
 			}
+		}
 
 	override suspend fun <T> store(
 		key: String,

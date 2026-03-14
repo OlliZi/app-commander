@@ -41,68 +41,63 @@ class SettingsViewModel(
 		viewModelScope.launch(mainDispatcher) {
 			_uiState.update { oldState ->
 				oldState.copy(
-					togglePreferences =
-						buildList {
-							add(
+					togglePreferences = buildList {
+						add(
+							createToggleItem(
+								label = Res.string.settings_preference_show_welcome_screen,
+								key = HIDE_WELCOME_SCREEN_PREF_KEY,
+								defaultValue = false,
+							),
+						)
+						addAll(
+							ToolSection.entries.map {
 								createToggleItem(
-									label = Res.string.settings_preference_show_welcome_screen,
-									key = HIDE_WELCOME_SCREEN_PREF_KEY,
-									defaultValue = false,
-								),
-							)
-							addAll(
-								ToolSection.entries.map {
-									createToggleItem(
-										label = it.label,
-										key = it.name,
-										defaultValue = it.isDefaultActive,
-									)
-								},
-							)
-						},
-					sliderPreferences =
-						listOf(
-							getPreferenceUseCase
-								.get(
+									label = it.label,
+									key = it.name,
+									defaultValue = it.isDefaultActive,
+								)
+							},
+						)
+					},
+					sliderPreferences = listOf(
+						getPreferenceUseCase
+							.get(
+								key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
+								defaultValue = 5,
+							).let { sliderValue ->
+								SliderItem(
+									maximum = 10f,
+									minimum = 1f,
+									steps = 8,
+									sliderValue = sliderValue.toFloat(),
+									labelValue = LabelValue.IntRes(sliderValue),
+									label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
 									key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-									defaultValue = 5,
-								).let { sliderValue ->
-									SliderItem(
-										maximum = 10f,
-										minimum = 1f,
-										steps = 8,
-										sliderValue = sliderValue.toFloat(),
-										labelValue = LabelValue.IntRes(sliderValue),
-										label = Res.string.settings_preference_track_scripts_file_delay_slider_label,
-										key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
-									)
-								},
-							getPreferenceUseCase
-								.get(
+								)
+							},
+						getPreferenceUseCase
+							.get(
+								key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+								defaultValue = ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
+							).toFloat()
+							.let { mapUiAppearance ->
+								SliderItem(
+									maximum = ManageUiAppearanceUseCase.UiAppearance.entries
+										.maxOf { it.optionIndex }
+										.toFloat(),
+									minimum = ManageUiAppearanceUseCase.UiAppearance.entries
+										.minOf { it.optionIndex }
+										.toFloat(),
+									steps = 1,
+									sliderValue = mapUiAppearance,
+									labelValue = LabelValue.StringRes(
+										mapUiAppearance(mapUiAppearance),
+									),
+									label = Res.string.settings_preference_ui_appearance_label,
 									key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-									defaultValue = ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex,
-								).toFloat()
-								.let { mapUiAppearance ->
-									SliderItem(
-										maximum =
-											ManageUiAppearanceUseCase.UiAppearance.entries
-												.maxOf { it.optionIndex }
-												.toFloat(),
-										minimum =
-											ManageUiAppearanceUseCase.UiAppearance.entries
-												.minOf { it.optionIndex }
-												.toFloat(),
-										steps = 1,
-										sliderValue = mapUiAppearance,
-										labelValue =
-											LabelValue.StringRes(
-												mapUiAppearance(mapUiAppearance),
-											),
-										label = Res.string.settings_preference_ui_appearance_label,
-										key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
-									)
-								},
-						),
+								)
+							},
+					),
 				)
 			}
 		}
@@ -126,14 +121,13 @@ class SettingsViewModel(
 		savePreferenceUseCase(event.toggleItem.key, event.isChecked)
 		_uiState.update { oldState ->
 			oldState.copy(
-				togglePreferences =
-					oldState.togglePreferences.map {
-						if (event.toggleItem == it) {
-							it.copy(isChecked = event.isChecked)
-						} else {
-							it
-						}
-					},
+				togglePreferences = oldState.togglePreferences.map {
+					if (event.toggleItem == it) {
+						it.copy(isChecked = event.isChecked)
+					} else {
+						it
+					}
+				},
 			)
 		}
 	}
@@ -141,36 +135,33 @@ class SettingsViewModel(
 	private suspend fun sliderItem(event: Event.OnSliderItem) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				sliderPreferences =
-					oldState.sliderPreferences.map {
-						if (event.sliderItem.key == it.key) {
-							it.copy(
-								sliderValue = event.value,
-								labelValue =
-									when (event.sliderItem.labelValue) {
-										is LabelValue.IntRes -> {
-											LabelValue.IntRes(event.value.toInt())
-										}
+				sliderPreferences = oldState.sliderPreferences.map {
+					if (event.sliderItem.key == it.key) {
+						it.copy(
+							sliderValue = event.value,
+							labelValue = when (event.sliderItem.labelValue) {
+								is LabelValue.IntRes -> {
+									LabelValue.IntRes(event.value.toInt())
+								}
 
-										is LabelValue.StringRes -> {
-											LabelValue.StringRes(
-												mapUiAppearance(event.value),
-											)
-										}
-									},
-							)
-						} else {
-							it
-						}
-					},
+								is LabelValue.StringRes -> {
+									LabelValue.StringRes(
+										mapUiAppearance(event.value),
+									)
+								}
+							},
+						)
+					} else {
+						it
+					}
+				},
 			)
 		}
 
 		if (event.sliderItem.key == ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE) {
-			val uiAppearance =
-				ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
-					it.optionIndex == event.value.toInt()
-				} ?: ManageUiAppearanceUseCase.UiAppearance.SYSTEM
+			val uiAppearance = ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
+				it.optionIndex == event.value.toInt()
+			} ?: ManageUiAppearanceUseCase.UiAppearance.SYSTEM
 			manageUiAppearanceUseCase(uiAppearance)
 		} else {
 			savePreferenceUseCase(event.sliderItem.key, event.value.toInt())
@@ -178,10 +169,9 @@ class SettingsViewModel(
 	}
 
 	private fun mapUiAppearance(sliderValue: Float): StringResource {
-		val uiAppearance =
-			ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
-				it.optionIndex == sliderValue.toInt()
-			} ?: ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
+		val uiAppearance = ManageUiAppearanceUseCase.UiAppearance.entries.firstOrNull {
+			it.optionIndex == sliderValue.toInt()
+		} ?: ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE
 
 		return when (uiAppearance) {
 			ManageUiAppearanceUseCase.UiAppearance.SYSTEM -> {
@@ -205,11 +195,10 @@ class SettingsViewModel(
 	) = ToggleItem(
 		label = label,
 		key = key,
-		isChecked =
-			getPreferenceUseCase.get(
-				key = key,
-				defaultValue = defaultValue,
-			),
+		isChecked = getPreferenceUseCase.get(
+			key = key,
+			defaultValue = defaultValue,
+		),
 	)
 
 	sealed interface Event {

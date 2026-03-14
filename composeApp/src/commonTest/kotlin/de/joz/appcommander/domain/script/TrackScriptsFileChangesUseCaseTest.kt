@@ -20,9 +20,7 @@ class TrackScriptsFileChangesUseCaseTest {
 	@Test
 	fun `invoke emits a new script list when a change is detected`() =
 		runTest {
-			coEvery { getUserScriptsUseCaseMock() } returns
-				createDummyScripts(1) andThen
-				createDummyScripts(2)
+			coEvery { getUserScriptsUseCaseMock() } returns createDummyScripts(1) andThen createDummyScripts(2)
 			val trackScriptsFileChangesUseCase = createUseCase()
 
 			val emittedScripts = trackScriptsFileChangesUseCase().first()
@@ -44,9 +42,10 @@ class TrackScriptsFileChangesUseCaseTest {
 			val firstError = ScriptsRepository.ParsingMetaData.MultiScriptsHint
 			val secondError = ScriptsRepository.ParsingMetaData.OldScriptFieldHint
 
-			coEvery { getUserScriptsUseCaseMock() } returns
-				createDummyScripts(1, parsingMetaData = firstError) andThen
-				createDummyScripts(1, parsingMetaData = secondError)
+			coEvery { getUserScriptsUseCaseMock() } returns createDummyScripts(
+				1,
+				parsingMetaData = firstError,
+			) andThen createDummyScripts(1, parsingMetaData = secondError)
 			val trackScriptsFileChangesUseCase = createUseCase()
 
 			val emittedScripts = trackScriptsFileChangesUseCase().first()
@@ -69,12 +68,11 @@ class TrackScriptsFileChangesUseCaseTest {
 			coEvery { getUserScriptsUseCaseMock() } returns createDummyScripts(1)
 			val trackScriptsFileChangesUseCase = createUseCase()
 			val collectedScripts = mutableListOf<List<ScriptsRepository.Script>>()
-			val job =
-				launch {
-					trackScriptsFileChangesUseCase().collect {
-						collectedScripts.add(it.scripts)
-					}
+			val job = launch {
+				trackScriptsFileChangesUseCase().collect {
+					collectedScripts.add(it.scripts)
 				}
+			}
 
 			advanceTimeBy(2500)
 
@@ -87,14 +85,13 @@ class TrackScriptsFileChangesUseCaseTest {
 		count: Int,
 		parsingMetaData: ScriptsRepository.ParsingMetaData? = null,
 	) = ScriptsRepository.JsonParseResult(
-		scripts =
-			(1..count).map {
-				ScriptsRepository.Script(
-					label = "foo $it",
-					scripts = listOf("echo $it"),
-					platform = ScriptsRepository.Platform.ANDROID,
-				)
-			},
+		scripts = (1..count).map {
+			ScriptsRepository.Script(
+				label = "foo $it",
+				scripts = listOf("echo $it"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+		},
 		parsingMetaData = parsingMetaData,
 	)
 

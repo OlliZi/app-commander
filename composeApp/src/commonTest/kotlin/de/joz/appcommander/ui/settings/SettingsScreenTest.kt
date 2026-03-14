@@ -31,18 +31,15 @@ class SettingsScreenTest {
 	private val navControllerMock: NavController = mockk()
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
 	private val preferencesRepositoryMock: PreferencesRepository = mockk(relaxed = true)
-	private val savePreferenceUseCaseMock =
-		SavePreferenceUseCase(
-			preferencesRepository = preferencesRepositoryMock,
-		)
-	private val manageUiAppearanceUseCase =
-		ManageUiAppearanceUseCase(
-			preferencesRepository = preferencesRepositoryMock,
-		)
-	private val screenshotVerifier =
-		ScreenshotVerifier(
-			testClass = javaClass,
-		)
+	private val savePreferenceUseCaseMock = SavePreferenceUseCase(
+		preferencesRepository = preferencesRepositoryMock,
+	)
+	private val manageUiAppearanceUseCase = ManageUiAppearanceUseCase(
+		preferencesRepository = preferencesRepositoryMock,
+	)
+	private val screenshotVerifier = ScreenshotVerifier(
+		testClass = javaClass,
+	)
 
 	private lateinit var viewModel: SettingsViewModel
 
@@ -60,14 +57,13 @@ class SettingsScreenTest {
 			getPreferenceUseCaseMock.get(STORE_KEY_FOR_SYSTEM_UI_APPEARANCE, any<Int>())
 		} returns 0
 
-		viewModel =
-			SettingsViewModel(
-				navController = navControllerMock,
-				getPreferenceUseCase = getPreferenceUseCaseMock,
-				savePreferenceUseCase = savePreferenceUseCaseMock,
-				manageUiAppearanceUseCase = manageUiAppearanceUseCase,
-				mainDispatcher = Dispatchers.Unconfined,
-			)
+		viewModel = SettingsViewModel(
+			navController = navControllerMock,
+			getPreferenceUseCase = getPreferenceUseCaseMock,
+			savePreferenceUseCase = savePreferenceUseCaseMock,
+			manageUiAppearanceUseCase = manageUiAppearanceUseCase,
+			mainDispatcher = Dispatchers.Unconfined,
+		)
 	}
 
 	@Test
@@ -86,31 +82,27 @@ class SettingsScreenTest {
 	fun `should show changes when settings are applied`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState =
-					SettingsViewModel.UiState(
-						togglePreferences =
-							viewModel.uiState.value.togglePreferences.map {
-								it.copy(
-									isChecked = true,
-								)
-							},
-						sliderPreferences =
-							viewModel.uiState.value.sliderPreferences.map {
-								it.copy(
-									sliderValue = it.maximum,
-									labelValue =
-										when (it.labelValue) {
-											is SettingsViewModel.LabelValue.IntRes -> {
-												SettingsViewModel.LabelValue.IntRes(it.maximum.toInt())
-											}
+				uiState = SettingsViewModel.UiState(
+					togglePreferences = viewModel.uiState.value.togglePreferences.map {
+						it.copy(
+							isChecked = true,
+						)
+					},
+					sliderPreferences = viewModel.uiState.value.sliderPreferences.map {
+						it.copy(
+							sliderValue = it.maximum,
+							labelValue = when (it.labelValue) {
+								is SettingsViewModel.LabelValue.IntRes -> {
+									SettingsViewModel.LabelValue.IntRes(it.maximum.toInt())
+								}
 
-											is SettingsViewModel.LabelValue.StringRes -> {
-												SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_light)
-											}
-										},
-								)
+								is SettingsViewModel.LabelValue.StringRes -> {
+									SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_light)
+								}
 							},
-					),
+						)
+					},
+				),
 			)
 
 			screenshotVerifier.verifyScreenshot(
@@ -145,9 +137,7 @@ class SettingsScreenTest {
 		runComposeUiTest {
 			setTestContent()
 
-			onNodeWithTag(STORE_KEY_FOR_SYSTEM_UI_APPEARANCE)
-				.assertIsDisplayed()
-				.performClick()
+			onNodeWithTag(STORE_KEY_FOR_SYSTEM_UI_APPEARANCE).assertIsDisplayed().performClick()
 
 			coVerify {
 				preferencesRepositoryMock.store(
@@ -163,9 +153,7 @@ class SettingsScreenTest {
 		runComposeUiTest {
 			setTestContent()
 
-			onNodeWithTag(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY)
-				.assertIsDisplayed()
-				.performClick()
+			onNodeWithTag(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY).assertIsDisplayed().performClick()
 
 			coVerify {
 				preferencesRepositoryMock.store(

@@ -15,10 +15,9 @@ class GetLoggingUseCaseTest {
 			val loggingRepositoryMock: LoggingRepository = mockk(relaxed = true)
 			every { loggingRepositoryMock.logging } returns flowOf(listOf("foo", "bar"))
 
-			val useCase =
-				GetLoggingUseCase(
-					loggingRepository = loggingRepositoryMock,
-				)
+			val useCase = GetLoggingUseCase(
+				loggingRepository = loggingRepositoryMock,
+			)
 
 			assertTrue(useCase().first().isNotEmpty())
 		}

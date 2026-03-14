@@ -15,16 +15,12 @@ class GetConnectedDevicesUseCase(
 			}
 
 			is ExecuteScriptUseCase.Result.Success -> {
-				result.output
-					.split("\n")
-					.drop(1)
-					.filter { it.isNotEmpty() }
-					.map {
-						ConnectedDevice(
-							id = it.split("\t").first(),
-							label = it,
-						)
-					}
+				result.output.split("\n").drop(1).filter { it.isNotEmpty() }.map {
+					ConnectedDevice(
+						id = it.split("\t").first(),
+						label = it,
+					)
+				}
 			}
 		}
 
@@ -36,16 +32,12 @@ class GetConnectedDevicesUseCase(
 			}
 
 			is ExecuteScriptUseCase.Result.Success -> {
-				result.output
-					.split("\n")
-					.drop(1)
-					.filter { it.isNotEmpty() }
-					.map {
-						ConnectedDevice(
-							id = it, // TODO parse device id
-							label = it,
-						)
-					}
+				result.output.split("\n").drop(1).filter { it.isNotEmpty() }.map {
+					ConnectedDevice(
+						id = it, // TODO parse device id
+						label = it,
+					)
+				}
 			}
 		}
 	}
@@ -56,17 +48,15 @@ class GetConnectedDevicesUseCase(
 	)
 
 	companion object {
-		val ANDROID_GET_DEVICES_SCRIPT =
-			ScriptsRepository.Script(
-				label = "Get connected Android devices",
-				scripts = listOf("adb devices"),
-				platform = ScriptsRepository.Platform.ANDROID,
-			)
-		val IOS_GET_DEVICES_SCRIPT =
-			ScriptsRepository.Script(
-				label = "Get connected iOS devices",
-				scripts = listOf("TODO for iOS"),
-				platform = ScriptsRepository.Platform.IOS,
-			)
+		val ANDROID_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
+			label = "Get connected Android devices",
+			scripts = listOf("adb devices"),
+			platform = ScriptsRepository.Platform.ANDROID,
+		)
+		val IOS_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
+			label = "Get connected iOS devices",
+			scripts = listOf("TODO for iOS"),
+			platform = ScriptsRepository.Platform.IOS,
+		)
 	}
 }

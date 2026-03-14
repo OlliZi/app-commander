@@ -81,12 +81,11 @@ internal fun EditScriptContent(
 
 	val onNavigateBackHandler = {
 		if (uiState.hasChanges) {
-			confirmationData =
-				confirmationData.copy(
-					show = uiState.hasChanges,
-					title = Res.string.edit_confirmation_change,
-					event = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
-				)
+			confirmationData = confirmationData.copy(
+				show = uiState.hasChanges,
+				title = Res.string.edit_confirmation_change,
+				event = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
+			)
 		} else {
 			onEvent(EditScriptViewModel.Event.OnNavigateBack)
 		}
@@ -102,30 +101,28 @@ internal fun EditScriptContent(
 		},
 		bottomBar = {
 			BottomBar(
-				actions =
-					listOf(
-						BottomBarAction(
-							label = Res.string.edit_action_save,
-							action = {
-								onEvent(EditScriptViewModel.Event.OnSaveScript)
-							},
-						),
-						BottomBarAction(
-							label = Res.string.edit_action_remove,
-							action = {
-								confirmationData =
-									confirmationData.copy(
-										show = true,
-										title = Res.string.edit_confirmation_remove,
-										event = { onEvent(EditScriptViewModel.Event.OnRemoveScript) },
-									)
-							},
-						),
-						BottomBarAction(
-							label = Res.string.edit_action_abort,
-							action = onNavigateBackHandler,
-						),
+				actions = listOf(
+					BottomBarAction(
+						label = Res.string.edit_action_save,
+						action = {
+							onEvent(EditScriptViewModel.Event.OnSaveScript)
+						},
 					),
+					BottomBarAction(
+						label = Res.string.edit_action_remove,
+						action = {
+							confirmationData = confirmationData.copy(
+								show = true,
+								title = Res.string.edit_confirmation_remove,
+								event = { onEvent(EditScriptViewModel.Event.OnRemoveScript) },
+							)
+						},
+					),
+					BottomBarAction(
+						label = Res.string.edit_action_abort,
+						action = onNavigateBackHandler,
+					),
+				),
 			)
 		},
 	) { paddingValues ->
@@ -190,10 +187,8 @@ internal fun EditScriptContent(
 			)
 			DevicesBar(
 				connectedDevices = emptyList(),
-				onDeviceSelect = {
-				},
-				onRefreshDevices = {
-				},
+				onDeviceSelect = { },
+				onRefreshDevices = { },
 			)
 		}
 	}

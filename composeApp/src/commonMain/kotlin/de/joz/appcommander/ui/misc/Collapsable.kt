@@ -37,11 +37,10 @@ fun Collapsable(
 	var isExpanded by rememberSaveable { mutableStateOf(false) }
 
 	Column(
-		modifier =
-			Modifier
-				.background(
-					MaterialTheme.colorScheme.background,
-				).padding(8.dp),
+		modifier = Modifier
+			.background(
+				MaterialTheme.colorScheme.background,
+			).padding(8.dp),
 	) {
 		Row(
 			modifier = Modifier.height(36.dp),

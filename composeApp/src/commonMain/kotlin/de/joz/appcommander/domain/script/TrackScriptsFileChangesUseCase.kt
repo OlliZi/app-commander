@@ -18,8 +18,7 @@ class TrackScriptsFileChangesUseCase(
 		flow {
 			var scripts: ScriptsRepository.JsonParseResult? = null
 			while (true) {
-				val prefsValueInSeconds =
-					getPreferenceUseCase.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, 1).toLong()
+				val prefsValueInSeconds = getPreferenceUseCase.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, 1).toLong()
 				val waitDelay = 1000 * min(10, max(1, prefsValueInSeconds))
 				delay(waitDelay)
 

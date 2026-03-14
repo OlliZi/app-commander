@@ -14,18 +14,16 @@ class GetUserScriptByKeyUseCaseTest {
 	@BeforeTest
 	fun setUp() {
 		every { getScriptIdUseCaseMock.invoke(any()) } returns 1
-		every { scriptsRepositoryMock.getScripts() } returns
-			ScriptsRepository.JsonParseResult(
-				scripts =
-					listOf(
-						ScriptsRepository.Script(
-							scripts = emptyList(),
-							label = "",
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
-					),
-				parsingMetaData = null,
-			)
+		every { scriptsRepositoryMock.getScripts() } returns ScriptsRepository.JsonParseResult(
+			scripts = listOf(
+				ScriptsRepository.Script(
+					scripts = emptyList(),
+					label = "",
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+			),
+			parsingMetaData = null,
+		)
 	}
 
 	@Test
@@ -51,11 +49,10 @@ class GetUserScriptByKeyUseCaseTest {
 
 	@Test
 	fun `should return nothing if repository has no scripts`() {
-		every { scriptsRepositoryMock.getScripts() } returns
-			ScriptsRepository.JsonParseResult(
-				scripts = emptyList(),
-				parsingMetaData = null,
-			)
+		every { scriptsRepositoryMock.getScripts() } returns ScriptsRepository.JsonParseResult(
+			scripts = emptyList(),
+			parsingMetaData = null,
+		)
 
 		val useCase = createUseCase()
 

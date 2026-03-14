@@ -10,10 +10,9 @@ class SavePreferenceUseCaseTest {
 	fun `should execute repository for integer when use case is executed`() =
 		runTest {
 			val preferencesRepositoryMock: PreferencesRepository = mockk(relaxed = true)
-			val savePreferenceUseCase =
-				SavePreferenceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val savePreferenceUseCase = SavePreferenceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			savePreferenceUseCase(key = "key", value = 123)
 
@@ -26,10 +25,9 @@ class SavePreferenceUseCaseTest {
 	fun `should execute repository for boolean when use case is executed`() =
 		runTest {
 			val preferencesRepositoryMock: PreferencesRepository = mockk(relaxed = true)
-			val savePreferenceUseCase =
-				SavePreferenceUseCase(
-					preferencesRepository = preferencesRepositoryMock,
-				)
+			val savePreferenceUseCase = SavePreferenceUseCase(
+				preferencesRepository = preferencesRepositoryMock,
+			)
 
 			savePreferenceUseCase(key = "key", value = true)
 
