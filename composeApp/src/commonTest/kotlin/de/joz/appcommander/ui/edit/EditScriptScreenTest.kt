@@ -292,6 +292,49 @@ class EditScriptScreenTest {
 		}
 	}
 
+	@Test
+	fun `show confirmation when close button is clicked and script was changed before`() {
+		runComposeUiTest {
+			setupData()
+			setTestContent()
+
+			onNodeWithTag(testTag = "text_field_simple_text").apply {
+				performTextClearance()
+				performTextInput("new script name")
+			}
+
+			onNodeWithText(text = "Close").performClick()
+
+			onNodeWithText(text = "You have changes in your script. Are you sure you want to leave?").isDisplayed()
+			onNodeWithText(text = "Yes").isDisplayed()
+			onNodeWithText(text = "No").isDisplayed()
+
+			onNodeWithText(text = "Yes").performClick()
+
+			verify { navControllerMock.navigateUp() }
+		}
+	}
+
+	@Test
+	fun `show confirmation when back button is clicked and script was changed before`() {
+		runComposeUiTest {
+			setupData()
+			setTestContent()
+
+			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performClick()
+
+			onNodeWithText(text = "Close").performClick()
+
+			onNodeWithText(text = "You have changes in your script. Are you sure you want to leave?").isDisplayed()
+			onNodeWithText(text = "Yes").isDisplayed()
+			onNodeWithText(text = "No").isDisplayed()
+
+			onNodeWithText(text = "Yes").performClick()
+
+			verify { navControllerMock.navigateUp() }
+		}
+	}
+
 	private fun setupData(script: ScriptsRepository.Script? = null) {
 		every { getScriptIdUseCaseMock.invoke(any()) } returns (script?.hashCode() ?: 0)
 		every { scriptsRepositoryMock.getScripts() } returns ScriptsRepository.JsonParseResult(

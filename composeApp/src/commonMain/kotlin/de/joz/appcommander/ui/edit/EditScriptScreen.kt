@@ -80,9 +80,9 @@ internal fun EditScriptContent(
 	)
 
 	val onNavigateBackHandler = {
-		if (uiState.hasChanges) {
+		if (uiState.scriptChanged) {
 			confirmationData = confirmationData.copy(
-				show = uiState.hasChanges,
+				show = true,
 				title = Res.string.edit_confirmation_change,
 				event = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
 			)
