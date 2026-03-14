@@ -38,10 +38,10 @@ class EditScriptViewModelTest {
 		runTest {
 			val viewModel = createViewModel()
 
-			assertEquals(1, viewModel.uiState.value.scripts.size)
-			assertEquals("", viewModel.uiState.value.scripts[0])
-			assertEquals("", viewModel.uiState.value.scriptName)
-			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.selectedPlatform)
+			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
+			assertEquals("", viewModel.uiState.value.scriptUiState.scripts[0])
+			assertEquals("", viewModel.uiState.value.scriptUiState.scriptName)
+			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
 		}
 
 	@Test
@@ -61,7 +61,7 @@ class EditScriptViewModelTest {
 	fun `should select platform when event 'OnSelectPlatform' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
-			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.selectedPlatform)
+			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
 
 			viewModel.onEvent(
 				event =
@@ -71,7 +71,7 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.selectedPlatform)
+			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
 		}
 
 	@Test
@@ -95,9 +95,9 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			assertEquals(listOf("script 1", "new script 2"), viewModel.uiState.value.scripts)
-			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.selectedPlatform)
-			assertEquals("label", viewModel.uiState.value.scriptName)
+			assertEquals(listOf("script 1", "new script 2"), viewModel.uiState.value.scriptUiState.scripts)
+			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertEquals("label", viewModel.uiState.value.scriptUiState.scriptName)
 		}
 
 	@Test
@@ -113,7 +113,7 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			assertEquals("new name", viewModel.uiState.value.scriptName)
+			assertEquals("new name", viewModel.uiState.value.scriptUiState.scriptName)
 		}
 
 	@Test
@@ -121,7 +121,7 @@ class EditScriptViewModelTest {
 		runTest {
 			val viewModel = createViewModel()
 
-			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
 
 			viewModel.onEvent(
 				event =
@@ -131,8 +131,8 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			assertEquals(2, viewModel.uiState.value.scripts.size)
-			assertEquals("<enter new script>", viewModel.uiState.value.scripts[1])
+			assertEquals(2, viewModel.uiState.value.scriptUiState.scripts.size)
+			assertEquals("<enter new script>", viewModel.uiState.value.scriptUiState.scripts[1])
 		}
 
 	@Test
@@ -140,7 +140,7 @@ class EditScriptViewModelTest {
 		runTest {
 			val viewModel = createViewModel()
 
-			assertEquals(1, viewModel.uiState.value.scripts.size)
+			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
 
 			viewModel.onEvent(
 				event =
@@ -150,8 +150,8 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			assertEquals(1, viewModel.uiState.value.scripts.size)
-			assertEquals("", viewModel.uiState.value.scripts[0])
+			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
+			assertEquals("", viewModel.uiState.value.scriptUiState.scripts[0])
 		}
 
 	@Test
@@ -166,7 +166,7 @@ class EditScriptViewModelTest {
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
 			val viewModel = createViewModel()
 
-			assertEquals(3, viewModel.uiState.value.scripts.size)
+			assertEquals(3, viewModel.uiState.value.scriptUiState.scripts.size)
 
 			viewModel.onEvent(
 				event =
@@ -176,9 +176,9 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			assertEquals(2, viewModel.uiState.value.scripts.size)
-			assertEquals("script 1", viewModel.uiState.value.scripts[0])
-			assertEquals("script 3", viewModel.uiState.value.scripts[1])
+			assertEquals(2, viewModel.uiState.value.scriptUiState.scripts.size)
+			assertEquals("script 1", viewModel.uiState.value.scriptUiState.scripts[0])
+			assertEquals("script 3", viewModel.uiState.value.scriptUiState.scripts[1])
 		}
 
 	@Test
@@ -229,9 +229,9 @@ class EditScriptViewModelTest {
 					scriptKey = 1,
 				)
 
-			assertEquals(listOf("foo"), viewModel.uiState.value.scripts)
-			assertEquals("bar", viewModel.uiState.value.scriptName)
-			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.selectedPlatform)
+			assertEquals(listOf("foo"), viewModel.uiState.value.scriptUiState.scripts)
+			assertEquals("bar", viewModel.uiState.value.scriptUiState.scriptName)
+			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
 
 			coVerify { getUserScriptByKeyUseCaseMock.invoke(any()) }
 		}
