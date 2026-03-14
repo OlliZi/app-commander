@@ -146,7 +146,7 @@ class EditScriptViewModel(
 	private fun onExecuteAllScripts() {
 		viewModelScope.launch(ioDispatcher) {
 			executeScriptUseCase(
-				script = toScriptsRepositoryScript(),
+				script = _uiState.value.scriptUiState.toScriptsRepositoryScript(),
 				selectedDevice = "TODO",
 			)
 		}
@@ -154,7 +154,7 @@ class EditScriptViewModel(
 
 	private fun onSaveScript() {
 		viewModelScope.launch(ioDispatcher) {
-			val scriptToSave = toScriptsRepositoryScript()
+			val scriptToSave = _uiState.value.scriptUiState.toScriptsRepositoryScript()
 			saveUserScriptUseCase(
 				script = scriptToSave,
 				scriptKey = scriptKey,
@@ -169,12 +169,7 @@ class EditScriptViewModel(
 	private fun onRemoveScript() {
 		viewModelScope.launch(ioDispatcher) {
 			removeUserScriptUseCase(
-				script =
-					ScriptsRepository.Script(
-						label = _uiState.value.scriptUiState.scriptName,
-						scripts = _uiState.value.scriptUiState.scripts,
-						platform = _uiState.value.scriptUiState.selectedPlatform,
-					),
+				script = originalUiState.scriptUiState.toScriptsRepositoryScript(),
 			)
 		}
 
@@ -238,10 +233,10 @@ class EditScriptViewModel(
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
 	)
 
-	private fun toScriptsRepositoryScript() =
+	private fun ScriptUiState.toScriptsRepositoryScript() =
 		ScriptsRepository.Script(
-			label = _uiState.value.scriptUiState.scriptName,
-			scripts = _uiState.value.scriptUiState.scripts,
-			platform = _uiState.value.scriptUiState.selectedPlatform,
+			label = scriptName,
+			scripts = scripts,
+			platform = selectedPlatform,
 		)
 }
