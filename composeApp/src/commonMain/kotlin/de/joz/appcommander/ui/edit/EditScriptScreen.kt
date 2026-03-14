@@ -22,6 +22,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
+import de.joz.appcommander.resources.edit_confirmation_change
 import de.joz.appcommander.resources.edit_confirmation_remove
 import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_select_devices
@@ -32,6 +33,7 @@ import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
+import de.joz.appcommander.ui.misc.ConfirmationData
 import de.joz.appcommander.ui.misc.DevicesBar
 import de.joz.appcommander.ui.misc.MultiScriptInput
 import de.joz.appcommander.ui.misc.PlatformSelection
@@ -58,26 +60,44 @@ internal fun EditScriptContent(
 	uiState: EditScriptViewModel.UiState,
 	onEvent: (EditScriptViewModel.Event) -> Unit,
 ) {
-	var showConfirmationRemoveScriptDialog by remember { mutableStateOf(false) }
+	var confirmationData by remember {
+		mutableStateOf(
+			ConfirmationData(
+				show = false,
+			),
+		)
+	}
 
 	Confirmation(
-		show = showConfirmationRemoveScriptDialog,
-		title = stringResource(Res.string.edit_confirmation_remove),
+		confirmationData = confirmationData,
 		onOkSelected = {
-			showConfirmationRemoveScriptDialog = true
-			onEvent(EditScriptViewModel.Event.OnRemoveScript)
+			confirmationData = confirmationData.copy(show = false)
+			confirmationData.event?.invoke()
 		},
 		onDismissRequest = {
-			showConfirmationRemoveScriptDialog = false
+			confirmationData = confirmationData.copy(show = false)
 		},
 	)
+
+	val onNavigateBackHandler = {
+		if (uiState.hasChanges) {
+			confirmationData =
+				confirmationData.copy(
+					show = uiState.hasChanges,
+					title = Res.string.edit_confirmation_change,
+					event = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
+				)
+		} else {
+			onEvent(EditScriptViewModel.Event.OnNavigateBack)
+		}
+	}
 
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
 		topBar = {
 			TitleBar(
 				title = stringResource(Res.string.edit_title),
-				onBackNavigation = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
+				onBackNavigation = onNavigateBackHandler,
 			)
 		},
 		bottomBar = {
@@ -93,12 +113,17 @@ internal fun EditScriptContent(
 						BottomBarAction(
 							label = Res.string.edit_action_remove,
 							action = {
-								showConfirmationRemoveScriptDialog = true
+								confirmationData =
+									confirmationData.copy(
+										show = true,
+										title = Res.string.edit_confirmation_remove,
+										event = { onEvent(EditScriptViewModel.Event.OnRemoveScript) },
+									)
 							},
 						),
 						BottomBarAction(
 							label = Res.string.edit_action_abort,
-							action = { onEvent(EditScriptViewModel.Event.OnNavigateBack) },
+							action = onNavigateBackHandler,
 						),
 					),
 			)
@@ -117,7 +142,7 @@ internal fun EditScriptContent(
 				textLabelType = TextLabelType.BodyLarge,
 			)
 			SimpleTextInput(
-				value = uiState.scriptName,
+				value = uiState.scriptUiState.scriptName,
 				onChangeTextChange = {
 					onEvent(EditScriptViewModel.Event.OnChangeScriptName(scriptName = it))
 				},
@@ -126,7 +151,7 @@ internal fun EditScriptContent(
 			SectionDivider()
 
 			MultiScriptInput(
-				scripts = uiState.scripts,
+				scripts = uiState.scriptUiState.scripts,
 				onChangeScriptText = { index, script ->
 					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
 				},
@@ -151,7 +176,7 @@ internal fun EditScriptContent(
 				textLabelType = TextLabelType.BodyLarge,
 			)
 			PlatformSelection(
-				selectedPlatform = uiState.selectedPlatform,
+				selectedPlatform = uiState.scriptUiState.selectedPlatform,
 				onSelectPlatform = {
 					onEvent(EditScriptViewModel.Event.OnSelectPlatform(platform = it))
 				},
