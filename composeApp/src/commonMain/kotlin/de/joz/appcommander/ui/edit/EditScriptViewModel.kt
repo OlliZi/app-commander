@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
+import de.joz.appcommander.domain.misc.ObserveObjectChangesUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
@@ -29,6 +30,7 @@ class EditScriptViewModel(
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
+	private val observeObjectChangesUseCase: ObserveObjectChangesUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -37,6 +39,13 @@ class EditScriptViewModel(
 		MutableStateFlow(
 			mapToUiState(getUserScriptByKeyUseCase(scriptKey)),
 		)
+
+	init {
+		viewModelScope.launch(mainDispatcher) {
+			observeObjectChangesUseCase(uiState)
+		}
+	}
+
 	override val uiState = _uiState.asStateFlow()
 
 	override fun onEvent(event: Event) {
@@ -61,63 +70,64 @@ class EditScriptViewModel(
 	}
 
 	private fun onSelectPlatform(platform: ScriptsRepository.Platform) {
-		_uiState.update { oldState ->
-			oldState.copy(
-				selectedPlatform = platform,
-			)
-		}
+		updateUiState(selectedPlatform = platform)
 	}
 
 	private fun onChangeScript(
 		index: Int,
 		script: String,
 	) {
-		_uiState.update { oldState ->
-			oldState.copy(
-				scripts =
-					oldState.scripts.mapIndexed { oldIndex, oldScript ->
-						if (oldIndex == index) {
-							script
-						} else {
-							oldScript
-						}
-					},
-			)
-		}
+		updateUiState(
+			scripts =
+				_uiState.value.scripts.mapIndexed { oldIndex, oldScript ->
+					if (oldIndex == index) {
+						script
+					} else {
+						oldScript
+					}
+				},
+		)
 	}
 
 	private fun onAddSubScript(index: Int) {
-		_uiState.update { oldState ->
-			oldState.copy(
-				scripts =
-					oldState.scripts
-						.toMutableList()
-						.apply {
-							add(index + 1, "<enter new script>")
-						}.toList(),
-			)
-		}
+		updateUiState(
+			scripts =
+				_uiState.value.scripts
+					.toMutableList()
+					.apply {
+						add(index + 1, "<enter new script>")
+					}.toList(),
+		)
 	}
 
 	private fun onRemoveSubScript(index: Int) {
-		_uiState.update { oldState ->
-			oldState.copy(
-				scripts =
-					if (oldState.scripts.size == 1) {
-						listOf("")
-					} else {
-						oldState.scripts.filterIndexed { oldIndex, _ ->
-							oldIndex != index
-						}
-					},
-			)
-		}
+		updateUiState(
+			scripts =
+				if (_uiState.value.scripts.size == 1) {
+					listOf("")
+				} else {
+					_uiState.value.scripts.filterIndexed { oldIndex, _ ->
+						oldIndex != index
+					}
+				},
+		)
 	}
 
 	private fun onChangeScriptName(scriptName: String) {
+		updateUiState(scriptName = scriptName)
+	}
+
+	private fun updateUiState(
+		scriptName: String? = null,
+		scripts: List<String>? = null,
+		selectedPlatform: ScriptsRepository.Platform? = null,
+	) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				scriptName = scriptName,
+				hasChanges = observeObjectChangesUseCase.wasObjectChanged,
+				scriptName = scriptName ?: oldState.scriptName,
+				scripts = scripts ?: oldState.scripts,
+				selectedPlatform = selectedPlatform ?: oldState.selectedPlatform,
 			)
 		}
 	}
@@ -227,6 +237,7 @@ class EditScriptViewModel(
 	}
 
 	data class UiState(
+		val hasChanges: Boolean = false,
 		val scripts: List<String> = emptyList(),
 		val scriptName: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
