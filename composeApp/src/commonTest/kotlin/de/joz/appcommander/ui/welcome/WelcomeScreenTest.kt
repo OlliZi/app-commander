@@ -43,6 +43,7 @@ class WelcomeScreenTest {
 
 	@BeforeTest
 	fun setup() {
+		stopKoin()
 		koin = startKoin {
 			modules(
 				DependencyInjection().module + module {
