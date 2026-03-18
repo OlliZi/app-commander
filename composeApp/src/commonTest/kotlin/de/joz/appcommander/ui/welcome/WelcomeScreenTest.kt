@@ -26,7 +26,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.ksp.generated.*
-import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -51,11 +50,6 @@ class WelcomeScreenTest {
 				},
 			)
 		}.koin
-	}
-
-	@AfterTest
-	fun tearDown() {
-		stopKoin()
 	}
 
 	@Test
