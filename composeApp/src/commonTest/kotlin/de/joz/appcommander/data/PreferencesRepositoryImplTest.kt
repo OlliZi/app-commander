@@ -17,7 +17,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class PreferencesRepositoryImplTest {
-	private val dataStoreMock: DataStore<Preferences> = mockk(relaxed = true)
+	private val dataStoreMock: DataStore<Preferences> = mockk()
 	private val preferencesRepository = PreferencesRepositoryImpl(
 		dataStore = dataStoreMock,
 	)
