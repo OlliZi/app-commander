@@ -62,6 +62,10 @@ class ScriptsRepositoryImpl(
 		writeScriptsToFile(listOf(script) + getScripts().scripts)
 	}
 
+	override fun saveScripts(scripts: List<ScriptsRepository.Script>) {
+		writeScriptsToFile(scripts)
+	}
+
 	override fun removeScript(script: ScriptsRepository.Script) {
 		writeScriptsToFile(getScripts().scripts - script)
 	}

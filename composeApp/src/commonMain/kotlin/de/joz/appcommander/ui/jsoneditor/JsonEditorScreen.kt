@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.action_abort
+import de.joz.appcommander.resources.action_save
 import de.joz.appcommander.resources.json_editor_open_script_file_externally
 import de.joz.appcommander.resources.json_editor_title
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
@@ -66,10 +68,17 @@ private fun JsonEditorContent(
 			BottomBar(
 				actions = listOf(
 					BottomBarAction(
+						enabled = uiState.isJsonValid,
+						label = Res.string.action_save,
+						action = { onEvent(JsonEditorViewModel.Event.OnSaveScript) },
+					),
+					BottomBarAction(
 						label = Res.string.json_editor_open_script_file_externally,
-						action = {
-							onEvent(JsonEditorViewModel.Event.OnOpenScriptFile)
-						},
+						action = { onEvent(JsonEditorViewModel.Event.OnOpenScriptFile) },
+					),
+					BottomBarAction(
+						label = Res.string.action_abort,
+						action = { onEvent(JsonEditorViewModel.Event.OnNavigateBack) },
 					),
 				),
 			)

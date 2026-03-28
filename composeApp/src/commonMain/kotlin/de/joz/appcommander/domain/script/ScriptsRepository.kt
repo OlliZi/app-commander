@@ -14,6 +14,8 @@ interface ScriptsRepository {
 
 	fun saveScript(script: Script)
 
+	fun saveScripts(scripts: List<Script>)
+
 	fun removeScript(script: Script)
 
 	@Serializable

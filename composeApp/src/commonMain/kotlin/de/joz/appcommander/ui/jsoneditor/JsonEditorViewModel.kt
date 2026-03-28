@@ -7,6 +7,7 @@ import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
+import de.joz.appcommander.domain.script.SaveUserScriptsUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,6 +25,7 @@ class JsonEditorViewModel(
 	getUserScriptsUseCase: GetUserScriptsUseCase,
 	private val jsonParser: Json,
 	private val openScriptFileUseCase: OpenScriptFileUseCase,
+	private val saveUserScriptsUseCase: SaveUserScriptsUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -70,7 +72,12 @@ class JsonEditorViewModel(
 		}
 	}
 
-	private fun onSaveScript() {}
+	private fun onSaveScript() {
+		saveUserScriptsUseCase.invoke(
+			scripts = jsonParser.decodeFromString<List<ScriptsRepository.Script>>(_uiState.value.json),
+		)
+		onNavigateBack()
+	}
 
 	private fun onOpenScriptFile() {
 		viewModelScope.launch(ioDispatcher) {
