@@ -27,7 +27,6 @@ import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
-import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlinx.serialization.json.Json
@@ -78,13 +77,6 @@ private fun JsonEditorContent(
 				.verticalScroll(rememberScrollState()),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
-			SimpleTextInput(
-				value = json,
-				visualTransformation = JsonVisualTransformation(),
-				onChangeTextChange = {
-					onEvent(JsonEditorViewModel.Event.OnJsonChange(json = it))
-				},
-			)
 			TextField(
 				value = json,
 				onValueChange = {

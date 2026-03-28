@@ -12,24 +12,20 @@ import java.io.File
 @Single
 class ScriptsRepositoryImpl(
 	private val addLoggingUseCase: AddLoggingUseCase,
+	private val json: Json,
 	private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
 	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
-	private val prettyJson = Json {
-		prettyPrint = true
-		ignoreUnknownKeys = true
-	}
-
 	override fun getScripts(): JsonParseResult {
 		val jsonFile = File(scriptFile)
 
 		if (!jsonFile.exists()) {
-			jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
+			jsonFile.writeText(text = json.encodeToString(DEFAULT_SCRIPTS))
 		}
 
 		return runCatching {
 			val scriptsFromFile = jsonFile.readText()
-			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
+			val script = json.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
 			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
 			JsonParseResult(
 				scripts = script,
@@ -72,7 +68,7 @@ class ScriptsRepositoryImpl(
 
 	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {
 		val jsonFile = File(scriptFile)
-		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
+		jsonFile.writeText(text = json.encodeToString(scripts))
 	}
 
 	private fun checkScriptContainsTrimmer(

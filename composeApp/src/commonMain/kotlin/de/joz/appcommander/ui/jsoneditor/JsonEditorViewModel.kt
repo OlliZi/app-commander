@@ -5,24 +5,32 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
+import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class JsonEditorViewModel(
 	@InjectedParam private val navController: NavController,
+	getUserScriptsUseCase: GetUserScriptsUseCase,
+	private val json: Json,
+	private val openScriptFileUseCase: OpenScriptFileUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
-	private val openScriptFileUseCase: OpenScriptFileUseCase,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<JsonEditorViewModel.UiState, JsonEditorViewModel.Event> {
-	private val _uiState = MutableStateFlow(UiState())
+	private val _uiState = MutableStateFlow(
+		UiState(
+			json = json.encodeToString(getUserScriptsUseCase().scripts),
+		),
+	)
 
 	override val uiState = _uiState.asStateFlow()
 
@@ -65,6 +73,6 @@ class JsonEditorViewModel(
 	}
 
 	data class UiState(
-		val json: String = "",
+		val json: String,
 	)
 }
