@@ -46,7 +46,7 @@
     <string name="edit_confirmation_change">You have changes in your script. Are you sure you want to leave?</string>
 
     <string name="json_editor_title">JSON-editor</string>
-    <string name="json_editor_open_script_file_external">Open script file externally</string>
+    <string name="json_editor_open_script_file_externally">Open script file externally</string>
 
     <string name="confirmation_yes">Yes</string>
     <string name="confirmation_no">No</string>

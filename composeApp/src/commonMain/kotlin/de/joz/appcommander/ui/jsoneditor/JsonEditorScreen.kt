@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.json_editor_open_script_file_external
+import de.joz.appcommander.resources.json_editor_open_script_file_externally
 import de.joz.appcommander.resources.json_editor_title
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
@@ -60,7 +60,7 @@ private fun JsonEditorContent(
 			BottomBar(
 				actions = listOf(
 					BottomBarAction(
-						label = Res.string.json_editor_open_script_file_external,
+						label = Res.string.json_editor_open_script_file_externally,
 						action = {
 							onEvent(JsonEditorViewModel.Event.OnOpenScriptFile)
 						},
