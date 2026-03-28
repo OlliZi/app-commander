@@ -118,6 +118,8 @@ private fun JsonEditorContent(
 				colors = TextFieldDefaults.colors(
 					unfocusedContainerColor = MaterialTheme.colorScheme.surface,
 					focusedContainerColor = MaterialTheme.colorScheme.surface,
+					focusedIndicatorColor = Color.Transparent,
+					unfocusedIndicatorColor = Color.Transparent,
 				),
 			)
 		}
