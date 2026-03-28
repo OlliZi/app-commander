@@ -1,5 +1,6 @@
 package de.joz.appcommander.ui.jsoneditor
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +29,9 @@ import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
+import de.joz.appcommander.ui.misc.SectionDivider
+import de.joz.appcommander.ui.misc.TextLabel
+import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlinx.serialization.json.Json
@@ -37,14 +42,14 @@ import org.jetbrains.compose.resources.stringResource
 fun JsonEditorScreen(viewModel: JsonEditorViewModel) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-	JsonEditorContent(json = uiState.value.json, onEvent = {
+	JsonEditorContent(uiState = uiState.value, onEvent = {
 		viewModel.onEvent(event = it)
 	})
 }
 
 @Composable
 private fun JsonEditorContent(
-	json: String,
+	uiState: JsonEditorViewModel.UiState,
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
 	Scaffold(
@@ -71,19 +76,28 @@ private fun JsonEditorContent(
 		},
 	) { paddingValues ->
 		Column(
-			Modifier
-				.fillMaxSize()
-				.padding(paddingValues)
-				.padding(16.dp)
-				.verticalScroll(rememberScrollState()),
+			Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
+			if (uiState.isJsonValid.not()) {
+				TextLabel(
+					text = uiState.jsonValidMessage,
+					textLabelType = TextLabelType.BodyMedium,
+				)
+				SectionDivider(verticalPadding = 8.dp)
+			}
+
 			TextField(
-				value = json,
+				value = uiState.json,
 				onValueChange = {
 					onEvent(JsonEditorViewModel.Event.OnJsonChange(json = it))
 				},
-				modifier = Modifier.fillMaxSize(),
+				modifier = Modifier
+					.fillMaxSize()
+					.border(
+						width = 2.dp,
+						color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
+					).verticalScroll(rememberScrollState()),
 				textStyle = TextStyle(
 					fontFamily = FontFamily.Monospace,
 					color = MaterialTheme.colorScheme.onSurface,
@@ -116,7 +130,10 @@ internal fun PreviewJsonEditorContent(
 		darkTheme = previewData.uiState,
 	) {
 		JsonEditorContent(
-			json = Json.encodeToString(ScriptsRepositoryImpl.DEFAULT_SCRIPTS),
+			uiState = JsonEditorViewModel.UiState(
+				json = Json.encodeToString(ScriptsRepositoryImpl.DEFAULT_SCRIPTS),
+				jsonValidMessage = "",
+			),
 			onEvent = {},
 		)
 	}

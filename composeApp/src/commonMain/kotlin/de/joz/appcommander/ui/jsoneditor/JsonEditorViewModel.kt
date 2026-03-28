@@ -7,10 +7,12 @@ import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.koin.android.annotation.KoinViewModel
@@ -20,7 +22,7 @@ import org.koin.core.annotation.InjectedParam
 class JsonEditorViewModel(
 	@InjectedParam private val navController: NavController,
 	getUserScriptsUseCase: GetUserScriptsUseCase,
-	private val json: Json,
+	private val jsonParser: Json,
 	private val openScriptFileUseCase: OpenScriptFileUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -28,7 +30,7 @@ class JsonEditorViewModel(
 	UnidirectionalDataFlowViewModel<JsonEditorViewModel.UiState, JsonEditorViewModel.Event> {
 	private val _uiState = MutableStateFlow(
 		UiState(
-			json = json.encodeToString(getUserScriptsUseCase().scripts),
+			json = jsonParser.encodeToString(getUserScriptsUseCase().scripts),
 		),
 	)
 
@@ -38,7 +40,7 @@ class JsonEditorViewModel(
 		viewModelScope.launch(mainDispatcher) {
 			when (event) {
 				is Event.OnNavigateBack -> onNavigateBack()
-				is Event.OnJsonChange -> onJsonChange()
+				is Event.OnJsonChange -> onJsonChange(json = event.json)
 				is Event.OnSaveScript -> onSaveScript()
 				is Event.OnOpenScriptFile -> onOpenScriptFile()
 			}
@@ -49,7 +51,23 @@ class JsonEditorViewModel(
 		navController.navigateUp()
 	}
 
-	private fun onJsonChange() {
+	private fun onJsonChange(json: String) {
+		_uiState.update { oldState ->
+			runCatching {
+				jsonParser.decodeFromString<List<ScriptsRepository.Script>>(json)
+				oldState.copy(
+					json = json,
+					isJsonValid = true,
+					jsonValidMessage = "",
+				)
+			}.getOrElse {
+				oldState.copy(
+					json = json,
+					isJsonValid = false,
+					jsonValidMessage = it.localizedMessage,
+				)
+			}
+		}
 	}
 
 	private fun onSaveScript() {}
@@ -74,5 +92,7 @@ class JsonEditorViewModel(
 
 	data class UiState(
 		val json: String,
+		val isJsonValid: Boolean = true,
+		val jsonValidMessage: String = "",
 	)
 }
