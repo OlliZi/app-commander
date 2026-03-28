@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
@@ -27,11 +28,13 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 @Composable
 fun SimpleTextInput(
 	value: String = "",
+	visualTransformation: VisualTransformation = VisualTransformation.None,
 	onChangeTextChange: (String) -> Unit,
 ) {
 	var inputValue by remember { mutableStateOf(value) }
 	TextField(
 		value = inputValue,
+		visualTransformation = visualTransformation,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_simple_text"),
 		colors = TextFieldDefaults.colors(
 			unfocusedContainerColor = Color.White,

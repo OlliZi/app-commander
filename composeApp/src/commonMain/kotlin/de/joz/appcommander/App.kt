@@ -15,6 +15,8 @@ import de.joz.appcommander.domain.navigation.GetStartDestinationUseCase
 import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.ui.edit.EditScriptScreen
 import de.joz.appcommander.ui.edit.EditScriptViewModel
+import de.joz.appcommander.ui.jsoneditor.JsonEditorScreen
+import de.joz.appcommander.ui.jsoneditor.JsonEditorViewModel
 import de.joz.appcommander.ui.scripts.ScriptsScreen
 import de.joz.appcommander.ui.scripts.ScriptsViewModel
 import de.joz.appcommander.ui.settings.SettingsScreen
@@ -48,7 +50,6 @@ fun App(
 				val viewModel: WelcomeViewModel = koinViewModel {
 					parametersOf(navHostController)
 				}
-
 				WelcomeScreen(
 					viewModel = viewModel,
 					bubblesStrategy = koinInject(),
@@ -58,7 +59,6 @@ fun App(
 				val viewModel: ScriptsViewModel = koinViewModel {
 					parametersOf(navHostController)
 				}
-
 				ScriptsScreen(
 					viewModel = viewModel,
 				)
@@ -67,8 +67,15 @@ fun App(
 				val viewModel: EditScriptViewModel = koinViewModel {
 					parametersOf(navHostController, it.toRoute<NavigationScreens.NewScriptScreen>().scriptKey)
 				}
-
 				EditScriptScreen(
+					viewModel = viewModel,
+				)
+			}
+			composable<NavigationScreens.JsonEditorScreen> {
+				val viewModel: JsonEditorViewModel = koinViewModel {
+					parametersOf(navHostController)
+				}
+				JsonEditorScreen(
 					viewModel = viewModel,
 				)
 			}
@@ -76,7 +83,6 @@ fun App(
 				val viewModel: SettingsViewModel = koinViewModel {
 					parametersOf(navHostController)
 				}
-
 				SettingsScreen(
 					viewModel = viewModel,
 				)

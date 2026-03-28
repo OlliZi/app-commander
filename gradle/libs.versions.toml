@@ -17,7 +17,7 @@ ktlintGradle = "14.2.0"
 
 koin-annotations = "2.3.1"
 json = "1.10.0"
-kover = "0.9.7"
+kover = "0.9.8"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

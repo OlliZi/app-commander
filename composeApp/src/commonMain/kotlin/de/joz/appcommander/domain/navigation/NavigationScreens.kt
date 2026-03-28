@@ -17,4 +17,7 @@ sealed interface NavigationScreens {
 
 	@Serializable
 	object SettingsScreen : NavigationScreens
+
+	@Serializable
+	object JsonEditorScreen : NavigationScreens
 }
