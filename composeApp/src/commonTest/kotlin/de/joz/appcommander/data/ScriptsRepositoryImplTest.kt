@@ -29,6 +29,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -71,6 +72,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -112,6 +114,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -150,6 +153,10 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json {
+					prettyPrint = true
+					ignoreUnknownKeys = true
+				},
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -209,6 +216,7 @@ class ScriptsRepositoryImplTest {
 
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -255,6 +263,10 @@ class ScriptsRepositoryImplTest {
 
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json {
+					prettyPrint = true
+					ignoreUnknownKeys = true
+				},
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -290,6 +302,7 @@ class ScriptsRepositoryImplTest {
 
 			ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				processBuilder = processBuilder,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			).openScriptFile()
@@ -308,6 +321,7 @@ class ScriptsRepositoryImplTest {
 			ScriptsRepositoryImpl(
 				scriptFile = "unknown file",
 				processBuilder = processBuilder,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			).openScriptFile()
 
@@ -321,6 +335,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -341,6 +356,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
@@ -358,6 +374,7 @@ class ScriptsRepositoryImplTest {
 		runTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
+				json = Json,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 

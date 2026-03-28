@@ -32,6 +32,7 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.stringResource
 
+// error handling, save and close button
 @Composable
 fun JsonEditorScreen(viewModel: JsonEditorViewModel) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -86,6 +87,7 @@ private fun JsonEditorContent(
 				textStyle = TextStyle(
 					fontFamily = FontFamily.Monospace,
 					color = MaterialTheme.colorScheme.onSurface,
+					fontSize = MaterialTheme.typography.bodyLarge.fontSize,
 				),
 				visualTransformation = JsonVisualTransformation(),
 				colors = TextFieldDefaults.colors(

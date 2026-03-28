@@ -11,7 +11,6 @@ import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
-import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
@@ -41,7 +40,6 @@ class ScriptsViewModelTest {
 	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
 	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk(relaxed = true)
-	private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
 	private val clearLoggingUseCaseMock: ClearLoggingUseCase = mockk(relaxed = true)
 	private val getLoggingUseCaseMock: GetLoggingUseCase = mockk(relaxed = true)
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk(relaxed = true)
@@ -324,7 +322,7 @@ class ScriptsViewModelTest {
 			runCurrent()
 
 			coVerify {
-				openScriptFileUseCaseMock()
+				navControllerMock.navigate(NavigationScreens.JsonEditorScreen)
 			}
 		}
 
@@ -725,7 +723,6 @@ class ScriptsViewModelTest {
 			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
 			executeScriptUseCase = executeScriptUseCaseMock,
 			getUserScriptsUseCase = getUserScriptsUseCaseMock,
-			openScriptFileUseCase = openScriptFileUseCaseMock,
 			trackScriptsFileChangesUseCase = trackScriptsFileChangesUseCaseMock,
 			clearLoggingUseCase = clearLoggingUseCaseMock,
 			getLoggingUseCase = getLoggingUseCaseMock,

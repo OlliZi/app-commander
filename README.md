@@ -11,6 +11,7 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **Multi-Device Control:** Execute commands on any number of connected devices at once.
 *   **Customizable Scripts:** Create and save your own scripts to automate frequent tasks.
 *   **Simple Script Management:** An intuitive UI to add, edit, and organize your scripts.
+*   **Integrated JSON-editor:** Edit your scripts as complete JSON.
 *   **Live Terminals:** View real-time command output for each device in a dedicated terminal section.
 *   **Centralized Logging:** Keep track of all script executions and device responses in one place.
 *   **Powerful Scripting:**
