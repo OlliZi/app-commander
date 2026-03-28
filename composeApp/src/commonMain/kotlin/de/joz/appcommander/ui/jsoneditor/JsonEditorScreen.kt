@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -104,7 +105,8 @@ private fun JsonEditorContent(
 				modifier = Modifier
 					.fillMaxSize()
 					.border(
-						width = 2.dp,
+						width = 1.dp,
+						shape = RoundedCornerShape(size = 12f),
 						color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
 					).verticalScroll(rememberScrollState()),
 				textStyle = TextStyle(
