@@ -9,7 +9,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 
 class JsonVisualTransformation : VisualTransformation {
-	override fun filter(text: AnnotatedString): TransformedText =
+	private val stringColor = Color(0xFF6A8759)
+	private val keywordColor = Color(0xFFCC7832)
+	private val numberColor = Color(0xFF6897BB)
+	private val bracketColor = Color(0xFFFFC66D)
+
+	override fun filter(text: AnnotatedString) =
 		TransformedText(
 			text = highlightJson(text.text),
 			offsetMapping = OffsetMapping.Identity,
@@ -17,10 +22,6 @@ class JsonVisualTransformation : VisualTransformation {
 
 	private fun highlightJson(text: String): AnnotatedString {
 		val builder = AnnotatedString.Builder()
-		val stringColor = Color(0xFF6A8759) // Green
-		val keywordColor = Color(0xFFCC7832) // Orange
-		val numberColor = Color(0xFF6897BB) // Blue
-		val bracketColor = Color(0xFFFFC66D) // Yellow-ish
 
 		var i = 0
 		while (i < text.length) {
