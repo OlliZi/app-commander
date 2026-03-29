@@ -14,6 +14,7 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
@@ -115,14 +116,16 @@ class JsonEditorScreenTest {
 	fun `should edit script when JSON is modified`() {
 		runComposeUiTest {
 			val testScripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS
+			val jsonString = jsonParser.encodeToString(testScripts)
 			var isEventFired = 0
 
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
-					json = jsonParser.encodeToString(testScripts),
+					json = jsonString,
 				),
 				onEvent = {
-					assertTrue(it is JsonEditorViewModel.Event.OnJsonChange)
+					assertIs<JsonEditorViewModel.Event.OnJsonChange>(it)
+					assertEquals("hello$jsonString", it.json)
 					isEventFired += 1
 				},
 			)
