@@ -7,11 +7,12 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
+import de.joz.appcommander.domain.script.ScriptsRepository
 
 class JsonVisualTransformation : VisualTransformation {
 	private val stringColor = Color(0xFF6A8759)
 	private val keywordColor = Color(0xFFCC7832)
-	private val numberColor = Color(0xFF6897BB)
+	private val scriptFieldColor = Color(0xFF6897BB)
 	private val bracketColor = Color(0xFFFFC66D)
 
 	override fun filter(text: AnnotatedString) =
@@ -34,8 +35,15 @@ class JsonVisualTransformation : VisualTransformation {
 						i++
 					}
 					if (i < text.length) i++
-					builder.withStyle(SpanStyle(color = stringColor)) {
-						append(text.substring(start, i))
+					val text = text.substring(start, i)
+					if (KNOWN_JSON_FIELDS.contains(text)) {
+						builder.withStyle(SpanStyle(color = scriptFieldColor)) {
+							append(text)
+						}
+					} else {
+						builder.withStyle(SpanStyle(color = stringColor)) {
+							append(text)
+						}
 					}
 				}
 
@@ -54,32 +62,15 @@ class JsonVisualTransformation : VisualTransformation {
 				}
 
 				else -> {
-					if (char.isDigit() || char == '-') {
-						val start = i
-						while (i < text.length &&
-							(text[i].isDigit() || text[i] == '.' || text[i] == 'e' || text[i] == 'E' || text[i] == '+' || text[i] == '-')
-						) {
-							i++
-						}
-						builder.withStyle(SpanStyle(color = numberColor)) {
-							append(text.substring(start, i))
-						}
-					} else if (text.startsWith("true", i)) {
-						builder.withStyle(SpanStyle(color = keywordColor)) { append("true") }
-						i += 4
-					} else if (text.startsWith("false", i)) {
-						builder.withStyle(SpanStyle(color = keywordColor)) { append("false") }
-						i += 5
-					} else if (text.startsWith("null", i)) {
-						builder.withStyle(SpanStyle(color = keywordColor)) { append("null") }
-						i += 4
-					} else {
-						builder.append(char)
-						i++
-					}
+					builder.append(char)
+					i++
 				}
 			}
 		}
 		return builder.toAnnotatedString()
+	}
+
+	companion object {
+		private val KNOWN_JSON_FIELDS = ScriptsRepository.Script::class.java.declaredFields.map { "\"${it.name}\"" }
 	}
 }
