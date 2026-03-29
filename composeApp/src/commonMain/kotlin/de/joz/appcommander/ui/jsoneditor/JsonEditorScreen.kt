@@ -51,7 +51,7 @@ fun JsonEditorScreen(viewModel: JsonEditorViewModel) {
 }
 
 @Composable
-private fun JsonEditorContent(
+internal fun JsonEditorContent(
 	uiState: JsonEditorViewModel.UiState,
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
