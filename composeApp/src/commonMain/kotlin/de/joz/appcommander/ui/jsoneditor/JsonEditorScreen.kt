@@ -15,6 +15,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -108,7 +109,8 @@ internal fun JsonEditorContent(
 						width = 1.dp,
 						shape = RoundedCornerShape(size = 12f),
 						color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
-					).verticalScroll(rememberScrollState()),
+					).verticalScroll(rememberScrollState())
+					.testTag("json_editor"),
 				textStyle = TextStyle(
 					fontFamily = FontFamily.Monospace,
 					color = MaterialTheme.colorScheme.onSurface,
