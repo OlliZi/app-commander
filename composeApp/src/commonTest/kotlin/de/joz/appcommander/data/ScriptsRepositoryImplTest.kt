@@ -352,6 +352,33 @@ class ScriptsRepositoryImplTest {
 		}
 
 	@Test
+	fun `should save scripts when method is called`() =
+		runTest {
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				json = Json,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+
+			val newScripts = listOf(
+				ScriptsRepository.Script(
+					scripts = listOf("bar"),
+					label = "my script abc",
+					platform = ScriptsRepository.Platform.IOS,
+				),
+				ScriptsRepository.Script(
+					scripts = listOf("foo"),
+					label = "my script foo",
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+			)
+
+			repository.saveScripts(scripts = newScripts)
+
+			assertEquals(newScripts, repository.getScripts().scripts)
+		}
+
+	@Test
 	fun `should remove script when method is called`() =
 		runTest {
 			val repository = ScriptsRepositoryImpl(
