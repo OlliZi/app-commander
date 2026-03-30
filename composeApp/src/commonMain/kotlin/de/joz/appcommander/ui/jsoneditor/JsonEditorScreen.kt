@@ -1,8 +1,11 @@
 package de.joz.appcommander.ui.jsoneditor
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -10,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -98,34 +102,68 @@ internal fun JsonEditorContent(
 				SectionDivider(verticalPadding = 8.dp)
 			}
 
-			TextField(
-				value = uiState.json,
-				onValueChange = {
-					onEvent(JsonEditorViewModel.Event.OnJsonChange(json = it))
-				},
-				modifier = Modifier
-					.fillMaxSize()
-					.border(
-						width = 1.dp,
-						shape = RoundedCornerShape(size = 12f),
-						color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
-					).verticalScroll(rememberScrollState())
-					.testTag("json_editor"),
-				textStyle = TextStyle(
-					fontFamily = FontFamily.Monospace,
-					color = MaterialTheme.colorScheme.onSurface,
-					fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-				),
-				visualTransformation = JsonVisualTransformation(),
-				colors = TextFieldDefaults.colors(
-					unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-					focusedContainerColor = MaterialTheme.colorScheme.surface,
-					focusedIndicatorColor = Color.Transparent,
-					unfocusedIndicatorColor = Color.Transparent,
-				),
+			val style = TextStyle(
+				fontFamily = FontFamily.Monospace,
+				color = MaterialTheme.colorScheme.onSurface,
+				fontSize = MaterialTheme.typography.bodyLarge.fontSize,
 			)
+
+			Row(
+				modifier = Modifier.verticalScroll(rememberScrollState()),
+			) {
+				Column(
+					modifier = Modifier.padding(vertical = 16.dp),
+				) {
+					uiState.jsonMenuItems.forEach {
+						JsonMenuItem(
+							item = it,
+							style = style,
+							onEvent = onEvent,
+						)
+					}
+				}
+
+				TextField(
+					value = uiState.json,
+					onValueChange = {
+						onEvent(JsonEditorViewModel.Event.OnJsonChange(json = it))
+					},
+					modifier = Modifier
+						.weight(1f)
+						.border(
+							width = 1.dp,
+							shape = RoundedCornerShape(size = 12f),
+							color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
+						).testTag("json_editor")
+						.horizontalScroll(rememberScrollState()),
+					textStyle = style,
+					visualTransformation = JsonVisualTransformation(jsonMenuItems = uiState.jsonMenuItems),
+					colors = TextFieldDefaults.colors(
+						unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+						focusedContainerColor = MaterialTheme.colorScheme.surface,
+						focusedIndicatorColor = Color.Transparent,
+						unfocusedIndicatorColor = Color.Transparent,
+					),
+				)
+			}
 		}
 	}
+}
+
+@Composable
+private fun JsonMenuItem(
+	item: JsonEditorViewModel.JsonObjectItem,
+	style: TextStyle,
+	onEvent: (JsonEditorViewModel.Event) -> Unit,
+) {
+	Text(
+		text = item.icon,
+		modifier = Modifier
+			.clickable {
+				onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
+			}.padding(horizontal = 12.dp),
+		style = style,
+	)
 }
 
 @Preview

@@ -6,10 +6,13 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import de.joz.appcommander.domain.script.ScriptsRepository
 
-class JsonVisualTransformation : VisualTransformation {
+class JsonVisualTransformation(
+	private val jsonMenuItems: List<JsonEditorViewModel.JsonObjectItem>,
+) : VisualTransformation {
 	private val stringColor = Color(0xFF6A8759)
 	private val keywordColor = Color(0xFFCC7832)
 	private val scriptFieldColor = Color(0xFF6897BB)
@@ -37,8 +40,10 @@ class JsonVisualTransformation : VisualTransformation {
 					if (i < text.length) i++
 					val text = text.substring(start, i)
 					if (KNOWN_JSON_FIELDS.contains(text)) {
-						builder.withStyle(SpanStyle(color = scriptFieldColor)) {
-							append(text)
+						builder.withAnnotation(tag = text, text) {
+							withStyle(SpanStyle(color = scriptFieldColor)) {
+								append(text)
+							}
 						}
 					} else {
 						builder.withStyle(SpanStyle(color = stringColor)) {
@@ -67,6 +72,21 @@ class JsonVisualTransformation : VisualTransformation {
 				}
 			}
 		}
+
+		var annotString = builder.toAnnotatedString()
+		jsonMenuItems.forEach { item ->
+			if (item.isExpanded.not() && item.type == JsonEditorViewModel.JsonType.ARRAY) {
+				val startIndex = item.currentVisitedJsonStringCount + 1
+				val endIndex = jsonMenuItems
+					.first {
+						it.index > item.index && it.type == JsonEditorViewModel.JsonType.CONTENT && it.content.trim() == "]"
+					}.currentVisitedJsonStringCount
+
+				val string = annotString.subSequence(startIndex, endIndex)
+				println(string)
+			}
+		}
+
 		return builder.toAnnotatedString()
 	}
 
