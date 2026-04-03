@@ -161,7 +161,7 @@ private fun JsonMenuItem(
 			EmptyMenuBarEntry(style)
 		}
 
-		is JsonEditorViewModel.JsonMenuBar.JsonScriptForUi -> {
+		is JsonEditorViewModel.JsonMenuBar.JsonArrayItem -> {
 			Text(
 				text = item.icon,
 				modifier = Modifier

@@ -64,7 +64,7 @@ class JsonEditorViewModel(
 		buildList {
 			addAll(mapMenuItemHeaderItems())
 			add(
-				JsonMenuBar.JsonScriptForUi(
+				JsonMenuBar.JsonArrayItem(
 					icon = icon,
 					isExpanded = isExpanded,
 					isScriptSectionExpanded = isScriptSectionExpanded,
@@ -130,14 +130,14 @@ class JsonEditorViewModel(
 		}
 	}
 
-	private fun onExpandJson(item: JsonMenuBar.JsonScriptForUi) {
+	private fun onExpandJson(item: JsonMenuBar.JsonArrayItem) {
 		_uiState.update { oldState ->
 			val isScriptSectionExpanded = !item.isScriptSectionExpanded
 
 			val newList = mutableListOf<JsonMenuBar>()
 			newList.add(JsonMenuBar.EmptyUi) // top array
 
-			oldState.jsonScriptForUi.filterIsInstance<JsonMenuBar.JsonScriptForUi>().forEach {
+			oldState.jsonScriptForUi.filterIsInstance<JsonMenuBar.JsonArrayItem>().forEach {
 				if (it == item) {
 					val newItem = it.copy(
 						isScriptSectionExpanded = isScriptSectionExpanded,
@@ -169,7 +169,7 @@ class JsonEditorViewModel(
 			}
 
 			val json = jsonParser.encodeToString(
-				newList.filterIsInstance<JsonMenuBar.JsonScriptForUi>().map {
+				newList.filterIsInstance<JsonMenuBar.JsonArrayItem>().map {
 					it.collapseScript
 				},
 			)
@@ -188,7 +188,7 @@ class JsonEditorViewModel(
 		data object OnOpenScriptFile : Event
 
 		data class OnExpandJson(
-			val item: JsonMenuBar.JsonScriptForUi,
+			val item: JsonMenuBar.JsonArrayItem,
 		) : Event
 
 		data class OnJsonChange(
@@ -204,7 +204,7 @@ class JsonEditorViewModel(
 	)
 
 	sealed interface JsonMenuBar {
-		data class JsonScriptForUi(
+		data class JsonArrayItem(
 			val icon: String,
 			val isExpanded: Boolean,
 			val isScriptSectionExpanded: Boolean,
