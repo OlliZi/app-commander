@@ -114,7 +114,7 @@ internal fun JsonEditorContent(
 				Column(
 					modifier = Modifier.padding(vertical = 16.dp),
 				) {
-					uiState.jsonMenuItems.forEach {
+					uiState.jsonScriptForUi.forEach {
 						JsonMenuItem(
 							item = it,
 							style = style,
@@ -137,7 +137,7 @@ internal fun JsonEditorContent(
 						).testTag("json_editor")
 						.horizontalScroll(rememberScrollState()),
 					textStyle = style,
-					visualTransformation = JsonVisualTransformation(jsonMenuItems = uiState.jsonMenuItems),
+					visualTransformation = JsonVisualTransformation(),
 					colors = TextFieldDefaults.colors(
 						unfocusedContainerColor = MaterialTheme.colorScheme.surface,
 						focusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -152,16 +152,32 @@ internal fun JsonEditorContent(
 
 @Composable
 private fun JsonMenuItem(
-	item: JsonEditorViewModel.JsonObjectItem,
+	item: JsonEditorViewModel.JsonMenuBar,
 	style: TextStyle,
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
+	when (item) {
+		is JsonEditorViewModel.JsonMenuBar.EmptyUi -> {
+			EmptyMenuBarEntry(style)
+		}
+
+		is JsonEditorViewModel.JsonMenuBar.JsonScriptForUi -> {
+			Text(
+				text = item.icon,
+				modifier = Modifier
+					.clickable {
+						onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
+					}.padding(horizontal = 12.dp),
+				style = style,
+			)
+		}
+	}
+}
+
+@Composable
+private fun EmptyMenuBarEntry(style: TextStyle) {
 	Text(
-		text = item.icon,
-		modifier = Modifier
-			.clickable {
-				onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
-			}.padding(horizontal = 12.dp),
+		text = "",
 		style = style,
 	)
 }

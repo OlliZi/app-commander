@@ -10,9 +10,7 @@ import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import de.joz.appcommander.domain.script.ScriptsRepository
 
-class JsonVisualTransformation(
-	private val jsonMenuItems: List<JsonEditorViewModel.JsonObjectItem>,
-) : VisualTransformation {
+class JsonVisualTransformation : VisualTransformation {
 	private val stringColor = Color(0xFF6A8759)
 	private val keywordColor = Color(0xFFCC7832)
 	private val scriptFieldColor = Color(0xFF6897BB)
@@ -70,20 +68,6 @@ class JsonVisualTransformation(
 					builder.append(char)
 					i++
 				}
-			}
-		}
-
-		var annotString = builder.toAnnotatedString()
-		jsonMenuItems.forEach { item ->
-			if (item.isExpanded.not() && item.type == JsonEditorViewModel.JsonType.ARRAY) {
-				val startIndex = item.currentVisitedJsonStringCount + 1
-				val endIndex = jsonMenuItems
-					.first {
-						it.index > item.index && it.type == JsonEditorViewModel.JsonType.CONTENT && it.content.trim() == "]"
-					}.currentVisitedJsonStringCount
-
-				val string = annotString.subSequence(startIndex, endIndex)
-				println(string)
 			}
 		}
 

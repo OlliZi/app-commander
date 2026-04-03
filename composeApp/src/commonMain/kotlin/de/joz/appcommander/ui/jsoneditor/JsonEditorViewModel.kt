@@ -31,22 +31,54 @@ class JsonEditorViewModel(
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<JsonEditorViewModel.UiState, JsonEditorViewModel.Event> {
 	private val _uiState = MutableStateFlow(
-		jsonParser.encodeToString(getUserScriptsUseCase().scripts).let {
+		getUserScriptsUseCase().scripts.let {
 			UiState(
-				json = it,
-				jsonMenuItems = buildJsonMenuBar(it),
-				jsonScriptForUi = getUserScriptsUseCase().scripts.map {
-					JsonScriptForUi(
-						icon = "+",
-						isExpanded = true,
-						isScriptSectionExpanded = true,
-						script = it,
-						collapseScript = it,
-					)
-				},
+				json = jsonParser.encodeToString(it),
+				jsonScriptForUi = mapJsonMenuItems(it),
 			)
 		},
 	)
+
+	private fun mapJsonMenuItems(scripts: List<ScriptsRepository.Script>): List<JsonMenuBar> =
+		buildList {
+			add(JsonMenuBar.EmptyUi) // top array
+			scripts.forEach {
+				addAll(mapScriptMenuItem(script = it))
+			}
+		}
+
+	private fun mapMenuItemHeaderItems() =
+		buildList {
+			add(JsonMenuBar.EmptyUi) // // object
+			add(JsonMenuBar.EmptyUi) // // label
+			add(JsonMenuBar.EmptyUi) // // platform
+		}
+
+	private fun mapScriptMenuItem(
+		script: ScriptsRepository.Script,
+		collapseScript: ScriptsRepository.Script = script,
+		icon: String = ARROW_DOWN,
+		isExpanded: Boolean = true,
+		isScriptSectionExpanded: Boolean = true,
+	): List<JsonMenuBar> =
+		buildList {
+			addAll(mapMenuItemHeaderItems())
+			add(
+				JsonMenuBar.JsonScriptForUi(
+					icon = icon,
+					isExpanded = isExpanded,
+					isScriptSectionExpanded = isScriptSectionExpanded,
+					script = script,
+					collapseScript = collapseScript,
+				),
+			)
+			addAll(collapseScript.scripts.map { JsonMenuBar.EmptyUi }) // script
+			add(JsonMenuBar.EmptyUi) // bottom object
+
+			if (collapseScript.scripts.isNotEmpty()) {
+				add(JsonMenuBar.EmptyUi) // empty array
+			}
+		}
 
 	override val uiState = _uiState.asStateFlow()
 
@@ -98,52 +130,52 @@ class JsonEditorViewModel(
 		}
 	}
 
-	private fun onExpandJson(item: JsonObjectItem) {
+	private fun onExpandJson(item: JsonMenuBar.JsonScriptForUi) {
 		_uiState.update { oldState ->
-			oldState.copy(
-				jsonMenuItems = oldState.jsonMenuItems.map { menuItem ->
-					if (menuItem == item) {
-						item.copy(
-							icon = if (item.isExpanded) ARROW_UP else ARROW_DOWN,
-							isExpanded = item.isExpanded.not(),
-						)
-					} else {
-						menuItem
-					}
+			val isScriptSectionExpanded = !item.isScriptSectionExpanded
+
+			val newList = mutableListOf<JsonMenuBar>()
+			newList.add(JsonMenuBar.EmptyUi) // top array
+
+			oldState.jsonScriptForUi.filterIsInstance<JsonMenuBar.JsonScriptForUi>().forEach {
+				if (it == item) {
+					val newItem = it.copy(
+						isScriptSectionExpanded = isScriptSectionExpanded,
+						icon = if (isScriptSectionExpanded) ARROW_DOWN else ARROW_UP,
+						collapseScript = item.collapseScript.copy(
+							scripts = if (isScriptSectionExpanded) item.script.scripts else emptyList(),
+						),
+					)
+					newList.addAll(
+						mapScriptMenuItem(
+							script = newItem.script,
+							collapseScript = newItem.collapseScript,
+							icon = newItem.icon,
+							isExpanded = newItem.isExpanded,
+							isScriptSectionExpanded = newItem.isScriptSectionExpanded,
+						),
+					)
+				} else {
+					newList.addAll(
+						mapScriptMenuItem(
+							script = it.script,
+							collapseScript = it.collapseScript,
+							icon = it.icon,
+							isExpanded = it.isExpanded,
+							isScriptSectionExpanded = it.isScriptSectionExpanded,
+						),
+					)
+				}
+			}
+
+			val json = jsonParser.encodeToString(
+				newList.filterIsInstance<JsonMenuBar.JsonScriptForUi>().map {
+					it.collapseScript
 				},
 			)
-		}
-	}
-
-	private fun mapJsonByMenuBar() {
-		_uiState.update { oldState ->
-			oldState.copy()
-		}
-	}
-
-	private fun computeType(token: String): JsonType =
-		when {
-			token.startsWith("{") -> JsonType.OBJECT
-			token.endsWith("[") -> JsonType.ARRAY
-			else -> JsonType.CONTENT
-		}
-
-	private fun buildJsonMenuBar(json: String): List<JsonObjectItem> {
-		var currentVisitedJsonStringCount = 0
-		return json.split("\n").mapIndexed { index, string ->
-			currentVisitedJsonStringCount += string.length + 1 // add linebreak
-
-			val cleaned = string.trim()
-			val type = computeType(cleaned)
-
-			JsonObjectItem(
-				icon = if (type == JsonType.CONTENT) "" else ARROW_DOWN,
-				index = index,
-				content = string,
-				indentation = string.length,
-				currentVisitedJsonStringCount = currentVisitedJsonStringCount,
-				isExpanded = true,
-				type = type,
+			oldState.copy(
+				json = json,
+				jsonScriptForUi = newList,
 			)
 		}
 	}
@@ -156,7 +188,7 @@ class JsonEditorViewModel(
 		data object OnOpenScriptFile : Event
 
 		data class OnExpandJson(
-			val item: JsonObjectItem,
+			val item: JsonMenuBar.JsonScriptForUi,
 		) : Event
 
 		data class OnJsonChange(
@@ -168,33 +200,20 @@ class JsonEditorViewModel(
 		val json: String,
 		val isJsonValid: Boolean = true,
 		val jsonValidMessage: String = "",
-		val jsonMenuItems: List<JsonObjectItem> = emptyList(),
-		val jsonScriptForUi: List<JsonScriptForUi> = emptyList(),
+		val jsonScriptForUi: List<JsonMenuBar> = emptyList(),
 	)
 
-	data class JsonObjectItem(
-		val icon: String,
-		val index: Int,
-		val content: String,
-		val indentation: Int,
-		val currentVisitedJsonStringCount: Int,
-		val isExpanded: Boolean,
-		val type: JsonType,
-	)
+	sealed interface JsonMenuBar {
+		data class JsonScriptForUi(
+			val icon: String,
+			val isExpanded: Boolean,
+			val isScriptSectionExpanded: Boolean,
+			internal val script: ScriptsRepository.Script,
+			internal val collapseScript: ScriptsRepository.Script,
+		) : JsonMenuBar
 
-	enum class JsonType {
-		OBJECT,
-		ARRAY,
-		CONTENT,
+		data object EmptyUi : JsonMenuBar
 	}
-
-	data class JsonScriptForUi(
-		val icon: String,
-		val isExpanded: Boolean,
-		val isScriptSectionExpanded: Boolean,
-		internal val script: ScriptsRepository.Script,
-		internal val collapseScript: ScriptsRepository.Script,
-	)
 
 	companion object {
 		const val ARROW_DOWN = "↓"
