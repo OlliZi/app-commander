@@ -32,6 +32,7 @@ class JsonEditorScreenTest {
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
 					json = jsonParser.encodeToString(testScripts),
+					jsonScriptForUi = JsonEditorViewModel.fromScripts(testScripts),
 				),
 			)
 
@@ -122,6 +123,7 @@ class JsonEditorScreenTest {
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
 					json = jsonString,
+					jsonScriptForUi = JsonEditorViewModel.fromScripts(testScripts),
 				),
 				onEvent = {
 					assertIs<JsonEditorViewModel.Event.OnJsonChange>(it)
