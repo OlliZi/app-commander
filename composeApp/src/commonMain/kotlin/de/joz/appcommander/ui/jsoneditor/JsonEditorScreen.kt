@@ -114,6 +114,7 @@ internal fun JsonEditorContent(
 				Column(
 					modifier = Modifier.padding(vertical = 16.dp),
 				) {
+					EmptyMenuBarEntry(style) // top array
 					uiState.jsonScriptForUi.forEach {
 						JsonMenuItem(
 							item = it,
@@ -152,20 +153,24 @@ internal fun JsonEditorContent(
 
 @Composable
 private fun JsonMenuItem(
-	item: JsonEditorViewModel.JsonMenuBar,
+	item: JsonEditorViewModel.JsonArrayItem,
 	style: TextStyle,
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
-	when (item) {
-		is JsonEditorViewModel.JsonMenuBar.EmptyUi -> {
-			EmptyMenuBarEntry(style)
-		}
+	(1..3).forEach {
+		EmptyMenuBarEntry(style)
+	}
+	JsonMenuEntry(icon = item.icon, style = style, onEvent = {
+		onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
+	})
+	item.collapseScript.scripts.forEach {
+		EmptyMenuBarEntry(style) // scripts
+	}
 
-		is JsonEditorViewModel.JsonMenuBar.JsonArrayItem -> {
-			JsonMenuEntry(icon = item.icon, style = style, onEvent = {
-				onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
-			})
-		}
+	EmptyMenuBarEntry(style) // bottom object
+
+	if (item.collapseScript.scripts.isNotEmpty()) {
+		EmptyMenuBarEntry(style) // empty array
 	}
 }
 
