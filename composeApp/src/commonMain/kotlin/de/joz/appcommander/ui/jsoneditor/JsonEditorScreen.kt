@@ -102,7 +102,7 @@ internal fun JsonEditorContent(
 				SectionDivider(verticalPadding = 8.dp)
 			}
 
-			val style = TextStyle(
+			val textStyle = TextStyle(
 				fontFamily = FontFamily.Monospace,
 				color = MaterialTheme.colorScheme.onSurface,
 				fontSize = MaterialTheme.typography.bodyLarge.fontSize,
@@ -114,11 +114,11 @@ internal fun JsonEditorContent(
 				Column(
 					modifier = Modifier.padding(vertical = 16.dp),
 				) {
-					EmptyMenuBarEntry(style) // top array
+					EmptyMenuBarEntry(textStyle) // top array
 					uiState.jsonScriptForUi.forEach {
 						JsonMenuItem(
 							item = it,
-							style = style,
+							textStyle = textStyle,
 							onEvent = onEvent,
 						)
 					}
@@ -137,7 +137,7 @@ internal fun JsonEditorContent(
 							color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
 						).testTag("json_editor")
 						.horizontalScroll(rememberScrollState()),
-					textStyle = style,
+					textStyle = textStyle,
 					visualTransformation = JsonVisualTransformation(),
 					colors = TextFieldDefaults.colors(
 						unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -154,23 +154,34 @@ internal fun JsonEditorContent(
 @Composable
 private fun JsonMenuItem(
 	item: JsonEditorViewModel.JsonArrayItem,
-	style: TextStyle,
+	textStyle: TextStyle,
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
-	(1..3).forEach {
-		EmptyMenuBarEntry(style)
+	if (!item.isWholeObjectExpanded) {
+		JsonMenuEntry(icon = item.iconWholeObject, style = textStyle, onEvent = {
+			onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
+		})
+		return
 	}
-	JsonMenuEntry(icon = item.iconArraySection, style = style, onEvent = {
-		onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
+
+	JsonMenuEntry(icon = item.iconWholeObject, style = textStyle, onEvent = {
+		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
 	})
-	item.collapseScript.scripts.forEach {
-		EmptyMenuBarEntry(style) // scripts
+	(1..2).forEach {
+		EmptyMenuBarEntry(textStyle)
 	}
+	JsonMenuEntry(icon = item.iconArraySection, style = textStyle, onEvent = {
+		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = false))
+	})
 
-	EmptyMenuBarEntry(style) // bottom object
-
-	if (item.collapseScript.scripts.isNotEmpty()) {
-		EmptyMenuBarEntry(style) // empty array
+	item.collapseScript?.let {
+		it.scripts.forEach {
+			EmptyMenuBarEntry(textStyle) // scripts
+		}
+		EmptyMenuBarEntry(textStyle) // bottom object
+		if (it.scripts.isNotEmpty()) {
+			EmptyMenuBarEntry(textStyle) // empty array
+		}
 	}
 }
 

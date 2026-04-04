@@ -32,14 +32,17 @@ class JsonEditorViewModel(
 	UnidirectionalDataFlowViewModel<JsonEditorViewModel.UiState, JsonEditorViewModel.Event> {
 	private val _uiState = MutableStateFlow(
 		getUserScriptsUseCase().scripts.let {
+			val allExpanded = true
 			UiState(
 				json = jsonParser.encodeToString(it),
-				jsonScriptForUi = it.map {
+				jsonScriptForUi = it.map { script ->
 					JsonArrayItem(
-						iconArraySection = ARROW_DOWN,
-						isScriptSectionExpanded = true,
-						script = it,
-						collapseScript = it,
+						iconWholeObject = allExpanded.toIcon(jsonType = JsonType.OBJECT),
+						iconArraySection = allExpanded.toIcon(jsonType = JsonType.ARRAY),
+						isWholeObjectExpanded = allExpanded,
+						isScriptSectionExpanded = allExpanded,
+						originalScript = script,
+						collapseScript = script,
 					)
 				},
 			)
@@ -55,7 +58,7 @@ class JsonEditorViewModel(
 				is Event.OnJsonChange -> onJsonChange(json = event.json)
 				is Event.OnSaveScript -> onSaveScript()
 				is Event.OnOpenScriptFile -> onOpenScriptFile()
-				is Event.OnExpandJson -> onExpandJson(item = event.item)
+				is Event.OnExpandJson -> onExpandJson(item = event.item, wholeObject = event.wholeObject)
 			}
 		}
 	}
@@ -96,30 +99,56 @@ class JsonEditorViewModel(
 		}
 	}
 
-	private fun onExpandJson(item: JsonArrayItem) {
+	private fun onExpandJson(
+		item: JsonArrayItem,
+		wholeObject: Boolean,
+	) {
 		_uiState.update { oldState ->
 			val newList = oldState.jsonScriptForUi.map {
 				if (it == item) {
-					val isScriptSectionExpanded = !item.isScriptSectionExpanded
-					val newItem = it.copy(
-						isScriptSectionExpanded = isScriptSectionExpanded,
-						iconArraySection = if (isScriptSectionExpanded) ARROW_DOWN else ARROW_UP,
-						collapseScript = item.collapseScript.copy(
-							scripts = if (isScriptSectionExpanded) item.script.scripts else emptyList(),
-						),
-					)
-					newItem
+					if (wholeObject) {
+						val isWholeObjectExpanded = !item.isWholeObjectExpanded
+						it.copy(
+							isWholeObjectExpanded = isWholeObjectExpanded,
+							iconWholeObject = isWholeObjectExpanded.toIcon(jsonType = JsonType.OBJECT),
+							collapseScript = if (isWholeObjectExpanded) {
+								item.originalScript.copy(
+									scripts = if (item.isScriptSectionExpanded) {
+										item.originalScript.scripts
+									} else {
+										emptyList()
+									},
+								)
+							} else {
+								null
+							},
+						)
+					} else {
+						val isScriptSectionExpanded = !item.isScriptSectionExpanded
+						it.copy(
+							isScriptSectionExpanded = isScriptSectionExpanded,
+							iconArraySection = isScriptSectionExpanded.toIcon(jsonType = JsonType.ARRAY),
+							collapseScript = item.originalScript.copy(
+								scripts = if (isScriptSectionExpanded) {
+									item.originalScript.scripts
+								} else {
+									emptyList()
+								},
+							),
+						)
+					}
 				} else {
 					it
 				}
 			}
 
 			oldState.copy(
-				json = jsonParser.encodeToString(
-					newList.map {
-						it.collapseScript
-					},
-				),
+				json = jsonParser
+					.encodeToString(
+						newList.map {
+							it.collapseScript
+						},
+					).replace("null", "{}"),
 				jsonScriptForUi = newList,
 			)
 		}
@@ -134,6 +163,7 @@ class JsonEditorViewModel(
 
 		data class OnExpandJson(
 			val item: JsonArrayItem,
+			val wholeObject: Boolean,
 		) : Event
 
 		data class OnJsonChange(
@@ -149,14 +179,29 @@ class JsonEditorViewModel(
 	)
 
 	data class JsonArrayItem(
+		val iconWholeObject: String,
 		val iconArraySection: String,
+		val isWholeObjectExpanded: Boolean,
 		val isScriptSectionExpanded: Boolean,
-		internal val script: ScriptsRepository.Script,
-		internal val collapseScript: ScriptsRepository.Script,
+		internal val originalScript: ScriptsRepository.Script,
+		internal val collapseScript: ScriptsRepository.Script?,
 	)
 
+	enum class JsonType(
+		val type: String,
+	) {
+		OBJECT(type = " {}"),
+		ARRAY(type = " []"),
+	}
+
 	companion object {
-		const val ARROW_DOWN = "↓"
-		const val ARROW_UP = "↑"
+		private const val ARROW_DOWN = "↓"
+		private const val ARROW_UP = "↑"
+
+		fun Boolean.toIcon(jsonType: JsonType) =
+			when (jsonType) {
+				JsonType.OBJECT -> if (this) ARROW_DOWN.plus(jsonType.type) else ARROW_UP.plus(jsonType.type)
+				JsonType.ARRAY -> if (this) ARROW_DOWN.plus(jsonType.type) else ARROW_UP.plus(jsonType.type)
+			}
 	}
 }
