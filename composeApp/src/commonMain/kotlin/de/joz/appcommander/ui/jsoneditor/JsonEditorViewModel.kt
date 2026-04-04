@@ -36,7 +36,7 @@ class JsonEditorViewModel(
 				json = jsonParser.encodeToString(it),
 				jsonScriptForUi = it.map {
 					JsonArrayItem(
-						icon = ARROW_DOWN,
+						iconArraySection = ARROW_DOWN,
 						isScriptSectionExpanded = true,
 						script = it,
 						collapseScript = it,
@@ -103,7 +103,7 @@ class JsonEditorViewModel(
 					val isScriptSectionExpanded = !item.isScriptSectionExpanded
 					val newItem = it.copy(
 						isScriptSectionExpanded = isScriptSectionExpanded,
-						icon = if (isScriptSectionExpanded) ARROW_DOWN else ARROW_UP,
+						iconArraySection = if (isScriptSectionExpanded) ARROW_DOWN else ARROW_UP,
 						collapseScript = item.collapseScript.copy(
 							scripts = if (isScriptSectionExpanded) item.script.scripts else emptyList(),
 						),
@@ -149,7 +149,7 @@ class JsonEditorViewModel(
 	)
 
 	data class JsonArrayItem(
-		val icon: String,
+		val iconArraySection: String,
 		val isScriptSectionExpanded: Boolean,
 		internal val script: ScriptsRepository.Script,
 		internal val collapseScript: ScriptsRepository.Script,

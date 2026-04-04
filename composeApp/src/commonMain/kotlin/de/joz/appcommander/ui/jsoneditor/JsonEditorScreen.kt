@@ -160,7 +160,7 @@ private fun JsonMenuItem(
 	(1..3).forEach {
 		EmptyMenuBarEntry(style)
 	}
-	JsonMenuEntry(icon = item.icon, style = style, onEvent = {
+	JsonMenuEntry(icon = item.iconArraySection, style = style, onEvent = {
 		onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
 	})
 	item.collapseScript.scripts.forEach {
