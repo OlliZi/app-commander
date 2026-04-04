@@ -193,11 +193,12 @@ private fun JsonMenuEntry(
 ) {
 	Text(
 		text = icon,
-		modifier = Modifier
-			.clickable {
-				onEvent()
-			}.padding(horizontal = 12.dp),
-		style = style,
+		modifier = Modifier.clickable {
+			onEvent()
+		},
+		style = style.copy(
+			color = MaterialTheme.colorScheme.primary,
+		),
 	)
 }
 
