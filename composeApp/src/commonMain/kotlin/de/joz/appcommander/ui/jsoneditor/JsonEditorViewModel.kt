@@ -34,32 +34,17 @@ class JsonEditorViewModel(
 		getUserScriptsUseCase().scripts.let {
 			UiState(
 				json = jsonParser.encodeToString(it),
-				jsonScriptForUi = it
-					.map {
-						mapScriptMenuItem(it)
-					}.flatten(),
+				jsonScriptForUi = it.map {
+					JsonArrayItem(
+						icon = ARROW_DOWN,
+						isScriptSectionExpanded = true,
+						script = it,
+						collapseScript = it,
+					)
+				},
 			)
 		},
 	)
-
-	private fun mapScriptMenuItem(
-		script: ScriptsRepository.Script,
-		collapseScript: ScriptsRepository.Script = script,
-		icon: String = ARROW_DOWN,
-		isExpanded: Boolean = true,
-		isScriptSectionExpanded: Boolean = true,
-	): List<JsonArrayItem> =
-		buildList {
-			add(
-				JsonArrayItem(
-					icon = icon,
-					isExpanded = isExpanded,
-					isScriptSectionExpanded = isScriptSectionExpanded,
-					script = script,
-					collapseScript = collapseScript,
-				),
-			)
-		}
 
 	override val uiState = _uiState.asStateFlow()
 
@@ -115,9 +100,7 @@ class JsonEditorViewModel(
 		_uiState.update { oldState ->
 			val isScriptSectionExpanded = !item.isScriptSectionExpanded
 
-			val newList = mutableListOf<JsonArrayItem>()
-
-			oldState.jsonScriptForUi.forEach {
+			val newList = oldState.jsonScriptForUi.map {
 				if (it == item) {
 					val newItem = it.copy(
 						isScriptSectionExpanded = isScriptSectionExpanded,
@@ -126,25 +109,9 @@ class JsonEditorViewModel(
 							scripts = if (isScriptSectionExpanded) item.script.scripts else emptyList(),
 						),
 					)
-					newList.addAll(
-						mapScriptMenuItem(
-							script = newItem.script,
-							collapseScript = newItem.collapseScript,
-							icon = newItem.icon,
-							isExpanded = newItem.isExpanded,
-							isScriptSectionExpanded = newItem.isScriptSectionExpanded,
-						),
-					)
+					newItem
 				} else {
-					newList.addAll(
-						mapScriptMenuItem(
-							script = it.script,
-							collapseScript = it.collapseScript,
-							icon = it.icon,
-							isExpanded = it.isExpanded,
-							isScriptSectionExpanded = it.isScriptSectionExpanded,
-						),
-					)
+					it
 				}
 			}
 
@@ -185,7 +152,6 @@ class JsonEditorViewModel(
 
 	data class JsonArrayItem(
 		val icon: String,
-		val isExpanded: Boolean,
 		val isScriptSectionExpanded: Boolean,
 		internal val script: ScriptsRepository.Script,
 		internal val collapseScript: ScriptsRepository.Script,
