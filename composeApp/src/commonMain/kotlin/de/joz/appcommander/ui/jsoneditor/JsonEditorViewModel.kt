@@ -98,10 +98,9 @@ class JsonEditorViewModel(
 
 	private fun onExpandJson(item: JsonArrayItem) {
 		_uiState.update { oldState ->
-			val isScriptSectionExpanded = !item.isScriptSectionExpanded
-
 			val newList = oldState.jsonScriptForUi.map {
 				if (it == item) {
+					val isScriptSectionExpanded = !item.isScriptSectionExpanded
 					val newItem = it.copy(
 						isScriptSectionExpanded = isScriptSectionExpanded,
 						icon = if (isScriptSectionExpanded) ARROW_DOWN else ARROW_UP,
@@ -115,13 +114,12 @@ class JsonEditorViewModel(
 				}
 			}
 
-			val json = jsonParser.encodeToString(
-				newList.map {
-					it.collapseScript
-				},
-			)
 			oldState.copy(
-				json = json,
+				json = jsonParser.encodeToString(
+					newList.map {
+						it.collapseScript
+					},
+				),
 				jsonScriptForUi = newList,
 			)
 		}
