@@ -36,7 +36,7 @@ class JsonEditorViewModel(
 			UiState(
 				json = jsonParser.encodeToString(it),
 				jsonScriptForUi = it.map { script ->
-					JsonArrayItem(
+					JsonItem(
 						iconWholeObject = allExpanded.toIcon(jsonType = JsonType.OBJECT),
 						iconArraySection = allExpanded.toIcon(jsonType = JsonType.ARRAY),
 						isWholeObjectExpanded = allExpanded,
@@ -100,7 +100,7 @@ class JsonEditorViewModel(
 	}
 
 	private fun onExpandJson(
-		item: JsonArrayItem,
+		item: JsonItem,
 		wholeObject: Boolean,
 	) {
 		_uiState.update { oldState ->
@@ -162,7 +162,7 @@ class JsonEditorViewModel(
 		data object OnOpenScriptFile : Event
 
 		data class OnExpandJson(
-			val item: JsonArrayItem,
+			val item: JsonItem,
 			val wholeObject: Boolean,
 		) : Event
 
@@ -175,10 +175,10 @@ class JsonEditorViewModel(
 		val json: String,
 		val isJsonValid: Boolean = true,
 		val jsonValidMessage: String = "",
-		val jsonScriptForUi: List<JsonArrayItem> = emptyList(),
+		val jsonScriptForUi: List<JsonItem> = emptyList(),
 	)
 
-	data class JsonArrayItem(
+	data class JsonItem(
 		val iconWholeObject: String,
 		val iconArraySection: String,
 		val isWholeObjectExpanded: Boolean,

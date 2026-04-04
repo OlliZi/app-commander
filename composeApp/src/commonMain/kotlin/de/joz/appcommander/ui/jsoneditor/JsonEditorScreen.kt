@@ -153,7 +153,7 @@ internal fun JsonEditorContent(
 
 @Composable
 private fun JsonMenuItem(
-	item: JsonEditorViewModel.JsonArrayItem,
+	item: JsonEditorViewModel.JsonItem,
 	textStyle: TextStyle,
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
