@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.action_abort
@@ -42,7 +43,6 @@ import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
-import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.stringResource
 
 // error handling, save and close button
@@ -226,10 +226,13 @@ internal fun PreviewJsonEditorContent(
 	AppCommanderTheme(
 		darkTheme = previewData.uiState,
 	) {
+		val scripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS
+		val json = DependencyInjection().provideJson()
 		JsonEditorContent(
 			uiState = JsonEditorViewModel.UiState(
-				json = Json.encodeToString(ScriptsRepositoryImpl.DEFAULT_SCRIPTS),
+				json = json.encodeToString(scripts),
 				jsonValidMessage = "",
+				jsonScriptForUi = JsonEditorViewModel.fromScripts(scripts),
 			),
 			onEvent = {},
 		)
