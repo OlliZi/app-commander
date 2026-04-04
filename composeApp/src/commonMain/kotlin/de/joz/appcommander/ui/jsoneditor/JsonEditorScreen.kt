@@ -162,16 +162,27 @@ private fun JsonMenuItem(
 		}
 
 		is JsonEditorViewModel.JsonMenuBar.JsonArrayItem -> {
-			Text(
-				text = item.icon,
-				modifier = Modifier
-					.clickable {
-						onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
-					}.padding(horizontal = 12.dp),
-				style = style,
-			)
+			JsonMenuEntry(icon = item.icon, style = style, onEvent = {
+				onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
+			})
 		}
 	}
+}
+
+@Composable
+private fun JsonMenuEntry(
+	icon: String,
+	style: TextStyle,
+	onEvent: () -> Unit,
+) {
+	Text(
+		text = icon,
+		modifier = Modifier
+			.clickable {
+				onEvent()
+			}.padding(horizontal = 12.dp),
+		style = style,
+	)
 }
 
 @Composable
