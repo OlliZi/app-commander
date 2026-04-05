@@ -194,18 +194,21 @@ class JsonEditorViewModel(
 				JsonType.ARRAY -> if (this) ARROW_DOWN.plus(jsonType.type) else ARROW_UP.plus(jsonType.type)
 			}
 
-		fun fromScripts(scripts: List<ScriptsRepository.Script>): List<JsonItem> {
-			val allExpanded = true
-			return scripts.map { script ->
-				JsonItem(
-					iconWholeObject = allExpanded.toIcon(jsonType = JsonType.OBJECT),
-					iconArraySection = allExpanded.toIcon(jsonType = JsonType.ARRAY),
-					isWholeObjectExpanded = allExpanded,
-					isScriptSectionExpanded = allExpanded,
-					originalScript = script,
-					collapseScript = script,
-				)
+		fun fromScripts(scripts: List<ScriptsRepository.Script>): List<JsonItem> =
+			scripts.map { script ->
+				fromScript(script = script)
 			}
+
+		fun fromScript(script: ScriptsRepository.Script): JsonItem {
+			val allExpanded = true
+			return JsonItem(
+				iconWholeObject = allExpanded.toIcon(jsonType = JsonType.OBJECT),
+				iconArraySection = allExpanded.toIcon(jsonType = JsonType.ARRAY),
+				isWholeObjectExpanded = allExpanded,
+				isScriptSectionExpanded = allExpanded,
+				originalScript = script,
+				collapseScript = script,
+			)
 		}
 	}
 }
