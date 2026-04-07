@@ -31,7 +31,7 @@ class JsonEditorScreenTest {
 
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
-					json = jsonParser.encodeToString(testScripts),
+					json = JsonEditorViewModel.convertScriptsToUi(scripts = testScripts, jsonParser = jsonParser),
 					jsonScriptForUi = JsonEditorViewModel.fromScripts(testScripts),
 				),
 			)
@@ -55,7 +55,7 @@ class JsonEditorScreenTest {
 
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
-					json = jsonParser.encodeToString(testScripts),
+					json = JsonEditorViewModel.convertScriptsToUi(scripts = testScripts, jsonParser = jsonParser),
 				),
 				onEvent = {
 					assertTrue(it is JsonEditorViewModel.Event.OnSaveScript)
@@ -77,7 +77,7 @@ class JsonEditorScreenTest {
 
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
-					json = jsonParser.encodeToString(testScripts),
+					json = JsonEditorViewModel.convertScriptsToUi(scripts = testScripts, jsonParser = jsonParser),
 				),
 				onEvent = {
 					assertTrue(it is JsonEditorViewModel.Event.OnNavigateBack)
@@ -99,7 +99,7 @@ class JsonEditorScreenTest {
 
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
-					json = jsonParser.encodeToString(testScripts),
+					json = JsonEditorViewModel.convertScriptsToUi(scripts = testScripts, jsonParser = jsonParser),
 				),
 				onEvent = {
 					assertTrue(it is JsonEditorViewModel.Event.OnOpenScriptFile)
@@ -117,7 +117,10 @@ class JsonEditorScreenTest {
 	fun `should edit script when JSON is modified`() {
 		runComposeUiTest {
 			val testScripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS
-			val jsonString = jsonParser.encodeToString(testScripts)
+			val jsonString = JsonEditorViewModel.convertScriptsToUi(
+				scripts = testScripts,
+				jsonParser = jsonParser,
+			)
 			var isEventFired = 0
 
 			setTestContent(

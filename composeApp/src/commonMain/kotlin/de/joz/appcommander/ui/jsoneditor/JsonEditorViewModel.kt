@@ -33,7 +33,7 @@ class JsonEditorViewModel(
 	private val _uiState = MutableStateFlow(
 		getUserScriptsUseCase().scripts.let {
 			UiState(
-				json = removeRootArrayFromJson(it),
+				json = convertScriptsToUi(scripts = it, jsonParser = jsonParser),
 				jsonScriptForUi = fromScripts(it),
 			)
 		},
@@ -133,21 +133,16 @@ class JsonEditorViewModel(
 			}
 
 			oldState.copy(
-				json = removeRootArrayFromJson(
-					newList.map {
+				json = convertScriptsToUi(
+					scripts = newList.map {
 						it.collapseScript
 					},
+					jsonParser = jsonParser,
 				),
 				jsonScriptForUi = newList,
 			)
 		}
 	}
-
-	private fun removeRootArrayFromJson(scripts: List<ScriptsRepository.Script?>): String =
-		scripts
-			.joinToString(separator = ",\n") {
-				jsonParser.encodeToString(it)
-			}.replace("null", "{}")
 
 	sealed interface Event {
 		data object OnNavigateBack : Event
@@ -215,5 +210,14 @@ class JsonEditorViewModel(
 				collapseScript = script,
 			)
 		}
+
+		fun convertScriptsToUi(
+			scripts: List<ScriptsRepository.Script?>,
+			jsonParser: Json,
+		): String =
+			scripts
+				.joinToString(separator = ",\n") {
+					jsonParser.encodeToString(it)
+				}.replace("null", "{}")
 	}
 }
