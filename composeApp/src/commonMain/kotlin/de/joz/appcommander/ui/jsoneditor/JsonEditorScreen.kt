@@ -114,7 +114,6 @@ internal fun JsonEditorContent(
 				Column(
 					modifier = Modifier.padding(vertical = 16.dp),
 				) {
-					EmptyMenuBarEntry(textStyle) // top array
 					uiState.jsonScriptForUi.forEach {
 						JsonMenuItem(
 							item = it,
