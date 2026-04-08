@@ -60,18 +60,45 @@ class JsonEditorViewModel(
 	private fun onJsonChange(json: String) {
 		_uiState.update { oldState ->
 			runCatching {
-				jsonParser.decodeFromString<List<ScriptsRepository.Script>>(json)
-				oldState.copy(
-					json = json,
-					isJsonValid = true,
-					jsonValidMessage = "",
-				)
+				val scriptObjects = json.split("},").filter { it.isNotBlank() }.map { it.trimStart() }.map {
+					if (!it.endsWith("}")) {
+						"$it}"
+					} else {
+						it
+					}
+				}
+				if (scriptObjects.size != oldState.jsonScriptForUi.size) {
+					resetStrategyAfterChange(oldState)
+				} else {
+					// find changed scripts
+					oldState.copy(
+						json = json,
+						isJsonValid = true,
+						jsonValidMessage = "",
+						jsonScriptForUi = oldState.jsonScriptForUi.mapIndexed { index, scriptObject ->
+							val changedScript = scriptObjects[index]
+							val originalJson = convertScriptToUi(scriptObject.collapseScript, jsonParser)
+							if (changedScript != originalJson) {
+								val changedScriptJson = jsonParser.decodeFromString<ScriptsRepository.Script>(
+									changedScript,
+								)
+								scriptObject.copy(
+									originalScript = scriptObject.originalScript.copy(
+										label = changedScriptJson.label,
+										platform = changedScriptJson.platform,
+										scripts = changedScriptJson.scripts,
+									),
+									collapseScript = changedScriptJson,
+									isWholeObjectExpanded = true,
+								)
+							} else {
+								scriptObject
+							}
+						},
+					)
+				}
 			}.getOrElse {
-				oldState.copy(
-					json = json,
-					isJsonValid = false,
-					jsonValidMessage = it.localizedMessage,
-				)
+				fallbackStrategy(oldState, json, it)
 			}
 		}
 	}
@@ -82,6 +109,29 @@ class JsonEditorViewModel(
 		)
 		onNavigateBack()
 	}
+
+	private fun resetStrategyAfterChange(oldState: UiState): UiState {
+		val originalScriptList = oldState.jsonScriptForUi.map {
+			fromScript(script = it.originalScript)
+		}
+		return oldState.copy(
+			json = convertScriptsToUi(originalScriptList.map { it.originalScript }, jsonParser),
+			isJsonValid = false,
+			jsonValidMessage = "Invalid JSON -> reset all JSON objects",
+			jsonScriptForUi = originalScriptList,
+		)
+	}
+
+	private fun fallbackStrategy(
+		oldState: UiState,
+		json: String,
+		throwable: Throwable,
+	): UiState =
+		oldState.copy(
+			json = json,
+			isJsonValid = false,
+			jsonValidMessage = throwable.localizedMessage,
+		)
 
 	private fun onOpenScriptFile() {
 		viewModelScope.launch(ioDispatcher) {
@@ -102,17 +152,14 @@ class JsonEditorViewModel(
 							isWholeObjectExpanded = isWholeObjectExpanded,
 							collapseScript = if (isWholeObjectExpanded) {
 								item.originalScript.copy(
-									scripts = if (item.isScriptSectionExpanded) {
-										item.originalScript.scripts
-									} else {
-										emptyList()
-									},
+									scripts = item.originalScript.scripts,
 								)
 							} else {
 								null
 							},
 						)
 					} else {
+						/*
 						val isScriptSectionExpanded = !item.isScriptSectionExpanded
 						it.copy(
 							isScriptSectionExpanded = isScriptSectionExpanded,
@@ -123,7 +170,8 @@ class JsonEditorViewModel(
 									emptyList()
 								},
 							),
-						)
+						)*/
+						it
 					}
 				} else {
 					it
@@ -168,7 +216,6 @@ class JsonEditorViewModel(
 
 	data class JsonItem(
 		val isWholeObjectExpanded: Boolean,
-		val isScriptSectionExpanded: Boolean,
 		internal val originalScript: ScriptsRepository.Script,
 		internal val collapseScript: ScriptsRepository.Script?,
 	)
@@ -179,23 +226,24 @@ class JsonEditorViewModel(
 				fromScript(script = script)
 			}
 
-		fun fromScript(script: ScriptsRepository.Script): JsonItem {
-			val allExpanded = true
-			return JsonItem(
-				isWholeObjectExpanded = allExpanded,
-				isScriptSectionExpanded = allExpanded,
+		fun fromScript(script: ScriptsRepository.Script): JsonItem =
+			JsonItem(
+				isWholeObjectExpanded = true,
 				originalScript = script,
 				collapseScript = script,
 			)
-		}
 
 		fun convertScriptsToUi(
 			scripts: List<ScriptsRepository.Script?>,
 			jsonParser: Json,
 		): String =
-			scripts
-				.joinToString(separator = ",\n") {
-					jsonParser.encodeToString(it)
-				}.replace("null", "{}")
+			scripts.joinToString(separator = ",\n") {
+				convertScriptToUi(script = it, jsonParser = jsonParser)
+			}
+
+		fun convertScriptToUi(
+			script: ScriptsRepository.Script?,
+			jsonParser: Json,
+		): String = jsonParser.encodeToString(script).replace("null", "{}")
 	}
 }
