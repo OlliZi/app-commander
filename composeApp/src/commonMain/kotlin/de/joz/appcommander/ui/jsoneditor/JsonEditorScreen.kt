@@ -1,15 +1,18 @@
 package de.joz.appcommander.ui.jsoneditor
 
-import androidx.compose.foundation.border
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -93,13 +96,7 @@ internal fun JsonEditorContent(
 			Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
-			if (uiState.isJsonValid.not()) {
-				TextLabel(
-					text = uiState.jsonValidMessage,
-					textLabelType = TextLabelType.BodyMedium,
-				)
-				SectionDivider(verticalPadding = 8.dp)
-			}
+			HintBox(uiState = uiState)
 
 			val textStyle = TextStyle(
 				fontFamily = FontFamily.Monospace,
@@ -127,14 +124,7 @@ internal fun JsonEditorContent(
 					onValueChange = {
 						onEvent(JsonEditorViewModel.Event.OnJsonChange(json = it))
 					},
-					modifier = Modifier
-						.weight(1f)
-						.border(
-							width = 1.dp,
-							shape = RoundedCornerShape(size = 12f),
-							color = if (uiState.isJsonValid) Color.Transparent else Color.Red,
-						).testTag("json_editor")
-						.horizontalScroll(rememberScrollState()),
+					modifier = Modifier.weight(1f).testTag("json_editor").horizontalScroll(rememberScrollState()),
 					textStyle = textStyle,
 					visualTransformation = JsonVisualTransformation(),
 					colors = TextFieldDefaults.colors(
@@ -145,6 +135,24 @@ internal fun JsonEditorContent(
 					),
 				)
 			}
+		}
+	}
+}
+
+@Composable
+private fun ColumnScope.HintBox(uiState: JsonEditorViewModel.UiState) {
+	AnimatedVisibility(
+		visible = uiState.isJsonValid.not(),
+		enter = fadeIn() + expandVertically(
+			animationSpec = tween(durationMillis = 500),
+		),
+	) {
+		Column {
+			TextLabel(
+				text = uiState.jsonValidMessage,
+				textLabelType = TextLabelType.BodyMedium,
+			)
+			SectionDivider(verticalPadding = 8.dp)
 		}
 	}
 }
