@@ -164,21 +164,18 @@ private fun JsonMenuItem(
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
 	if (!item.isWholeObjectExpanded) {
-		JsonMenuEntry(icon = false.toIcon(JsonType.OBJECT), style = textStyle, onEvent = {
+		JsonMenuEntry(icon = false.toIcon(), style = textStyle, onEvent = {
 			onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
 		})
 		return
 	}
 
-	JsonMenuEntry(icon = true.toIcon(JsonType.OBJECT), style = textStyle, onEvent = {
+	JsonMenuEntry(icon = true.toIcon(), style = textStyle, onEvent = {
 		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
 	})
-	(1..2).forEach {
+	(1..3).forEach {
 		EmptyMenuBarEntry(textStyle)
 	}
-	JsonMenuEntry(icon = item.isScriptSectionExpanded.toIcon(JsonType.ARRAY), style = textStyle, onEvent = {
-		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = false))
-	})
 
 	item.collapseScript?.let {
 		it.scripts.forEach {
@@ -216,11 +213,7 @@ private fun EmptyMenuBarEntry(style: TextStyle) {
 	)
 }
 
-private fun Boolean.toIcon(jsonType: JsonType) =
-	when (jsonType) {
-		JsonType.OBJECT -> if (this) "↓".plus(jsonType.type) else "↑".plus(jsonType.type)
-		JsonType.ARRAY -> if (this) "↓".plus(jsonType.type) else "↑".plus(jsonType.type)
-	}
+private fun Boolean.toIcon() = if (this) "↓" else "↑"
 
 @Preview
 @Composable
