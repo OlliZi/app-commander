@@ -100,7 +100,6 @@ class JsonEditorViewModel(
 						val isWholeObjectExpanded = !item.isWholeObjectExpanded
 						it.copy(
 							isWholeObjectExpanded = isWholeObjectExpanded,
-							iconWholeObject = isWholeObjectExpanded.toIcon(jsonType = JsonType.OBJECT),
 							collapseScript = if (isWholeObjectExpanded) {
 								item.originalScript.copy(
 									scripts = if (item.isScriptSectionExpanded) {
@@ -117,7 +116,6 @@ class JsonEditorViewModel(
 						val isScriptSectionExpanded = !item.isScriptSectionExpanded
 						it.copy(
 							isScriptSectionExpanded = isScriptSectionExpanded,
-							iconArraySection = isScriptSectionExpanded.toIcon(jsonType = JsonType.ARRAY),
 							collapseScript = item.originalScript.copy(
 								scripts = if (isScriptSectionExpanded) {
 									item.originalScript.scripts
@@ -169,31 +167,13 @@ class JsonEditorViewModel(
 	)
 
 	data class JsonItem(
-		val iconWholeObject: String,
-		val iconArraySection: String,
 		val isWholeObjectExpanded: Boolean,
 		val isScriptSectionExpanded: Boolean,
 		internal val originalScript: ScriptsRepository.Script,
 		internal val collapseScript: ScriptsRepository.Script?,
 	)
 
-	enum class JsonType(
-		val type: String,
-	) {
-		OBJECT(type = " {}"),
-		ARRAY(type = " []"),
-	}
-
 	companion object {
-		private const val ARROW_DOWN = "↓"
-		private const val ARROW_UP = "↑"
-
-		fun Boolean.toIcon(jsonType: JsonType) =
-			when (jsonType) {
-				JsonType.OBJECT -> if (this) ARROW_DOWN.plus(jsonType.type) else ARROW_UP.plus(jsonType.type)
-				JsonType.ARRAY -> if (this) ARROW_DOWN.plus(jsonType.type) else ARROW_UP.plus(jsonType.type)
-			}
-
 		fun fromScripts(scripts: List<ScriptsRepository.Script>): List<JsonItem> =
 			scripts.map { script ->
 				fromScript(script = script)
@@ -202,8 +182,6 @@ class JsonEditorViewModel(
 		fun fromScript(script: ScriptsRepository.Script): JsonItem {
 			val allExpanded = true
 			return JsonItem(
-				iconWholeObject = allExpanded.toIcon(jsonType = JsonType.OBJECT),
-				iconArraySection = allExpanded.toIcon(jsonType = JsonType.ARRAY),
 				isWholeObjectExpanded = allExpanded,
 				isScriptSectionExpanded = allExpanded,
 				originalScript = script,

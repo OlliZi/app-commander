@@ -45,7 +45,6 @@ import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
-// error handling, save and close button
 @Composable
 fun JsonEditorScreen(viewModel: JsonEditorViewModel) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -157,19 +156,19 @@ private fun JsonMenuItem(
 	onEvent: (JsonEditorViewModel.Event) -> Unit,
 ) {
 	if (!item.isWholeObjectExpanded) {
-		JsonMenuEntry(icon = item.iconWholeObject, style = textStyle, onEvent = {
+		JsonMenuEntry(icon = false.toIcon(JsonType.OBJECT), style = textStyle, onEvent = {
 			onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
 		})
 		return
 	}
 
-	JsonMenuEntry(icon = item.iconWholeObject, style = textStyle, onEvent = {
+	JsonMenuEntry(icon = true.toIcon(JsonType.OBJECT), style = textStyle, onEvent = {
 		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
 	})
 	(1..2).forEach {
 		EmptyMenuBarEntry(textStyle)
 	}
-	JsonMenuEntry(icon = item.iconArraySection, style = textStyle, onEvent = {
+	JsonMenuEntry(icon = item.isScriptSectionExpanded.toIcon(JsonType.ARRAY), style = textStyle, onEvent = {
 		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = false))
 	})
 
@@ -208,6 +207,12 @@ private fun EmptyMenuBarEntry(style: TextStyle) {
 		style = style,
 	)
 }
+
+private fun Boolean.toIcon(jsonType: JsonType) =
+	when (jsonType) {
+		JsonType.OBJECT -> if (this) "↓".plus(jsonType.type) else "↑".plus(jsonType.type)
+		JsonType.ARRAY -> if (this) "↓".plus(jsonType.type) else "↑".plus(jsonType.type)
+	}
 
 @Preview
 @Composable

@@ -111,7 +111,7 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- JSON editor collapsing
+- JSON editor collapsing (error handling, save and close button)
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable
 
