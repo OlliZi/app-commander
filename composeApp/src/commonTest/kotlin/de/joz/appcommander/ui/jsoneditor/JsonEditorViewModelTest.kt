@@ -7,21 +7,29 @@ import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptsUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class JsonEditorViewModelTest {
 	private val jsonParser = DependencyInjection().provideJson()
 	private val navControllerMock: NavController = mockk(relaxed = true)
-	private val saveUserScriptsUseCaseMock: SaveUserScriptsUseCase = mockk(relaxed = true)
 	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk(relaxed = true)
-	private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = false)
+	private val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
+	private val saveUserScriptsUseCaseMock: SaveUserScriptsUseCase =
+		SaveUserScriptsUseCase(scriptsRepository = scriptsRepositoryMock)
+	private val openScriptFileUseCaseMock: OpenScriptFileUseCase =
+		OpenScriptFileUseCase(scriptsRepository = scriptsRepositoryMock)
 
 	@BeforeTest
 	fun setUp() {
@@ -141,14 +149,48 @@ class JsonEditorViewModelTest {
 			)
 		}
 
+	@Test
+	fun `should navigate back when back button is clicked`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = JsonEditorViewModel.Event.OnNavigateBack)
+
+			verify { navControllerMock.navigateUp() }
+		}
+
+	@Test
+	fun `should open script file externally when open button is clicked`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = JsonEditorViewModel.Event.OnOpenScriptFile)
+			runCurrent()
+
+			coVerify {
+				scriptsRepositoryMock.openScriptFile()
+			}
+		}
+
+	@Test
+	fun `should save script when save button is clicked`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = JsonEditorViewModel.Event.OnOpenScriptFile)
+			runCurrent()
+
+			coVerify { scriptsRepositoryMock.saveScripts(any()) }
+		}
+
 	private fun createViewModel(): JsonEditorViewModel =
 		JsonEditorViewModel(
 			navController = navControllerMock,
-			mainDispatcher = Dispatchers.Unconfined,
 			saveUserScriptsUseCase = saveUserScriptsUseCaseMock,
 			getUserScriptsUseCase = getUserScriptsUseCaseMock,
 			openScriptFileUseCase = openScriptFileUseCaseMock,
 			jsonParser = jsonParser,
+			mainDispatcher = Dispatchers.Unconfined,
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }
