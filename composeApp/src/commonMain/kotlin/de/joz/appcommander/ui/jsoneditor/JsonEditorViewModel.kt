@@ -48,7 +48,7 @@ class JsonEditorViewModel(
 				is Event.OnJsonChange -> onJsonChange(json = event.json)
 				is Event.OnSaveScript -> onSaveScript()
 				is Event.OnOpenScriptFile -> onOpenScriptFile()
-				is Event.OnExpandJson -> onExpandJson(item = event.item, wholeObject = event.wholeObject)
+				is Event.OnExpandJson -> onExpandJson(item = event.item)
 			}
 		}
 	}
@@ -147,28 +147,21 @@ class JsonEditorViewModel(
 		}
 	}
 
-	private fun onExpandJson(
-		item: JsonItem,
-		wholeObject: Boolean,
-	) {
+	private fun onExpandJson(item: JsonItem) {
 		_uiState.update { oldState ->
 			val newList = oldState.jsonScriptForUi.map {
 				if (it == item) {
-					if (wholeObject) {
-						val isWholeObjectExpanded = !item.isWholeObjectExpanded
-						it.copy(
-							isWholeObjectExpanded = isWholeObjectExpanded,
-							collapseScript = if (isWholeObjectExpanded) {
-								item.originalScript.copy(
-									scripts = item.originalScript.scripts,
-								)
-							} else {
-								null
-							},
-						)
-					} else {
-						it
-					}
+					val isWholeObjectExpanded = !item.isWholeObjectExpanded
+					it.copy(
+						isWholeObjectExpanded = isWholeObjectExpanded,
+						collapseScript = if (isWholeObjectExpanded) {
+							item.originalScript.copy(
+								scripts = item.originalScript.scripts,
+							)
+						} else {
+							null
+						},
+					)
 				} else {
 					it
 				}
@@ -195,7 +188,6 @@ class JsonEditorViewModel(
 
 		data class OnExpandJson(
 			val item: JsonItem,
-			val wholeObject: Boolean,
 		) : Event
 
 		data class OnJsonChange(

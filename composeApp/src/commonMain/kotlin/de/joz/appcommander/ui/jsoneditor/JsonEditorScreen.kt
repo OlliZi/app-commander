@@ -165,13 +165,13 @@ private fun JsonMenuItem(
 ) {
 	if (!item.isWholeObjectExpanded) {
 		JsonMenuEntry(icon = false.toIcon(), style = textStyle, onEvent = {
-			onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
+			onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
 		})
 		return
 	}
 
 	JsonMenuEntry(icon = true.toIcon(), style = textStyle, onEvent = {
-		onEvent(JsonEditorViewModel.Event.OnExpandJson(item, wholeObject = true))
+		onEvent(JsonEditorViewModel.Event.OnExpandJson(item))
 	})
 	(1..3).forEach {
 		EmptyMenuBarEntry(textStyle)
