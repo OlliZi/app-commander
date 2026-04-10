@@ -185,6 +185,111 @@ class JsonEditorViewModelTest {
 			}
 		}
 
+	@Test
+	fun `should expand script when expand menu is clicked`() =
+		runTest {
+			val viewModel = createViewModel()
+			val jsonMenus = ArrayList(viewModel.uiState.value.jsonScriptForUi)
+			val unchangedJsonMenuList = jsonMenus.take(jsonMenus.size - 1)
+
+			val jsonMenu = viewModel.uiState.value.jsonScriptForUi
+				.last()
+			viewModel.onEvent(
+				event = JsonEditorViewModel.Event.OnExpandJson(
+					item = viewModel.uiState.value.jsonScriptForUi
+						.last(),
+				),
+			)
+			runCurrent()
+
+			assertEquals(3, viewModel.uiState.value.jsonScriptForUi.size)
+			assertEquals(
+				unchangedJsonMenuList,
+				viewModel.uiState.value.jsonScriptForUi
+					.take(2),
+			)
+			assertEquals(
+				listOf(
+					JsonEditorViewModel.JsonItem(
+						isWholeObjectExpanded = false,
+						originalScript = jsonMenu.originalScript,
+						collapseScript = null,
+					),
+				),
+				viewModel.uiState.value.jsonScriptForUi
+					.takeLast(1),
+			)
+
+			assertEquals(
+				"{\n" + "    \"label\": \"Dark mode\",\n" + "    \"platform\": \"ANDROID\",\n" + "    \"scripts\": [\n" +
+					"        \"adb shell cmd uimode night yes\"\n" +
+					"    ]\n" +
+					"},\n" +
+					"{\n" +
+					"    \"label\": \"Light mode\",\n" +
+					"    \"platform\": \"ANDROID\",\n" +
+					"    \"scripts\": [\n" +
+					"        \"adb shell cmd uimode night no\"\n" +
+					"    ]\n" +
+					"},\n" +
+					"{}",
+				viewModel.uiState.value.json,
+			)
+
+			// click again
+			viewModel.onEvent(
+				event = JsonEditorViewModel.Event.OnExpandJson(
+					item = viewModel.uiState.value.jsonScriptForUi
+						.last(),
+				),
+			)
+			runCurrent()
+
+			assertEquals(3, viewModel.uiState.value.jsonScriptForUi.size)
+			assertEquals(
+				unchangedJsonMenuList,
+				viewModel.uiState.value.jsonScriptForUi
+					.take(2),
+			)
+			assertEquals(
+				listOf(
+					JsonEditorViewModel.JsonItem(
+						isWholeObjectExpanded = true,
+						originalScript = jsonMenu.originalScript,
+						collapseScript = jsonMenu.collapseScript,
+					),
+				),
+				viewModel.uiState.value.jsonScriptForUi
+					.takeLast(1),
+			)
+
+			assertEquals(
+				"{\n" + "    \"label\": \"Dark mode\",\n" + "    \"platform\": \"ANDROID\",\n" + "    \"scripts\": [\n" +
+					"        \"adb shell cmd uimode night yes\"\n" +
+					"    ]\n" +
+					"},\n" +
+					"{\n" +
+					"    \"label\": \"Light mode\",\n" +
+					"    \"platform\": \"ANDROID\",\n" +
+					"    \"scripts\": [\n" +
+					"        \"adb shell cmd uimode night no\"\n" +
+					"    ]\n" +
+					"},\n" +
+					"{\n" +
+					"    \"label\": \"Switch dark to light to dark mode\",\n" +
+					"    \"platform\": \"ANDROID\",\n" +
+					"    \"scripts\": [\n" +
+					"        \"adb shell cmd uimode night no\",\n" +
+					"        \"sleep 1\",\n" +
+					"        \"adb shell cmd uimode night yes\",\n" +
+					"        \"sleep 1\",\n" +
+					"        \"adb shell cmd uimode night no\"\n" +
+					"    ]\n" +
+					"}",
+				viewModel.uiState.value.json,
+			)
+		}
+
 	private fun createViewModel(): JsonEditorViewModel =
 		JsonEditorViewModel(
 			navController = navControllerMock,
