@@ -14,6 +14,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class JsonEditorViewModelTest {
 	private val jsonParser = DependencyInjection().provideJson()
@@ -31,9 +32,26 @@ class JsonEditorViewModelTest {
 	}
 
 	@Test
-	fun `should `() =
+	fun `should load default state when viewmodel is initialized`() =
 		runTest {
 			val viewModel = createViewModel()
+
+			assertTrue(viewModel.uiState.value.isJsonValid)
+			assertTrue(
+				viewModel.uiState.value.json
+					.isNotEmpty(),
+			)
+			assertEquals(3, viewModel.uiState.value.jsonScriptForUi.size)
+
+			viewModel.uiState.value.jsonScriptForUi.forEach {
+				assertTrue(it.isWholeObjectExpanded)
+				assertEquals(it.originalScript, it.collapseScript)
+			}
+
+			assertTrue(
+				viewModel.uiState.value.jsonValidMessage
+					.isEmpty(),
+			)
 		}
 
 	@Test
@@ -75,7 +93,7 @@ class JsonEditorViewModelTest {
 							scripts = listOf("foo"),
 						),
 						collapseScript = ScriptsRepository.Script(
-							label = "foo",
+							label = "bar",
 							platform = ScriptsRepository.Platform.DESKTOP,
 							scripts = listOf("foo"),
 						),
@@ -107,21 +125,18 @@ class JsonEditorViewModelTest {
 			)
 
 			assertEquals(
-				"""{
-						"label": "foo",
-						"platform": "ANDROID",
-						"scripts": [
-							"foo",
-							"bar"
-						]
-					},
-					{
-						"label": "bar",
-						"platform": "DESKTOP",
-						"scripts": [
-							"foo"
-						]
-					}""",
+				"{\n" + "    \"label\": \"foo\",\n" + "    \"platform\": \"ANDROID\",\n" + "    \"scripts\": [\n" +
+					"        \"foo\",\n" +
+					"        \"bar\"\n" +
+					"    ]\n" +
+					"},\n" +
+					"{\n" +
+					"    \"label\": \"bar\",\n" +
+					"    \"platform\": \"DESKTOP\",\n" +
+					"    \"scripts\": [\n" +
+					"        \"foo\"\n" +
+					"    ]\n" +
+					"}",
 				json,
 			)
 		}
