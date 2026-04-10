@@ -105,7 +105,15 @@ class JsonEditorViewModel(
 
 	private fun onSaveScript() {
 		saveUserScriptsUseCase.invoke(
-			scripts = jsonParser.decodeFromString<List<ScriptsRepository.Script>>(_uiState.value.json),
+			scripts = wrapToJsonObject(
+				json = convertScriptsToUi(
+					_uiState.value.jsonScriptForUi.map {
+						it.originalScript
+					},
+					jsonParser = jsonParser,
+				),
+				jsonParser = jsonParser,
+			),
 		)
 		onNavigateBack()
 	}
@@ -159,18 +167,6 @@ class JsonEditorViewModel(
 							},
 						)
 					} else {
-						/*
-						val isScriptSectionExpanded = !item.isScriptSectionExpanded
-						it.copy(
-							isScriptSectionExpanded = isScriptSectionExpanded,
-							collapseScript = item.originalScript.copy(
-								scripts = if (isScriptSectionExpanded) {
-									item.originalScript.scripts
-								} else {
-									emptyList()
-								},
-							),
-						)*/
 						it
 					}
 				} else {
@@ -221,19 +217,19 @@ class JsonEditorViewModel(
 	)
 
 	companion object {
-		fun fromScripts(scripts: List<ScriptsRepository.Script>): List<JsonItem> =
-			scripts.map { script ->
-				fromScript(script = script)
-			}
+		private fun wrapToJsonObject(
+			json: String,
+			jsonParser: Json,
+		): List<ScriptsRepository.Script> = jsonParser.decodeFromString<List<ScriptsRepository.Script>>("[$json]")
 
-		fun fromScript(script: ScriptsRepository.Script): JsonItem =
+		private fun fromScript(script: ScriptsRepository.Script): JsonItem =
 			JsonItem(
 				isWholeObjectExpanded = true,
 				originalScript = script,
 				collapseScript = script,
 			)
 
-		fun convertScriptsToUi(
+		private fun convertScriptsToUi(
 			scripts: List<ScriptsRepository.Script?>,
 			jsonParser: Json,
 		): String =
@@ -241,9 +237,14 @@ class JsonEditorViewModel(
 				convertScriptToUi(script = it, jsonParser = jsonParser)
 			}
 
-		fun convertScriptToUi(
+		private fun convertScriptToUi(
 			script: ScriptsRepository.Script?,
 			jsonParser: Json,
 		): String = jsonParser.encodeToString(script).replace("null", "{}")
+
+		fun fromScripts(scripts: List<ScriptsRepository.Script>): List<JsonItem> =
+			scripts.map { script ->
+				fromScript(script = script)
+			}
 	}
 }
