@@ -177,10 +177,12 @@ class JsonEditorViewModelTest {
 		runTest {
 			val viewModel = createViewModel()
 
-			viewModel.onEvent(event = JsonEditorViewModel.Event.OnOpenScriptFile)
+			viewModel.onEvent(event = JsonEditorViewModel.Event.OnSaveScript)
 			runCurrent()
 
-			coVerify { scriptsRepositoryMock.saveScripts(any()) }
+			coVerify {
+				scriptsRepositoryMock.saveScripts(ScriptsRepositoryImpl.DEFAULT_SCRIPTS)
+			}
 		}
 
 	private fun createViewModel(): JsonEditorViewModel =
