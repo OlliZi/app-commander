@@ -32,7 +32,7 @@ class JsonEditorScreenTest {
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
 					json = JsonEditorViewModel.convertScriptsToUi(scripts = testScripts, jsonParser = jsonParser),
-					jsonScriptForUi = JsonEditorViewModel.fromScripts(testScripts),
+					jsonScriptForUi = JsonEditorViewModel.fromScriptsToJsonMenu(testScripts),
 				),
 			)
 
@@ -126,7 +126,7 @@ class JsonEditorScreenTest {
 			setTestContent(
 				uiState = JsonEditorViewModel.UiState(
 					json = jsonString,
-					jsonScriptForUi = JsonEditorViewModel.fromScripts(testScripts),
+					jsonScriptForUi = JsonEditorViewModel.fromScriptsToJsonMenu(testScripts),
 				),
 				onEvent = {
 					assertIs<JsonEditorViewModel.Event.OnJsonChange>(it)

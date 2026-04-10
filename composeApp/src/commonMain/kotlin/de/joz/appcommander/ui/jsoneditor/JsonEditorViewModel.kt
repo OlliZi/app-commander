@@ -34,7 +34,7 @@ class JsonEditorViewModel(
 		getUserScriptsUseCase().scripts.let {
 			UiState(
 				json = convertScriptsToUi(scripts = it, jsonParser = jsonParser),
-				jsonScriptForUi = fromScripts(it),
+				jsonScriptForUi = fromScriptsToJsonMenu(it),
 			)
 		},
 	)
@@ -120,7 +120,7 @@ class JsonEditorViewModel(
 
 	private fun resetStrategyAfterChange(oldState: UiState): UiState {
 		val originalScriptList = oldState.jsonScriptForUi.map {
-			fromScript(script = it.originalScript)
+			fromScriptToJsonMenu(script = it.originalScript)
 		}
 		return oldState.copy(
 			json = convertScriptsToUi(originalScriptList.map { it.originalScript }, jsonParser),
@@ -222,14 +222,19 @@ class JsonEditorViewModel(
 			jsonParser: Json,
 		): List<ScriptsRepository.Script> = jsonParser.decodeFromString<List<ScriptsRepository.Script>>("[$json]")
 
-		private fun fromScript(script: ScriptsRepository.Script): JsonItem =
+		private fun fromScriptToJsonMenu(script: ScriptsRepository.Script): JsonItem =
 			JsonItem(
 				isWholeObjectExpanded = true,
 				originalScript = script,
 				collapseScript = script,
 			)
 
-		private fun convertScriptsToUi(
+		private fun convertScriptToUi(
+			script: ScriptsRepository.Script?,
+			jsonParser: Json,
+		): String = jsonParser.encodeToString(script).replace("null", "{}")
+
+		fun convertScriptsToUi(
 			scripts: List<ScriptsRepository.Script?>,
 			jsonParser: Json,
 		): String =
@@ -237,14 +242,9 @@ class JsonEditorViewModel(
 				convertScriptToUi(script = it, jsonParser = jsonParser)
 			}
 
-		private fun convertScriptToUi(
-			script: ScriptsRepository.Script?,
-			jsonParser: Json,
-		): String = jsonParser.encodeToString(script).replace("null", "{}")
-
-		fun fromScripts(scripts: List<ScriptsRepository.Script>): List<JsonItem> =
+		fun fromScriptsToJsonMenu(scripts: List<ScriptsRepository.Script>): List<JsonItem> =
 			scripts.map { script ->
-				fromScript(script = script)
+				fromScriptToJsonMenu(script = script)
 			}
 	}
 }

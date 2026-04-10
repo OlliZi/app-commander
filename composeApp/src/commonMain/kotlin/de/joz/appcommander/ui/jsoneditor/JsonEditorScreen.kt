@@ -237,7 +237,7 @@ internal fun PreviewJsonEditorContent(
 			uiState = JsonEditorViewModel.UiState(
 				json = json.encodeToString(scripts),
 				jsonValidMessage = "",
-				jsonScriptForUi = JsonEditorViewModel.fromScripts(scripts),
+				jsonScriptForUi = JsonEditorViewModel.fromScriptsToJsonMenu(scripts),
 			),
 			onEvent = {},
 		)
