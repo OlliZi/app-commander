@@ -54,7 +54,7 @@ App-Commander lets you create a library of scripts. Each script consists of:
 
 *   **A Label:** A friendly name for your script (e.g., "Take Screenshot", "Enable Dark Mode").
 *   **The Script:** The actual shell command to be executed (e.g., `adb shell cmd uimode night yes`).
-*   **Platform:** The target operating system (`ANDROID` or `IOS`).
+*   **Platform:** The target operating system (`ANDROID`, `IOS` or `DESKTOP`).
 
 Your scripts are stored in a `scripts.json` file located in the `.app_commander` directory in your user's home folder.
 
