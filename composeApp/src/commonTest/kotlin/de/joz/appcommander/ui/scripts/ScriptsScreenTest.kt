@@ -293,7 +293,7 @@ class ScriptsScreenTest {
 				},
 			)
 
-			onNodeWithText("Open script file").performClick()
+			onNodeWithText("Open JSON-editor").performClick()
 
 			assertEquals(1, isOpenClicked)
 		}

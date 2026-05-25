@@ -11,7 +11,7 @@
     <string name="scripts_hint_devices">Your connected devices:</string>
     <string name="scripts_hint_no_devices">Connect your devices over USB and click refresh.</string>
     <string name="scripts_hint_no_devices_refresh">Refresh</string>
-    <string name="scripts_open_script_file">Open script file</string>
+    <string name="scripts_open_script_file">Open JSON-editor</string>
     <string name="scripts_add_new_script">Add new script</string>
     <string name="scripts_filter_section_title">Filter</string>
     <string name="scripts_terminal_section_title">Terminal</string>
@@ -41,10 +41,15 @@
     <string name="edit_select_devices">Select device for testing your script</string>
     <string name="edit_action_save">Save script</string>
     <string name="edit_action_remove">Remove script</string>
-    <string name="edit_action_abort">Close</string>
     <string name="edit_confirmation_remove">Are your sure you want to remove this script?</string>
     <string name="edit_confirmation_change">You have changes in your script. Are you sure you want to leave?</string>
 
+    <string name="json_editor_title">JSON-editor</string>
+    <string name="json_editor_open_script_file_externally">Open script file externally</string>
+
     <string name="confirmation_yes">Yes</string>
     <string name="confirmation_no">No</string>
+
+    <string name="action_save">Save</string>
+    <string name="action_abort">Close</string>
 </resources>

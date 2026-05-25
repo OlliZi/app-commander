@@ -11,6 +11,7 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **Multi-Device Control:** Execute commands on any number of connected devices at once.
 *   **Customizable Scripts:** Create and save your own scripts to automate frequent tasks.
 *   **Simple Script Management:** An intuitive UI to add, edit, and organize your scripts.
+*   **Integrated JSON-editor:** Edit your scripts as complete JSON.
 *   **Live Terminals:** View real-time command output for each device in a dedicated terminal section.
 *   **Centralized Logging:** Keep track of all script executions and device responses in one place.
 *   **Powerful Scripting:**
@@ -43,6 +44,9 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 
 **Edit/Add Script Screen**
     <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/edit/screenshots/edit_script_ui.png)</kbd>
+
+**JSON-editor Screen**
+<kbd>![JSON-editor-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/jsoneditor/screenshots/json_editor.png)</kbd>
 
 **Settings Screen**
     <kbd>![Settings-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
@@ -107,6 +111,7 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
+- JSON editor: error handling, save and close button
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable
 

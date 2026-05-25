@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
@@ -39,6 +39,7 @@ fun BottomBar(
 	) {
 		actions.forEachIndexed { index, action ->
 			Button(
+				enabled = action.enabled,
 				onClick = action.action,
 			) {
 				Text(
@@ -55,6 +56,7 @@ fun BottomBar(
 
 data class BottomBarAction(
 	val label: StringResource,
+	val enabled: Boolean = true,
 	val action: () -> Unit,
 )
 
@@ -81,7 +83,7 @@ internal fun PreviewBottomBar(
 					action = {},
 				),
 				BottomBarAction(
-					label = Res.string.edit_action_abort,
+					label = Res.string.action_abort,
 					action = {},
 				),
 				BottomBarAction(

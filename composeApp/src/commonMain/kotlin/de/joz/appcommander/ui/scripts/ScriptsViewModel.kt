@@ -15,7 +15,6 @@ import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
-import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
@@ -36,7 +35,6 @@ class ScriptsViewModel(
 	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val getUserScriptsUseCase: GetUserScriptsUseCase,
-	private val openScriptFileUseCase: OpenScriptFileUseCase,
 	private val trackScriptsFileChangesUseCase: TrackScriptsFileChangesUseCase,
 	private val clearLoggingUseCase: ClearLoggingUseCase,
 	private val getLoggingUseCase: GetLoggingUseCase,
@@ -91,7 +89,7 @@ class ScriptsViewModel(
 				}
 
 				Event.OnOpenScriptFile -> {
-					onOpenScriptFile()
+					navController.navigate(NavigationScreens.JsonEditorScreen)
 				}
 
 				Event.OnNewScript -> {
@@ -289,12 +287,6 @@ class ScriptsViewModel(
 	private suspend fun onFilterScripts(filter: String) {
 		savePreferenceUseCase(SCRIPT_FILTER_PREF_KEY, filter)
 		onRefreshScripts(jsonParseResult = getUserScriptsUseCase())
-	}
-
-	private fun onOpenScriptFile() {
-		viewModelScope.launch(ioDispatcher) {
-			openScriptFileUseCase()
-		}
 	}
 
 	private fun onNewScript() {

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_change
@@ -119,7 +119,7 @@ internal fun EditScriptContent(
 						},
 					),
 					BottomBarAction(
-						label = Res.string.edit_action_abort,
+						label = Res.string.action_abort,
 						action = onNavigateBackHandler,
 					),
 				),
