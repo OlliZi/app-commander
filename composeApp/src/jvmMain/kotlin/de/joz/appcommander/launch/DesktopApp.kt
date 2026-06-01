@@ -13,6 +13,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
+import org.koin.dsl.koinConfiguration
 import org.koin.ksp.generated.*
 
 fun main() =
@@ -27,11 +28,10 @@ fun main() =
 			onCloseRequest = ::exitApplication,
 		) {
 			KoinApplication(
-				application = {
-					modules(DependencyInjection().module)
+				configuration = koinConfiguration(declaration = { modules(DependencyInjection().module) }),
+				content = {
+					App()
 				},
-			) {
-				App()
-			}
+			)
 		}
 	}
