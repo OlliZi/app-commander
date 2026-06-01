@@ -3,7 +3,7 @@
 package de.joz.appcommander
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
@@ -14,6 +14,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
+import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 import org.koin.ksp.generated.*
 import kotlin.test.Test
@@ -29,7 +30,7 @@ class AppTest {
 		runComposeUiTest {
 			setContent {
 				KoinApplication(
-					application = {
+					configuration = koinConfiguration(declaration = {
 						modules(DependencyInjection().module)
 						modules(
 							module {
@@ -43,15 +44,16 @@ class AppTest {
 								}
 							},
 						)
-					},
-				) {
-					val savePreferenceUseCase: SavePreferenceUseCase = koinInject()
-					runBlocking {
-						savePreferenceUseCase(SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, true)
-					}
+					}),
+					content = {
+						val savePreferenceUseCase: SavePreferenceUseCase = koinInject()
+						runBlocking {
+							savePreferenceUseCase(SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, true)
+						}
 
-					App()
-				}
+						App()
+					},
+				)
 			}
 
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "app_launch")

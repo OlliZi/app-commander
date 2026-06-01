@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
