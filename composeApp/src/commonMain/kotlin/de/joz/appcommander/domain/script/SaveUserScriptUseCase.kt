@@ -6,11 +6,14 @@ import org.koin.core.annotation.Factory
 class SaveUserScriptUseCase(
 	private val scriptsRepository: ScriptsRepository,
 	private val getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
+	private val runFileBackupUseCase: RunFileBackupUseCase,
 ) {
 	operator fun invoke(
 		script: ScriptsRepository.Script,
 		scriptKey: Int?,
 	) {
+		runFileBackupUseCase(backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumStorage())
+
 		val oldScript = getUserScriptByKeyUseCase(scriptKey)
 		if (oldScript != null) {
 			scriptsRepository.updateScript(script = script, oldScript = oldScript)

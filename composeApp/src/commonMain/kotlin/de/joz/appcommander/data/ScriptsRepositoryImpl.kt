@@ -70,6 +70,8 @@ class ScriptsRepositoryImpl(
 		writeScriptsToFile(getScripts().scripts - script)
 	}
 
+	override fun getScriptFile() = scriptFile
+
 	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {
 		val jsonFile = File(scriptFile)
 		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
