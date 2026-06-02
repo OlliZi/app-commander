@@ -25,13 +25,12 @@ class RunFileBackupUseCase(
 		backupDirectory: File,
 	): Boolean =
 		when (backupStrategy) {
-			is BackupStrategy.MaximumFiles -> !backupDirectory.exists() ||
-				backupDirectory.listFiles().size < backupStrategy.maxFiles
+			is BackupStrategy.MaximumFiles -> backupDirectory.listFiles()?.let { it.size < backupStrategy.maxFiles } ?: true
 
-			is BackupStrategy.MaximumStorage -> !backupDirectory.exists() ||
-				backupDirectory
-					.listFiles()
-					.sumOf { it.totalSpace } / 1024 < backupStrategy.maxMB
+			is BackupStrategy.MaximumStorage -> backupDirectory.listFiles()?.let { files ->
+				val mb = files.sumOf { it.length() } / TO_MB
+				mb <= backupStrategy.maxMB
+			} ?: true
 
 			BackupStrategy.None -> false
 		}
@@ -54,6 +53,7 @@ class RunFileBackupUseCase(
 
 	companion object {
 		const val BACKUP_DIRECTORY = "backups"
+		private const val TO_MB = 1024 * 1024
 	}
 
 	sealed interface BackupStrategy {
