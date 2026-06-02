@@ -21,8 +21,7 @@ class RunFileBackupUseCase(
 				createBackupFile()
 			}
 		}.onFailure {
-			// write tet for this case
-			addLoggingUseCase("Error backup the file: ${it.message}")
+			addLoggingUseCase("Error backup scripts file: ${it.message}")
 		}
 	}
 

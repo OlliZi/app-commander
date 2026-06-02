@@ -122,7 +122,7 @@ class RunFileBackupUseCaseTest {
 
 			createUseCase().invoke()
 
-			verify { addLoggingUseCaseMock.invoke("Error backup the file: test error") }
+			verify { addLoggingUseCaseMock.invoke("Error backup scripts file: test error") }
 		}
 
 	private fun writeBigFile(
