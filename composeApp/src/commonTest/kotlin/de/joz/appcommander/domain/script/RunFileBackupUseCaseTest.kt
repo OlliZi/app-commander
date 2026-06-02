@@ -53,7 +53,6 @@ class RunFileBackupUseCaseTest {
 		runTest {
 			val backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumFiles()
 			val contentBefore = testFile.readText()
-			val useCase = createUseCase()
 
 			createBackupDirectory()
 
@@ -66,7 +65,7 @@ class RunFileBackupUseCaseTest {
 			assertEquals(contentBefore, testFile.readText())
 			assertEquals(100, backupDirectory?.listFiles().orEmpty().size)
 
-			useCase.invoke(backupStrategy = backupStrategy)
+			createUseCase().invoke(backupStrategy = backupStrategy)
 
 			assertEquals(contentBefore, testFile.readText())
 			assertEquals(100, backupDirectory?.listFiles().orEmpty().size)
@@ -76,6 +75,27 @@ class RunFileBackupUseCaseTest {
 	fun `should do a backup when strategy is MaximumStorage`() =
 		runTest {
 			val contentBefore = testFile.readText()
+
+			createUseCase().invoke(backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumStorage(maxMB = 1))
+
+			assertEquals(contentBefore, testFile.readText())
+			assertEquals(1, getBackupDirectory()?.listFiles().orEmpty().size)
+			assertEquals(
+				contentBefore,
+				getBackupDirectory()?.listFiles()?.first()?.readText(),
+			)
+		}
+
+	@Test
+	fun `should do no backup when strategy is MaximumStorage but disk space is not sufficient`() =
+		runTest {
+			val contentBefore = testFile.readText()
+
+			createBackupDirectory()
+
+			val backupDirectory = getBackupDirectory()
+
+			// 	File(backupDirectory, "test_file_$it.json").writeText(it.toString())
 
 			createUseCase().invoke(backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumStorage(maxMB = 1))
 

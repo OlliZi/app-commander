@@ -28,9 +28,10 @@ class RunFileBackupUseCase(
 			is BackupStrategy.MaximumFiles -> !backupDirectory.exists() ||
 				backupDirectory.listFiles().size < backupStrategy.maxFiles
 
-			is BackupStrategy.MaximumStorage -> !backupDirectory.exists() || backupDirectory
-				.listFiles()
-				.sumOf { it.totalSpace } / 1024 < backupStrategy.maxMB
+			is BackupStrategy.MaximumStorage -> !backupDirectory.exists() ||
+				backupDirectory
+					.listFiles()
+					.sumOf { it.totalSpace } / 1024 < backupStrategy.maxMB
 
 			BackupStrategy.None -> false
 		}
