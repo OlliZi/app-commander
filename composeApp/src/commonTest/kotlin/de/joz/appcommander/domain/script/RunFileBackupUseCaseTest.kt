@@ -72,6 +72,21 @@ class RunFileBackupUseCaseTest {
 			assertEquals(100, backupDirectory?.listFiles().orEmpty().size)
 		}
 
+	@Test
+	fun `should do a backup when strategy is MaximumStorage`() =
+		runTest {
+			val contentBefore = testFile.readText()
+
+			createUseCase().invoke(backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumStorage(maxMB = 1))
+
+			assertEquals(contentBefore, testFile.readText())
+			assertEquals(1, getBackupDirectory()?.listFiles().orEmpty().size)
+			assertEquals(
+				contentBefore,
+				getBackupDirectory()?.listFiles()?.first()?.readText(),
+			)
+		}
+
 	private fun getBackupDirectory() =
 		testFile.parentFile
 			.listFiles()
