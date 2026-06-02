@@ -12,7 +12,7 @@ class SaveUserScriptUseCase(
 		script: ScriptsRepository.Script,
 		scriptKey: Int?,
 	) {
-		runFileBackupUseCase(backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumStorage())
+		runFileBackupUseCase()
 
 		val oldScript = getUserScriptByKeyUseCase(scriptKey)
 		if (oldScript != null) {

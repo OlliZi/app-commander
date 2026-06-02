@@ -41,7 +41,7 @@ class SaveUserScriptUseCaseTest {
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				)
-				runFileBackupUseCaseMock(any())
+				runFileBackupUseCaseMock()
 			}
 		}
 
@@ -87,7 +87,7 @@ class SaveUserScriptUseCaseTest {
 					),
 					oldScript = oldScript,
 				)
-				runFileBackupUseCaseMock(any())
+				runFileBackupUseCaseMock()
 			}
 		}
 }

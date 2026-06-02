@@ -11,18 +11,18 @@ import java.util.Date
 class RunFileBackupUseCase(
 	private val scriptsRepository: ScriptsRepository,
 	private val getPreferenceUseCase: GetPreferenceUseCase,
-	private val loggingUseCase: AddLoggingUseCase,
+	private val addLoggingUseCase: AddLoggingUseCase,
 ) {
-	suspend operator fun invoke(backupStrategy: BackupStrategy) {
+	suspend operator fun invoke() {
 		runCatching {
-			val backupStrategyFromPrefs = getBackupStrategyFromPreferences()
+			val backupStrategy = getBackupStrategyFromPreferences()
 			val backupDirectory = getBackupDirectory()
-			if (checkStrategy(backupStrategyFromPrefs, backupDirectory)) {
+			if (checkStrategy(backupStrategy, backupDirectory)) {
 				createBackupFile()
 			}
 		}.onFailure {
 			// write tet for this case
-			loggingUseCase("Error backup the file: ${it.message}")
+			addLoggingUseCase("Error backup the file: ${it.message}")
 		}
 	}
 
@@ -40,8 +40,6 @@ class RunFileBackupUseCase(
 		backupDirectory: File,
 	): Boolean =
 		when (backupStrategy) {
-			is BackupStrategy.MaximumFiles -> backupDirectory.listFiles()?.let { it.size < backupStrategy.maxFiles } ?: true
-
 			is BackupStrategy.MaximumStorage -> backupDirectory.listFiles()?.let { files ->
 				val mb = files.sumOf { it.length() } / TO_MB
 				mb <= backupStrategy.maxMB
@@ -74,12 +72,8 @@ class RunFileBackupUseCase(
 		private const val TO_MB = 1024 * 1024
 	}
 
-	sealed interface BackupStrategy {
+	internal sealed interface BackupStrategy {
 		data object None : BackupStrategy
-
-		data class MaximumFiles(
-			val maxFiles: Int = 100,
-		) : BackupStrategy
 
 		data class MaximumStorage(
 			val maxMB: Int = 50,
