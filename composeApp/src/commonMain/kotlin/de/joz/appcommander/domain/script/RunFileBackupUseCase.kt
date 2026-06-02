@@ -31,17 +31,16 @@ class RunFileBackupUseCase(
 	private fun createBackupFile() {
 		runCatching {
 			val currentFile = File(scriptsRepository.getScriptFile())
-			val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm'${currentFile.extension}'").format(Date())
+			val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm.'${currentFile.extension}'").format(Date())
 			val scriptFileName = currentFile.nameWithoutExtension + dateFileExtension
-			val backupDirectory = File(currentFile.parentFile, BACKUP_DIRECTORY).apply {
-				mkdirs()
-			}
+			val backupDirectory = File(currentFile.parentFile, BACKUP_DIRECTORY)
+			backupDirectory.mkdirs()
 			currentFile.copyTo(File(backupDirectory, scriptFileName), overwrite = true)
 		}
 	}
 
 	companion object {
-		private const val BACKUP_DIRECTORY = "backups"
+		const val BACKUP_DIRECTORY = "backups"
 	}
 
 	sealed interface BackupStrategy {

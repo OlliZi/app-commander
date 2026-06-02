@@ -19,6 +19,7 @@ import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
@@ -41,9 +42,11 @@ class EditScriptScreenTest {
 		getScriptIdUseCase = getScriptIdUseCaseMock,
 	)
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
+	private val runFileBackupUseCaseMock: RunFileBackupUseCase = mockk(relaxed = true)
 	private val saveUserScriptUseCaseMock = SaveUserScriptUseCase(
 		scriptsRepository = scriptsRepositoryMock,
 		getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+		runFileBackupUseCase = runFileBackupUseCaseMock,
 	)
 	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
 

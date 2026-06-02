@@ -12,6 +12,7 @@ class SaveUserScriptUseCaseTest {
 		runTest {
 			val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
 			val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = true)
+			val runFileBackupUseCaseMock: RunFileBackupUseCase = mockk(relaxed = true)
 
 			every {
 				getUserScriptByKeyUseCaseMock(any())
@@ -20,6 +21,7 @@ class SaveUserScriptUseCaseTest {
 			val savePreferenceUseCase = SaveUserScriptUseCase(
 				getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 				scriptsRepository = scriptsRepositoryMock,
+				runFileBackupUseCase = runFileBackupUseCaseMock,
 			)
 
 			savePreferenceUseCase(
@@ -39,6 +41,7 @@ class SaveUserScriptUseCaseTest {
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				)
+				runFileBackupUseCaseMock(any())
 			}
 		}
 
@@ -47,6 +50,7 @@ class SaveUserScriptUseCaseTest {
 		runTest {
 			val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
 			val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = true)
+			val runFileBackupUseCaseMock: RunFileBackupUseCase = mockk(relaxed = true)
 
 			val newScript = ScriptsRepository.Script(
 				label = "key",
@@ -66,6 +70,7 @@ class SaveUserScriptUseCaseTest {
 			val savePreferenceUseCase = SaveUserScriptUseCase(
 				getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 				scriptsRepository = scriptsRepositoryMock,
+				runFileBackupUseCase = runFileBackupUseCaseMock,
 			)
 
 			savePreferenceUseCase(
@@ -82,6 +87,7 @@ class SaveUserScriptUseCaseTest {
 					),
 					oldScript = oldScript,
 				)
+				runFileBackupUseCaseMock(any())
 			}
 		}
 }

@@ -20,7 +20,7 @@ class ScriptsRepositoryImplTest {
 	private val testFile = File("./build", "test.json")
 
 	@AfterTest
-	fun setUp() {
+	fun tearDown() {
 		testFile.delete()
 	}
 
