@@ -5,6 +5,7 @@ import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import java.io.File
 import kotlin.test.BeforeTest
@@ -112,6 +113,16 @@ class RunFileBackupUseCaseTest {
 				contentBefore,
 				getBackupDirectory()?.listFiles()?.get(2)?.readText(),
 			)
+		}
+
+	@Test
+	fun `should log when an exception occurred`() =
+		runTest {
+			every { scriptsRepositoryMock.getScriptFile() } throws IllegalArgumentException("test error")
+
+			createUseCase().invoke()
+
+			verify { addLoggingUseCaseMock.invoke("Error backup the file: test error") }
 		}
 
 	private fun writeBigFile(
