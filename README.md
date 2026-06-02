@@ -108,7 +108,7 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Do a backup before each file dump: 100files? unit-test + move error to ui
+- Do a backup before each file dump: unit-test + move error to ui
 - Create a demo app for Android (?)
 - Create a video showing the UI with emulator and a real device
 - Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable
