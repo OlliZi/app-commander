@@ -11,20 +11,27 @@ class RunFileBackupUseCase(
 ) {
 	operator fun invoke(backupStrategy: BackupStrategy) {
 		runCatching {
-			val parentFileDirectory = File(scriptsRepository.getScriptFile()).parentFile
-			if (checkStrategy(backupStrategy, parentFileDirectory.listFiles())) {
+			val backupDirectory = getBackupDirectory()
+			if (checkStrategy(backupStrategy, backupDirectory)) {
 				createBackupFile()
 			}
+		}.onFailure {
+			println("Error backup the file: ${it.message}")
 		}
 	}
 
 	private fun checkStrategy(
 		backupStrategy: BackupStrategy,
-		files: Array<File>,
+		backupDirectory: File,
 	): Boolean =
 		when (backupStrategy) {
-			is BackupStrategy.MaximumFiles -> files.size < backupStrategy.maxFiles
-			is BackupStrategy.MaximumStorage -> files.sumOf { it.totalSpace } / 1024 < backupStrategy.maxMB
+			is BackupStrategy.MaximumFiles -> !backupDirectory.exists() ||
+				backupDirectory.listFiles().size < backupStrategy.maxFiles
+
+			is BackupStrategy.MaximumStorage -> !backupDirectory.exists() || backupDirectory
+				.listFiles()
+				.sumOf { it.totalSpace } / 1024 < backupStrategy.maxMB
+
 			BackupStrategy.None -> false
 		}
 
@@ -33,10 +40,15 @@ class RunFileBackupUseCase(
 			val currentFile = File(scriptsRepository.getScriptFile())
 			val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm.'${currentFile.extension}'").format(Date())
 			val scriptFileName = currentFile.nameWithoutExtension + dateFileExtension
-			val backupDirectory = File(currentFile.parentFile, BACKUP_DIRECTORY)
+			val backupDirectory = getBackupDirectory()
 			backupDirectory.mkdirs()
 			currentFile.copyTo(File(backupDirectory, scriptFileName), overwrite = true)
 		}
+	}
+
+	private fun getBackupDirectory(): File {
+		val currentFile = File(scriptsRepository.getScriptFile())
+		return File(currentFile.parentFile, BACKUP_DIRECTORY)
 	}
 
 	companion object {

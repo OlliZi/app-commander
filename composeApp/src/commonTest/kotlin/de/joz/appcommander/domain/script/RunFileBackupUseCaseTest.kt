@@ -44,18 +44,42 @@ class RunFileBackupUseCaseTest {
 			assertEquals(1, getBackupDirectory()?.listFiles().orEmpty().size)
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()
-					?.listFiles()
-					.orEmpty()
-					.first()
-					.readText(),
+				getBackupDirectory()?.listFiles()?.first()?.readText(),
 			)
+		}
+
+	@Test
+	fun `should do no backup when strategy is MaximumFiles but there are too many files`() =
+		runTest {
+			val backupStrategy = RunFileBackupUseCase.BackupStrategy.MaximumFiles()
+			val contentBefore = testFile.readText()
+			val useCase = createUseCase()
+
+			createBackupDirectory()
+
+			val backupDirectory = getBackupDirectory()
+
+			(1..backupStrategy.maxFiles).forEach {
+				File(backupDirectory, "test_file_$it.json").writeText(it.toString())
+			}
+
+			assertEquals(contentBefore, testFile.readText())
+			assertEquals(100, backupDirectory?.listFiles().orEmpty().size)
+
+			useCase.invoke(backupStrategy = backupStrategy)
+
+			assertEquals(contentBefore, testFile.readText())
+			assertEquals(100, backupDirectory?.listFiles().orEmpty().size)
 		}
 
 	private fun getBackupDirectory() =
 		testFile.parentFile
 			.listFiles()
 			.firstOrNull { it.isDirectory && it.nameWithoutExtension == RunFileBackupUseCase.BACKUP_DIRECTORY }
+
+	private fun createBackupDirectory() {
+		File(testFile.parentFile, RunFileBackupUseCase.BACKUP_DIRECTORY).mkdirs()
+	}
 
 	private fun createUseCase() = RunFileBackupUseCase(scriptsRepository = scriptsRepositoryMock)
 }
