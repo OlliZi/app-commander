@@ -1,8 +1,8 @@
 package de.joz.appcommander.domain.script
 
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -33,7 +33,7 @@ class SaveUserScriptUseCaseTest {
 				scriptKey = null,
 			)
 
-			verify {
+			coVerify {
 				scriptsRepositoryMock.saveScript(
 					script = ScriptsRepository.Script(
 						label = "key",
@@ -78,7 +78,7 @@ class SaveUserScriptUseCaseTest {
 				scriptKey = oldScript.hashCode(),
 			)
 
-			verify {
+			coVerify {
 				scriptsRepositoryMock.updateScript(
 					script = ScriptsRepository.Script(
 						label = "key",

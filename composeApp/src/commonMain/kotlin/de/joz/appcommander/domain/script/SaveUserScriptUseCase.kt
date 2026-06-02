@@ -8,7 +8,7 @@ class SaveUserScriptUseCase(
 	private val getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
 	private val runFileBackupUseCase: RunFileBackupUseCase,
 ) {
-	operator fun invoke(
+	suspend operator fun invoke(
 		script: ScriptsRepository.Script,
 		scriptKey: Int?,
 	) {

@@ -7,7 +7,9 @@ import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.settings_preference_backup_label
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_dark
@@ -95,6 +97,22 @@ class SettingsViewModel(
 									),
 									label = Res.string.settings_preference_ui_appearance_label,
 									key = ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+								)
+							},
+						getPreferenceUseCase
+							.get(
+								key = RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
+								defaultValue = RunFileBackupUseCase.DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB,
+							).toFloat()
+							.let { mb ->
+								SliderItem(
+									maximum = RunFileBackupUseCase.DEFAULT_SYSTEM_BACKUP_MAXIMUM_STORAGE_SIZE_IN_MB,
+									minimum = 0f,
+									steps = 0,
+									sliderValue = mb,
+									labelValue = LabelValue.IntRes(mb.toInt()),
+									label = Res.string.settings_preference_backup_label,
+									key = RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
 								)
 							},
 					),

@@ -1,5 +1,7 @@
 package de.joz.appcommander.domain.script
 
+import de.joz.appcommander.domain.logging.AddLoggingUseCase
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import org.koin.core.annotation.Factory
 import java.io.File
 import java.text.SimpleDateFormat
@@ -8,15 +10,28 @@ import java.util.Date
 @Factory
 class RunFileBackupUseCase(
 	private val scriptsRepository: ScriptsRepository,
+	private val getPreferenceUseCase: GetPreferenceUseCase,
+	private val loggingUseCase: AddLoggingUseCase,
 ) {
-	operator fun invoke(backupStrategy: BackupStrategy) {
+	suspend operator fun invoke(backupStrategy: BackupStrategy) {
 		runCatching {
+			val backupStrategyFromPrefs = getBackupStrategyFromPreferences()
 			val backupDirectory = getBackupDirectory()
-			if (checkStrategy(backupStrategy, backupDirectory)) {
+			if (checkStrategy(backupStrategyFromPrefs, backupDirectory)) {
 				createBackupFile()
 			}
 		}.onFailure {
-			println("Error backup the file: ${it.message}")
+			// write tet for this case
+			loggingUseCase("Error backup the file: ${it.message}")
+		}
+	}
+
+	private suspend fun getBackupStrategyFromPreferences(): BackupStrategy {
+		val mb = getPreferenceUseCase.get(STORE_KEY_FOR_BACKUP_STORAGE, DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB)
+		return if (mb > 0) {
+			BackupStrategy.MaximumStorage(maxMB = mb)
+		} else {
+			BackupStrategy.None
 		}
 	}
 
@@ -52,6 +67,9 @@ class RunFileBackupUseCase(
 	}
 
 	companion object {
+		const val STORE_KEY_FOR_BACKUP_STORAGE = "STORE_KEY_FOR_BACKUP_STORAGE"
+		const val DEFAULT_SYSTEM_BACKUP_MAXIMUM_STORAGE_SIZE_IN_MB = 250f
+		const val DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB = 50
 		const val BACKUP_DIRECTORY = "backups"
 		private const val TO_MB = 1024 * 1024
 	}
