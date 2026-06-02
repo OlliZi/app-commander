@@ -25,6 +25,17 @@ class ScriptsRepositoryImplTest {
 	}
 
 	@Test
+	fun `should return same script file`() =
+		runTest {
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+
+			assertEquals(testFile.absolutePath, repository.getScriptFile())
+		}
+
+	@Test
 	fun `should return default scripts when file does not exist`() =
 		runTest {
 			val repository = ScriptsRepositoryImpl(
