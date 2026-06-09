@@ -82,8 +82,8 @@ class SaveUserScriptUseCaseResultMapper {
 				ErrorStringResource(
 					stringResource = Res.string.edit_error_not_enough_disk_space_in_backup_directory,
 					errorSubstitutions = listOf(
-						result.backupMessage.diskSpace,
-						result.backupMessage.maxMB,
+						result.backupMessage.diskSpace.toString(),
+						result.backupMessage.maxMB.toString(),
 					),
 				)
 			}

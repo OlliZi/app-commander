@@ -4,5 +4,5 @@ import org.jetbrains.compose.resources.StringResource
 
 data class ErrorStringResource(
 	val stringResource: StringResource,
-	val errorSubstitutions: List<Any>,
+	val errorSubstitutions: List<String>,
 )
