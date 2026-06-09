@@ -65,13 +65,13 @@ class ScriptsRepositoryImpl(
 		runCatching {
 			writeScriptsToFile(listOf(script) + getScripts().scripts)
 			ScriptsRepository.WriteScriptResult.Success
-		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(throwable = error) }
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.SaveError(throwable = error) }
 
 	override fun removeScript(script: ScriptsRepository.Script): ScriptsRepository.WriteScriptResult =
 		runCatching {
 			writeScriptsToFile(getScripts().scripts - script)
 			ScriptsRepository.WriteScriptResult.Success
-		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(throwable = error) }
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.RemoveError(throwable = error) }
 
 	override fun getScriptFile() = scriptFile
 
