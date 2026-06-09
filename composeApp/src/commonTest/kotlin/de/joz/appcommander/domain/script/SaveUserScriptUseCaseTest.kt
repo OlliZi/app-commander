@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class SaveUserScriptUseCaseTest {
 	@Test
@@ -149,6 +150,66 @@ class SaveUserScriptUseCaseTest {
 
 			assertIs<SaveUserScriptUseCase.Result.Error>(result)
 			assertNotNull(result.backupMessage)
+			assertNotNull(result.writeScriptMessage)
+		}
+
+	@Test
+	fun `should return error when backup fails`() =
+		runTest {
+			val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
+			val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = true)
+			val runFileBackupUseCaseMock: RunFileBackupUseCase = mockk(relaxed = true)
+
+			coEvery { runFileBackupUseCaseMock.invoke() } returns RunFileBackupUseCase.Result.UnknownError("foo")
+			coEvery { scriptsRepositoryMock.saveScript(any()) } returns ScriptsRepository.WriteScriptResult.Success(Unit)
+			every { getUserScriptByKeyUseCaseMock(null) } returns null
+
+			val savePreferenceUseCase = SaveUserScriptUseCase(
+				getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+				scriptsRepository = scriptsRepositoryMock,
+				runFileBackupUseCase = runFileBackupUseCaseMock,
+			)
+			val result = savePreferenceUseCase(
+				script = ScriptsRepository.Script(
+					label = "key",
+					scripts = listOf("foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+				scriptKey = null,
+			)
+
+			assertIs<SaveUserScriptUseCase.Result.Error>(result)
+			assertNotNull(result.backupMessage)
+			assertNull(result.writeScriptMessage)
+		}
+
+	@Test
+	fun `should return error when writing fails`() =
+		runTest {
+			val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
+			val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = true)
+			val runFileBackupUseCaseMock: RunFileBackupUseCase = mockk(relaxed = true)
+
+			coEvery { runFileBackupUseCaseMock.invoke() } returns RunFileBackupUseCase.Result.Success
+			coEvery { scriptsRepositoryMock.saveScript(any()) } returns ScriptsRepository.WriteScriptResult.SaveError("bar")
+			every { getUserScriptByKeyUseCaseMock(null) } returns null
+
+			val savePreferenceUseCase = SaveUserScriptUseCase(
+				getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+				scriptsRepository = scriptsRepositoryMock,
+				runFileBackupUseCase = runFileBackupUseCaseMock,
+			)
+			val result = savePreferenceUseCase(
+				script = ScriptsRepository.Script(
+					label = "key",
+					scripts = listOf("foo"),
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+				scriptKey = null,
+			)
+
+			assertIs<SaveUserScriptUseCase.Result.Error>(result)
+			assertNull(result.backupMessage)
 			assertNotNull(result.writeScriptMessage)
 		}
 }
