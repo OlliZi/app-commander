@@ -4,7 +4,9 @@ import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase.Companion.DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB
 import de.joz.appcommander.domain.script.RunFileBackupUseCase.Companion.STORE_KEY_FOR_BACKUP_STORAGE
+import io.mockk.called
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,7 +39,7 @@ class RunFileBackupUseCaseTest {
 			val contentBefore = testFile.readText()
 			coEvery {
 				getPreferenceUseCaseMock.get(
-					RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
+					STORE_KEY_FOR_BACKUP_STORAGE,
 					any<Int>(),
 				)
 			} returns -1
@@ -47,6 +49,7 @@ class RunFileBackupUseCaseTest {
 			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
 			assertTrue(getBackupDirectory()?.listFiles().orEmpty().isEmpty())
+			coVerify { addLoggingUseCaseMock wasNot called }
 		}
 
 	@Test
@@ -56,7 +59,7 @@ class RunFileBackupUseCaseTest {
 
 			coEvery {
 				getPreferenceUseCaseMock.get(
-					RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
+					STORE_KEY_FOR_BACKUP_STORAGE,
 					any<Int>(),
 				)
 			} returns 1
@@ -77,7 +80,7 @@ class RunFileBackupUseCaseTest {
 		runTest {
 			coEvery {
 				getPreferenceUseCaseMock.get(
-					RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
+					STORE_KEY_FOR_BACKUP_STORAGE,
 					any<Int>(),
 				)
 			} returns 3
@@ -123,7 +126,7 @@ class RunFileBackupUseCaseTest {
 		}
 
 	@Test
-	fun `should log when an exception occurred`() =
+	fun `should log error when an exception occurred`() =
 		runTest {
 			every { scriptsRepositoryMock.getScriptFile() } throws IllegalArgumentException("test error")
 
@@ -143,7 +146,7 @@ class RunFileBackupUseCaseTest {
 		}
 
 	@Test
-	fun `should log when strategy cannot read from preferences`() =
+	fun `should log error when strategy cannot read from preferences`() =
 		runTest {
 			coEvery {
 				getPreferenceUseCaseMock.get(
@@ -162,7 +165,29 @@ class RunFileBackupUseCaseTest {
 
 			verify {
 				addLoggingUseCaseMock.invoke(
-					"An error occurred: test error",
+					"Error backup scripts file: test error",
+				)
+			}
+		}
+
+	@Test
+	fun `should log error when backup directory cannot created`() =
+		runTest {
+			coEvery {
+				scriptsRepositoryMock.getScriptFile()
+			} throws IllegalArgumentException("foo")
+
+			val result = createUseCase().invoke()
+
+			assertIs<RunFileBackupUseCase.Result.UnknownError>(result)
+			assertEquals(
+				"An error occurred: Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+				result.message,
+			)
+
+			verify {
+				addLoggingUseCaseMock.invoke(
+					"Error backup scripts file: Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
 				)
 			}
 		}

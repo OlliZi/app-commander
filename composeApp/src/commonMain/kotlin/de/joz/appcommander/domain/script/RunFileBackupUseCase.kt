@@ -82,7 +82,6 @@ class RunFileBackupUseCase(
 			File(currentFile.parentFile, BACKUP_DIRECTORY)
 		}.getOrElse {
 			throw Result.CannotCreateBackupDirectory(
-				// TOOD message als string.msl nehmen
 				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
 			)
 		}
