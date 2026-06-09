@@ -179,9 +179,9 @@ class RunFileBackupUseCaseTest {
 
 			val result = createUseCase().invoke()
 
-			assertIs<RunFileBackupUseCase.Result.UnknownError>(result)
+			assertIs<RunFileBackupUseCase.Result.CannotCreateBackupDirectory>(result)
 			assertEquals(
-				"An error occurred: Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
 				result.message,
 			)
 

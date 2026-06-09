@@ -27,7 +27,6 @@ class RunFileBackupUseCase(
 				is Result.CannotCreateBackupDirectory -> error
 				is Result.CannotCreateBackupFile -> error
 				is Result.NotEnoughDiskSpaceInBackupDirectory -> error
-				is Result.UnknownError -> error
 				else -> Result.UnknownError(error.message ?: "Unknown error")
 			}
 		}
