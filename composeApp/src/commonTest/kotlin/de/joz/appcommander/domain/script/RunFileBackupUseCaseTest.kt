@@ -89,9 +89,9 @@ class RunFileBackupUseCaseTest {
 			write1MBFile(testFile)
 			val contentBefore = testFile.readText()
 
+			createBackupDirectory()
 			assertEquals(0, getBackupDirectory()?.listFiles().orEmpty().size)
 
-			createBackupDirectory()
 			write1MBFile(File(getBackupDirectory(), "test_file1.json"))
 			write1MBFile(File(getBackupDirectory(), "test_file2.json"))
 
