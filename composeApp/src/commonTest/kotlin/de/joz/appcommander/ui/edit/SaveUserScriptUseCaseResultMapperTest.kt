@@ -142,6 +142,60 @@ class SaveUserScriptUseCaseResultMapperTest {
 		)
 	}
 
+	@Test
+	fun `Mixed - should map strings in case of error to some list`() {
+		assertEquals(
+			listOf(
+				ErrorStringResource(
+					stringResource = Res.string.edit_error_cannot_create_backup_directory,
+					errorSubstitutions = listOf("bar"),
+				),
+				ErrorStringResource(
+					stringResource = Res.string.edit_error_save_script,
+					errorSubstitutions = listOf("foo"),
+				),
+			),
+			mapError(
+				backupMessage = RunFileBackupUseCase.Result.CannotCreateBackupDirectory("bar"),
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.SaveError("foo"),
+			),
+		)
+
+		assertEquals(
+			listOf(
+				ErrorStringResource(
+					stringResource = Res.string.edit_error_cannot_create_backup_file,
+					errorSubstitutions = listOf("bar"),
+				),
+				ErrorStringResource(
+					stringResource = Res.string.edit_error_update_script,
+					errorSubstitutions = listOf("foo"),
+				),
+			),
+			mapError(
+				backupMessage = RunFileBackupUseCase.Result.CannotCreateBackupFile("bar"),
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.UpdateError("foo"),
+			),
+		)
+
+		assertEquals(
+			listOf(
+				ErrorStringResource(
+					stringResource = Res.string.edit_error_unknown_error,
+					errorSubstitutions = listOf("bar"),
+				),
+				ErrorStringResource(
+					stringResource = Res.string.edit_error_remove_script,
+					errorSubstitutions = listOf("foo"),
+				),
+			),
+			mapError(
+				backupMessage = RunFileBackupUseCase.Result.UnknownError("bar"),
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.RemoveError("foo"),
+			),
+		)
+	}
+
 	private fun mapError(
 		backupMessage: RunFileBackupUseCase.Result? = null,
 		writeScriptMessage: ScriptsRepository.WriteScriptResult? = null,
