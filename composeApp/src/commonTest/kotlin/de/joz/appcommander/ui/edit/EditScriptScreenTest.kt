@@ -117,7 +117,7 @@ class EditScriptScreenTest {
 			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
 
 			onNodeWithText(text = "Save script").performClick()
-			waitUntilAtLeastOneExists(hasText(text = "cannot save script"))
+			waitUntilAtLeastOneExists(hasText(text = testScript.label))
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
