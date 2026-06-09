@@ -68,6 +68,94 @@ class EditScriptScreenTest {
 	}
 
 	@Test
+	fun `show error messages in ui when script can saved but backup fails`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			coEvery {
+				runFileBackupUseCaseMock.invoke()
+			} returns RunFileBackupUseCase.Result.CannotCreateBackupFile("cannot create backup file")
+			coEvery {
+				scriptsRepositoryMock.updateScript(any(), any())
+			} returns ScriptsRepository.WriteScriptResult.Success(Unit)
+
+			onNodeWithText(text = "Save script").performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "error_messages_1",
+			)
+		}
+	}
+
+	@Test
+	fun `show error messages in ui when script cannot saved but backup was successfully`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			coEvery {
+				runFileBackupUseCaseMock.invoke()
+			} returns RunFileBackupUseCase.Result.Success
+			coEvery {
+				scriptsRepositoryMock.updateScript(any(), any())
+			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
+
+			onNodeWithText(text = "Save script").performClick()
+			waitUntilAtLeastOneExists(hasText(text = "cannot save script"))
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "error_messages_2",
+			)
+		}
+	}
+
+	@Test
+	fun `show error messages in ui when script cannot saved and backup fails`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			coEvery {
+				runFileBackupUseCaseMock.invoke()
+			} returns RunFileBackupUseCase.Result.UnknownError("unknown error")
+			coEvery {
+				scriptsRepositoryMock.updateScript(any(), any())
+			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
+
+			onNodeWithText(text = "Save script").performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "error_messages_3",
+			)
+		}
+	}
+
+	@Test
 	fun `show ui with selected script when a script was selected for editing before`() {
 		runComposeUiTest {
 			val testScript = ScriptsRepository.Script(
