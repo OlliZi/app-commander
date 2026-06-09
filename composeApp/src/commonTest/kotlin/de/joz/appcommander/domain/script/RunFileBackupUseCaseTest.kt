@@ -2,6 +2,8 @@ package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase.Companion.DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB
+import de.joz.appcommander.domain.script.RunFileBackupUseCase.Companion.STORE_KEY_FOR_BACKUP_STORAGE
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -11,6 +13,7 @@ import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class RunFileBackupUseCaseTest {
@@ -38,8 +41,10 @@ class RunFileBackupUseCaseTest {
 					any<Int>(),
 				)
 			} returns -1
-			createUseCase().invoke()
 
+			val result = createUseCase().invoke()
+
+			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
 			assertTrue(getBackupDirectory()?.listFiles().orEmpty().isEmpty())
 		}
@@ -56,8 +61,9 @@ class RunFileBackupUseCaseTest {
 				)
 			} returns 1
 
-			createUseCase().invoke()
+			val result = createUseCase().invoke()
 
+			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
 			assertEquals(1, getBackupDirectory()?.listFiles().orEmpty().size)
 			assertEquals(
@@ -97,8 +103,9 @@ class RunFileBackupUseCaseTest {
 				getBackupDirectory()?.listFiles()?.get(1)?.readText(),
 			)
 
-			useCase.invoke()
+			val result = useCase.invoke()
 
+			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
 			assertEquals(3, getBackupDirectory()?.listFiles().orEmpty().size)
 			assertEquals(
@@ -120,9 +127,44 @@ class RunFileBackupUseCaseTest {
 		runTest {
 			every { scriptsRepositoryMock.getScriptFile() } throws IllegalArgumentException("test error")
 
-			createUseCase().invoke()
+			val result = createUseCase().invoke()
 
-			verify { addLoggingUseCaseMock.invoke("Error backup scripts file: test error") }
+			assertIs<RunFileBackupUseCase.Result.CannotCreateBackupDirectory>(result)
+			assertEquals(
+				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+				result.message,
+			)
+
+			verify {
+				addLoggingUseCaseMock.invoke(
+					"Error backup scripts file: Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+				)
+			}
+		}
+
+	@Test
+	fun `should log when strategy cannot read from preferences`() =
+		runTest {
+			coEvery {
+				getPreferenceUseCaseMock.get(
+					STORE_KEY_FOR_BACKUP_STORAGE,
+					DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB,
+				)
+			} throws IllegalArgumentException("test error")
+
+			val result = createUseCase().invoke()
+
+			assertIs<RunFileBackupUseCase.Result.UnknownError>(result)
+			assertEquals(
+				"An error occurred: test error",
+				result.message,
+			)
+
+			verify {
+				addLoggingUseCaseMock.invoke(
+					"An error occurred: test error",
+				)
+			}
 		}
 
 	private fun writeBigFile(
