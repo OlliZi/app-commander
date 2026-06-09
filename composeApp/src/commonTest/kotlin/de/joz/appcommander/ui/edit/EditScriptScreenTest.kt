@@ -24,6 +24,7 @@ import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -267,7 +268,7 @@ class EditScriptScreenTest {
 			onNodeWithText(text = "Remove script").performClick()
 			onNodeWithText(text = "No").performClick()
 
-			verify(exactly = 0) { scriptsRepositoryMock.removeScript(any()) }
+			verify { scriptsRepositoryMock.removeScript(any()) wasNot called }
 		}
 	}
 
