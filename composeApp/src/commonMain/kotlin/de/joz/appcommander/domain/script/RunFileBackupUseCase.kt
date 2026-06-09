@@ -46,7 +46,10 @@ class RunFileBackupUseCase(
 	): Boolean =
 		when (backupStrategy) {
 			is BackupStrategy.MaximumStorage -> {
-				val mb = backupDirectory.listFiles()?.sumOf { it.length() }?.div(TO_MB) ?: 0
+				val filesMB = backupDirectory.listFiles()?.sumOf { it.toMB() } ?: 0
+				val currentFileMB = currentFile().toMB()
+				val mb = filesMB + currentFileMB
+
 				if (mb <= backupStrategy.maxMB) {
 					true
 				} else {
@@ -64,7 +67,7 @@ class RunFileBackupUseCase(
 
 	private fun createBackupFile() {
 		runCatching {
-			val currentFile = File(scriptsRepository.getScriptFile())
+			val currentFile = currentFile()
 			val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm.'${currentFile.extension}'").format(Date())
 			val scriptFileName = currentFile.nameWithoutExtension + dateFileExtension
 			val backupDirectory = getBackupDirectory()
@@ -77,13 +80,17 @@ class RunFileBackupUseCase(
 
 	private fun getBackupDirectory(): File =
 		runCatching {
-			val currentFile = File(scriptsRepository.getScriptFile())
+			val currentFile = currentFile()
 			File(currentFile.parentFile, BACKUP_DIRECTORY)
 		}.getOrElse {
 			throw Result.CannotCreateBackupDirectory(
 				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
 			)
 		}
+
+	private fun currentFile() = File(scriptsRepository.getScriptFile())
+
+	private fun File.toMB() = length().div(TO_MB)
 
 	companion object {
 		const val STORE_KEY_FOR_BACKUP_STORAGE = "STORE_KEY_FOR_BACKUP_STORAGE"

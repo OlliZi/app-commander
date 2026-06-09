@@ -61,7 +61,7 @@ class RunFileBackupUseCaseTest {
 					STORE_KEY_FOR_BACKUP_STORAGE,
 					any<Int>(),
 				)
-			} returns 1
+			} returns 2
 
 			val result = createUseCase().invoke()
 
@@ -82,7 +82,7 @@ class RunFileBackupUseCaseTest {
 					STORE_KEY_FOR_BACKUP_STORAGE,
 					any<Int>(),
 				)
-			} returns 2
+			} returns 3
 
 			val useCase = createUseCase()
 
@@ -131,13 +131,13 @@ class RunFileBackupUseCaseTest {
 			assertIs<RunFileBackupUseCase.Result.NotEnoughDiskSpaceInBackupDirectory>(result2)
 
 			assertEquals(
-				"There is not enough disk space for backup. Available: 3 MB. Your maximum allowed: 2 MB.",
+				"There is not enough disk space for backup. Available: 4 MB. Your maximum allowed: 3 MB.",
 				result2.message,
 			)
 
 			verify {
 				addLoggingUseCaseMock.invoke(
-					"Error backup scripts file: There is not enough disk space for backup. Available: 3 MB. Your maximum allowed: 2 MB.",
+					"Error backup scripts file: There is not enough disk space for backup. Available: 4 MB. Your maximum allowed: 3 MB.",
 				)
 			}
 		}
