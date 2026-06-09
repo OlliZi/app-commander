@@ -1,8 +1,10 @@
 package de.joz.appcommander.ui.edit
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -134,6 +137,22 @@ internal fun EditScriptContent(
 				.verticalScroll(rememberScrollState()),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
+			AnimatedVisibility(
+				visible = uiState.errorMessages.isNotEmpty(),
+			) {
+				Column {
+					uiState.errorMessages.forEach {
+						TextLabel(
+							modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+							text = stringResource(it.stringResource, *it.errorSubstitutions.toTypedArray()),
+							textLabelType = TextLabelType.BodyLarge,
+							textColor = Color.Red,
+						)
+					}
+					SectionDivider()
+				}
+			}
+
 			TextLabel(
 				text = stringResource(Res.string.edit_script_name),
 				textLabelType = TextLabelType.BodyLarge,
