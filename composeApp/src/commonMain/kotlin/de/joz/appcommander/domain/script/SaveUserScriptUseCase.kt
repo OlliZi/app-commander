@@ -21,14 +21,15 @@ class SaveUserScriptUseCase(
 			scriptsRepository.saveScript(script = script)
 		}
 
-		return if (backupResult is RunFileBackupUseCase.Result.Success &&
-			writeScriptResult is ScriptsRepository.WriteScriptResult.Success
-		) {
+		val isBackupResultSuccess = backupResult is RunFileBackupUseCase.Result.Success
+		val isWriteScriptResultSuccess = writeScriptResult is ScriptsRepository.WriteScriptResult.Success
+
+		return if (isBackupResultSuccess && isWriteScriptResultSuccess) {
 			Result.Success
 		} else {
 			Result.Error(
-				backupMessage = backupResult,
-				writeScriptMessage = writeScriptResult,
+				backupMessage = if (isBackupResultSuccess) null else backupResult,
+				writeScriptMessage = if (isWriteScriptResultSuccess) null else writeScriptResult,
 			)
 		}
 	}
