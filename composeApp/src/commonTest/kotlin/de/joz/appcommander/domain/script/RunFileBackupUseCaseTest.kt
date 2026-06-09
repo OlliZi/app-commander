@@ -86,14 +86,14 @@ class RunFileBackupUseCaseTest {
 
 			val useCase = createUseCase()
 
-			writeBigFile(mb = 1, testFile)
+			write1MBFile(testFile)
 			val contentBefore = testFile.readText()
 
 			assertEquals(0, getBackupDirectory()?.listFiles().orEmpty().size)
 
 			createBackupDirectory()
-			writeBigFile(mb = 1, File(getBackupDirectory(), "test_file1.json"))
-			writeBigFile(mb = 1, File(getBackupDirectory(), "test_file2.json"))
+			write1MBFile(File(getBackupDirectory(), "test_file1.json"))
+			write1MBFile(File(getBackupDirectory(), "test_file2.json"))
 
 			assertEquals(contentBefore, testFile.readText())
 			assertEquals(2, getBackupDirectory()?.listFiles().orEmpty().size)
@@ -237,11 +237,8 @@ class RunFileBackupUseCaseTest {
 			}
 		}
 
-	private fun writeBigFile(
-		mb: Int,
-		testFile: File,
-	) {
-		val sizeInBytes = mb * 1024 * 1024
+	private fun write1MBFile(testFile: File) {
+		val sizeInBytes = 1 * 1024 * 1024
 		testFile.writeBytes(ByteArray(sizeInBytes))
 	}
 
