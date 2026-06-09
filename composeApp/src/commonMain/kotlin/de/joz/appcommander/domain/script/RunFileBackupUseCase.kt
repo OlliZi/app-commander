@@ -17,7 +17,7 @@ class RunFileBackupUseCase(
 		runCatching {
 			val backupStrategy = getBackupStrategyFromPreferences()
 			val backupDirectory = getBackupDirectory()
-			if (checkStrategy(backupStrategy, backupDirectory)) {
+			if (checkStrategy(backupStrategy = backupStrategy, backupDirectory = backupDirectory)) {
 				createBackupFile()
 			}
 		}.onFailure {
@@ -48,14 +48,12 @@ class RunFileBackupUseCase(
 		}
 
 	private fun createBackupFile() {
-		runCatching {
-			val currentFile = File(scriptsRepository.getScriptFile())
-			val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm.'${currentFile.extension}'").format(Date())
-			val scriptFileName = currentFile.nameWithoutExtension + dateFileExtension
-			val backupDirectory = getBackupDirectory()
-			backupDirectory.mkdirs()
-			currentFile.copyTo(File(backupDirectory, scriptFileName), overwrite = true)
-		}
+		val currentFile = File(scriptsRepository.getScriptFile())
+		val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm.'${currentFile.extension}'").format(Date())
+		val scriptFileName = currentFile.nameWithoutExtension + dateFileExtension
+		val backupDirectory = getBackupDirectory()
+		backupDirectory.mkdirs()
+		currentFile.copyTo(File(backupDirectory, scriptFileName), overwrite = true)
 	}
 
 	private fun getBackupDirectory(): File {
