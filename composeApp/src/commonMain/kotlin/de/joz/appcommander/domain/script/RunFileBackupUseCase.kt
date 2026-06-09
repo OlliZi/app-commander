@@ -27,7 +27,7 @@ class RunFileBackupUseCase(
 				is Result.CannotCreateBackupDirectory -> error
 				is Result.CannotCreateBackupFile -> error
 				is Result.NotEnoughDiskSpaceInBackupDirectory -> error
-				else -> Result.UnknownError(error.message ?: "Unknown error")
+				else -> Result.UnknownError(error.message)
 			}
 		}
 
@@ -83,9 +83,7 @@ class RunFileBackupUseCase(
 			val currentFile = currentFile()
 			File(currentFile.parentFile, BACKUP_DIRECTORY)
 		}.getOrElse {
-			throw Result.CannotCreateBackupDirectory(
-				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
-			)
+			throw Result.CannotCreateBackupDirectory("Cannot create backup directory.")
 		}
 
 	private fun currentFile() = File(scriptsRepository.getScriptFile())
@@ -116,14 +114,12 @@ class RunFileBackupUseCase(
 		data class NotEnoughDiskSpaceInBackupDirectory(
 			val diskSpace: Long,
 			val maxMB: Int,
-		) : Exception(
-				"There is not enough disk space for backup. Available: $diskSpace MB. Your maximum allowed: $maxMB MB.",
-			),
+		) : Exception("Not enough disk space."),
 			Result
 
 		data class UnknownError(
-			val submessage: String,
-		) : Exception("An error occurred: $submessage"),
+			override val message: String?,
+		) : Exception(message ?: "Unknown error"),
 			Result
 	}
 

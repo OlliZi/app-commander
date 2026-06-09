@@ -29,6 +29,7 @@ class EditScriptViewModel(
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
+	private val saveUserScriptUseCaseResultMapper: SaveUserScriptUseCaseResultMapper,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -149,10 +150,11 @@ class EditScriptViewModel(
 	private fun onSaveScript() {
 		viewModelScope.launch(ioDispatcher) {
 			val scriptToSave = _uiState.value.scriptUiState.toScriptsRepositoryScript()
-			saveUserScriptUseCase(
+			val result = saveUserScriptUseCase(
 				script = scriptToSave,
 				scriptKey = scriptKey,
 			)
+			val errorMessage = saveUserScriptUseCaseResultMapper(result = result)
 
 			scriptKey = getScriptIdUseCase(scriptToSave)
 		}

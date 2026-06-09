@@ -11,14 +11,34 @@ class SaveUserScriptUseCase(
 	suspend operator fun invoke(
 		script: ScriptsRepository.Script,
 		scriptKey: Int?,
-	) {
-		runFileBackupUseCase()
+	): Result {
+		val backupResult = runFileBackupUseCase()
 
 		val oldScript = getUserScriptByKeyUseCase(scriptKey)
-		if (oldScript != null) {
+		val writeScriptResult = if (oldScript != null) {
 			scriptsRepository.updateScript(script = script, oldScript = oldScript)
 		} else {
 			scriptsRepository.saveScript(script = script)
 		}
+
+		return if (backupResult is RunFileBackupUseCase.Result.Success &&
+			writeScriptResult is ScriptsRepository.WriteScriptResult.Success
+		) {
+			Result.Success
+		} else {
+			Result.Error(
+				backupMessage = backupResult,
+				writeScriptMessage = writeScriptResult,
+			)
+		}
+	}
+
+	sealed interface Result {
+		data object Success : Result
+
+		data class Error(
+			val backupMessage: RunFileBackupUseCase.Result?,
+			val writeScriptMessage: ScriptsRepository.WriteScriptResult?,
+		) : Result
 	}
 }

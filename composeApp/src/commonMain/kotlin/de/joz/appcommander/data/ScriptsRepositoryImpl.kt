@@ -57,21 +57,18 @@ class ScriptsRepositoryImpl(
 		oldScript: ScriptsRepository.Script,
 	): ScriptsRepository.WriteScriptResult =
 		runCatching {
-			writeScriptsToFile(listOf(script) + getScripts().scripts - oldScript)
-			ScriptsRepository.WriteScriptResult.Success
-		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(throwable = error) }
+			ScriptsRepository.WriteScriptResult.Success(writeScriptsToFile(listOf(script) + getScripts().scripts - oldScript))
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(message = error.message ?: "Unknown error") }
 
 	override fun saveScript(script: ScriptsRepository.Script): ScriptsRepository.WriteScriptResult =
 		runCatching {
-			writeScriptsToFile(listOf(script) + getScripts().scripts)
-			ScriptsRepository.WriteScriptResult.Success
-		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.SaveError(throwable = error) }
+			ScriptsRepository.WriteScriptResult.Success(writeScriptsToFile(listOf(script) + getScripts().scripts))
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.SaveError(message = error.message ?: "Unknown error") }
 
 	override fun removeScript(script: ScriptsRepository.Script): ScriptsRepository.WriteScriptResult =
 		runCatching {
-			writeScriptsToFile(getScripts().scripts - script)
-			ScriptsRepository.WriteScriptResult.Success
-		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.RemoveError(throwable = error) }
+			ScriptsRepository.WriteScriptResult.Success(writeScriptsToFile(getScripts().scripts - script))
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.RemoveError(message = error.message ?: "Unknown error") }
 
 	override fun getScriptFile() = scriptFile
 

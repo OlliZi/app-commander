@@ -359,6 +359,7 @@ class EditScriptScreenTest {
 							executeScriptUseCase = executeScriptUseCaseMock,
 							saveUserScriptUseCase = saveUserScriptUseCaseMock,
 							removeUserScriptUseCase = removeUserScriptUseCaseMock,
+							saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
 							mainDispatcher = Dispatchers.Unconfined,
 							ioDispatcher = Dispatchers.Unconfined,
 							scriptKey = scriptKey,

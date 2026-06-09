@@ -401,7 +401,7 @@ class ScriptsRepositoryImplTest {
 			val result = repository.updateScript(script = mockk(), oldScript = mockk())
 
 			assertIs<ScriptsRepository.WriteScriptResult.UpdateError>(result)
-			assertFalse(result.throwable.message.isNullOrBlank())
+			assertFalse(result.message.isBlank())
 		}
 
 	@Test
@@ -415,7 +415,7 @@ class ScriptsRepositoryImplTest {
 			val result = repository.saveScript(script = mockk())
 
 			assertIs<ScriptsRepository.WriteScriptResult.SaveError>(result)
-			assertFalse(result.throwable.message.isNullOrBlank())
+			assertFalse(result.message.isBlank())
 		}
 
 	@Test
@@ -429,6 +429,6 @@ class ScriptsRepositoryImplTest {
 			val result = repository.removeScript(script = mockk())
 
 			assertIs<ScriptsRepository.WriteScriptResult.RemoveError>(result)
-			assertFalse(result.throwable.message.isNullOrBlank())
+			assertFalse(result.message.isBlank())
 		}
 }

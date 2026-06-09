@@ -41,18 +41,20 @@ interface ScriptsRepository {
 	}
 
 	sealed interface WriteScriptResult {
-		data object Success : WriteScriptResult
+		data class Success(
+			val result: Unit,
+		) : WriteScriptResult
 
 		data class UpdateError(
-			val throwable: Throwable,
+			val message: String,
 		) : WriteScriptResult
 
 		data class SaveError(
-			val throwable: Throwable,
+			val message: String,
 		) : WriteScriptResult
 
 		data class RemoveError(
-			val throwable: Throwable,
+			val message: String,
 		) : WriteScriptResult
 	}
 

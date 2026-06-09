@@ -131,13 +131,16 @@ class RunFileBackupUseCaseTest {
 			assertIs<RunFileBackupUseCase.Result.NotEnoughDiskSpaceInBackupDirectory>(result2)
 
 			assertEquals(
-				"There is not enough disk space for backup. Available: 4 MB. Your maximum allowed: 3 MB.",
+				"Not enough disk space.",
 				result2.message,
 			)
 
+			assertEquals(4, result2.diskSpace)
+			assertEquals(3, result2.maxMB)
+
 			verify {
 				addLoggingUseCaseMock.invoke(
-					"Error backup scripts file: There is not enough disk space for backup. Available: 4 MB. Your maximum allowed: 3 MB.",
+					"Error backup scripts file: Not enough disk space.",
 				)
 			}
 		}
@@ -151,13 +154,13 @@ class RunFileBackupUseCaseTest {
 
 			assertIs<RunFileBackupUseCase.Result.CannotCreateBackupDirectory>(result)
 			assertEquals(
-				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+				"Cannot create backup directory.",
 				result.message,
 			)
 
 			verify {
 				addLoggingUseCaseMock.invoke(
-					"Error backup scripts file: Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+					"Error backup scripts file: Cannot create backup directory.",
 				)
 			}
 		}
@@ -176,7 +179,7 @@ class RunFileBackupUseCaseTest {
 
 			assertIs<RunFileBackupUseCase.Result.UnknownError>(result)
 			assertEquals(
-				"An error occurred: test error",
+				"test error",
 				result.message,
 			)
 
@@ -198,13 +201,13 @@ class RunFileBackupUseCaseTest {
 
 			assertIs<RunFileBackupUseCase.Result.CannotCreateBackupDirectory>(result)
 			assertEquals(
-				"Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+				"Cannot create backup directory.",
 				result.message,
 			)
 
 			verify {
 				addLoggingUseCaseMock.invoke(
-					"Error backup scripts file: Cannot create backup directory. Please check your home-directory (~/.app_commander/backups).",
+					"Error backup scripts file: Cannot create backup directory.",
 				)
 			}
 		}

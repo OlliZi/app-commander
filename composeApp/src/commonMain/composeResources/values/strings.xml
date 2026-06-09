@@ -45,6 +45,13 @@
     <string name="edit_action_abort">Close</string>
     <string name="edit_confirmation_remove">Are your sure you want to remove this script?</string>
     <string name="edit_confirmation_change">You have changes in your script. Are you sure you want to leave?</string>
+    <string name="edit_error_cannot_create_backup_directory">Cannot create backup directory. Please check your home-directory (~/.app_commander/backups). Error is: %1$s</string>
+    <string name="edit_error_cannot_create_backup_file">Cannot create backup directory. Error is: %1$s</string>
+    <string name="edit_error_not_enough_disk_space_in_backup_directory">Not enough disk space. Available: %1$s MB. Your maximum allowed: %2$s MB.</string>
+    <string name="edit_error_unknown_error">Error is: %1$s</string>
+    <string name="edit_error_remove_script">Error in removing the script. Error is: %1$s</string>
+    <string name="edit_error_save_script">Error in saving the script. Error is: %1$s</string>
+    <string name="edit_error_update_script">Error in updating the script. Error is: %1$s</string>
 
     <string name="confirmation_yes">Yes</string>
     <string name="confirmation_no">No</string>
