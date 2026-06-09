@@ -7,7 +7,10 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_error_cannot_create_backup_directory
 import de.joz.appcommander.resources.edit_error_cannot_create_backup_file
 import de.joz.appcommander.resources.edit_error_not_enough_disk_space_in_backup_directory
+import de.joz.appcommander.resources.edit_error_remove_script
+import de.joz.appcommander.resources.edit_error_save_script
 import de.joz.appcommander.resources.edit_error_unknown_error
+import de.joz.appcommander.resources.edit_error_update_script
 import de.joz.appcommander.ui.misc.ErrorStringResource
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -102,6 +105,39 @@ class SaveUserScriptUseCaseResultMapperTest {
 					maxMB = 3,
 					diskSpace = 10,
 				),
+			).first(),
+		)
+	}
+
+	@Test
+	fun `WriteScriptResult - should map strings in case of error to some list`() {
+		assertEquals(
+			ErrorStringResource(
+				stringResource = Res.string.edit_error_save_script,
+				errorSubstitutions = listOf("foo"),
+			),
+			mapError(
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.SaveError("foo"),
+			).first(),
+		)
+
+		assertEquals(
+			ErrorStringResource(
+				stringResource = Res.string.edit_error_update_script,
+				errorSubstitutions = listOf("foo"),
+			),
+			mapError(
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.UpdateError("foo"),
+			).first(),
+		)
+
+		assertEquals(
+			ErrorStringResource(
+				stringResource = Res.string.edit_error_remove_script,
+				errorSubstitutions = listOf("foo"),
+			),
+			mapError(
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.RemoveError("foo"),
 			).first(),
 		)
 	}
