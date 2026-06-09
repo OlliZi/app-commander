@@ -6,7 +6,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -120,7 +119,8 @@ class SaveUserScriptUseCaseTest {
 				scriptKey = null,
 			)
 
-			assertIs<SaveUserScriptUseCase.Result.Success>(result)
+			assertNull(result.backupMessage)
+			assertNull(result.writeScriptMessage)
 		}
 
 	@Test
@@ -148,7 +148,6 @@ class SaveUserScriptUseCaseTest {
 				scriptKey = null,
 			)
 
-			assertIs<SaveUserScriptUseCase.Result.Error>(result)
 			assertNotNull(result.backupMessage)
 			assertNotNull(result.writeScriptMessage)
 		}
@@ -178,9 +177,8 @@ class SaveUserScriptUseCaseTest {
 				scriptKey = null,
 			)
 
-			assertIs<SaveUserScriptUseCase.Result.Error>(result)
 			assertNotNull(result.backupMessage)
-			assertNull(result.writeScriptMessage)
+			assertNotNull(result.writeScriptMessage)
 		}
 
 	@Test
@@ -208,7 +206,6 @@ class SaveUserScriptUseCaseTest {
 				scriptKey = null,
 			)
 
-			assertIs<SaveUserScriptUseCase.Result.Error>(result)
 			assertNull(result.backupMessage)
 			assertNotNull(result.writeScriptMessage)
 		}

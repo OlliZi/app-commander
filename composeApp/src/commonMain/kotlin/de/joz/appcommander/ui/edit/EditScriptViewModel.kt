@@ -11,7 +11,7 @@ import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
-import de.joz.appcommander.ui.misc.ErrorStringResource
+import de.joz.appcommander.ui.misc.TypedStringResource
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -157,11 +157,12 @@ class EditScriptViewModel(
 			)
 
 			val errorMessages = saveUserScriptUseCaseResultMapper(result = result)
+
+			scriptKey = getScriptIdUseCase(scriptToSave)
+
 			_uiState.update { oldState ->
 				oldState.copy(errorMessages = errorMessages)
 			}
-
-			scriptKey = getScriptIdUseCase(scriptToSave)
 
 			if (errorMessages.isEmpty()) {
 				viewModelScope.launch(mainDispatcher) {
@@ -229,7 +230,7 @@ class EditScriptViewModel(
 	data class UiState(
 		val scriptChanged: Boolean = false,
 		val scriptUiState: ScriptUiState = ScriptUiState(),
-		val errorMessages: List<ErrorStringResource> = emptyList(),
+		val errorMessages: List<TypedStringResource> = emptyList(),
 	)
 
 	data class ScriptUiState(

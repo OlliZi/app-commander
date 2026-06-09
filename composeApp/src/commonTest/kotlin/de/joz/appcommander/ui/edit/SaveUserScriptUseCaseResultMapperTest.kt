@@ -11,7 +11,9 @@ import de.joz.appcommander.resources.edit_error_remove_script
 import de.joz.appcommander.resources.edit_error_save_script
 import de.joz.appcommander.resources.edit_error_unknown_error
 import de.joz.appcommander.resources.edit_error_update_script
-import de.joz.appcommander.ui.misc.ErrorStringResource
+import de.joz.appcommander.resources.edit_success_save_script
+import de.joz.appcommander.ui.misc.HintType
+import de.joz.appcommander.ui.misc.TypedStringResource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -21,11 +23,10 @@ class SaveUserScriptUseCaseResultMapperTest {
 
 	@Test
 	fun `should map strings in case of success to empty list`() {
-		assertTrue(mapper.invoke(SaveUserScriptUseCase.Result.Success).isEmpty())
 		assertTrue(
 			mapper
 				.invoke(
-					SaveUserScriptUseCase.Result.Error(
+					SaveUserScriptUseCase.Result(
 						backupMessage = null,
 						writeScriptMessage = null,
 					),
@@ -35,29 +36,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 		assertTrue(
 			mapper
 				.invoke(
-					SaveUserScriptUseCase.Result.Error(
+					SaveUserScriptUseCase.Result(
 						backupMessage = RunFileBackupUseCase.Result.Success,
 						writeScriptMessage = null,
-					),
-				).isEmpty(),
-		)
-
-		assertTrue(
-			mapper
-				.invoke(
-					SaveUserScriptUseCase.Result.Error(
-						backupMessage = null,
-						writeScriptMessage = ScriptsRepository.WriteScriptResult.Success(Unit),
-					),
-				).isEmpty(),
-		)
-
-		assertTrue(
-			mapper
-				.invoke(
-					SaveUserScriptUseCase.Result.Error(
-						backupMessage = RunFileBackupUseCase.Result.Success,
-						writeScriptMessage = ScriptsRepository.WriteScriptResult.Success(Unit),
 					),
 				).isEmpty(),
 		)
@@ -66,9 +47,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 	@Test
 	fun `RunFileBackupUseCase - should map strings in case of error to some list`() {
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_unknown_error,
-				errorSubstitutions = listOf("foo"),
+				substitutions = listOf("foo"),
 			),
 			mapError(
 				backupMessage = RunFileBackupUseCase.Result.UnknownError("foo"),
@@ -76,9 +57,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 		)
 
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_cannot_create_backup_file,
-				errorSubstitutions = listOf("foo"),
+				substitutions = listOf("foo"),
 			),
 			mapError(
 				backupMessage = RunFileBackupUseCase.Result.CannotCreateBackupFile("foo"),
@@ -86,9 +67,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 		)
 
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_cannot_create_backup_directory,
-				errorSubstitutions = listOf("foo"),
+				substitutions = listOf("foo"),
 			),
 			mapError(
 				backupMessage = RunFileBackupUseCase.Result.CannotCreateBackupDirectory("foo"),
@@ -96,9 +77,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 		)
 
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_not_enough_disk_space_in_backup_directory,
-				errorSubstitutions = listOf("10", "3"),
+				substitutions = listOf("10", "3"),
 			),
 			mapError(
 				backupMessage = RunFileBackupUseCase.Result.NotEnoughDiskSpaceInBackupDirectory(
@@ -112,9 +93,20 @@ class SaveUserScriptUseCaseResultMapperTest {
 	@Test
 	fun `WriteScriptResult - should map strings in case of error to some list`() {
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
+				stringResource = Res.string.edit_success_save_script,
+				substitutions = emptyList(),
+				hintType = HintType.SUCCESS,
+			),
+			mapError(
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.Success(Unit),
+			).first(),
+		)
+
+		assertEquals(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_save_script,
-				errorSubstitutions = listOf("foo"),
+				substitutions = listOf("foo"),
 			),
 			mapError(
 				writeScriptMessage = ScriptsRepository.WriteScriptResult.SaveError("foo"),
@@ -122,9 +114,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 		)
 
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_update_script,
-				errorSubstitutions = listOf("foo"),
+				substitutions = listOf("foo"),
 			),
 			mapError(
 				writeScriptMessage = ScriptsRepository.WriteScriptResult.UpdateError("foo"),
@@ -132,9 +124,9 @@ class SaveUserScriptUseCaseResultMapperTest {
 		)
 
 		assertEquals(
-			ErrorStringResource(
+			TypedStringResource(
 				stringResource = Res.string.edit_error_remove_script,
-				errorSubstitutions = listOf("foo"),
+				substitutions = listOf("foo"),
 			),
 			mapError(
 				writeScriptMessage = ScriptsRepository.WriteScriptResult.RemoveError("foo"),
@@ -146,13 +138,13 @@ class SaveUserScriptUseCaseResultMapperTest {
 	fun `Mixed - should map strings in case of error to some list`() {
 		assertEquals(
 			listOf(
-				ErrorStringResource(
-					stringResource = Res.string.edit_error_cannot_create_backup_directory,
-					errorSubstitutions = listOf("bar"),
-				),
-				ErrorStringResource(
+				TypedStringResource(
 					stringResource = Res.string.edit_error_save_script,
-					errorSubstitutions = listOf("foo"),
+					substitutions = listOf("foo"),
+				),
+				TypedStringResource(
+					stringResource = Res.string.edit_error_cannot_create_backup_directory,
+					substitutions = listOf("bar"),
 				),
 			),
 			mapError(
@@ -163,13 +155,13 @@ class SaveUserScriptUseCaseResultMapperTest {
 
 		assertEquals(
 			listOf(
-				ErrorStringResource(
-					stringResource = Res.string.edit_error_cannot_create_backup_file,
-					errorSubstitutions = listOf("bar"),
-				),
-				ErrorStringResource(
+				TypedStringResource(
 					stringResource = Res.string.edit_error_update_script,
-					errorSubstitutions = listOf("foo"),
+					substitutions = listOf("foo"),
+				),
+				TypedStringResource(
+					stringResource = Res.string.edit_error_cannot_create_backup_file,
+					substitutions = listOf("bar"),
 				),
 			),
 			mapError(
@@ -180,18 +172,51 @@ class SaveUserScriptUseCaseResultMapperTest {
 
 		assertEquals(
 			listOf(
-				ErrorStringResource(
-					stringResource = Res.string.edit_error_unknown_error,
-					errorSubstitutions = listOf("bar"),
-				),
-				ErrorStringResource(
+				TypedStringResource(
 					stringResource = Res.string.edit_error_remove_script,
-					errorSubstitutions = listOf("foo"),
+					substitutions = listOf("foo"),
+				),
+				TypedStringResource(
+					stringResource = Res.string.edit_error_unknown_error,
+					substitutions = listOf("bar"),
 				),
 			),
 			mapError(
 				backupMessage = RunFileBackupUseCase.Result.UnknownError("bar"),
 				writeScriptMessage = ScriptsRepository.WriteScriptResult.RemoveError("foo"),
+			),
+		)
+
+		assertEquals(
+			listOf(
+				TypedStringResource(
+					stringResource = Res.string.edit_success_save_script,
+					substitutions = emptyList(),
+					hintType = HintType.SUCCESS,
+				),
+			),
+			mapError(
+				backupMessage = RunFileBackupUseCase.Result.Success,
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.Success(Unit),
+			),
+		)
+
+		assertEquals(
+			listOf(
+				TypedStringResource(
+					stringResource = Res.string.edit_success_save_script,
+					substitutions = emptyList(),
+					hintType = HintType.SUCCESS,
+				),
+				TypedStringResource(
+					stringResource = Res.string.edit_error_cannot_create_backup_directory,
+					substitutions = listOf("foo"),
+					hintType = HintType.ERROR,
+				),
+			),
+			mapError(
+				backupMessage = RunFileBackupUseCase.Result.CannotCreateBackupDirectory("foo"),
+				writeScriptMessage = ScriptsRepository.WriteScriptResult.Success(Unit),
 			),
 		)
 	}
@@ -200,7 +225,7 @@ class SaveUserScriptUseCaseResultMapperTest {
 		backupMessage: RunFileBackupUseCase.Result? = null,
 		writeScriptMessage: ScriptsRepository.WriteScriptResult? = null,
 	) = mapper(
-		result = SaveUserScriptUseCase.Result.Error(
+		result = SaveUserScriptUseCase.Result(
 			backupMessage = backupMessage,
 			writeScriptMessage = writeScriptMessage,
 		),

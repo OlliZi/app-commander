@@ -38,6 +38,7 @@ import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
 import de.joz.appcommander.ui.misc.ConfirmationData
 import de.joz.appcommander.ui.misc.DevicesBar
+import de.joz.appcommander.ui.misc.HintType
 import de.joz.appcommander.ui.misc.MultiScriptInput
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.SectionDivider
@@ -45,6 +46,7 @@ import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
+import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -140,13 +142,18 @@ internal fun EditScriptContent(
 			AnimatedVisibility(
 				visible = uiState.errorMessages.isNotEmpty(),
 			) {
-				Column {
+				Column(
+					verticalArrangement = Arrangement.spacedBy(8.dp),
+				) {
 					uiState.errorMessages.forEach {
 						TextLabel(
 							modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
-							text = stringResource(it.stringResource, *it.errorSubstitutions.toTypedArray()),
+							text = stringResource(it.stringResource, *it.substitutions.toTypedArray()),
 							textLabelType = TextLabelType.BodyLarge,
-							textColor = Color.Red,
+							textColor = when (it.hintType) {
+								HintType.SUCCESS -> Color.Green.lighter(factor = 0.75f)
+								HintType.ERROR -> Color.Red
+							},
 						)
 					}
 					SectionDivider()

@@ -15,31 +15,24 @@ class SaveUserScriptUseCase(
 		val backupResult = runFileBackupUseCase()
 
 		val oldScript = getUserScriptByKeyUseCase(scriptKey)
+
 		val writeScriptResult = if (oldScript != null) {
 			scriptsRepository.updateScript(script = script, oldScript = oldScript)
 		} else {
 			scriptsRepository.saveScript(script = script)
 		}
 
-		val isBackupResultSuccess = backupResult is RunFileBackupUseCase.Result.Success
-		val isWriteScriptResultSuccess = writeScriptResult is ScriptsRepository.WriteScriptResult.Success
+		val isBackupSuccess = backupResult is RunFileBackupUseCase.Result.Success
+		val writeScriptResultSuccess = writeScriptResult is ScriptsRepository.WriteScriptResult.Success
 
-		return if (isBackupResultSuccess && isWriteScriptResultSuccess) {
-			Result.Success
-		} else {
-			Result.Error(
-				backupMessage = if (isBackupResultSuccess) null else backupResult,
-				writeScriptMessage = if (isWriteScriptResultSuccess) null else writeScriptResult,
-			)
-		}
+		return Result(
+			backupMessage = if (isBackupSuccess) null else backupResult,
+			writeScriptMessage = if (isBackupSuccess && writeScriptResultSuccess) null else writeScriptResult,
+		)
 	}
 
-	sealed interface Result {
-		data object Success : Result
-
-		data class Error(
-			val backupMessage: RunFileBackupUseCase.Result?,
-			val writeScriptMessage: ScriptsRepository.WriteScriptResult?,
-		) : Result
-	}
+	data class Result(
+		val backupMessage: RunFileBackupUseCase.Result?,
+		val writeScriptMessage: ScriptsRepository.WriteScriptResult?,
+	)
 }
