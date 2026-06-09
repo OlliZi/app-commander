@@ -11,6 +11,7 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -341,7 +342,9 @@ class ScriptsRepositoryImplTest {
 				platform = ScriptsRepository.Platform.IOS,
 			)
 
-			repository.saveScript(script = newScript)
+			val result = repository.saveScript(script = newScript)
+
+			assertIs<ScriptsRepository.WriteScriptResult.Success>(result)
 
 			assertEquals(4, repository.getScripts().scripts.size)
 			assertEquals(newScript, repository.getScripts().scripts.first())
@@ -358,8 +361,9 @@ class ScriptsRepositoryImplTest {
 			val scripts = repository.getScripts().scripts
 			val scriptToRemove = scripts.first()
 
-			repository.removeScript(script = scriptToRemove)
+			val result = repository.removeScript(script = scriptToRemove)
 
+			assertIs<ScriptsRepository.WriteScriptResult.Success>(result)
 			assertEquals(2, repository.getScripts().scripts.size)
 			assertFalse(repository.getScripts().scripts.contains(scriptToRemove))
 		}
@@ -374,9 +378,11 @@ class ScriptsRepositoryImplTest {
 
 			val scripts = repository.getScripts()
 			val oldScript = scripts.scripts.first()
-
 			val scriptToUpdate = oldScript.copy(label = "bar")
-			repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
+
+			val result = repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
+
+			assertIs<ScriptsRepository.WriteScriptResult.Success>(result)
 
 			val updatedScripts = repository.getScripts()
 			assertEquals(3, updatedScripts.scripts.size)

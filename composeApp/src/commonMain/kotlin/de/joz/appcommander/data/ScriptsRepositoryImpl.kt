@@ -20,14 +20,12 @@ class ScriptsRepositoryImpl(
 		ignoreUnknownKeys = true
 	}
 
-	override fun getScripts(): JsonParseResult {
-		val jsonFile = File(scriptFile)
-
-		if (!jsonFile.exists()) {
-			jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
-		}
-
-		return runCatching {
+	override fun getScripts(): JsonParseResult =
+		runCatching {
+			val jsonFile = File(scriptFile)
+			if (!jsonFile.exists()) {
+				jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
+			}
 			val scriptsFromFile = jsonFile.readText()
 			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
 			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
@@ -41,7 +39,6 @@ class ScriptsRepositoryImpl(
 				parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
 			)
 		}
-	}
 
 	override fun openScriptFile() {
 		runCatching {
@@ -58,17 +55,23 @@ class ScriptsRepositoryImpl(
 	override fun updateScript(
 		script: ScriptsRepository.Script,
 		oldScript: ScriptsRepository.Script,
-	) {
-		writeScriptsToFile(listOf(script) + getScripts().scripts - oldScript)
-	}
+	): ScriptsRepository.WriteScriptResult =
+		runCatching {
+			writeScriptsToFile(listOf(script) + getScripts().scripts - oldScript)
+			ScriptsRepository.WriteScriptResult.Success
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(throwable = error) }
 
-	override fun saveScript(script: ScriptsRepository.Script) {
-		writeScriptsToFile(listOf(script) + getScripts().scripts)
-	}
+	override fun saveScript(script: ScriptsRepository.Script): ScriptsRepository.WriteScriptResult =
+		runCatching {
+			writeScriptsToFile(listOf(script) + getScripts().scripts)
+			ScriptsRepository.WriteScriptResult.Success
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(throwable = error) }
 
-	override fun removeScript(script: ScriptsRepository.Script) {
-		writeScriptsToFile(getScripts().scripts - script)
-	}
+	override fun removeScript(script: ScriptsRepository.Script): ScriptsRepository.WriteScriptResult =
+		runCatching {
+			writeScriptsToFile(getScripts().scripts - script)
+			ScriptsRepository.WriteScriptResult.Success
+		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(throwable = error) }
 
 	override fun getScriptFile() = scriptFile
 

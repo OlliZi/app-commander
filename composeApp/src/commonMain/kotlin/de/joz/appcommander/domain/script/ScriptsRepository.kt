@@ -10,11 +10,11 @@ interface ScriptsRepository {
 	fun updateScript(
 		script: Script,
 		oldScript: Script,
-	)
+	): WriteScriptResult
 
-	fun saveScript(script: Script)
+	fun saveScript(script: Script): WriteScriptResult
 
-	fun removeScript(script: Script)
+	fun removeScript(script: Script): WriteScriptResult
 
 	fun getScriptFile(): String
 
@@ -38,6 +38,22 @@ interface ScriptsRepository {
 		data object MultiScriptsHint : ParsingMetaData
 
 		data object OldScriptFieldHint : ParsingMetaData
+	}
+
+	sealed interface WriteScriptResult {
+		data object Success : WriteScriptResult
+
+		data class UpdateError(
+			val throwable: Throwable,
+		) : WriteScriptResult
+
+		data class SaveError(
+			val throwable: Throwable,
+		) : WriteScriptResult
+
+		data class RemoveError(
+			val throwable: Throwable,
+		) : WriteScriptResult
 	}
 
 	enum class Platform(
