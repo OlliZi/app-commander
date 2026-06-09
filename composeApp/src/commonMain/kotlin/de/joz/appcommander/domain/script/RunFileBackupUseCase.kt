@@ -109,7 +109,9 @@ class RunFileBackupUseCase(
 		data class NotEnoughDiskSpaceInBackupDirectory(
 			val diskSpace: Long,
 			val maxMB: Int,
-		) : Exception("There is not enough disk space for backup. Available: $diskSpace MB. Your maximum allowed: $maxMB MB"),
+		) : Exception(
+				"There is not enough disk space for backup. Available: $diskSpace MB. Your maximum allowed: $maxMB MB.",
+			),
 			Result
 
 		data class UnknownError(
