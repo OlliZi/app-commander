@@ -192,6 +192,34 @@ class RunFileBackupUseCaseTest {
 			}
 		}
 
+	@Test
+	fun `should log error when backup file cannot created`() =
+		runTest {
+			every {
+				scriptsRepositoryMock.getScriptFile()
+			} returnsMany listOf(testFile.absolutePath, "error")
+			coEvery {
+				getPreferenceUseCaseMock.get(
+					STORE_KEY_FOR_BACKUP_STORAGE,
+					any<Int>(),
+				)
+			} returns 3
+
+			val result = createUseCase().invoke()
+
+			assertIs<RunFileBackupUseCase.Result.CannotCreateBackupFile>(result)
+			assertEquals(
+				"error: The source file doesn't exist.",
+				result.message,
+			)
+
+			verify {
+				addLoggingUseCaseMock.invoke(
+					"Error backup scripts file: error: The source file doesn't exist.",
+				)
+			}
+		}
+
 	private fun writeBigFile(
 		mb: Int,
 		testFile: File,
