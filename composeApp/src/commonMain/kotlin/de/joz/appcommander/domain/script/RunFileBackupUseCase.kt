@@ -46,7 +46,7 @@ class RunFileBackupUseCase(
 	): Boolean =
 		when (backupStrategy) {
 			is BackupStrategy.MaximumStorage -> {
-				val filesMB = backupDirectory.listFiles()?.sumOf { it.toMB() } ?: 0
+				val filesMB = backupDirectory.walkTopDown().sumOf { it.toMB() }
 				val currentFileMB = currentFile().toMB()
 				val mb = filesMB + currentFileMB
 
@@ -68,9 +68,11 @@ class RunFileBackupUseCase(
 	private fun createBackupFile() {
 		runCatching {
 			val currentFile = currentFile()
-			val dateFileExtension = SimpleDateFormat("_yyyy_MM_dd_HH_mm.'${currentFile.extension}'").format(Date())
+			val date = Date()
+			val dateFileExtension = SimpleDateFormat("_HH_mm.'${currentFile.extension}'").format(date)
+			val subDirectoryName = SimpleDateFormat("yyyy_MM_dd").format(date)
 			val scriptFileName = currentFile.nameWithoutExtension + dateFileExtension
-			val backupDirectory = getBackupDirectory()
+			val backupDirectory = File(getBackupDirectory(), subDirectoryName)
 			backupDirectory.mkdirs()
 			currentFile.copyTo(File(backupDirectory, scriptFileName), overwrite = true)
 		}.getOrElse { error ->

@@ -67,10 +67,17 @@ class RunFileBackupUseCaseTest {
 
 			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
-			assertEquals(1, getBackupDirectory()?.listFiles().orEmpty().size)
+
+			val files = getBackupDirectory()
+				?.walkTopDown()
+				.orEmpty()
+				.filter { it.isFile }
+				.toList()
+
+			assertEquals(1, files.size)
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()?.listFiles()?.first()?.readText(),
+				files.first().readText(),
 			)
 		}
 
@@ -108,20 +115,25 @@ class RunFileBackupUseCaseTest {
 
 			val result1 = useCase.invoke()
 
+			val files = getBackupDirectory()
+				?.walkTopDown()
+				.orEmpty()
+				.filter { it.isFile }
+				.toList()
 			assertIs<RunFileBackupUseCase.Result.Success>(result1)
 			assertEquals(contentBefore, testFile.readText())
-			assertEquals(3, getBackupDirectory()?.listFiles().orEmpty().size)
+			assertEquals(3, files.count())
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()?.listFiles()?.get(0)?.readText(),
+				files[0].readText(),
 			)
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()?.listFiles()?.get(1)?.readText(),
+				files[1].readText(),
 			)
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()?.listFiles()?.get(2)?.readText(),
+				files[2].readText(),
 			)
 
 			val result2 = useCase.invoke()
