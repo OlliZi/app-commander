@@ -47,7 +47,7 @@ class RunFileBackupUseCaseTest {
 
 			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
-			assertTrue(getBackupDirectory()?.listFiles().orEmpty().isEmpty())
+			assertTrue(getAllFilesFromBackupDirectory().isEmpty())
 			coVerify(exactly = 0) { addLoggingUseCaseMock.invoke(any()) }
 		}
 
@@ -68,12 +68,7 @@ class RunFileBackupUseCaseTest {
 			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
 
-			val files = getBackupDirectory()
-				?.walkTopDown()
-				.orEmpty()
-				.filter { it.isFile }
-				.toList()
-
+			val files = getAllFilesFromBackupDirectory()
 			assertEquals(1, files.size)
 			assertEquals(
 				contentBefore,
@@ -97,29 +92,25 @@ class RunFileBackupUseCaseTest {
 			val contentBefore = testFile.readText()
 
 			createBackupDirectory()
-			assertEquals(0, getBackupDirectory()?.listFiles().orEmpty().size)
+			assertEquals(0, getAllFilesFromBackupDirectory().size)
 
 			write1MBFile(File(getBackupDirectory(), "test_file1.json"))
 			write1MBFile(File(getBackupDirectory(), "test_file2.json"))
 
 			assertEquals(contentBefore, testFile.readText())
-			assertEquals(2, getBackupDirectory()?.listFiles().orEmpty().size)
+			assertEquals(2, getAllFilesFromBackupDirectory().size)
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()?.listFiles()?.get(0)?.readText(),
+				getAllFilesFromBackupDirectory()[0].readText(),
 			)
 			assertEquals(
 				contentBefore,
-				getBackupDirectory()?.listFiles()?.get(1)?.readText(),
+				getAllFilesFromBackupDirectory()[1].readText(),
 			)
 
 			val result1 = useCase.invoke()
 
-			val files = getBackupDirectory()
-				?.walkTopDown()
-				.orEmpty()
-				.filter { it.isFile }
-				.toList()
+			val files = getAllFilesFromBackupDirectory()
 			assertIs<RunFileBackupUseCase.Result.Success>(result1)
 			assertEquals(contentBefore, testFile.readText())
 			assertEquals(3, files.count())
@@ -139,7 +130,7 @@ class RunFileBackupUseCaseTest {
 			val result2 = useCase.invoke()
 
 			assertEquals(contentBefore, testFile.readText())
-			assertEquals(3, getBackupDirectory()?.listFiles().orEmpty().size)
+			assertEquals(3, getAllFilesFromBackupDirectory().size)
 			assertIs<RunFileBackupUseCase.Result.NotEnoughDiskSpaceInBackupDirectory>(result2)
 
 			assertEquals(
@@ -261,6 +252,13 @@ class RunFileBackupUseCaseTest {
 		testFile.parentFile
 			.listFiles()
 			.firstOrNull { it.isDirectory && it.nameWithoutExtension == RunFileBackupUseCase.BACKUP_DIRECTORY }
+
+	private fun getAllFilesFromBackupDirectory() =
+		getBackupDirectory()
+			?.walkTopDown()
+			.orEmpty()
+			.filter { it.isFile }
+			.toList()
 
 	private fun createBackupDirectory() {
 		File(testFile.parentFile, RunFileBackupUseCase.BACKUP_DIRECTORY).mkdirs()
