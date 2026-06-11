@@ -89,7 +89,7 @@ class SaveUserScriptUseCaseResultMapper {
 			is RunFileBackupUseCase.Result.UnknownError -> {
 				TypedStringResource(
 					stringResource = Res.string.edit_error_unknown_error,
-					substitutions = listOf(result.message ?: "Unknown error"),
+					substitutions = listOf(result.message),
 				)
 			}
 

@@ -27,7 +27,7 @@ class RunFileBackupUseCase(
 				is Result.CannotCreateBackupDirectory -> error
 				is Result.CannotCreateBackupFile -> error
 				is Result.NotEnoughDiskSpaceInBackupDirectory -> error
-				else -> Result.UnknownError(error.message)
+				else -> Result.UnknownError(error.message ?: "Unknown error")
 			}
 		}
 
@@ -120,8 +120,8 @@ class RunFileBackupUseCase(
 			Result
 
 		data class UnknownError(
-			override val message: String?,
-		) : Exception(message ?: "Unknown error"),
+			override val message: String,
+		) : Exception(message),
 			Result
 	}
 
