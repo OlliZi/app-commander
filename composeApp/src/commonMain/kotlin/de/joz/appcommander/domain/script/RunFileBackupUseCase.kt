@@ -129,7 +129,7 @@ class RunFileBackupUseCase(
 		data object None : BackupStrategy
 
 		data class MaximumStorage(
-			val maxMB: Int = 50,
+			val maxMB: Int,
 		) : BackupStrategy
 	}
 }
