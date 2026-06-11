@@ -19,6 +19,7 @@ import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
@@ -41,9 +42,11 @@ class EditScriptScreenTest {
 		getScriptIdUseCase = getScriptIdUseCaseMock,
 	)
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
+	private val runFileBackupUseCaseMock: RunFileBackupUseCase = mockk(relaxed = true)
 	private val saveUserScriptUseCaseMock = SaveUserScriptUseCase(
 		scriptsRepository = scriptsRepositoryMock,
 		getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+		runFileBackupUseCase = runFileBackupUseCaseMock,
 	)
 	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
 
@@ -60,6 +63,94 @@ class EditScriptScreenTest {
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "default_edit",
+			)
+		}
+	}
+
+	@Test
+	fun `show error messages in ui when script can saved but backup fails`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			coEvery {
+				runFileBackupUseCaseMock.invoke()
+			} returns RunFileBackupUseCase.Result.CannotCreateBackupFile("cannot create backup file")
+			coEvery {
+				scriptsRepositoryMock.updateScript(any(), any())
+			} returns ScriptsRepository.WriteScriptResult.Success(Unit)
+
+			onNodeWithText(text = "Save script").performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "error_messages_1",
+			)
+		}
+	}
+
+	@Test
+	fun `show error messages in ui when script cannot saved but backup was successfully`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			coEvery {
+				runFileBackupUseCaseMock.invoke()
+			} returns RunFileBackupUseCase.Result.Success
+			coEvery {
+				scriptsRepositoryMock.updateScript(any(), any())
+			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
+
+			onNodeWithText(text = "Save script").performClick()
+			waitUntilAtLeastOneExists(hasText(text = testScript.label))
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "error_messages_2",
+			)
+		}
+	}
+
+	@Test
+	fun `show error messages in ui when script cannot saved and backup fails`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "Toggle Dark Mode On and Off",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			coEvery {
+				runFileBackupUseCaseMock.invoke()
+			} returns RunFileBackupUseCase.Result.UnknownError("unknown error")
+			coEvery {
+				scriptsRepositoryMock.updateScript(any(), any())
+			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
+
+			onNodeWithText(text = "Save script").performClick()
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "error_messages_3",
 			)
 		}
 	}
@@ -356,6 +447,7 @@ class EditScriptScreenTest {
 							executeScriptUseCase = executeScriptUseCaseMock,
 							saveUserScriptUseCase = saveUserScriptUseCaseMock,
 							removeUserScriptUseCase = removeUserScriptUseCaseMock,
+							saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
 							mainDispatcher = Dispatchers.Unconfined,
 							ioDispatcher = Dispatchers.Unconfined,
 							scriptKey = scriptKey,

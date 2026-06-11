@@ -5,8 +5,10 @@ import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -222,17 +224,49 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should save script when event 'OnSaveScript' is fired`() =
+	fun `should save script and close screen when event 'OnSaveScript' is fired and there are no error messages`() =
 		runTest {
 			val viewModel = createViewModel()
+
+			coEvery { saveUserScriptUseCaseMock.invoke(any(), null) } returns SaveUserScriptUseCase.Result(
+				backupMessage = null,
+				writeScriptMessage = null,
+			)
 
 			viewModel.onEvent(
 				event = EditScriptViewModel.Event.OnSaveScript,
 			)
 			runCurrent()
 
+			assertTrue(
+				viewModel.uiState.value.errorMessages
+					.isEmpty(),
+			)
 			coVerify { saveUserScriptUseCaseMock.invoke(any(), null) }
 			verify { navControllerMock.navigateUp() }
+		}
+
+	@Test
+	fun `should save script and not close screen when event 'OnSaveScript' is fired and there are some error messages`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			coEvery { saveUserScriptUseCaseMock.invoke(any(), null) } returns SaveUserScriptUseCase.Result(
+				backupMessage = RunFileBackupUseCase.Result.CannotCreateBackupFile("foo"),
+				writeScriptMessage = null,
+			)
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnSaveScript,
+			)
+			runCurrent()
+
+			assertTrue(
+				viewModel.uiState.value.errorMessages
+					.isNotEmpty(),
+			)
+			coVerify { saveUserScriptUseCaseMock.invoke(any(), null) }
+			verify(exactly = 0) { navControllerMock.navigateUp() }
 		}
 
 	@Test
@@ -342,6 +376,7 @@ class EditScriptViewModelTest {
 			removeUserScriptUseCase = removeUserScriptUseCaseMock,
 			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
+			saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
 			mainDispatcher = Dispatchers.Unconfined,
 			ioDispatcher = Dispatchers.Unconfined,
 		)

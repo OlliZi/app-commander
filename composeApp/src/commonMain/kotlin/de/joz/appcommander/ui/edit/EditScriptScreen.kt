@@ -1,8 +1,10 @@
 package de.joz.appcommander.ui.edit
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -35,6 +38,7 @@ import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
 import de.joz.appcommander.ui.misc.ConfirmationData
 import de.joz.appcommander.ui.misc.DevicesBar
+import de.joz.appcommander.ui.misc.HintType
 import de.joz.appcommander.ui.misc.MultiScriptInput
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.SectionDivider
@@ -42,6 +46,7 @@ import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
+import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -134,6 +139,27 @@ internal fun EditScriptContent(
 				.verticalScroll(rememberScrollState()),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
+			AnimatedVisibility(
+				visible = uiState.errorMessages.isNotEmpty(),
+			) {
+				Column(
+					verticalArrangement = Arrangement.spacedBy(8.dp),
+				) {
+					uiState.errorMessages.forEach {
+						TextLabel(
+							modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+							text = stringResource(it.stringResource, *it.substitutions.toTypedArray()),
+							textLabelType = TextLabelType.BodyLarge,
+							textColor = when (it.hintType) {
+								HintType.SUCCESS -> Color.Green.lighter(factor = 0.75f)
+								HintType.ERROR -> Color.Red
+							},
+						)
+					}
+					SectionDivider()
+				}
+			}
+
 			TextLabel(
 				text = stringResource(Res.string.edit_script_name),
 				textLabelType = TextLabelType.BodyLarge,

@@ -384,7 +384,39 @@ class ScriptsScreenTest {
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
-				screenshotName = "json_error",
+				screenshotName = "json_error_invalid_script",
+			)
+		}
+	}
+
+	@Test
+	fun `should error if JSON contains multiple scripts`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(
+					hint = Hint.MultiScripts,
+				),
+			)
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "json_error_multiple_scripts",
+			)
+		}
+	}
+
+	@Test
+	fun `should error if JSON contains an old script field`() {
+		runComposeUiTest {
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(
+					hint = Hint.OldScriptFieldHint,
+				),
+			)
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "json_error_old_script_field",
 			)
 		}
 	}

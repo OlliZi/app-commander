@@ -4,7 +4,9 @@ import androidx.navigation.NavController
 import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.settings_preference_backup_label
 import de.joz.appcommander.resources.settings_preference_show_filter_section
 import de.joz.appcommander.resources.settings_preference_show_logging_section
 import de.joz.appcommander.resources.settings_preference_show_terminal_section
@@ -73,7 +75,7 @@ class SettingsViewModelTest {
 			val uiState = viewModel.uiState.value
 
 			assertEquals(4, uiState.togglePreferences.size)
-			assertEquals(2, uiState.sliderPreferences.size)
+			assertEquals(3, uiState.sliderPreferences.size)
 
 			assertEquals(
 				SettingsViewModel.ToggleItem(
@@ -135,6 +137,19 @@ class SettingsViewModelTest {
 					labelValue = StringRes(Res.string.settings_preference_ui_appearance_system),
 				),
 				uiState.sliderPreferences[1],
+			)
+
+			assertEquals(
+				SettingsViewModel.SliderItem(
+					maximum = 250f,
+					minimum = 0f,
+					steps = 0,
+					sliderValue = 0f,
+					label = Res.string.settings_preference_backup_label,
+					key = RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
+					labelValue = SettingsViewModel.LabelValue.IntRes(0),
+				),
+				uiState.sliderPreferences[2],
 			)
 		}
 

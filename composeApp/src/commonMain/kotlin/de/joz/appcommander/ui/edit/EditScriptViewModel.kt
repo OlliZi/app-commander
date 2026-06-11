@@ -11,6 +11,7 @@ import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.ui.misc.TypedStringResource
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,7 @@ class EditScriptViewModel(
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
 	private val removeUserScriptUseCase: RemoveUserScriptUseCase,
+	private val saveUserScriptUseCaseResultMapper: SaveUserScriptUseCaseResultMapper,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -149,15 +151,25 @@ class EditScriptViewModel(
 	private fun onSaveScript() {
 		viewModelScope.launch(ioDispatcher) {
 			val scriptToSave = _uiState.value.scriptUiState.toScriptsRepositoryScript()
-			saveUserScriptUseCase(
+			val result = saveUserScriptUseCase(
 				script = scriptToSave,
 				scriptKey = scriptKey,
 			)
 
-			scriptKey = getScriptIdUseCase(scriptToSave)
-		}
+			val errorMessages = saveUserScriptUseCaseResultMapper(result = result)
 
-		onNavigateBack()
+			scriptKey = getScriptIdUseCase(scriptToSave)
+
+			_uiState.update { oldState ->
+				oldState.copy(errorMessages = errorMessages)
+			}
+
+			if (errorMessages.isEmpty()) {
+				viewModelScope.launch(mainDispatcher) {
+					onNavigateBack()
+				}
+			}
+		}
 	}
 
 	private fun onRemoveScript() {
@@ -218,6 +230,7 @@ class EditScriptViewModel(
 	data class UiState(
 		val scriptChanged: Boolean = false,
 		val scriptUiState: ScriptUiState = ScriptUiState(),
+		val errorMessages: List<TypedStringResource> = emptyList(),
 	)
 
 	data class ScriptUiState(

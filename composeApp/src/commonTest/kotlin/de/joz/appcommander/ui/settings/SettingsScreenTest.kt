@@ -13,6 +13,7 @@ import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase.Companion.STORE
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_ui_appearance_light
@@ -159,6 +160,22 @@ class SettingsScreenTest {
 				preferencesRepositoryMock.store(
 					key = TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY,
 					value = 5,
+				)
+			}
+		}
+	}
+
+	@Test
+	fun `should change backup value when slider is moved`() {
+		runComposeUiTest {
+			setTestContent()
+
+			onNodeWithTag(RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE).assertIsDisplayed().performClick()
+
+			coVerify {
+				preferencesRepositoryMock.store(
+					key = RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE,
+					value = 125,
 				)
 			}
 		}

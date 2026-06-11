@@ -11,6 +11,7 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -20,9 +21,20 @@ class ScriptsRepositoryImplTest {
 	private val testFile = File("./build", "test.json")
 
 	@AfterTest
-	fun setUp() {
+	fun tearDown() {
 		testFile.delete()
 	}
+
+	@Test
+	fun `should return same script file`() =
+		runTest {
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+
+			assertEquals(testFile.absolutePath, repository.getScriptFile())
+		}
 
 	@Test
 	fun `should return default scripts when file does not exist`() =
@@ -330,7 +342,9 @@ class ScriptsRepositoryImplTest {
 				platform = ScriptsRepository.Platform.IOS,
 			)
 
-			repository.saveScript(script = newScript)
+			val result = repository.saveScript(script = newScript)
+
+			assertIs<ScriptsRepository.WriteScriptResult.Success>(result)
 
 			assertEquals(4, repository.getScripts().scripts.size)
 			assertEquals(newScript, repository.getScripts().scripts.first())
@@ -347,8 +361,9 @@ class ScriptsRepositoryImplTest {
 			val scripts = repository.getScripts().scripts
 			val scriptToRemove = scripts.first()
 
-			repository.removeScript(script = scriptToRemove)
+			val result = repository.removeScript(script = scriptToRemove)
 
+			assertIs<ScriptsRepository.WriteScriptResult.Success>(result)
 			assertEquals(2, repository.getScripts().scripts.size)
 			assertFalse(repository.getScripts().scripts.contains(scriptToRemove))
 		}
@@ -363,13 +378,57 @@ class ScriptsRepositoryImplTest {
 
 			val scripts = repository.getScripts()
 			val oldScript = scripts.scripts.first()
-
 			val scriptToUpdate = oldScript.copy(label = "bar")
-			repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
+
+			val result = repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
+
+			assertIs<ScriptsRepository.WriteScriptResult.Success>(result)
 
 			val updatedScripts = repository.getScripts()
 			assertEquals(3, updatedScripts.scripts.size)
 			assertFalse(updatedScripts.scripts.contains(oldScript))
 			assertTrue(updatedScripts.scripts.contains(scriptToUpdate))
+		}
+
+	@Test
+	fun `should return an error when updating fails`() =
+		runTest {
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+
+			val result = repository.updateScript(script = mockk(), oldScript = mockk())
+
+			assertIs<ScriptsRepository.WriteScriptResult.UpdateError>(result)
+			assertFalse(result.message.isBlank())
+		}
+
+	@Test
+	fun `should return an error when saving fails`() =
+		runTest {
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = testFile.absolutePath,
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+
+			val result = repository.saveScript(script = mockk())
+
+			assertIs<ScriptsRepository.WriteScriptResult.SaveError>(result)
+			assertFalse(result.message.isBlank())
+		}
+
+	@Test
+	fun `should return an error when removing fails`() =
+		runTest {
+			val repository = ScriptsRepositoryImpl(
+				scriptFile = "",
+				addLoggingUseCase = addLoggingUseCaseMock,
+			)
+
+			val result = repository.removeScript(script = mockk())
+
+			assertIs<ScriptsRepository.WriteScriptResult.RemoveError>(result)
+			assertFalse(result.message.isBlank())
 		}
 }
