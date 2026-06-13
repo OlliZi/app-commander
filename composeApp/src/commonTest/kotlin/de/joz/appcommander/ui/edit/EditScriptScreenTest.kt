@@ -228,19 +228,19 @@ class EditScriptScreenTest {
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
-			val removeScript = ScriptsRepository.Script(
+			val script = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			setupData(script = removeScript)
-			setTestContent(scriptKey = removeScript.hashCode())
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
 
 			onNodeWithContentDescription(label = "Execute all scripts").performClick()
 
-			coVerify { executeScriptUseCaseMock(script = removeScript, selectedDevice = "TODO") }
+			coVerify { executeScriptUseCaseMock(script = script, selectedDevice = "") }
 		}
 	}
 
@@ -272,15 +272,15 @@ class EditScriptScreenTest {
 	@Test
 	fun `add a new script when add script button for a script is clicked`() {
 		runComposeUiTest {
-			val removeScript = ScriptsRepository.Script(
+			val addScript = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("script 1", "script 2"),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			setupData(script = removeScript)
-			setTestContent(scriptKey = removeScript.hashCode())
+			setupData(script = addScript)
+			setTestContent(scriptKey = addScript.hashCode())
 
 			onNodeWithText("script 1").isDisplayed()
 			onNodeWithText("script 2").isDisplayed()
@@ -299,15 +299,15 @@ class EditScriptScreenTest {
 	@Test
 	fun `run one script when run button is clicked`() {
 		runComposeUiTest {
-			val removeScript = ScriptsRepository.Script(
+			val script = ScriptsRepository.Script(
 				label = "Test",
 				platform = ScriptsRepository.Platform.DESKTOP,
 				scripts = listOf("echo Hello", "echo world!"),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			setupData(script = removeScript)
-			setTestContent(scriptKey = removeScript.hashCode())
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
 
 			onAllNodes(hasContentDescription("Execute script text")).apply {
 				get(0).performClick()
