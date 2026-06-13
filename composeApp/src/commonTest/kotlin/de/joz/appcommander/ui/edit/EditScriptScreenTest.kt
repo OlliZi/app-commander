@@ -317,19 +317,19 @@ class EditScriptScreenTest {
 			coVerify {
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
-						label = "Test",
+						label = "",
 						scripts = listOf("echo Hello"),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
-					selectedDevice = "TODO",
+					selectedDevice = "",
 				)
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
-						label = "Test",
+						label = "",
 						scripts = listOf("echo world!"),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
-					selectedDevice = "TODO",
+					selectedDevice = "",
 				)
 			}
 		}
