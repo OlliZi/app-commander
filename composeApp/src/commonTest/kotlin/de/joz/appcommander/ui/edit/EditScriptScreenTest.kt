@@ -226,7 +226,6 @@ class EditScriptScreenTest {
 		}
 	}
 
-	// TEST devie selection
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
@@ -248,7 +247,7 @@ class EditScriptScreenTest {
 
 			onNodeWithContentDescription(label = "Execute all scripts").performClick()
 
-			coVerify { executeScriptUseCaseMock(script = script, selectedDevice = "") }
+			coVerify { executeScriptUseCaseMock(script = script, selectedDevice = "id") }
 		}
 	}
 
