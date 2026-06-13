@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.edit
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -330,6 +331,14 @@ class EditScriptViewModelTest {
 				platform = ScriptsRepository.Platform.IOS,
 			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
 
 			val viewModel = createViewModel()
 
@@ -338,18 +347,27 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			coVerify { executeScriptUseCaseMock.invoke(testScript, eq("TODO")) }
+			coVerify { executeScriptUseCaseMock.invoke(script = testScript, selectedDevice = "id 1") }
 		}
 
 	@Test
 	fun `should execute script when event 'OnExecuteSingleScript' is fired`() =
 		runTest {
 			val testScript = ScriptsRepository.Script(
-				label = "label",
+				label = "",
 				scripts = listOf("script 1", "script 2"),
 				platform = ScriptsRepository.Platform.IOS,
 			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
@@ -359,12 +377,12 @@ class EditScriptViewModelTest {
 
 			coVerify {
 				executeScriptUseCaseMock.invoke(
-					ScriptsRepository.Script(
+					script = ScriptsRepository.Script(
 						label = "label",
 						scripts = listOf("script 2"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
-					eq("TODO"),
+					selectedDevice = "id 1",
 				)
 			}
 		}
