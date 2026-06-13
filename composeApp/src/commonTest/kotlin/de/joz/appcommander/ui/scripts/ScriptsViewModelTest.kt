@@ -358,7 +358,7 @@ class ScriptsViewModelTest {
 			coVerify {
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
-						label = "entered by terminal script",
+						label = "",
 						scripts = listOf("echo"),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
@@ -697,7 +697,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val desktop = ScriptsRepository.Platform.DESKTOP
 			val testScript = ScriptsRepository.Script(
-				label = "entered by terminal script",
+				label = "",
 				scripts = listOf("echo"),
 				platform = desktop,
 			)
