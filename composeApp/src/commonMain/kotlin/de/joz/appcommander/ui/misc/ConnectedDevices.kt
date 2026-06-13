@@ -27,6 +27,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun ConnectedDevices(
 	connectedDevices: List<Device>,
+	showHintLabel: Boolean,
 	onDeviceSelect: (Device) -> Unit,
 	onRefreshDevices: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -35,16 +36,18 @@ fun ConnectedDevices(
 		modifier = modifier.fillMaxWidth(),
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		TextLabel(
-			text = stringResource(
-				if (connectedDevices.isNotEmpty()) {
-					Res.string.scripts_hint_devices
-				} else {
-					Res.string.scripts_hint_no_devices
-				},
-			),
-			textLabelType = TextLabelType.BodyLarge,
-		)
+		if (showHintLabel) {
+			TextLabel(
+				text = stringResource(
+					if (connectedDevices.isNotEmpty()) {
+						Res.string.scripts_hint_devices
+					} else {
+						Res.string.scripts_hint_no_devices
+					},
+				),
+				textLabelType = TextLabelType.BodyLarge,
+			)
+		}
 
 		DevicesBar(
 			connectedDevices = connectedDevices,
@@ -52,10 +55,12 @@ fun ConnectedDevices(
 			onRefreshDevices = onRefreshDevices,
 		)
 
-		TextLabel(
-			text = stringResource(Res.string.scripts_hint),
-			textLabelType = TextLabelType.BodySmall,
-		)
+		if (showHintLabel) {
+			TextLabel(
+				text = stringResource(Res.string.scripts_hint),
+				textLabelType = TextLabelType.BodySmall,
+			)
+		}
 	}
 }
 
@@ -107,6 +112,7 @@ internal fun PreviewConnectedDevices(
 		darkTheme = previewData.uiState,
 	) {
 		ConnectedDevices(
+			showHintLabel = true,
 			connectedDevices = listOf(
 				Device(
 					id = "1",

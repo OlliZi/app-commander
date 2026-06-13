@@ -213,6 +213,7 @@ internal fun EditScriptContent(
 			)
 
 			ConnectedDevices(
+				showHintLabel = false,
 				connectedDevices = uiState.connectedDevices,
 				onDeviceSelect = {
 					onEvent(EditScriptViewModel.Event.OnDeviceSelected(device = it))

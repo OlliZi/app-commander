@@ -125,6 +125,7 @@ internal fun ScriptsContent(
 		) {
 			val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
 			ConnectedDevices(
+				showHintLabel = true,
 				connectedDevices = uiState.connectedDevices,
 				modifier = paddingInline,
 				onDeviceSelect = {
