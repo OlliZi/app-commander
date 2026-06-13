@@ -378,7 +378,7 @@ class EditScriptViewModelTest {
 			coVerify {
 				executeScriptUseCaseMock.invoke(
 					script = ScriptsRepository.Script(
-						label = "label",
+						label = "",
 						scripts = listOf("script 2"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
