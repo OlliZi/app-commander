@@ -53,6 +53,12 @@ class UiElementsTest {
 		}
 
 	@Test
+	fun `should render PreviewConnectedDevices in all modes`() =
+		setupTestUiElement("PreviewConnectedDevices") {
+			PreviewConnectedDevices()
+		}
+
+	@Test
 	fun `should render PreviewMultiScriptInput in all modes`() =
 		setupTestUiElement("PreviewMultiScriptInput") {
 			PreviewMultiScriptInput()

@@ -19,6 +19,7 @@ import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
@@ -169,13 +170,11 @@ class ScriptsViewModel(
 				filter = filter,
 				scripts = jsonParseResult.scripts
 					.filter {
-						it.label.lowercase().contains(filter) ||
-							it.scripts.any { script ->
-								script.lowercase().contains(filter)
-							} ||
-							it.platform.name
-								.lowercase()
-								.contains(filter)
+						it.label.lowercase().contains(filter) || it.scripts.any { script ->
+							script.lowercase().contains(filter)
+						} || it.platform.name
+							.lowercase()
+							.contains(filter)
 					}.map { script ->
 						Script(
 							description = script.label,
@@ -367,12 +366,6 @@ class ScriptsViewModel(
 		val toolSections: List<ToolSection> = ToolSection.entries,
 		val filter: String = "",
 		val hint: Hint? = null,
-	)
-
-	data class Device(
-		val id: String,
-		val label: String,
-		val isSelected: Boolean,
 	)
 
 	data class Script(

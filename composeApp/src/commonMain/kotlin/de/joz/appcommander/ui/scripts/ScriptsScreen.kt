@@ -42,9 +42,6 @@ import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_filter_section_title
-import de.joz.appcommander.resources.scripts_hint
-import de.joz.appcommander.resources.scripts_hint_devices
-import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_json_multi_scripts
 import de.joz.appcommander.resources.scripts_json_old_script_field
 import de.joz.appcommander.resources.scripts_json_parsing_error
@@ -56,7 +53,7 @@ import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Collapsable
-import de.joz.appcommander.ui.misc.DevicesBar
+import de.joz.appcommander.ui.misc.ConnectedDevices
 import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
@@ -66,6 +63,7 @@ import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.TitleBarAction
+import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
@@ -183,41 +181,6 @@ internal fun ScriptsContent(
 				},
 			)
 		}
-	}
-}
-
-@Composable
-private fun ConnectedDevices(
-	connectedDevices: List<ScriptsViewModel.Device>,
-	onDeviceSelect: (ScriptsViewModel.Device) -> Unit,
-	onRefreshDevices: () -> Unit,
-	modifier: Modifier = Modifier,
-) {
-	Column(
-		modifier = modifier.fillMaxWidth(),
-		verticalArrangement = Arrangement.spacedBy(8.dp),
-	) {
-		TextLabel(
-			text = stringResource(
-				if (connectedDevices.isNotEmpty()) {
-					Res.string.scripts_hint_devices
-				} else {
-					Res.string.scripts_hint_no_devices
-				},
-			),
-			textLabelType = TextLabelType.BodyLarge,
-		)
-
-		DevicesBar(
-			connectedDevices = connectedDevices,
-			onDeviceSelect = onDeviceSelect,
-			onRefreshDevices = onRefreshDevices,
-		)
-
-		TextLabel(
-			text = stringResource(Res.string.scripts_hint),
-			textLabelType = TextLabelType.BodySmall,
-		)
 	}
 }
 
@@ -518,12 +481,12 @@ private fun RenderPreview(darkTheme: Boolean) {
 		ScriptsContent(
 			uiState = ScriptsViewModel.UiState(
 				connectedDevices = listOf(
-					ScriptsViewModel.Device(
+					Device(
 						label = "Pixel 9",
 						isSelected = true,
 						id = "1",
 					),
-					ScriptsViewModel.Device(
+					Device(
 						label = "Pixel 8",
 						isSelected = false,
 						id = "2",

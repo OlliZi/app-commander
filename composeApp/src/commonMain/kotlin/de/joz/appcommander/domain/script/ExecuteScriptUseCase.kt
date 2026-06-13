@@ -5,6 +5,7 @@ import kotlinx.coroutines.delay
 import org.koin.core.annotation.Factory
 import java.io.File
 import kotlin.math.max
+import kotlin.time.Duration.Companion.milliseconds
 
 @Factory
 class ExecuteScriptUseCase(
@@ -33,7 +34,7 @@ class ExecuteScriptUseCase(
 				val plainCommand = removeSpecialCommands(commands)
 
 				(1..loopCount).forEach { _ ->
-					delay((if (loopCount > 1) 200 else 0))
+					delay((if (loopCount > 1) 200 else 0).milliseconds)
 					addLoggingUseCase(
 						"Execute script: '${plainCommand.joinToString(" ")}'" +
 							(if (selectedDevice.isNotEmpty()) " on device '$selectedDevice'." else "."),
