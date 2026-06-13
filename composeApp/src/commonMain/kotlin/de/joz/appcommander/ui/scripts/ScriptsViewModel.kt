@@ -224,41 +224,40 @@ class ScriptsViewModel(
 		script: String,
 		platform: ScriptsRepository.Platform,
 	) {
-		viewModelScope.launch(ioDispatcher) {
-			if (platform == ScriptsRepository.Platform.DESKTOP) {
-				executeScript(
-					script = script,
-					platform = platform,
-					device = "",
-				)
-			} else {
-				_uiState.value.connectedDevices
-					.filter {
-						it.isSelected
-					}.forEach { device ->
-						executeScript(
-							script = script,
-							platform = platform,
-							device = device.id,
-						)
-					}
-			}
+		if (platform == ScriptsRepository.Platform.DESKTOP) {
+			executeScriptHelper(
+				script = script,
+				platform = platform,
+			)
+		} else {
+			_uiState.value.connectedDevices
+				.filter {
+					it.isSelected
+				}.forEach { device ->
+					executeScriptHelper(
+						script = script,
+						platform = platform,
+						device = device.id,
+					)
+				}
 		}
 	}
 
-	private suspend fun executeScript(
+	private fun executeScriptHelper(
 		script: String,
 		platform: ScriptsRepository.Platform,
 		device: String = "",
 	) {
-		executeScriptUseCase(
-			script = ScriptsRepository.Script(
-				label = "entered by terminal script",
-				scripts = listOf(script),
-				platform = platform,
-			),
-			selectedDevice = device,
-		)
+		viewModelScope.launch(ioDispatcher) {
+			executeScriptUseCase(
+				script = ScriptsRepository.Script(
+					label = "",
+					scripts = listOf(script),
+					platform = platform,
+				),
+				selectedDevice = device,
+			)
+		}
 	}
 
 	private fun onExpandScript(script: Script) {

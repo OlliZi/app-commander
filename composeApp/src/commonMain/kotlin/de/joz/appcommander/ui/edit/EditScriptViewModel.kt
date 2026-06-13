@@ -138,35 +138,65 @@ class EditScriptViewModel(
 	}
 
 	private fun onExecuteSingleScript(script: String) {
-		_uiState.value.connectedDevices
-			.filter {
-				it.isSelected
-			}.forEach { device ->
-				viewModelScope.launch(ioDispatcher) {
-					executeScriptUseCase(
-						script = ScriptsRepository.Script(
-							label = _uiState.value.scriptUiState.scriptName,
-							scripts = listOf(script),
-							platform = _uiState.value.scriptUiState.selectedPlatform,
-						),
-						selectedDevice = device.id,
+		val platform = _uiState.value.scriptUiState.selectedPlatform
+		if (platform == ScriptsRepository.Platform.DESKTOP) {
+			executeScriptHelper(
+				script = script,
+				platform = platform,
+			)
+		} else {
+			_uiState.value.connectedDevices
+				.filter {
+					it.isSelected
+				}.forEach { device ->
+					executeScriptHelper(
+						script = script,
+						platform = platform,
+						device = device.id,
 					)
 				}
-			}
+		}
 	}
 
 	private fun onExecuteAllScripts() {
-		_uiState.value.connectedDevices
-			.filter {
-				it.isSelected
-			}.forEach { device ->
-				viewModelScope.launch(ioDispatcher) {
-					executeScriptUseCase(
-						script = _uiState.value.scriptUiState.toScriptsRepositoryScript(),
-						selectedDevice = device.id,
-					)
-				}
+		val platform = _uiState.value.scriptUiState.selectedPlatform
+		if (platform == ScriptsRepository.Platform.DESKTOP) {
+			viewModelScope.launch(ioDispatcher) {
+				executeScriptUseCase(
+					script = _uiState.value.scriptUiState.toScriptsRepositoryScript(),
+					selectedDevice = "",
+				)
 			}
+		} else {
+			_uiState.value.connectedDevices
+				.filter {
+					it.isSelected
+				}.forEach { device ->
+					viewModelScope.launch(ioDispatcher) {
+						executeScriptUseCase(
+							script = _uiState.value.scriptUiState.toScriptsRepositoryScript(),
+							selectedDevice = device.id,
+						)
+					}
+				}
+		}
+	}
+
+	private fun executeScriptHelper(
+		script: String,
+		platform: ScriptsRepository.Platform,
+		device: String = "",
+	) {
+		viewModelScope.launch(ioDispatcher) {
+			executeScriptUseCase(
+				script = ScriptsRepository.Script(
+					label = "",
+					scripts = listOf(script),
+					platform = platform,
+				),
+				selectedDevice = device,
+			)
+		}
 	}
 
 	private fun onSaveScript() {
