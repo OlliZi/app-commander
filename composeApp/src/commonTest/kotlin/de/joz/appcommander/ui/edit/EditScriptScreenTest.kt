@@ -252,6 +252,41 @@ class EditScriptScreenTest {
 	}
 
 	@Test
+	fun `should refresh devices when refresh is clicked`() {
+		runComposeUiTest {
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "test device before refresh",
+					),
+				),
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "test device before refresh",
+					),
+					ConnectedDevice(
+						id = "id 2",
+						label = "test device after refresh",
+					),
+				),
+			)
+
+			setupData()
+			setTestContent()
+
+			onNodeWithText("test device before refresh").isDisplayed()
+			onNodeWithText("test device after refresh").assertDoesNotExist()
+
+			onNodeWithText(text = "Refresh").performClick()
+
+			onNodeWithText("test device before refresh").isDisplayed()
+			onNodeWithText("test device after refresh").isDisplayed()
+		}
+	}
+
+	@Test
 	fun `remove script when remove script button for a script is clicked`() {
 		runComposeUiTest {
 			val removeScript = ScriptsRepository.Script(
