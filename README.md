@@ -108,8 +108,6 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Executing script in edit screen is currently only working for `DESKTOP`. TODO: Add support for `ANDROID` and `IOS`.
-- Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable
 - Create a demo app for Android (?)
 - Create a video showing the UI with emulator and a real device
 
