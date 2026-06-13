@@ -15,6 +15,7 @@ import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery
@@ -88,7 +89,7 @@ class ScriptsViewModelTest {
 
 			assertEquals(
 				listOf(
-					ScriptsViewModel.Device(
+					Device(
 						label = "pixel 7",
 						id = "p7",
 						isSelected = true,
