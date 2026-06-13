@@ -37,7 +37,7 @@ import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
 import de.joz.appcommander.ui.misc.ConfirmationData
-import de.joz.appcommander.ui.misc.DevicesBar
+import de.joz.appcommander.ui.misc.ConnectedDevices
 import de.joz.appcommander.ui.misc.HintType
 import de.joz.appcommander.ui.misc.MultiScriptInput
 import de.joz.appcommander.ui.misc.PlatformSelection
@@ -211,10 +211,15 @@ internal fun EditScriptContent(
 				text = stringResource(Res.string.edit_select_devices),
 				textLabelType = TextLabelType.BodyLarge,
 			)
-			DevicesBar(
-				connectedDevices = emptyList(),
-				onDeviceSelect = { },
-				onRefreshDevices = { },
+
+			ConnectedDevices(
+				connectedDevices = uiState.connectedDevices,
+				onDeviceSelect = {
+					onEvent(EditScriptViewModel.Event.OnDeviceSelected(device = it))
+				},
+				onRefreshDevices = {
+					onEvent(EditScriptViewModel.Event.OnRefreshDevices)
+				},
 			)
 		}
 	}

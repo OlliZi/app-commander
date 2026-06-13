@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -13,6 +14,7 @@ import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.ui.misc.TypedStringResource
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
+import de.joz.appcommander.ui.misc.model.Device
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +28,7 @@ class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
 	@InjectedParam private var scriptKey: Int?,
 	getUserScriptByKeyUseCase: GetUserScriptByKeyUseCase,
+	private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
 	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val saveUserScriptUseCase: SaveUserScriptUseCase,
@@ -39,6 +42,12 @@ class EditScriptViewModel(
 		mapToUiState(getUserScriptByKeyUseCase(scriptKey)),
 	)
 	private val originalUiState = _uiState.value
+
+	init {
+		viewModelScope.launch(mainDispatcher) {
+			onRefreshDevices()
+		}
+	}
 
 	override val uiState = _uiState.asStateFlow()
 
@@ -55,6 +64,8 @@ class EditScriptViewModel(
 				is Event.OnExecuteAllScripts -> onExecuteAllScripts()
 				is Event.OnSaveScript -> onSaveScript()
 				is Event.OnRemoveScript -> onRemoveScript()
+				is Event.OnDeviceSelected -> onDeviceSelected(device = event.device)
+				Event.OnRefreshDevices -> onRefreshDevices()
 			}
 		}
 	}
@@ -127,25 +138,35 @@ class EditScriptViewModel(
 	}
 
 	private fun onExecuteSingleScript(script: String) {
-		viewModelScope.launch(ioDispatcher) {
-			executeScriptUseCase(
-				script = ScriptsRepository.Script(
-					label = _uiState.value.scriptUiState.scriptName,
-					scripts = listOf(script),
-					platform = _uiState.value.scriptUiState.selectedPlatform,
-				),
-				selectedDevice = "TODO",
-			)
-		}
+		_uiState.value.connectedDevices
+			.filter {
+				it.isSelected
+			}.forEach { device ->
+				viewModelScope.launch(ioDispatcher) {
+					executeScriptUseCase(
+						script = ScriptsRepository.Script(
+							label = _uiState.value.scriptUiState.scriptName,
+							scripts = listOf(script),
+							platform = _uiState.value.scriptUiState.selectedPlatform,
+						),
+						selectedDevice = device.id,
+					)
+				}
+			}
 	}
 
 	private fun onExecuteAllScripts() {
-		viewModelScope.launch(ioDispatcher) {
-			executeScriptUseCase(
-				script = _uiState.value.scriptUiState.toScriptsRepositoryScript(),
-				selectedDevice = "TODO",
-			)
-		}
+		_uiState.value.connectedDevices
+			.filter {
+				it.isSelected
+			}.forEach { device ->
+				viewModelScope.launch(ioDispatcher) {
+					executeScriptUseCase(
+						script = _uiState.value.scriptUiState.toScriptsRepositoryScript(),
+						selectedDevice = device.id,
+					)
+				}
+			}
 	}
 
 	private fun onSaveScript() {
@@ -182,6 +203,35 @@ class EditScriptViewModel(
 		onNavigateBack()
 	}
 
+	private suspend fun onRefreshDevices() {
+		_uiState.update { oldState ->
+			val devices = getConnectedDevicesUseCase()
+			oldState.copy(
+				connectedDevices = devices.map { device ->
+					Device(
+						id = device.id,
+						label = device.label,
+						isSelected = devices.size == 1 || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
+					)
+				},
+			)
+		}
+	}
+
+	private fun onDeviceSelected(device: Device) {
+		_uiState.update { oldState ->
+			oldState.copy(
+				connectedDevices = oldState.connectedDevices.map {
+					if (it.id == device.id) {
+						it.copy(isSelected = it.isSelected.not())
+					} else {
+						it
+					}
+				},
+			)
+		}
+	}
+
 	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			scriptChanged = false,
@@ -198,6 +248,12 @@ class EditScriptViewModel(
 		data object OnSaveScript : Event
 
 		data object OnRemoveScript : Event
+
+		data object OnRefreshDevices : Event
+
+		data class OnDeviceSelected(
+			val device: Device,
+		) : Event
 
 		data class OnExecuteSingleScript(
 			val script: String,
@@ -231,6 +287,7 @@ class EditScriptViewModel(
 		val scriptChanged: Boolean = false,
 		val scriptUiState: ScriptUiState = ScriptUiState(),
 		val errorMessages: List<TypedStringResource> = emptyList(),
+		val connectedDevices: List<Device> = emptyList(),
 	)
 
 	data class ScriptUiState(

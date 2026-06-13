@@ -19,6 +19,7 @@ import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
+// move to ConnectedDevices
 @Composable
 fun DevicesBar(
 	connectedDevices: List<Device>,
