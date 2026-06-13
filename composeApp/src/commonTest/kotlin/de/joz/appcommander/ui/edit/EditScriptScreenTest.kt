@@ -17,6 +17,7 @@ import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -225,13 +226,20 @@ class EditScriptScreenTest {
 		}
 	}
 
+	// TEST devie selection
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
 			val script = ScriptsRepository.Script(
-				label = "Toggle Dark Mode On and Off",
+				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+			)
+			coEvery { getConnectedDevicesUseCaseMock() } returns listOf(
+				ConnectedDevice(
+					id = "id",
+					label = "test device",
+				),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
