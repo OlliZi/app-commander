@@ -16,6 +16,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -49,6 +50,7 @@ class EditScriptScreenTest {
 		runFileBackupUseCase = runFileBackupUseCaseMock,
 	)
 	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
+	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
 
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
@@ -448,6 +450,7 @@ class EditScriptScreenTest {
 							saveUserScriptUseCase = saveUserScriptUseCaseMock,
 							removeUserScriptUseCase = removeUserScriptUseCaseMock,
 							saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
+							getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
 							mainDispatcher = Dispatchers.Unconfined,
 							ioDispatcher = Dispatchers.Unconfined,
 							scriptKey = scriptKey,

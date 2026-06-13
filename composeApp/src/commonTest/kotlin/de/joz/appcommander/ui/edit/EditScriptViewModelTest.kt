@@ -2,6 +2,7 @@ package de.joz.appcommander.ui.edit
 
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -31,6 +32,7 @@ class EditScriptViewModelTest {
 	private val removeUserScriptUseCaseMock: RemoveUserScriptUseCase = mockk(relaxed = true)
 	private val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = false)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
+	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
@@ -376,6 +378,7 @@ class EditScriptViewModelTest {
 			removeUserScriptUseCase = removeUserScriptUseCaseMock,
 			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
+			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
 			saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
 			mainDispatcher = Dispatchers.Unconfined,
 			ioDispatcher = Dispatchers.Unconfined,

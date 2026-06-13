@@ -83,12 +83,6 @@ class UiElementsTest {
 		}
 
 	@Test
-	fun `should render PreviewDevicesBar in all modes`() =
-		setupTestUiElement("PreviewDevicesBar") {
-			PreviewDevicesBar()
-		}
-
-	@Test
 	fun `should render PreviewExpandButton in all modes`() =
 		setupTestUiElement("PreviewExpandButton") {
 			PreviewExpandButton()
@@ -178,7 +172,7 @@ class UiElementsTest {
 					) {
 						val uiState = PreviewData.createThemeDarkMode(darkMode)
 						PreviewBottomBar(uiState)
-						PreviewDevicesBar(uiState)
+						PreviewConnectedDevices(uiState)
 						PreviewExpandButton(uiState)
 						PreviewLabelledSwitch(uiState)
 						PreviewPlatformSelection(uiState)
