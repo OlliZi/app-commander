@@ -23,7 +23,7 @@ buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
 		name = "MAIN_VERSION",
-		value = if (isDebug()) mainVersion else "debug",
+		value = if (isDebug()) mainVersion else "Debug 6.7.8",
 	)
 }
 

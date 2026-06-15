@@ -32,7 +32,7 @@
     <string name="settings_preference_ui_appearance_dark">Dark</string>
     <string name="settings_preference_ui_appearance_light">Light</string>
     <string name="settings_preference_backup_label">Automatically backups scripts up to %1$s MB in your home folder (~/.app_commander/backups).</string>
-    <string name="settings_footer">Developed with ❤ in Münster (version %1$s).</string>
+    <string name="settings_footer">Developed with ❤ in Münster (v%1$s).</string>
 
     <string name="edit_title">Change or add a script</string>
     <string name="edit_script_name">Name or description of your script</string>
