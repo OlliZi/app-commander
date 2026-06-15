@@ -18,7 +18,7 @@ buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
 		name = "MAIN_VERSION",
-		value = if (gradle.taskGraph.allTasks.any { it.name.contains("release") }) mainVersion else "debug",
+		value = if (gradle.taskGraph.allTasks.any { it.name.contains("package") }) mainVersion else "debug",
 	)
 }
 
