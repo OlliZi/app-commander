@@ -88,7 +88,7 @@ Unleash the full potential of App-Commander with these special commands in your 
 3.  Navigate to `composeApp/src/jvmMain/kotlin/de/joz/appcommander/DesktopApp.kt`.
 4.  Run the `main` function to start the desktop application.
 
-To create a distributable package, run the Gradle task `package` or `package<Platform>` (e.g., `packageDmg`, `packageMsi`).
+To create a distributable package, run the gradle task `package` or `package<Platform>` (e.g., `packageDmg`, `packageMsi`).
 
 ## 👨‍💻 For Developers: Technical Insights
 
