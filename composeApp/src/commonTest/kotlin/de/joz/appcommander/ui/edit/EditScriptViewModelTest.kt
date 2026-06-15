@@ -128,6 +128,40 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should refresh devices when event 'OnDeviceSelected' is fired`() =
+		runTest {
+			coEvery {
+				getConnectedDevicesUseCaseMock.invoke()
+			} returns listOf(ConnectedDevice(id = "1", label = "label 1"))
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnRefreshDevices)
+			runCurrent()
+
+			assertEquals(
+				"1",
+				viewModel.uiState.value.connectedDevices
+					.first()
+					.id,
+			)
+			assertEquals(
+				"label 1",
+				viewModel.uiState.value.connectedDevices
+					.first()
+					.label,
+			)
+			assertTrue(
+				viewModel.uiState.value.connectedDevices
+					.first()
+					.isSelected,
+			)
+
+			coVerify(exactly = 2) {
+				getConnectedDevicesUseCaseMock.invoke()
+			}
+		}
+
+	@Test
 	fun `should select device when event 'OnDeviceSelected' is fired`() =
 		runTest {
 			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
