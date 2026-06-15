@@ -1,7 +1,12 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 private val mainPackage = "de.joz.appcommander"
-private val mainVersion = "2.0.0"
+private val mainVersion = "2.0.1"
+
+private fun isDebug() =
+	gradle.startParameter.taskNames.any {
+		it.contains("package")
+	}
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
@@ -18,7 +23,7 @@ buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
 		name = "MAIN_VERSION",
-		value = if (gradle.taskGraph.allTasks.any { it.name.contains("package") }) mainVersion else "debug",
+		value = if (isDebug()) mainVersion else "debug",
 	)
 }
 
