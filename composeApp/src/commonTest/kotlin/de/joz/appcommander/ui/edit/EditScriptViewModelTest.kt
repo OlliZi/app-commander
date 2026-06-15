@@ -527,6 +527,80 @@ class EditScriptViewModelTest {
 			}
 		}
 
+	@Test
+	fun `should execute script and ignore selected device when event 'OnExecuteSingleScript' is fired on DESKTOP`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnExecuteSingleScript("script 2"),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock.invoke(
+					script = ScriptsRepository.Script(
+						label = "",
+						scripts = listOf("script 2"),
+						platform = ScriptsRepository.Platform.DESKTOP,
+					),
+					selectedDevice = "",
+				)
+			}
+		}
+
+	@Test
+	fun `should execute script and ignore selected device when event 'OnExecuteAllScripts' is fired on DESKTOP`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnExecuteAllScripts,
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock.invoke(
+					script = ScriptsRepository.Script(
+						label = "",
+						scripts = listOf("script 1", "script 2"),
+						platform = ScriptsRepository.Platform.DESKTOP,
+					),
+					selectedDevice = "",
+				)
+			}
+		}
+
 	private fun createViewModel(scriptKey: Int? = null): EditScriptViewModel =
 		EditScriptViewModel(
 			scriptKey = scriptKey,
