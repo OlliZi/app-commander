@@ -96,13 +96,13 @@ compose.desktop {
 
 tasks.register("runDependencyUpdates") {
 	group = "_joz"
-	description = "Run dependency udpates."
+	description = "Run dependency updates."
 	dependsOn("dependencyUpdates")
 }
 
 tasks.register("runCodeCoverage") {
 	group = "_joz"
-	description = "Run all kover task and execute tests and create code coverage."
+	description = "Run all kover tasks: Execute all tests and create code coverage."
 	dependsOn("koverLog")
 	dependsOn("koverVerify")
 	dependsOn("koverHtmlReport")
