@@ -39,7 +39,7 @@ class EditScriptViewModel(
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<EditScriptViewModel.UiState, EditScriptViewModel.Event> {
 	private val _uiState = MutableStateFlow(
-		mapToUiState(getUserScriptByKeyUseCase(scriptKey)),
+		initToUiState(getUserScriptByKeyUseCase(scriptKey)),
 	)
 	private val originalUiState = _uiState.value
 
@@ -262,7 +262,7 @@ class EditScriptViewModel(
 		}
 	}
 
-	private fun mapToUiState(script: ScriptsRepository.Script?): UiState =
+	private fun initToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			scriptChanged = false,
 			scriptUiState = ScriptUiState(
