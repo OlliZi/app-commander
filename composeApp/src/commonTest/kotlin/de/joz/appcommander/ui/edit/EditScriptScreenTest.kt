@@ -2,6 +2,7 @@ package de.joz.appcommander.ui.edit
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -87,6 +88,41 @@ class EditScriptScreenTest {
 				source = this,
 				screenshotName = "no_conected_devices_desktop",
 			)
+		}
+	}
+
+	@Test
+	fun `should toggle device selection when corresponding platform is selected`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "bar",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("foo"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			onNodeWithText(text = "Refresh").assertDoesNotExist()
+
+			ScriptsRepository.Platform.entries.forEach { platform ->
+				onNodeWithText(text = platform.label).performClick()
+
+				when (platform) {
+					ScriptsRepository.Platform.ANDROID -> {
+						onNodeWithText(text = "Refresh").assertIsDisplayed()
+					}
+
+					ScriptsRepository.Platform.IOS -> {
+						onNodeWithText(text = "Refresh").assertIsDisplayed()
+					}
+
+					ScriptsRepository.Platform.DESKTOP -> {
+						onNodeWithText(text = "Refresh").assertDoesNotExist()
+					}
+				}
+			}
 		}
 	}
 

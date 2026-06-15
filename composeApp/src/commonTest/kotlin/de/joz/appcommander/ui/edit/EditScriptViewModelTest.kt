@@ -46,9 +46,25 @@ class EditScriptViewModelTest {
 			val viewModel = createViewModel()
 
 			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
-			assertEquals("", viewModel.uiState.value.scriptUiState.scripts[0])
-			assertEquals("", viewModel.uiState.value.scriptUiState.scriptName)
+			assertTrue(
+				viewModel.uiState.value.scriptUiState.scripts[0]
+					.isEmpty(),
+			)
+			assertTrue(
+				viewModel.uiState.value.scriptUiState.scriptName
+					.isEmpty(),
+			)
 			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertTrue(viewModel.uiState.value.showDeviceSelection)
+			assertTrue(
+				viewModel.uiState.value.connectedDevices
+					.isEmpty(),
+			)
+			assertFalse(viewModel.uiState.value.scriptChanged)
+			assertTrue(
+				viewModel.uiState.value.errorMessages
+					.isEmpty(),
+			)
 		}
 
 	@Test
@@ -124,6 +140,27 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertTrue(viewModel.uiState.value.showDeviceSelection)
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnSelectPlatform(
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+			)
+			runCurrent()
+
+			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertTrue(viewModel.uiState.value.showDeviceSelection)
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnSelectPlatform(
+					platform = ScriptsRepository.Platform.DESKTOP,
+				),
+			)
+			runCurrent()
+
+			assertEquals(ScriptsRepository.Platform.DESKTOP, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertFalse(viewModel.uiState.value.showDeviceSelection)
 		}
 
 	@Test
