@@ -205,23 +205,25 @@ internal fun EditScriptContent(
 				},
 			)
 
-			SectionDivider()
+			if (uiState.showDeviceSelection) {
+				SectionDivider()
 
-			TextLabel(
-				text = stringResource(Res.string.edit_select_devices),
-				textLabelType = TextLabelType.BodyLarge,
-			)
+				TextLabel(
+					text = stringResource(Res.string.edit_select_devices),
+					textLabelType = TextLabelType.BodyLarge,
+				)
 
-			ConnectedDevices(
-				showHintLabel = false,
-				connectedDevices = uiState.connectedDevices,
-				onDeviceSelect = {
-					onEvent(EditScriptViewModel.Event.OnDeviceSelected(device = it))
-				},
-				onRefreshDevices = {
-					onEvent(EditScriptViewModel.Event.OnRefreshDevices)
-				},
-			)
+				ConnectedDevices(
+					showHintLabel = false,
+					connectedDevices = uiState.connectedDevices,
+					onDeviceSelect = {
+						onEvent(EditScriptViewModel.Event.OnDeviceSelected(device = it))
+					},
+					onRefreshDevices = {
+						onEvent(EditScriptViewModel.Event.OnRefreshDevices)
+					},
+				)
+			}
 		}
 	}
 }

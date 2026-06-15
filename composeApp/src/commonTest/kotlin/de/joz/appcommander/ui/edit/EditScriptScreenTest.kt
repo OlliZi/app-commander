@@ -71,6 +71,26 @@ class EditScriptScreenTest {
 	}
 
 	@Test
+	fun `show no connected device when platform is DESKTOP`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "bar",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("foo"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "no_conected_devices_desktop",
+			)
+		}
+	}
+
+	@Test
 	fun `show error messages in ui when script can saved but backup fails`() {
 		runComposeUiTest {
 			val testScript = ScriptsRepository.Script(

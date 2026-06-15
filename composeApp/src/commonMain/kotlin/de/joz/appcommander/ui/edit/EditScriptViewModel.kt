@@ -133,6 +133,7 @@ class EditScriptViewModel(
 			oldState.copy(
 				scriptChanged = newScript != originalUiState.scriptUiState,
 				scriptUiState = newScript,
+				showDeviceSelection = newScript.selectedPlatform.canShowDeviceSelection(),
 			)
 		}
 	}
@@ -265,12 +266,15 @@ class EditScriptViewModel(
 	private fun initToUiState(script: ScriptsRepository.Script?): UiState =
 		UiState(
 			scriptChanged = false,
+			showDeviceSelection = script?.platform.canShowDeviceSelection(),
 			scriptUiState = ScriptUiState(
 				scriptName = script?.label.orEmpty(),
 				scripts = script?.scripts ?: listOf(""),
 				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
 			),
 		)
+
+	private fun ScriptsRepository.Platform?.canShowDeviceSelection() = this != ScriptsRepository.Platform.DESKTOP
 
 	sealed interface Event {
 		data object OnNavigateBack : Event
@@ -315,6 +319,7 @@ class EditScriptViewModel(
 
 	data class UiState(
 		val scriptChanged: Boolean = false,
+		val showDeviceSelection: Boolean = true,
 		val scriptUiState: ScriptUiState = ScriptUiState(),
 		val errorMessages: List<TypedStringResource> = emptyList(),
 		val connectedDevices: List<Device> = emptyList(),
