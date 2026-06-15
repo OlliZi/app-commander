@@ -10,6 +10,7 @@ import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.ui.misc.model.Device
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -124,6 +125,50 @@ class EditScriptViewModelTest {
 			assertTrue(viewModel.uiState.value.scriptChanged)
 			viewModel.onEvent(event = EditScriptViewModel.Event.OnRemoveSubScript(1))
 			assertFalse(viewModel.uiState.value.scriptChanged)
+		}
+
+	@Test
+	fun `should select device when event 'OnDeviceSelected' is fired`() =
+		runTest {
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+					ConnectedDevice(
+						id = "id 2",
+						label = "device 2",
+					),
+				),
+			)
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnDeviceSelected(
+					device = Device(
+						id = "id 1",
+						label = "device 1",
+						isSelected = false,
+					),
+				),
+			)
+
+			assertEquals(
+				listOf(
+					Device(
+						id = "id 1",
+						label = "device 1",
+						isSelected = true,
+					),
+					Device(
+						id = "id 2",
+						label = "device 2",
+						isSelected = false,
+					),
+				),
+				viewModel.uiState.value.connectedDevices,
+			)
 		}
 
 	@Test
