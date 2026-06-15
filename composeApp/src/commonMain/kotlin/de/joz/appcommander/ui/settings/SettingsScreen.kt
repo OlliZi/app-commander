@@ -121,7 +121,7 @@ internal fun SettingsContent(
 			TextLabel(
 				modifier = Modifier.align(Alignment.CenterHorizontally),
 				text = stringResource(Res.string.settings_footer, BuildConfig.MAIN_VERSION),
-				textLabelType = TextLabelType.BodyMedium,
+				textLabelType = TextLabelType.BodyLarge,
 			)
 		}
 	}

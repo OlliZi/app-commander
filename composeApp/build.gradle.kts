@@ -16,7 +16,10 @@ plugins {
 
 buildConfig {
 	packageName(mainPackage)
-	buildConfigField(name = "MAIN_VERSION", value = mainVersion)
+	buildConfigField(
+		name = "MAIN_VERSION",
+		value = if (gradle.taskGraph.allTasks.any { it.name.contains("release") }) mainVersion else "debug",
+	)
 }
 
 allprojects {
