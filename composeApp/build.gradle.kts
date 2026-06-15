@@ -1,5 +1,13 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
+private val mainPackage = "de.joz.appcommander"
+private val mainVersion = "2.0.1"
+
+private fun isDebug() =
+	gradle.startParameter.taskNames.any {
+		it.contains("package")
+	}
+
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
 	alias(libs.plugins.composeMultiplatform)
@@ -8,6 +16,15 @@ plugins {
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
 	alias(libs.plugins.koverCodeCoverage)
+	alias(libs.plugins.buildConfig)
+}
+
+buildConfig {
+	packageName(mainPackage)
+	buildConfigField(
+		name = "MAIN_VERSION",
+		value = if (isDebug()) mainVersion else "Debug 6.7.8",
+	)
 }
 
 allprojects {
@@ -56,7 +73,7 @@ kotlin {
 
 compose.resources {
 	publicResClass = true
-	packageOfResClass = "de.joz.appcommander.resources"
+	packageOfResClass = "$mainPackage.resources"
 	generateResClass = always
 }
 
@@ -71,12 +88,12 @@ ksp {
 
 compose.desktop {
 	application {
-		mainClass = "de.joz.appcommander.launch.DesktopAppKt"
+		mainClass = "$mainPackage.launch.DesktopAppKt"
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg)
 			packageName = "App-Commander"
-			packageVersion = "2.0.0"
+			packageVersion = mainVersion
 			modules("jdk.unsupported")
 		}
 	}
@@ -84,11 +101,13 @@ compose.desktop {
 
 tasks.register("runDependencyUpdates") {
 	group = "_joz"
+	description = "Run dependency updates."
 	dependsOn("dependencyUpdates")
 }
 
 tasks.register("runCodeCoverage") {
 	group = "_joz"
+	description = "Run all kover tasks: Execute all tests and create code coverage."
 	dependsOn("koverLog")
 	dependsOn("koverVerify")
 	dependsOn("koverHtmlReport")
@@ -98,7 +117,7 @@ kover {
 	reports {
 		filters {
 			excludes {
-				packages("org.koin.ksp.generated", "de.joz.appcommander.resources", "de.joz.appcommander.launch")
+				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
 				classes("**ComposableSingletons**", $$"**NavigationScreens$Companion**")
 			}
 		}
