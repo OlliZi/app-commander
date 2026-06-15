@@ -128,7 +128,7 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
-	fun `should refresh devices when event 'OnDeviceSelected' is fired`() =
+	fun `should refresh devices when event 'OnRefreshDevices' is fired`() =
 		runTest {
 			coEvery {
 				getConnectedDevicesUseCaseMock.invoke()
