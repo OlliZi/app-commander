@@ -28,6 +28,7 @@ allprojects {
 
 tasks.register<Exec>("convertMov2Gif") {
 	group = "_joz"
+	description = "Convert a movie file to an Gif file."
 	commandLine(
 		"sh",
 		"-c",
