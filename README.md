@@ -110,7 +110,6 @@ App-Commander is built with modern technologies and best practices:
 ## 👷TODOs
 - Create a demo app for Android (?)
 - Create a video showing the UI with emulator and a real device
-- Solve selectedDevice = "TODO" (EditScriptVM) + make device section in edit script-screen workable
 
 ## 🤝 Contributing
 

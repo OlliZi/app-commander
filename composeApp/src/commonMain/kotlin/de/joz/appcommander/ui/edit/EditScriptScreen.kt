@@ -37,7 +37,7 @@ import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
 import de.joz.appcommander.ui.misc.ConfirmationData
-import de.joz.appcommander.ui.misc.DevicesBar
+import de.joz.appcommander.ui.misc.ConnectedDevices
 import de.joz.appcommander.ui.misc.HintType
 import de.joz.appcommander.ui.misc.MultiScriptInput
 import de.joz.appcommander.ui.misc.PlatformSelection
@@ -205,17 +205,27 @@ internal fun EditScriptContent(
 				},
 			)
 
-			SectionDivider()
+			AnimatedVisibility(visible = uiState.showDeviceSelection) {
+				Column {
+					SectionDivider()
 
-			TextLabel(
-				text = stringResource(Res.string.edit_select_devices),
-				textLabelType = TextLabelType.BodyLarge,
-			)
-			DevicesBar(
-				connectedDevices = emptyList(),
-				onDeviceSelect = { },
-				onRefreshDevices = { },
-			)
+					TextLabel(
+						text = stringResource(Res.string.edit_select_devices),
+						textLabelType = TextLabelType.BodyLarge,
+					)
+
+					ConnectedDevices(
+						showHintLabel = false,
+						connectedDevices = uiState.connectedDevices,
+						onDeviceSelect = {
+							onEvent(EditScriptViewModel.Event.OnDeviceSelected(device = it))
+						},
+						onRefreshDevices = {
+							onEvent(EditScriptViewModel.Event.OnRefreshDevices)
+						},
+					)
+				}
+			}
 		}
 	}
 }

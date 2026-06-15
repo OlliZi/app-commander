@@ -53,6 +53,12 @@ class UiElementsTest {
 		}
 
 	@Test
+	fun `should render PreviewConnectedDevices in all modes`() =
+		setupTestUiElement("PreviewConnectedDevices") {
+			PreviewConnectedDevices()
+		}
+
+	@Test
 	fun `should render PreviewMultiScriptInput in all modes`() =
 		setupTestUiElement("PreviewMultiScriptInput") {
 			PreviewMultiScriptInput()
@@ -74,12 +80,6 @@ class UiElementsTest {
 	fun `should render Confirmation in light mode`() =
 		setupTestUiElement("PreviewConfirmation_light") {
 			PreviewConfirmation(darkTheme = false)
-		}
-
-	@Test
-	fun `should render PreviewDevicesBar in all modes`() =
-		setupTestUiElement("PreviewDevicesBar") {
-			PreviewDevicesBar()
 		}
 
 	@Test
@@ -172,7 +172,7 @@ class UiElementsTest {
 					) {
 						val uiState = PreviewData.createThemeDarkMode(darkMode)
 						PreviewBottomBar(uiState)
-						PreviewDevicesBar(uiState)
+						PreviewConnectedDevices(uiState)
 						PreviewExpandButton(uiState)
 						PreviewLabelledSwitch(uiState)
 						PreviewPlatformSelection(uiState)

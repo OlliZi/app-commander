@@ -15,6 +15,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.mockk
@@ -55,17 +56,17 @@ class ScriptsScreenTest {
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(
 					connectedDevices = listOf(
-						ScriptsViewModel.Device(
+						Device(
 							label = "emulator-5555",
 							id = "1",
 							isSelected = true,
 						),
-						ScriptsViewModel.Device(
+						Device(
 							label = "emulator-5556",
 							id = "2",
 							isSelected = false,
 						),
-						ScriptsViewModel.Device(
+						Device(
 							label = "Google Pixel 10",
 							id = "3",
 							isSelected = true,
@@ -249,7 +250,7 @@ class ScriptsScreenTest {
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(
 					connectedDevices = listOf(
-						ScriptsViewModel.Device(
+						Device(
 							label = "Device A",
 							id = "1",
 							isSelected = true,

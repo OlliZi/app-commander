@@ -57,7 +57,7 @@ class GetStartDestinationUseCaseTest {
 
 			coVerify {
 				getPreferenceUseCaseMock.get(
-					key = SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY,
+					key = SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY,
 					defaultValue = false,
 				)
 			}

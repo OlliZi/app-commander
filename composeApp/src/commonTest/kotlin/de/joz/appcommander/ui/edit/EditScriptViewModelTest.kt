@@ -2,12 +2,15 @@ package de.joz.appcommander.ui.edit
 
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.ui.misc.model.Device
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,6 +34,7 @@ class EditScriptViewModelTest {
 	private val removeUserScriptUseCaseMock: RemoveUserScriptUseCase = mockk(relaxed = true)
 	private val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = false)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
+	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
@@ -43,9 +47,25 @@ class EditScriptViewModelTest {
 			val viewModel = createViewModel()
 
 			assertEquals(1, viewModel.uiState.value.scriptUiState.scripts.size)
-			assertEquals("", viewModel.uiState.value.scriptUiState.scripts[0])
-			assertEquals("", viewModel.uiState.value.scriptUiState.scriptName)
+			assertTrue(
+				viewModel.uiState.value.scriptUiState.scripts[0]
+					.isEmpty(),
+			)
+			assertTrue(
+				viewModel.uiState.value.scriptUiState.scriptName
+					.isEmpty(),
+			)
 			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertTrue(viewModel.uiState.value.showDeviceSelection)
+			assertTrue(
+				viewModel.uiState.value.connectedDevices
+					.isEmpty(),
+			)
+			assertFalse(viewModel.uiState.value.scriptChanged)
+			assertTrue(
+				viewModel.uiState.value.errorMessages
+					.isEmpty(),
+			)
 		}
 
 	@Test
@@ -108,6 +128,108 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should refresh devices when event 'OnRefreshDevices' is fired`() =
+		runTest {
+			coEvery {
+				getConnectedDevicesUseCaseMock.invoke()
+			} returns listOf(ConnectedDevice(id = "1", label = "label 1"))
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnRefreshDevices)
+			runCurrent()
+
+			assertEquals(
+				Device(
+					id = "1",
+					label = "label 1",
+					isSelected = true,
+				),
+				viewModel.uiState.value.connectedDevices
+					.first(),
+			)
+
+			coVerify(exactly = 2) {
+				getConnectedDevicesUseCaseMock.invoke()
+			}
+		}
+
+	@Test
+	fun `should refresh devices and disable selected devices when event 'OnDeviceSelected' is fired`() =
+		runTest {
+			coEvery {
+				getConnectedDevicesUseCaseMock.invoke()
+			} returns listOf(ConnectedDevice(id = "1", label = "label 1"), ConnectedDevice(id = "2", label = "label 2"))
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(event = EditScriptViewModel.Event.OnRefreshDevices)
+			runCurrent()
+
+			assertEquals(
+				listOf(
+					Device(
+						id = "1",
+						label = "label 1",
+						isSelected = false,
+					),
+					Device(
+						id = "2",
+						label = "label 2",
+						isSelected = false,
+					),
+				),
+				viewModel.uiState.value.connectedDevices,
+			)
+
+			coVerify(exactly = 2) {
+				getConnectedDevicesUseCaseMock.invoke()
+			}
+		}
+
+	@Test
+	fun `should select device when event 'OnDeviceSelected' is fired`() =
+		runTest {
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+					ConnectedDevice(
+						id = "id 2",
+						label = "device 2",
+					),
+				),
+			)
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnDeviceSelected(
+					device = Device(
+						id = "id 1",
+						label = "device 1",
+						isSelected = false,
+					),
+				),
+			)
+
+			assertEquals(
+				listOf(
+					Device(
+						id = "id 1",
+						label = "device 1",
+						isSelected = true,
+					),
+					Device(
+						id = "id 2",
+						label = "device 2",
+						isSelected = false,
+					),
+				),
+				viewModel.uiState.value.connectedDevices,
+			)
+		}
+
+	@Test
 	fun `should select platform when event 'OnSelectPlatform' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
@@ -121,6 +243,27 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertTrue(viewModel.uiState.value.showDeviceSelection)
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnSelectPlatform(
+					platform = ScriptsRepository.Platform.ANDROID,
+				),
+			)
+			runCurrent()
+
+			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertTrue(viewModel.uiState.value.showDeviceSelection)
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnSelectPlatform(
+					platform = ScriptsRepository.Platform.DESKTOP,
+				),
+			)
+			runCurrent()
+
+			assertEquals(ScriptsRepository.Platform.DESKTOP, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertFalse(viewModel.uiState.value.showDeviceSelection)
 		}
 
 	@Test
@@ -328,6 +471,14 @@ class EditScriptViewModelTest {
 				platform = ScriptsRepository.Platform.IOS,
 			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
 
 			val viewModel = createViewModel()
 
@@ -336,18 +487,27 @@ class EditScriptViewModelTest {
 			)
 			runCurrent()
 
-			coVerify { executeScriptUseCaseMock.invoke(testScript, eq("TODO")) }
+			coVerify { executeScriptUseCaseMock.invoke(script = testScript, selectedDevice = "id 1") }
 		}
 
 	@Test
 	fun `should execute script when event 'OnExecuteSingleScript' is fired`() =
 		runTest {
 			val testScript = ScriptsRepository.Script(
-				label = "label",
+				label = "",
 				scripts = listOf("script 1", "script 2"),
 				platform = ScriptsRepository.Platform.IOS,
 			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
@@ -357,12 +517,86 @@ class EditScriptViewModelTest {
 
 			coVerify {
 				executeScriptUseCaseMock.invoke(
-					ScriptsRepository.Script(
-						label = "label",
+					script = ScriptsRepository.Script(
+						label = "",
 						scripts = listOf("script 2"),
 						platform = ScriptsRepository.Platform.IOS,
 					),
-					eq("TODO"),
+					selectedDevice = "id 1",
+				)
+			}
+		}
+
+	@Test
+	fun `should execute script and ignore selected device when event 'OnExecuteSingleScript' is fired on DESKTOP`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnExecuteSingleScript("script 2"),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock.invoke(
+					script = ScriptsRepository.Script(
+						label = "",
+						scripts = listOf("script 2"),
+						platform = ScriptsRepository.Platform.DESKTOP,
+					),
+					selectedDevice = "",
+				)
+			}
+		}
+
+	@Test
+	fun `should execute script and ignore selected device when event 'OnExecuteAllScripts' is fired on DESKTOP`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnExecuteAllScripts,
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock.invoke(
+					script = ScriptsRepository.Script(
+						label = "",
+						scripts = listOf("script 1", "script 2"),
+						platform = ScriptsRepository.Platform.DESKTOP,
+					),
+					selectedDevice = "",
 				)
 			}
 		}
@@ -376,6 +610,7 @@ class EditScriptViewModelTest {
 			removeUserScriptUseCase = removeUserScriptUseCaseMock,
 			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
+			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
 			saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
 			mainDispatcher = Dispatchers.Unconfined,
 			ioDispatcher = Dispatchers.Unconfined,

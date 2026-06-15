@@ -2,6 +2,7 @@ package de.joz.appcommander.ui.edit
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -16,6 +17,8 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -49,6 +52,7 @@ class EditScriptScreenTest {
 		runFileBackupUseCase = runFileBackupUseCaseMock,
 	)
 	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
+	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
 
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
@@ -64,6 +68,61 @@ class EditScriptScreenTest {
 				source = this,
 				screenshotName = "default_edit",
 			)
+		}
+	}
+
+	@Test
+	fun `show no connected device when platform is DESKTOP`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "bar",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("foo"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "no_conected_devices_desktop",
+			)
+		}
+	}
+
+	@Test
+	fun `should toggle device selection when corresponding platform is selected`() {
+		runComposeUiTest {
+			val testScript = ScriptsRepository.Script(
+				label = "bar",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("foo"),
+			)
+			setupData(
+				script = testScript,
+			)
+			setTestContent(scriptKey = testScript.hashCode())
+
+			onNodeWithText(text = "Refresh").assertDoesNotExist()
+
+			ScriptsRepository.Platform.entries.forEach { platform ->
+				onNodeWithText(text = platform.label).performClick()
+
+				when (platform) {
+					ScriptsRepository.Platform.ANDROID -> {
+						onNodeWithText(text = "Refresh").assertIsDisplayed()
+					}
+
+					ScriptsRepository.Platform.IOS -> {
+						onNodeWithText(text = "Refresh").assertIsDisplayed()
+					}
+
+					ScriptsRepository.Platform.DESKTOP -> {
+						onNodeWithText(text = "Refresh").assertDoesNotExist()
+					}
+				}
+			}
 		}
 	}
 
@@ -226,19 +285,105 @@ class EditScriptScreenTest {
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
-			val removeScript = ScriptsRepository.Script(
-				label = "Toggle Dark Mode On and Off",
+			val script = ScriptsRepository.Script(
+				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
 			)
+			coEvery { getConnectedDevicesUseCaseMock() } returns listOf(
+				ConnectedDevice(
+					id = "id",
+					label = "test device",
+				),
+			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			setupData(script = removeScript)
-			setTestContent(scriptKey = removeScript.hashCode())
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
 
 			onNodeWithContentDescription(label = "Execute all scripts").performClick()
 
-			coVerify { executeScriptUseCaseMock(script = removeScript, selectedDevice = "TODO") }
+			coVerify { executeScriptUseCaseMock(script = script, selectedDevice = "id") }
+		}
+	}
+
+	@Test
+	fun `should refresh devices when refresh is clicked`() {
+		runComposeUiTest {
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "test device before refresh",
+					),
+				),
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "test device before refresh",
+					),
+					ConnectedDevice(
+						id = "id 2",
+						label = "test device after refresh",
+					),
+				),
+			)
+
+			setupData()
+			setTestContent()
+
+			onNodeWithText("test device before refresh").isDisplayed()
+			onNodeWithText("test device after refresh").assertDoesNotExist()
+
+			onNodeWithText(text = "Refresh").performClick()
+
+			onNodeWithText("test device before refresh").isDisplayed()
+			onNodeWithText("test device after refresh").isDisplayed()
+		}
+	}
+
+	@Test
+	fun `should use selected device when script is executed`() {
+		runComposeUiTest {
+			val script = ScriptsRepository.Script(
+				label = "",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("echo"),
+			)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+					ConnectedDevice(
+						id = "id 2",
+						label = "device 2",
+					),
+				),
+			)
+
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
+
+			onNodeWithText("device 1").performClick()
+			onNodeWithContentDescription(label = "Execute all scripts").performClick()
+
+			onNodeWithText("device 2").performClick()
+			onNodeWithContentDescription(label = "Execute all scripts").performClick()
+
+			onNodeWithText("device 1").performClick()
+			onNodeWithText("device 2").performClick()
+			onNodeWithContentDescription(label = "Execute all scripts").performClick()
+
+			coVerify(exactly = 2) {
+				executeScriptUseCaseMock(script = script, selectedDevice = "id 1")
+			}
+
+			coVerify(exactly = 1) {
+				executeScriptUseCaseMock(script = script, selectedDevice = "id 2")
+			}
 		}
 	}
 
@@ -270,15 +415,15 @@ class EditScriptScreenTest {
 	@Test
 	fun `add a new script when add script button for a script is clicked`() {
 		runComposeUiTest {
-			val removeScript = ScriptsRepository.Script(
+			val addScript = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("script 1", "script 2"),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			setupData(script = removeScript)
-			setTestContent(scriptKey = removeScript.hashCode())
+			setupData(script = addScript)
+			setTestContent(scriptKey = addScript.hashCode())
 
 			onNodeWithText("script 1").isDisplayed()
 			onNodeWithText("script 2").isDisplayed()
@@ -297,15 +442,15 @@ class EditScriptScreenTest {
 	@Test
 	fun `run one script when run button is clicked`() {
 		runComposeUiTest {
-			val removeScript = ScriptsRepository.Script(
+			val script = ScriptsRepository.Script(
 				label = "Test",
 				platform = ScriptsRepository.Platform.DESKTOP,
 				scripts = listOf("echo Hello", "echo world!"),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			setupData(script = removeScript)
-			setTestContent(scriptKey = removeScript.hashCode())
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
 
 			onAllNodes(hasContentDescription("Execute script text")).apply {
 				get(0).performClick()
@@ -315,19 +460,19 @@ class EditScriptScreenTest {
 			coVerify {
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
-						label = "Test",
+						label = "",
 						scripts = listOf("echo Hello"),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
-					selectedDevice = "TODO",
+					selectedDevice = "",
 				)
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
-						label = "Test",
+						label = "",
 						scripts = listOf("echo world!"),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
-					selectedDevice = "TODO",
+					selectedDevice = "",
 				)
 			}
 		}
@@ -448,6 +593,7 @@ class EditScriptScreenTest {
 							saveUserScriptUseCase = saveUserScriptUseCaseMock,
 							removeUserScriptUseCase = removeUserScriptUseCaseMock,
 							saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
+							getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
 							mainDispatcher = Dispatchers.Unconfined,
 							ioDispatcher = Dispatchers.Unconfined,
 							scriptKey = scriptKey,
