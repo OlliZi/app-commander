@@ -19,22 +19,6 @@ plugins {
 	alias(libs.plugins.buildConfig)
 }
 
-buildConfig {
-	packageName(mainPackage)
-	buildConfigField(
-		name = "MAIN_VERSION",
-		value = if (isDebug()) mainVersion else "Debug 6.7.8",
-	)
-}
-
-detekt {
-	buildUponDefaultConfig = true // preconfigure defaults
-	allRules = false // activate all available (even unstable) rules.
-	autoCorrect = false // Enable automatic correction of issues found by detekt
-	config.setFrom("$projectDir/../detekt-config.yml")
-	parallel = true // Run detekt in parallel mode for better performance
-}
-
 kotlin {
 	jvm()
 
@@ -66,12 +50,6 @@ kotlin {
 	}
 }
 
-compose.resources {
-	publicResClass = true
-	packageOfResClass = "$mainPackage.resources"
-	generateResClass = always
-}
-
 dependencies {
 	ksp(libs.koin.ksp)
 }
@@ -79,6 +57,49 @@ dependencies {
 ksp {
 	arg("KOIN_CONFIG_CHECK", "true")
 	arg("KOIN_DEFAULT_MODULE", "false")
+}
+
+buildConfig {
+	packageName(mainPackage)
+	buildConfigField(
+		name = "MAIN_VERSION",
+		value = if (isDebug()) mainVersion else "Debug 6.7.8",
+	)
+}
+
+detekt {
+	buildUponDefaultConfig = true // preconfigure defaults
+	allRules = false // activate all available (even unstable) rules.
+	autoCorrect = false // Enable automatic correction of issues found by detekt
+	config.setFrom("$projectDir/../detekt-config.yml")
+	parallel = true // Run detekt in parallel mode for better performance
+}
+
+kover {
+	reports {
+		filters {
+			excludes {
+				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
+				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
+			}
+		}
+		verify {
+			// also edit in README.md
+			val lineCoverage = 95
+			rule("Minimal line coverage rate in percent.") {
+				minBound(lineCoverage)
+			}
+			rule("Maximum line coverage rate in percent. Indicator to adjust when coverage was increased.") {
+				maxBound(lineCoverage + 1)
+			}
+		}
+	}
+}
+
+compose.resources {
+	publicResClass = true
+	packageOfResClass = "$mainPackage.resources"
+	generateResClass = always
 }
 
 compose.desktop {
@@ -106,25 +127,4 @@ tasks.register("runCodeCoverage") {
 	dependsOn("koverLog")
 	dependsOn("koverVerify")
 	dependsOn("koverHtmlReport")
-}
-
-kover {
-	reports {
-		filters {
-			excludes {
-				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
-				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
-			}
-		}
-		verify {
-			// also edit in README.md
-			val lineCoverage = 95
-			rule("Minimal line coverage rate in percent.") {
-				minBound(lineCoverage)
-			}
-			rule("Maximum line coverage rate in percent. Indicator to adjust when coverage was increased.") {
-				maxBound(lineCoverage + 1)
-			}
-		}
-	}
 }
