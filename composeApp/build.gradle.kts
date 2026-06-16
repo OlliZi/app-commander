@@ -118,7 +118,7 @@ kover {
 		filters {
 			excludes {
 				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
-				classes("**ComposableSingletons**", $$"**NavigationScreens$Companion**")
+				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
 			}
 		}
 		verify {
