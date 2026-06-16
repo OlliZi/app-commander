@@ -27,17 +27,12 @@ buildConfig {
 	)
 }
 
-allprojects {
-	apply(plugin = "io.gitlab.arturbosch.detekt")
-
-	detekt {
-		buildUponDefaultConfig = true // preconfigure defaults
-		allRules = false // activate all available (even unstable) rules.
-		// point to your custom config defining rules to run, overwriting default behavior
-		autoCorrect = false // Enable automatic correction of issues found by detekt
-		config.setFrom("$projectDir/../detekt-config.yml")
-		parallel = true // Run detekt in parallel mode for better performance
-	}
+detekt {
+	buildUponDefaultConfig = true // preconfigure defaults
+	allRules = false // activate all available (even unstable) rules.
+	autoCorrect = false // Enable automatic correction of issues found by detekt
+	config.setFrom("$projectDir/../detekt-config.yml")
+	parallel = true // Run detekt in parallel mode for better performance
 }
 
 kotlin {
