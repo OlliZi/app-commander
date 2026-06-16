@@ -11,22 +11,16 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.navigation.NavController
-import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.navigation.NavigationScreens
-import de.joz.appcommander.domain.preference.PreferencesRepository
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
+import de.joz.appcommander.ui.welcome.bubble.MultiBubblesStrategy
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import org.koin.core.Koin
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.dsl.module
-import org.koin.ksp.generated.*
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -36,21 +30,8 @@ class WelcomeScreenTest {
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
 	)
-	private lateinit var koin: Koin
 
 	private val preferencesRepositoryMock = PreferencesRepositoryMock()
-
-	@BeforeTest
-	fun setup() {
-		stopKoin()
-		koin = startKoin {
-			modules(
-				DependencyInjection().module + module {
-					single<PreferencesRepository> { preferencesRepositoryMock }
-				},
-			)
-		}.koin
-	}
 
 	@Test
 	fun `should display all default labels on screen`() {
@@ -154,7 +135,7 @@ class WelcomeScreenTest {
 					WelcomeScreen(
 						viewModel = WelcomeViewModel(
 							navController = navController,
-							savePreferenceUseCase = koin.get(),
+							savePreferenceUseCase = SavePreferenceUseCase(preferencesRepository = preferencesRepositoryMock),
 						),
 						bubblesStrategy = if (useCustomBubbleStrategy) {
 							object : BubblesStrategy {
@@ -167,7 +148,7 @@ class WelcomeScreenTest {
 								}
 							}
 						} else {
-							koin.get()
+							MultiBubblesStrategy()
 						},
 						isInTextExecution = true,
 					)
