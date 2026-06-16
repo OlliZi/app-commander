@@ -5,6 +5,11 @@ buildscript {
 	}
 }
 
+subprojects {
+	ext["mainPackage"] = "de.joz.appcommander"
+	ext["mainVersion"] = "2.0.1"
+}
+
 plugins {
 	alias(libs.plugins.composeMultiplatform) apply false
 	alias(libs.plugins.composeCompiler) apply false

@@ -1,7 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
-private val mainPackage = "de.joz.appcommander"
-private val mainVersion = "2.0.1"
+private val mainPackage = ext["mainPackage"].toString().also { println("Package: $it") }
+private val mainVersion = ext["mainVersion"].toString().also { println("Version: $it") }
 
 private fun isDebug() =
 	gradle.startParameter.taskNames.any {
