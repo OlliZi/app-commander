@@ -1,12 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
-private val mainPackage = "de.joz.appcommander"
-private val mainVersion = "2.0.1"
-
-private fun isDebug() =
-	gradle.startParameter.taskNames.any {
-		it.contains("package")
-	}
+private val mainPackage = rootProject.ext["mainPackage"].toString()
+private val mainVersion = rootProject.ext["mainVersion"].toString()
+private val isRelease = rootProject.ext["isRelease"] == "true"
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
@@ -17,27 +13,6 @@ plugins {
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
 	alias(libs.plugins.koverCodeCoverage)
 	alias(libs.plugins.buildConfig)
-}
-
-buildConfig {
-	packageName(mainPackage)
-	buildConfigField(
-		name = "MAIN_VERSION",
-		value = if (isDebug()) mainVersion else "Debug 6.7.8",
-	)
-}
-
-allprojects {
-	apply(plugin = "io.gitlab.arturbosch.detekt")
-
-	detekt {
-		buildUponDefaultConfig = true // preconfigure defaults
-		allRules = false // activate all available (even unstable) rules.
-		// point to your custom config defining rules to run, overwriting default behavior
-		autoCorrect = false // Enable automatic correction of issues found by detekt
-		config.setFrom("$projectDir/../detekt-config.yml")
-		parallel = true // Run detekt in parallel mode for better performance
-	}
 }
 
 kotlin {
@@ -71,12 +46,6 @@ kotlin {
 	}
 }
 
-compose.resources {
-	publicResClass = true
-	packageOfResClass = "$mainPackage.resources"
-	generateResClass = always
-}
-
 dependencies {
 	ksp(libs.koin.ksp)
 }
@@ -84,6 +53,49 @@ dependencies {
 ksp {
 	arg("KOIN_CONFIG_CHECK", "true")
 	arg("KOIN_DEFAULT_MODULE", "false")
+}
+
+buildConfig {
+	packageName(mainPackage)
+	buildConfigField(
+		name = "MAIN_VERSION",
+		value = if (isRelease) mainVersion else "Debug 6.7.8",
+	)
+}
+
+detekt {
+	buildUponDefaultConfig = true // preconfigure defaults
+	allRules = false // activate all available (even unstable) rules.
+	autoCorrect = false // Enable automatic correction of issues found by detekt
+	config.setFrom("$projectDir/../detekt-config.yml")
+	parallel = true // Run detekt in parallel mode for better performance
+}
+
+kover {
+	reports {
+		filters {
+			excludes {
+				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
+				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
+			}
+		}
+		verify {
+			// also edit in README.md
+			val lineCoverage = 95
+			rule("Minimal line coverage rate in percent.") {
+				minBound(lineCoverage)
+			}
+			rule("Maximum line coverage rate in percent. Indicator to adjust when coverage was increased.") {
+				maxBound(lineCoverage + 1)
+			}
+		}
+	}
+}
+
+compose.resources {
+	publicResClass = true
+	packageOfResClass = "$mainPackage.resources"
+	generateResClass = always
 }
 
 compose.desktop {
@@ -111,25 +123,4 @@ tasks.register("runCodeCoverage") {
 	dependsOn("koverLog")
 	dependsOn("koverVerify")
 	dependsOn("koverHtmlReport")
-}
-
-kover {
-	reports {
-		filters {
-			excludes {
-				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
-				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
-			}
-		}
-		verify {
-			// also edit in README.md
-			val lineCoverage = 95
-			rule("Minimal line coverage rate in percent.") {
-				minBound(lineCoverage)
-			}
-			rule("Maximum line coverage rate in percent. Indicator to adjust when coverage was increased.") {
-				maxBound(lineCoverage + 1)
-			}
-		}
-	}
 }

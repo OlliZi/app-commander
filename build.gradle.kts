@@ -1,16 +1,16 @@
 buildscript {
-	repositories {
-		google()
-		mavenCentral()
-		gradlePluginPortal()
-	}
-
 	dependencies {
-		// https://github.com/ben-manes/gradle-versions-plugin
 		classpath(libs.gradle.versions.plugin)
 		classpath(libs.ktlint.gradle)
 	}
 }
+
+rootProject.ext["mainPackage"] = "de.joz.appcommander".also { println("Package: $it") }
+rootProject.ext["mainVersion"] = "2.1.0".also { println("Version: $it") }
+rootProject.ext["isRelease"] = gradle.startParameter.taskNames
+	.any {
+		it.contains("package")
+	}.also { println("isRelease: $it") }
 
 plugins {
 	alias(libs.plugins.composeMultiplatform) apply false
@@ -19,19 +19,4 @@ plugins {
 	alias(libs.plugins.ksp) apply false
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
 	alias(libs.plugins.ktlint)
-}
-
-allprojects {
-	apply(plugin = "com.github.ben-manes.versions")
-	apply(plugin = "org.jlleitschuh.gradle.ktlint")
-}
-
-tasks.register<Exec>("convertMov2Gif") {
-	group = "_joz"
-	description = "Convert a movie file to a Gif file."
-	commandLine(
-		"sh",
-		"-c",
-		"ffmpeg -i preview_overview.mov -pix_fmt rgb8 -r 10 preview_overview.gif && gifsicle -O3 preview_overview.gif -o preview_overview.gif",
-	)
 }
