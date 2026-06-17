@@ -5,10 +5,12 @@ buildscript {
 	}
 }
 
-subprojects {
-	ext["mainPackage"] = "de.joz.appcommander"
-	ext["mainVersion"] = "2.0.1"
-}
+rootProject.ext["mainPackage"] = "de.joz.appcommander".also { println("Package: $it") }
+rootProject.ext["mainVersion"] = "2.1.0".also { println("Version: $it") }
+rootProject.ext["isRelease"] = gradle.startParameter.taskNames
+	.any {
+		it.contains("package")
+	}.also { println("isRelease: $it") }
 
 plugins {
 	alias(libs.plugins.composeMultiplatform) apply false

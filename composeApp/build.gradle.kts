@@ -1,12 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
-private val mainPackage = ext["mainPackage"].toString().also { println("Package: $it") }
-private val mainVersion = ext["mainVersion"].toString().also { println("Version: $it") }
-
-private fun isDebug() =
-	gradle.startParameter.taskNames.any {
-		it.contains("package")
-	}
+private val mainPackage = rootProject.ext["mainPackage"].toString()
+private val mainVersion = rootProject.ext["mainVersion"].toString()
+private val isRelease = rootProject.ext["isRelease"] == "true"
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
@@ -63,7 +59,7 @@ buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
 		name = "MAIN_VERSION",
-		value = if (isDebug()) mainVersion else "Debug 6.7.8",
+		value = if (isRelease) mainVersion else "Debug 6.7.8",
 	)
 }
 
