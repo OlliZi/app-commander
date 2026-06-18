@@ -12,17 +12,14 @@ dependencies {
 	implementation(libs.kotlinx.coroutinesSwing)
 }
 
-private val mainPackage = rootProject.ext["mainPackage"].toString()
-private val mainVersion = rootProject.ext["mainVersion"].toString()
-
 compose.desktop {
 	application {
-		mainClass = "$mainPackage.launch.DesktopAppKt"
+		mainClass = "${rootProject.ext["mainPackage"]}.launch.DesktopAppKt"
 
 		nativeDistributions {
 			targetFormats(TargetFormat.Dmg, TargetFormat.Deb, TargetFormat.Msi)
 			packageName = "App-Commander"
-			packageVersion = mainVersion
+			packageVersion = rootProject.ext["mainVersion"].toString()
 			modules("jdk.unsupported")
 		}
 	}
