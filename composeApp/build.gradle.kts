@@ -1,4 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 private val mainPackage = rootProject.ext["mainPackage"].toString()
 private val mainVersion = rootProject.ext["mainVersion"].toString()
@@ -6,6 +7,7 @@ private val isRelease = rootProject.ext["isRelease"] == "true"
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
+	alias(libs.plugins.androidMultiplatformLibrary)
 	alias(libs.plugins.composeMultiplatform)
 	alias(libs.plugins.composeCompiler)
 	alias(libs.plugins.kotlinSerialization)
@@ -16,22 +18,65 @@ plugins {
 }
 
 kotlin {
+	listOf(
+		iosArm64(),
+		iosSimulatorArm64(),
+	).forEach { iosTarget ->
+		iosTarget.binaries.framework {
+			baseName = "Shared"
+			isStatic = true
+		}
+	}
+
 	jvm()
 
+	/*js { TODO
+		browser()
+	}*/
+
+	@OptIn(ExperimentalWasmDsl::class)
+	wasmJs {
+		browser()
+	}
+
+	androidLibrary {
+		namespace = "de.joz.myapplication.shared"
+		compileSdk = libs.versions.android.compileSdk
+			.get()
+			.toInt()
+		minSdk = libs.versions.android.minSdk
+			.get()
+			.toInt()
+
+		compilerOptions {
+			jvmTarget = JvmTarget.JVM_11
+		}
+		androidResources {
+			enable = true
+		}
+		withHostTest {
+			isIncludeAndroidResources = true
+		}
+	}
+
 	sourceSets {
+		androidMain.dependencies {
+			implementation(libs.androidx.datastore.preferences)
+		}
 		commonMain.dependencies {
 			implementation(libs.compose.runtime)
 			implementation(libs.compose.foundation)
 			implementation(libs.compose.material3)
 			implementation(libs.compose.ui)
-			implementation(libs.compose.components.resources)
+			api(libs.compose.components.resources)
 			implementation(libs.androidx.lifecycle.viewmodelCompose)
 			implementation(libs.androidx.lifecycle.runtimeCompose)
 			implementation(libs.navigation.compose)
-			implementation(libs.androidx.datastore.preferences)
-			implementation(libs.bundles.koin)
+			api(libs.androidx.datastore.preferences.core)
+			api(libs.bundles.koin)
 			implementation(libs.compose.icons)
 			implementation(libs.kotlinx.serialization.json)
+			api(libs.compose.uiToolingPreview)
 		}
 		commonTest.dependencies {
 			implementation(libs.compose.ui.test)
@@ -39,15 +84,16 @@ kotlin {
 			implementation(libs.mockk)
 			implementation(libs.kotlinx.coroutines.test)
 		}
-		jvmMain.dependencies {
-			implementation(compose.desktop.currentOs)
-			implementation(libs.kotlinx.coroutinesSwing)
+		jsMain.dependencies {
+			implementation(libs.wrappers.browser)
+			implementation(libs.androidx.datastore.preferences.core)
 		}
 	}
 }
 
 dependencies {
 	ksp(libs.koin.ksp)
+	androidRuntimeClasspath(libs.compose.uiTooling)
 }
 
 ksp {
@@ -96,19 +142,6 @@ compose.resources {
 	publicResClass = true
 	packageOfResClass = "$mainPackage.resources"
 	generateResClass = always
-}
-
-compose.desktop {
-	application {
-		mainClass = "$mainPackage.launch.DesktopAppKt"
-
-		nativeDistributions {
-			targetFormats(TargetFormat.Dmg)
-			packageName = "App-Commander"
-			packageVersion = mainVersion
-			modules("jdk.unsupported")
-		}
-	}
 }
 
 tasks.register("runDependencyUpdates") {
