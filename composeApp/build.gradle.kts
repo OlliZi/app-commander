@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 private val mainPackage = rootProject.ext["mainPackage"].toString()
@@ -30,15 +29,7 @@ kotlin {
 
 	jvm()
 
-	/*js { TODO
-		browser()
-	}*/
-
-	@OptIn(ExperimentalWasmDsl::class)
-	wasmJs {
-		browser()
-	}
-
+	// move android to androidApp-dir
 	androidLibrary {
 		namespace = "de.joz.myapplication.shared"
 		compileSdk = libs.versions.android.compileSdk
@@ -86,7 +77,7 @@ kotlin {
 		}
 		jsMain.dependencies {
 			implementation(libs.wrappers.browser)
-			implementation(libs.androidx.datastore.preferences.core)
+			api(libs.androidx.datastore.preferences.core)
 		}
 	}
 }
