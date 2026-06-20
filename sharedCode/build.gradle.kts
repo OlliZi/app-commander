@@ -96,12 +96,6 @@ compose.resources {
 	generateResClass = always
 }
 
-tasks.register("runDependencyUpdates") {
-	group = "_joz"
-	description = "Run dependency updates."
-	dependsOn("dependencyUpdates")
-}
-
 tasks.register("runCodeCoverage") {
 	group = "_joz"
 	description = "Run all kover tasks: Execute all tests and create code coverage."
