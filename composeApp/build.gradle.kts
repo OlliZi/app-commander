@@ -75,10 +75,6 @@ kotlin {
 			implementation(libs.mockk)
 			implementation(libs.kotlinx.coroutines.test)
 		}
-		jsMain.dependencies {
-			implementation(libs.wrappers.browser)
-			api(libs.androidx.datastore.preferences.core)
-		}
 	}
 }
 
