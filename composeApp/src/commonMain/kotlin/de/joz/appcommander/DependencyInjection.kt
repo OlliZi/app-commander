@@ -3,6 +3,7 @@ package de.joz.appcommander
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import de.joz.appcommander.data.ScriptFile
 import de.joz.appcommander.data.getPreferenceFileStorePath
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,9 @@ class DependencyInjection {
 
 	@Factory
 	fun provideWorkingDirectory() = File(".")
+
+	@Factory
+	fun provideScriptFile() = ScriptFile(scriptFile = getPreferenceFileStorePath(fileName = "scripts.json"))
 
 	@Factory
 	fun provideDatastore(): DataStore<Preferences> =

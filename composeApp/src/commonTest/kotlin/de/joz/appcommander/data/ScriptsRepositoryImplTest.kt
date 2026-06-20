@@ -149,7 +149,7 @@ class ScriptsRepositoryImplTest {
 	fun `should return scripts and hint when scripts contains old 'script' field`() =
 		runTest {
 			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
+				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
 				addLoggingUseCase = addLoggingUseCaseMock,
 				processBuilder = ProcessBuilder(),
 			)
@@ -284,7 +284,7 @@ class ScriptsRepositoryImplTest {
 			testFile.writeText("")
 
 			ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
+				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
 				processBuilder = processBuilder,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			).openScriptFile()
@@ -301,7 +301,7 @@ class ScriptsRepositoryImplTest {
 			val processBuilder: ProcessBuilder = mockk(relaxed = true)
 
 			ScriptsRepositoryImpl(
-				scriptFile = "unknown file",
+				scriptFile = ScriptFile(scriptFile = "unknown file"),
 				processBuilder = processBuilder,
 				addLoggingUseCase = addLoggingUseCaseMock,
 			).openScriptFile()
@@ -401,7 +401,7 @@ class ScriptsRepositoryImplTest {
 
 	private fun createRepository(scriptFile: String = testFile.absolutePath) =
 		ScriptsRepositoryImpl(
-			scriptFile = scriptFile,
+			scriptFile = ScriptFile(scriptFile = scriptFile),
 			addLoggingUseCase = addLoggingUseCaseMock,
 			processBuilder = ProcessBuilder(),
 		)

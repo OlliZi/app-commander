@@ -9,11 +9,16 @@ import okio.FileNotFoundException
 import org.koin.core.annotation.Single
 import java.io.File
 
+@JvmInline
+value class ScriptFile(
+	val scriptFile: String,
+)
+
 @Single
 class ScriptsRepositoryImpl(
 	private val addLoggingUseCase: AddLoggingUseCase,
 	private val processBuilder: ProcessBuilder,
-	private val scriptFile: String = getPreferenceFileStorePath(fileName = "scripts.json"),
+	private val scriptFile: ScriptFile,
 ) : ScriptsRepository {
 	private val prettyJson = Json {
 		prettyPrint = true
@@ -22,7 +27,7 @@ class ScriptsRepositoryImpl(
 
 	override fun getScripts(): JsonParseResult =
 		runCatching {
-			val jsonFile = File(scriptFile)
+			val jsonFile = File(scriptFile.scriptFile)
 			if (!jsonFile.exists()) {
 				jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
 			}
@@ -42,13 +47,13 @@ class ScriptsRepositoryImpl(
 
 	override fun openScriptFile() {
 		runCatching {
-			if (File(scriptFile).exists().not()) {
-				throw FileNotFoundException(scriptFile)
+			if (File(scriptFile.scriptFile).exists().not()) {
+				throw FileNotFoundException(scriptFile.scriptFile)
 			}
-			processBuilder.command("open", scriptFile)
+			processBuilder.command("open", scriptFile.scriptFile)
 			processBuilder.start()
 		}.onFailure {
-			addLoggingUseCase("Cannot open script file '$scriptFile'. (Error: ${it.message})")
+			addLoggingUseCase("Cannot open script file '${scriptFile.scriptFile}'. (Error: ${it.message})")
 		}
 	}
 
@@ -70,10 +75,10 @@ class ScriptsRepositoryImpl(
 			ScriptsRepository.WriteScriptResult.Success(writeScriptsToFile(getScripts().scripts - script))
 		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.RemoveError(message = error.message ?: "Unknown error") }
 
-	override fun getScriptFile() = scriptFile
+	override fun getScriptFile() = scriptFile.scriptFile
 
 	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {
-		val jsonFile = File(scriptFile)
+		val jsonFile = File(scriptFile.scriptFile)
 		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
 	}
 
