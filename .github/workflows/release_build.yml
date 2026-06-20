@@ -26,4 +26,4 @@ jobs:
           path: |
             **/build/compose/binaries/main/app/**
             **/build/compose/binaries/main/dmg/**
-            **/build/libs/sharedCode-jvm.jar
+            **/build/libs/composeApp-jvm.jar
