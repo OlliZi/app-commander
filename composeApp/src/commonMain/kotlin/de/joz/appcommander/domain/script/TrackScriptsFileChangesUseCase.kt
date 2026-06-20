@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Factory
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.time.Duration.Companion.milliseconds
 
 @Factory
 class TrackScriptsFileChangesUseCase(
@@ -20,7 +21,7 @@ class TrackScriptsFileChangesUseCase(
 			while (true) {
 				val prefsValueInSeconds = getPreferenceUseCase.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, 1).toLong()
 				val waitDelay = 1000 * min(10, max(1, prefsValueInSeconds))
-				delay(waitDelay)
+				delay(waitDelay.milliseconds)
 
 				val newLoadedScripts = getUserScriptsUseCase()
 				if (scripts == null) {
