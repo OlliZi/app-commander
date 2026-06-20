@@ -10,7 +10,7 @@ rootProject.ext["mainVersion"] = "2.1.0".also { println("Version: $it") }
 rootProject.ext["isRelease"] = gradle.startParameter.taskNames
 	.any {
 		it.contains("package")
-	}.also { println("isRelease: $it") }
+	}.also { println("Is release build: $it") }
 
 plugins {
 	alias(libs.plugins.composeMultiplatform) apply false
