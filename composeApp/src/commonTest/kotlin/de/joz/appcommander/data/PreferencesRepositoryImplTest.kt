@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.preferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
+import de.joz.appcommander.helper.TestRuleApplier
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -16,7 +17,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PreferencesRepositoryImplTest {
+class PreferencesRepositoryImplTest : TestRuleApplier() {
 	private val dataStoreMock: DataStore<Preferences> = mockk()
 	private val preferencesRepository = PreferencesRepositoryImpl(
 		dataStore = dataStoreMock,

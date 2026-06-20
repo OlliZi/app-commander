@@ -1,62 +1,56 @@
 package de.joz.appcommander.data
 
 import de.joz.appcommander.helper.TestRuleApplier
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class LoggingRepositoryImplTest : TestRuleApplier() {
 	@Test
-	fun `should empty after startup`() =
-		runTest {
-			val repository = createRepository()
+	fun `should empty after startup`() {
+		val repository = createRepository()
 
-			assertTrue(repository.logging.value.isEmpty())
-		}
-
-	@Test
-	fun `should add log`() =
-		runTest {
-			val repository = createRepository()
-
-			repository.add("foo")
-
-			assertEquals(listOf("foo"), repository.logging.value)
-		}
+		assertTrue(repository.logging.value.isEmpty())
+	}
 
 	@Test
-	fun `should ignore empty log`() =
-		runTest {
-			val repository = createRepository()
+	fun `should add log`() {
+		val repository = createRepository()
 
-			repository.add("")
+		repository.add("foo")
 
-			assertTrue(repository.logging.value.isEmpty())
-		}
-
-	@Test
-	fun `should clear log`() =
-		runTest {
-			val repository = createRepository()
-
-			repository.add("foo")
-			repository.clear()
-
-			assertTrue(repository.logging.value.isEmpty())
-		}
+		assertEquals(listOf("foo"), repository.logging.value)
+	}
 
 	@Test
-	fun `should trunk log`() =
-		runTest {
-			val repository = createRepository()
+	fun `should ignore empty log`() {
+		val repository = createRepository()
 
-			(0..1000).forEach {
-				repository.add(it.toString())
-			}
+		repository.add("")
 
-			assertEquals(100, repository.logging.value.size)
+		assertTrue(repository.logging.value.isEmpty())
+	}
+
+	@Test
+	fun `should clear log`() {
+		val repository = createRepository()
+
+		repository.add("foo")
+		repository.clear()
+
+		assertTrue(repository.logging.value.isEmpty())
+	}
+
+	@Test
+	fun `should trunk log`() {
+		val repository = createRepository()
+
+		(0..1000).forEach {
+			repository.add(it.toString())
 		}
+
+		assertEquals(100, repository.logging.value.size)
+	}
 
 	private fun createRepository() = LoggingRepositoryImpl()
 }

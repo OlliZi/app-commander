@@ -1,6 +1,7 @@
 package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -12,8 +13,9 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 
-class TrackScriptsFileChangesUseCaseTest {
+class TrackScriptsFileChangesUseCaseTest : TestRuleApplier() {
 	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
 
@@ -74,7 +76,7 @@ class TrackScriptsFileChangesUseCaseTest {
 				}
 			}
 
-			advanceTimeBy(2500)
+			advanceTimeBy(2500.milliseconds)
 
 			assertTrue(collectedScripts.isEmpty(), "Should not emit anything if the scripts do not change.")
 
