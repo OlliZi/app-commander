@@ -1,6 +1,6 @@
 private val mainPackage = rootProject.ext["mainPackage"].toString()
 private val mainVersion = rootProject.ext["mainVersion"].toString()
-private val isRelease = rootProject.ext["isRelease"] == "true"
+private val isRelease = rootProject.ext["isRelease"].toString() == "true"
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
@@ -57,7 +57,9 @@ buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
 		name = "MAIN_VERSION",
-		value = if (isRelease) mainVersion else "Debug 6.7.8",
+		value = (if (isRelease) mainVersion else "Debug 6.7.8").also {
+			println("Applied version: $it")
+		},
 	)
 }
 
