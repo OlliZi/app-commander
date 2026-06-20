@@ -45,7 +45,7 @@ kotlin {
 }
 
 dependencies {
-	ksp(libs.koin.ksp)
+	add("kspJvm", libs.koin.ksp)
 }
 
 ksp {
