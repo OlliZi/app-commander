@@ -3,6 +3,7 @@ package de.joz.appcommander.domain.script
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -38,6 +39,9 @@ class TrackScriptsFileChangesUseCase(
 				}
 			}.onFailure {
 				addLoggingUseCase("Error tracking scripts file changes: ${it.message}")
+				if (it is CancellationException) {
+					throw it
+				}
 			}
 		}
 }
