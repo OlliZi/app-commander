@@ -1,6 +1,5 @@
 package de.joz.appcommander.data
 
-import de.joz.appcommander.ScriptFile
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
@@ -14,7 +13,7 @@ import java.io.File
 class ScriptsRepositoryImpl(
 	private val addLoggingUseCase: AddLoggingUseCase,
 	private val processBuilder: ProcessBuilder,
-	@ScriptFile private val scriptFile: String,
+	private val scriptFile: String = getPreferenceFileStorePath(fileName = "scripts.json"),
 ) : ScriptsRepository {
 	private val prettyJson = Json {
 		prettyPrint = true

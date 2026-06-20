@@ -31,10 +31,6 @@ class DependencyInjection {
 	fun provideWorkingDirectory() = File(".")
 
 	@Factory
-	@ScriptFile
-	fun provideScriptFileWorkingDirectory() = getPreferenceFileStorePath(fileName = "scripts.json")
-
-	@Factory
 	fun provideDatastore(): DataStore<Preferences> =
 		PreferenceDataStoreFactory.createWithPath(
 			corruptionHandler = null,
@@ -52,7 +48,3 @@ annotation class MainDispatcher
 @Named
 @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
 annotation class IODispatcher
-
-@Named
-@Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
-annotation class ScriptFile
