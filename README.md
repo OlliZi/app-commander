@@ -109,6 +109,7 @@ App-Commander is built with modern technologies and best practices:
 
 ## 👷TODOs
 - Create a demo app for Android (?)
+- Bug: Load identical selected devices in edit mode
 - Create a video showing the UI with emulator and a real device
 
 ## 🤝 Contributing
