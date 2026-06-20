@@ -38,10 +38,10 @@ class TrackScriptsFileChangesUseCase(
 					}
 				}
 			}.onFailure {
-				addLoggingUseCase("Error tracking scripts file changes: ${it.message}")
 				if (it is CancellationException) {
 					throw it
 				}
+				addLoggingUseCase("Error tracking scripts file changes: ${it.message}")
 			}
 		}
 }
