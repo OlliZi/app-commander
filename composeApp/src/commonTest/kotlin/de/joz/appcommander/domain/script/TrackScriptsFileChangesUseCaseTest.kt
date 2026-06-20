@@ -1,12 +1,15 @@
 package de.joz.appcommander.domain.script
 
+import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY
 import io.mockk.coEvery
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -18,6 +21,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class TrackScriptsFileChangesUseCaseTest : TestRuleApplier() {
 	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
 	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
+	private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
 
 	@Test
 	fun `invoke emits a new script list when a change is detected`() =
@@ -36,6 +40,17 @@ class TrackScriptsFileChangesUseCaseTest : TestRuleApplier() {
 				createDummyScripts(2).scripts[1],
 				emittedScripts.scripts[1],
 			)
+		}
+
+	@Test
+	fun `should log error when an error occurred`() =
+		runTest {
+			coEvery { getUserScriptsUseCaseMock() } throws IllegalArgumentException("test error")
+			val trackScriptsFileChangesUseCase = createUseCase()
+
+			trackScriptsFileChangesUseCase().firstOrNull()
+
+			verify { addLoggingUseCaseMock.invoke("Error tracking scripts file changes: test error") }
 		}
 
 	@Test
@@ -105,6 +120,7 @@ class TrackScriptsFileChangesUseCaseTest : TestRuleApplier() {
 		return TrackScriptsFileChangesUseCase(
 			getUserScriptsUseCase = getUserScriptsUseCaseMock,
 			getPreferenceUseCase = getPreferenceUseCaseMock,
+			addLoggingUseCase = addLoggingUseCaseMock,
 		)
 	}
 }
