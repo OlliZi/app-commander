@@ -26,6 +26,16 @@ class LoggingRepositoryImplTest : TestRuleApplier() {
 		}
 
 	@Test
+	fun `should ignore empty log`() =
+		runTest {
+			val repository = createRepository()
+
+			repository.add("")
+
+			assertTrue(repository.logging.value.isEmpty())
+		}
+
+	@Test
 	fun `should clear log`() =
 		runTest {
 			val repository = createRepository()
@@ -45,7 +55,7 @@ class LoggingRepositoryImplTest : TestRuleApplier() {
 				repository.add(it.toString())
 			}
 
-			assertEquals(repository.logging.value.size, 100)
+			assertEquals(100, repository.logging.value.size)
 		}
 
 	private fun createRepository() = LoggingRepositoryImpl()
