@@ -5,6 +5,7 @@ import de.joz.appcommander.helper.IsLocalTestRunUseCase
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -16,9 +17,7 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should execute script when launched`() =
 		runTest {
-			val executeScriptUseCase = ExecuteScriptUseCase(
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				scripts = listOf("echo foo"),
@@ -35,9 +34,7 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should chain multiples scripts when scripts are chained by special command &&`() =
 		runTest {
-			val executeScriptUseCase = ExecuteScriptUseCase(
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				scripts = listOf(
@@ -65,9 +62,7 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should execute script multiple times when special command '#LOOP_X' is prefixed`() =
 		runTest {
-			val executeScriptUseCase = ExecuteScriptUseCase(
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				scripts = listOf("#LOOP_3 echo foo"),
@@ -84,9 +79,7 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should not log device when no devive provided`() =
 		runTest {
-			val executeScriptUseCase = ExecuteScriptUseCase(
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				scripts = listOf("echo foo"),
@@ -101,9 +94,7 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should return an failure if script execution fails`() =
 		runTest {
-			val executeScriptUseCase = ExecuteScriptUseCase(
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				scripts = listOf("foo_bar_unknown_command"),
@@ -125,9 +116,7 @@ class ExecuteScriptUseCaseTest {
 				return@runTest
 			}
 
-			val executeScriptUseCase = ExecuteScriptUseCase(
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val executeScriptUseCase = createUseCase()
 
 			val script = ScriptsRepository.Script(
 				label = "Test",
@@ -144,4 +133,11 @@ class ExecuteScriptUseCaseTest {
 				)
 			}
 		}
+
+	private fun createUseCase() =
+		ExecuteScriptUseCase(
+			addLoggingUseCase = addLoggingUseCaseMock,
+			workingDir = File("."),
+			processBuilder = ProcessBuilder(),
+		)
 }

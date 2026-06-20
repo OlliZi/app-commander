@@ -28,10 +28,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return same script file`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			assertEquals(testFile.absolutePath, repository.getScriptFile())
 		}
@@ -39,10 +36,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return default scripts when file does not exist`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			assertFalse(testFile.exists())
 
@@ -81,10 +75,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return default scripts and error when file contains invalid JSON`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			testFile.writeText("{ key : invalid JSON, }")
 
@@ -122,10 +113,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return scripts and hint when scripts contains scripts trimmer`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			testFile.writeText(
 				"""
@@ -163,6 +151,7 @@ class ScriptsRepositoryImplTest {
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = testFile.absolutePath,
 				addLoggingUseCase = addLoggingUseCaseMock,
+				processBuilder = ProcessBuilder(),
 			)
 
 			testFile.writeText(
@@ -219,10 +208,7 @@ class ScriptsRepositoryImplTest {
 				),
 			)
 
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			assertTrue(testFile.exists())
 
@@ -265,10 +251,7 @@ class ScriptsRepositoryImplTest {
 						"]",
 			)
 
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			assertTrue(testFile.exists())
 
@@ -331,10 +314,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should save script when method is called`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			val newScript = ScriptsRepository.Script(
 				scripts = listOf("bar"),
@@ -353,10 +333,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should remove script when method is called`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			val scripts = repository.getScripts().scripts
 			val scriptToRemove = scripts.first()
@@ -371,10 +348,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should update script when method is called`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			val scripts = repository.getScripts()
 			val oldScript = scripts.scripts.first()
@@ -393,10 +367,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return an error when updating fails`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			val result = repository.updateScript(script = mockk(), oldScript = mockk())
 
@@ -407,10 +378,7 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return an error when saving fails`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = testFile.absolutePath,
-				addLoggingUseCase = addLoggingUseCaseMock,
-			)
+			val repository = createRepository()
 
 			val result = repository.saveScript(script = mockk())
 
@@ -421,9 +389,8 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return an error when removing fails`() =
 		runTest {
-			val repository = ScriptsRepositoryImpl(
+			val repository = createRepository(
 				scriptFile = "",
-				addLoggingUseCase = addLoggingUseCaseMock,
 			)
 
 			val result = repository.removeScript(script = mockk())
@@ -431,4 +398,11 @@ class ScriptsRepositoryImplTest {
 			assertIs<ScriptsRepository.WriteScriptResult.RemoveError>(result)
 			assertFalse(result.message.isBlank())
 		}
+
+	private fun createRepository(scriptFile: String = testFile.absolutePath) =
+		ScriptsRepositoryImpl(
+			scriptFile = scriptFile,
+			addLoggingUseCase = addLoggingUseCaseMock,
+			processBuilder = ProcessBuilder(),
+		)
 }
