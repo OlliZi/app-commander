@@ -5,7 +5,7 @@ buildscript {
 }
 
 rootProject.ext["mainPackage"] = "de.joz.appcommander".also { println("Package: $it") }
-rootProject.ext["mainVersion"] = "2.1.0".also { println("Version: $it") }
+rootProject.ext["mainVersion"] = "3.0.0".also { println("Version: $it") }
 rootProject.ext["isRelease"] = gradle.startParameter.taskNames
 	.any {
 		it.contains("package")
