@@ -1,5 +1,6 @@
 buildscript {
 	dependencies {
+		// https://github.com/ben-manes/gradle-versions-plugin
 		classpath(libs.gradle.versions.plugin)
 		classpath(libs.ktlint.gradle)
 	}
