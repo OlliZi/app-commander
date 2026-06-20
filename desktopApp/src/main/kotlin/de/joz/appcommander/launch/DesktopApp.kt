@@ -1,3 +1,5 @@
+@file:Suppress("WildcardImport")
+
 package de.joz.appcommander.launch
 
 import androidx.compose.ui.unit.DpSize
