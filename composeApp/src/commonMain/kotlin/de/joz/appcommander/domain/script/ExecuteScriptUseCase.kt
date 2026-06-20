@@ -10,8 +10,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @Factory
 class ExecuteScriptUseCase(
 	private val addLoggingUseCase: AddLoggingUseCase,
-	private val workingDir: File = File("."),
-	private val processBuilder: ProcessBuilder = ProcessBuilder(),
+	private val workingDir: File,
+	private val processBuilder: ProcessBuilder,
 ) {
 	suspend operator fun invoke(
 		script: ScriptsRepository.Script,

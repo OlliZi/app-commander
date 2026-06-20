@@ -11,6 +11,7 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Named
+import java.io.File
 
 @Module(includes = [])
 @ComponentScan
@@ -25,6 +26,13 @@ class DependencyInjection {
 
 	@Factory
 	fun provideProcessBuilder() = ProcessBuilder()
+
+	@Factory
+	fun provideWorkingDirectory() = File(".")
+
+	@Factory
+	@ScriptFile
+	fun provideScriptFileWorkingDirectory() = getPreferenceFileStorePath(fileName = "scripts.json")
 
 	@Factory
 	fun provideDatastore(): DataStore<Preferences> =
@@ -44,3 +52,7 @@ annotation class MainDispatcher
 @Named
 @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
 annotation class IODispatcher
+
+@Named
+@Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION)
+annotation class ScriptFile
