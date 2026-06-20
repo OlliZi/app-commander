@@ -3,6 +3,7 @@ package de.joz.appcommander
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.data.ScriptsRepositoryImpl
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
@@ -48,6 +49,13 @@ class AppTest : TestRuleApplier() {
 												any<Boolean>(),
 											)
 										} returns false
+
+										coEvery {
+											get(
+												ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE,
+												any<Int>(),
+											)
+										} returns ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex
 									}
 								}
 							},
