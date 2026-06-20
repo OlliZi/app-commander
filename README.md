@@ -108,10 +108,10 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Create a demo app for Android (?)
 - Create nice app icon
 - Bug: Load identical selected devices in edit mode
 - Create a video showing the UI with emulator and a real device
+- Create a demo app for Android
 
 ## 🤝 Contributing
 
