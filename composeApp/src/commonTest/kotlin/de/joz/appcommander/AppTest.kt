@@ -8,6 +8,7 @@ import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import io.mockk.every
 import io.mockk.mockk
@@ -19,7 +20,7 @@ import org.koin.dsl.module
 import org.koin.ksp.generated.*
 import kotlin.test.Test
 
-class AppTest {
+class AppTest : TestRuleApplier() {
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
 	)

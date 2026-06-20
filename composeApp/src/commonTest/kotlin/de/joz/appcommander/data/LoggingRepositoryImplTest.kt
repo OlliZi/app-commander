@@ -1,11 +1,12 @@
 package de.joz.appcommander.data
 
+import de.joz.appcommander.helper.TestRuleApplier
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class LoggingRepositoryImplTest {
+class LoggingRepositoryImplTest : TestRuleApplier() {
 	@Test
 	fun `should empty after startup`() =
 		runTest {
@@ -44,7 +45,7 @@ class LoggingRepositoryImplTest {
 				repository.add(it.toString())
 			}
 
-			assertTrue(repository.logging.value.size == 100)
+			assertEquals(repository.logging.value.size, 100)
 		}
 
 	private fun createRepository() = LoggingRepositoryImpl()

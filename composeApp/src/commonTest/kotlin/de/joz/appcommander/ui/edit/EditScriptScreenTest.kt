@@ -26,6 +26,7 @@ import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -36,7 +37,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
-class EditScriptScreenTest {
+class EditScriptScreenTest : TestRuleApplier() {
 	private val navControllerMock: NavController = mockk(relaxed = true)
 	private val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
@@ -580,24 +581,25 @@ class EditScriptScreenTest {
 	}
 
 	private fun ComposeUiTest.setTestContent(scriptKey: Int? = null) {
+		val viewModel = EditScriptViewModel(
+			navController = navControllerMock,
+			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
+			getScriptIdUseCase = getScriptIdUseCaseMock,
+			executeScriptUseCase = executeScriptUseCaseMock,
+			saveUserScriptUseCase = saveUserScriptUseCaseMock,
+			removeUserScriptUseCase = removeUserScriptUseCaseMock,
+			saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
+			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
+			mainDispatcher = Dispatchers.Unconfined,
+			ioDispatcher = Dispatchers.Unconfined,
+			scriptKey = scriptKey,
+		)
 		setContent {
 			AppCommanderTheme(
 				darkTheme = true,
 				content = {
 					EditScriptScreen(
-						viewModel = EditScriptViewModel(
-							navController = navControllerMock,
-							getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
-							getScriptIdUseCase = getScriptIdUseCaseMock,
-							executeScriptUseCase = executeScriptUseCaseMock,
-							saveUserScriptUseCase = saveUserScriptUseCaseMock,
-							removeUserScriptUseCase = removeUserScriptUseCaseMock,
-							saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
-							getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
-							mainDispatcher = Dispatchers.Unconfined,
-							ioDispatcher = Dispatchers.Unconfined,
-							scriptKey = scriptKey,
-						),
+						viewModel = viewModel,
 					)
 				},
 			)

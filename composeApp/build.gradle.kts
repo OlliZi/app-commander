@@ -65,6 +65,9 @@ kotlin {
 			implementation(libs.mockk)
 			implementation(libs.kotlinx.coroutines.test)
 		}
+		jvmTest.dependencies {
+			implementation(compose.desktop.currentOs)
+		}
 	}
 }
 
