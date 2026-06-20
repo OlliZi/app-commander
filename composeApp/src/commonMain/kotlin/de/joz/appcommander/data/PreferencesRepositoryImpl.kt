@@ -1,7 +1,6 @@
 package de.joz.appcommander.data
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -12,14 +11,13 @@ import de.joz.appcommander.domain.preference.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import okio.Path.Companion.toPath
 import org.koin.core.annotation.Single
 
 expect fun getPreferenceFileStorePath(fileName: String): String
 
 @Single
 internal class PreferencesRepositoryImpl(
-	private val dataStore: DataStore<Preferences> = createDataStore(),
+	private val dataStore: DataStore<Preferences>,
 ) : PreferencesRepository {
 	override suspend fun get(
 		key: String,
@@ -72,14 +70,3 @@ internal class PreferencesRepositoryImpl(
 		}
 	}
 }
-
-private fun createDataStore(): DataStore<Preferences> =
-	PreferenceDataStoreFactory.createWithPath(
-		corruptionHandler = null,
-		migrations = emptyList(),
-		produceFile = {
-			getPreferenceFileStorePath(fileName = SIMPLE_PREF_FILE_NAME).toPath()
-		},
-	)
-
-internal const val SIMPLE_PREF_FILE_NAME = "userprefs.preferences_pb"

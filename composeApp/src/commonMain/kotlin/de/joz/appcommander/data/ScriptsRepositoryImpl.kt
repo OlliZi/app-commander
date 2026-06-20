@@ -12,8 +12,8 @@ import java.io.File
 @Single
 class ScriptsRepositoryImpl(
 	private val addLoggingUseCase: AddLoggingUseCase,
+	private val processBuilder: ProcessBuilder,
 	private val scriptFile: String = getPreferenceFileStorePath(fileName = JSON_FILE_NAME),
-	private val processBuilder: ProcessBuilder = ProcessBuilder(),
 ) : ScriptsRepository {
 	private val prettyJson = Json {
 		prettyPrint = true
