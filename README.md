@@ -36,18 +36,18 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 ## 📸 First Impressions II
 
 **Welcome Screen Animation**
-    <kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/welcome/screenshots/animation.png)</kbd>
+    <kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/welcome/screenshots/animation.png)</kbd>
 
 **Scripts Screen**
-    <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
-    <kbd>![Scripts-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
+    <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
+    <kbd>![Scripts-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
 
 **Edit/Add Script Screen**
-    <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/edit/screenshots/edit_script_ui.png)</kbd>
+    <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/edit/screenshots/edit_script_ui.png)</kbd>
 
 **Settings Screen**
-    <kbd>![Settings-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
-    <kbd>![Settings-screen with changed label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/composeApp/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
+    <kbd>![Settings-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
+    <kbd>![Settings-screen with changed label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 ## 🤖 How It Works
 
@@ -85,7 +85,7 @@ Unleash the full potential of App-Commander with these special commands in your 
 
 1.  Clone the repository.
 2.  Open the project in your IDE (e.g., IntelliJ IDEA, Android Studio).
-3.  Navigate to `composeApp/src/jvmMain/kotlin/de/joz/appcommander/DesktopApp.kt`.
+3.  Navigate to `desktopApp/src/main/kotlin/de/joz/appcommander/launch/DesktopApp.kt`.
 4.  Run the `main` function to start the desktop application.
 
 To create a distributable package, run the gradle task `package` or `package<Platform>` (e.g., `packageDmg`, `packageMsi`).
@@ -102,14 +102,16 @@ App-Commander is built with modern technologies and best practices:
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
-    *   Code Coverage with Kover (> 95 %).
+    *   Code Coverage with Kover (~ 95 %).
     *   Execute code quality locally (on my jenkins) and in github-cloud.
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Create a demo app for Android (?)
+- Create nice app icon
+- Bug: Load identical selected devices in edit mode
 - Create a video showing the UI with emulator and a real device
+- Create a demo app for Android
 
 ## 🤝 Contributing
 

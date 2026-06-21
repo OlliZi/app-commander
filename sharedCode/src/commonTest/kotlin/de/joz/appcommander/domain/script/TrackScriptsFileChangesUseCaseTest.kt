@@ -1,0 +1,126 @@
+package de.joz.appcommander.domain.script
+
+import de.joz.appcommander.domain.logging.AddLoggingUseCase
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.helper.TestRuleApplier
+import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
+
+class TrackScriptsFileChangesUseCaseTest : TestRuleApplier() {
+	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk()
+	private val getPreferenceUseCaseMock: GetPreferenceUseCase = mockk()
+	private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
+
+	@Test
+	fun `invoke emits a new script list when a change is detected`() =
+		runTest {
+			coEvery { getUserScriptsUseCaseMock() } returns createDummyScripts(1) andThen createDummyScripts(2)
+			val trackScriptsFileChangesUseCase = createUseCase()
+
+			val emittedScripts = trackScriptsFileChangesUseCase().first()
+
+			assertEquals(2, emittedScripts.scripts.size)
+			assertEquals(
+				createDummyScripts(2).scripts[0],
+				emittedScripts.scripts[0],
+			)
+			assertEquals(
+				createDummyScripts(2).scripts[1],
+				emittedScripts.scripts[1],
+			)
+		}
+
+	@Test
+	fun `should log error when an error occurred`() =
+		runTest {
+			coEvery { getUserScriptsUseCaseMock() } throws IllegalArgumentException("test error")
+			val trackScriptsFileChangesUseCase = createUseCase()
+
+			trackScriptsFileChangesUseCase().firstOrNull()
+
+			verify { addLoggingUseCaseMock.invoke("Error tracking scripts file changes: test error") }
+		}
+
+	@Test
+	fun `invoke emits a script list when a parsing hint is detected`() =
+		runTest {
+			val firstError = ScriptsRepository.ParsingMetaData.MultiScriptsHint
+			val secondError = ScriptsRepository.ParsingMetaData.OldScriptFieldHint
+
+			coEvery { getUserScriptsUseCaseMock() } returns createDummyScripts(
+				1,
+				parsingMetaData = firstError,
+			) andThen createDummyScripts(1, parsingMetaData = secondError)
+			val trackScriptsFileChangesUseCase = createUseCase()
+
+			val emittedScripts = trackScriptsFileChangesUseCase().first()
+
+			assertEquals(1, emittedScripts.scripts.size)
+			assertEquals(
+				createDummyScripts(1).scripts[0],
+				emittedScripts.scripts[0],
+			)
+			assertEquals(
+				secondError,
+				emittedScripts.parsingMetaData,
+			)
+		}
+
+	@OptIn(ExperimentalCoroutinesApi::class)
+	@Test
+	fun `invoke does not emit when script list has not changed`() =
+		runTest {
+			coEvery { getUserScriptsUseCaseMock() } returns createDummyScripts(1)
+			val trackScriptsFileChangesUseCase = createUseCase()
+			val collectedScripts = mutableListOf<List<ScriptsRepository.Script>>()
+			val job = launch {
+				trackScriptsFileChangesUseCase().collect {
+					collectedScripts.add(it.scripts)
+				}
+			}
+
+			advanceTimeBy(2500.milliseconds)
+
+			assertTrue(collectedScripts.isEmpty(), "Should not emit anything if the scripts do not change.")
+
+			job.cancel()
+		}
+
+	private fun createDummyScripts(
+		count: Int,
+		parsingMetaData: ScriptsRepository.ParsingMetaData? = null,
+	) = ScriptsRepository.JsonParseResult(
+		scripts = (1..count).map {
+			ScriptsRepository.Script(
+				label = "foo $it",
+				scripts = listOf("echo $it"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+		},
+		parsingMetaData = parsingMetaData,
+	)
+
+	private fun createUseCase(): TrackScriptsFileChangesUseCase {
+		coEvery {
+			getPreferenceUseCaseMock.get(TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY, any<Int>())
+		} returns 1
+
+		return TrackScriptsFileChangesUseCase(
+			getUserScriptsUseCase = getUserScriptsUseCaseMock,
+			getPreferenceUseCase = getPreferenceUseCaseMock,
+			addLoggingUseCase = addLoggingUseCaseMock,
+		)
+	}
+}
