@@ -22,6 +22,16 @@ compose.desktop {
 			packageName = "App-Commander"
 			packageVersion = rootProject.ext["mainVersion"].toString()
 			modules("jdk.unsupported")
+
+			macOS {
+				iconFile.set(project.file("app_logo_mac.icns"))
+			}
+			windows {
+				// TODO Create PR if needed:) iconFile.set(project.file("icon.ico"))
+			}
+			linux {
+				iconFile.set(project.file("../sharedCode/src/commonMain/composeResources/drawable/app_logo.png"))
+			}
 		}
 	}
 }
