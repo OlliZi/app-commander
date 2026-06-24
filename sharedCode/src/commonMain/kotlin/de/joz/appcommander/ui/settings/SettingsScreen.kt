@@ -1,10 +1,12 @@
 package de.joz.appcommander.ui.settings
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.BuildConfig
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.app_logo
 import de.joz.appcommander.resources.settings_footer
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
@@ -28,6 +31,7 @@ import de.joz.appcommander.ui.misc.Slider
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -118,8 +122,13 @@ internal fun SettingsContent(
 
 			Box(modifier = Modifier.weight(1f))
 
+			Image(
+				modifier = Modifier.size(400.dp).align(Alignment.CenterHorizontally),
+				painter = painterResource(Res.drawable.app_logo),
+				contentDescription = null,
+			)
 			TextLabel(
-				modifier = Modifier.align(Alignment.CenterHorizontally),
+				modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp),
 				text = stringResource(Res.string.settings_footer, BuildConfig.MAIN_VERSION),
 				textLabelType = TextLabelType.BodyLarge,
 			)
