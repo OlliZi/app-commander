@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.welcome
+import de.joz.appcommander.resources.app_logo
 import de.joz.appcommander.resources.welcome_action
 import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_do_not_show_again
@@ -106,19 +106,19 @@ internal fun WelcomeContent(
 			TextLabel(
 				modifier = Modifier.padding(top = 24.dp),
 				text = stringResource(Res.string.welcome_title),
-				textLabelType = TextLabelType.HeadlineLarge,
+				textLabelType = TextLabelType.HeadlineMedium,
 				textAlign = TextAlign.Center,
 			)
 			Spacer(Modifier.height(16.dp))
 			TextLabel(
 				text = stringResource(Res.string.welcome_catch_phrase),
-				textLabelType = TextLabelType.HeadlineSmall,
+				textLabelType = TextLabelType.BodyLarge,
 				textAlign = TextAlign.Center,
 			)
 			Spacer(Modifier.height(12.dp))
 			Image(
-				modifier = Modifier.size(380.dp),
-				painter = painterResource(Res.drawable.welcome),
+				modifier = Modifier.size(500.dp),
+				painter = painterResource(Res.drawable.app_logo),
 				contentDescription = null,
 			)
 			Spacer(Modifier.height(16.dp))
