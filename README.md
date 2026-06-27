@@ -110,7 +110,6 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Bug: Load identical selected devices in edit mode
 - Create a video showing the UI with emulator and a real device
 - Create a demo app for Android
 
