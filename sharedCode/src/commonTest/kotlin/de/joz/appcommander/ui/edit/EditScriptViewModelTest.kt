@@ -1,6 +1,7 @@
 package de.joz.appcommander.ui.edit
 
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase.ConnectedDevice
@@ -10,7 +11,6 @@ import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
-import de.joz.appcommander.ui.misc.model.Device
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

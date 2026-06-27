@@ -1,4 +1,4 @@
-package de.joz.appcommander.ui.misc.model
+package de.joz.appcommander.domain.model
 
 data class Device(
 	val id: String,
