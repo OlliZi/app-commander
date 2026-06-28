@@ -1,21 +1,21 @@
 package de.joz.appcommander.ui.scripts
 
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
-import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
-import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.coEvery

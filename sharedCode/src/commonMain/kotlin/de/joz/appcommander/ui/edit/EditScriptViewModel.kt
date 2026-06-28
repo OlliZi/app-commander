@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
+import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
-import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
@@ -14,7 +15,6 @@ import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.ui.misc.TypedStringResource
 import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
-import de.joz.appcommander.ui.misc.model.Device
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -38,6 +38,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Edit
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_add_new_script
@@ -63,7 +64,6 @@ import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.TitleBarAction
-import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script

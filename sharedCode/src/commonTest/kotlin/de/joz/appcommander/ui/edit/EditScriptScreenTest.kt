@@ -16,9 +16,9 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
-import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
-import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
 import de.joz.appcommander.domain.script.RemoveUserScriptUseCase

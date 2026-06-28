@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
@@ -20,7 +21,6 @@ import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
 import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
 import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
-import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
