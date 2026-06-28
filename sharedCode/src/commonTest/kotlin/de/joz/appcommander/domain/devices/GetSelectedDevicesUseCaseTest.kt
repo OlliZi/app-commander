@@ -6,6 +6,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GetSelectedDevicesUseCaseTest {
@@ -25,9 +26,9 @@ class GetSelectedDevicesUseCaseTest {
 				selectedDevicesRepositoryMock.getSelectedDevices()
 			} returns listOf(selectedTestDevice, unSelectedTestDevice)
 
-			val result = createUseCase().invoke().isEmpty()
+			val result = createUseCase().invoke()
 
-			assertTrue(result)
+			assertTrue(result.isEmpty())
 			coVerify {
 				saveSelectedDevicesUseCaseMock.invoke(devices = emptyList())
 			}
@@ -51,9 +52,9 @@ class GetSelectedDevicesUseCaseTest {
 				selectedDevicesRepositoryMock.getSelectedDevices()
 			} returns emptyList()
 
-			val result = createUseCase().invoke().isEmpty()
+			val result = createUseCase().invoke()
 
-			assertTrue(result)
+			assertTrue(result.isEmpty())
 			coVerify {
 				saveSelectedDevicesUseCaseMock.invoke(devices = emptyList())
 			}
@@ -77,11 +78,38 @@ class GetSelectedDevicesUseCaseTest {
 				selectedDevicesRepositoryMock.getSelectedDevices()
 			} returns listOf(unSelectedTestDevice)
 
-			val result = createUseCase().invoke().isEmpty()
+			val result = createUseCase().invoke()
 
-			assertTrue(result)
+			assertTrue(result.isEmpty())
 			coVerify {
 				saveSelectedDevicesUseCaseMock.invoke(devices = emptyList())
+			}
+			coVerify {
+				selectedDevicesRepositoryMock.getSelectedDevices()
+			}
+		}
+
+	@Test
+	fun `should return selected devices when devices are previously selected and they are some to the connected devices`() =
+		runTest {
+			coEvery {
+				getConnectedDevicesUseCaseMock()
+			} returns listOf(
+				GetConnectedDevicesUseCase.ConnectedDevice(
+					id = selectedTestDevice.id,
+					label = selectedTestDevice.label,
+				),
+			)
+			coEvery {
+				selectedDevicesRepositoryMock.getSelectedDevices()
+			} returns listOf(selectedTestDevice)
+
+			val result = createUseCase().invoke()
+
+			assertEquals(1, result.size)
+			assertEquals(selectedTestDevice, result[0])
+			coVerify {
+				saveSelectedDevicesUseCaseMock.invoke(devices = result)
 			}
 			coVerify {
 				selectedDevicesRepositoryMock.getSelectedDevices()
