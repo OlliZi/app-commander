@@ -188,11 +188,11 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return custom scripts when file contains custom scripts`() =
 		runTest {
-			val prettyJson = Json {
+			val jsonHandler = Json {
 				prettyPrint = true
 			}
 			testFile.writeText(
-				text = prettyJson.encodeToString(
+				text = jsonHandler.encodeToString(
 					listOf(
 						ScriptsRepository.Script(
 							label = "my script",

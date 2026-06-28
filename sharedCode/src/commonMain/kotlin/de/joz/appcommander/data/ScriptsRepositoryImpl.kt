@@ -19,20 +19,16 @@ class ScriptsRepositoryImpl(
 	private val addLoggingUseCase: AddLoggingUseCase,
 	private val processBuilder: ProcessBuilder,
 	private val scriptFile: ScriptFile,
+	private val jsonHandler: Json,
 ) : ScriptsRepository {
-	private val prettyJson = Json {
-		prettyPrint = true
-		ignoreUnknownKeys = true
-	}
-
 	override fun getScripts(): JsonParseResult =
 		runCatching {
 			val jsonFile = File(scriptFile.scriptFile)
 			if (!jsonFile.exists()) {
-				jsonFile.writeText(text = prettyJson.encodeToString(DEFAULT_SCRIPTS))
+				jsonFile.writeText(text = jsonHandler.encodeToString(DEFAULT_SCRIPTS))
 			}
 			val scriptsFromFile = jsonFile.readText()
-			val script = prettyJson.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
+			val script = jsonHandler.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
 			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
 			JsonParseResult(
 				scripts = script,
@@ -79,7 +75,7 @@ class ScriptsRepositoryImpl(
 
 	private fun writeScriptsToFile(scripts: List<ScriptsRepository.Script>) {
 		val jsonFile = File(scriptFile.scriptFile)
-		jsonFile.writeText(text = prettyJson.encodeToString(scripts))
+		jsonFile.writeText(text = jsonHandler.encodeToString(scripts))
 	}
 
 	private fun checkScriptContainsTrimmer(
