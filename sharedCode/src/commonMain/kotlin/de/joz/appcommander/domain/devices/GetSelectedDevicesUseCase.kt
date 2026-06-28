@@ -11,16 +11,15 @@ class GetSelectedDevicesUseCase(
 ) {
 	suspend operator fun invoke(): List<Device> {
 		val connectedDevices = getConnectedDevicesUseCase()
-		val selectedDevices = selectedDevicesRepository.getSelectedDevices()
+		val selectedDevicesFromRepo = selectedDevicesRepository.getSelectedDevices()
 
-		val connected = selectedDevices.filter { device ->
+		val connected = selectedDevicesFromRepo.filter { device ->
 			connectedDevices.any { it.id == device.id }
 		}
+		val selectedDevices = connected.filter { device -> device.isSelected }
 
-		// udapte save devices?
-		saveSelectedDevicesUseCase(devices = connected)
+		saveSelectedDevicesUseCase(devices = selectedDevices)
 
-		return connected
-		// filter all not connected devices
+		return selectedDevices
 	}
 }
