@@ -7,5 +7,10 @@ import org.koin.core.annotation.Factory
 class SaveSelectedDevicesUseCase(
 	private val selectedDevicesRepository: SelectedDevicesRepository,
 ) {
-	suspend operator fun invoke(devices: List<Device>) = selectedDevicesRepository.saveSelectedDevices(devices)
+	suspend operator fun invoke(devices: List<Device>) =
+		selectedDevicesRepository.saveSelectedDevices(
+			devices.filter {
+				it.isSelected
+			},
+		)
 }
