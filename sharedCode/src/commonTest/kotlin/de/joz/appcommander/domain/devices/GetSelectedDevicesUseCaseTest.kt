@@ -90,7 +90,7 @@ class GetSelectedDevicesUseCaseTest {
 		}
 
 	@Test
-	fun `should return selected devices when devices are previously selected and they are some to the connected devices`() =
+	fun `should return selected devices when devices are previously selected and they are appropriate connected devices`() =
 		runTest {
 			coEvery {
 				getConnectedDevicesUseCaseMock()
@@ -99,15 +99,39 @@ class GetSelectedDevicesUseCaseTest {
 					id = selectedTestDevice.id,
 					label = selectedTestDevice.label,
 				),
+				GetConnectedDevicesUseCase.ConnectedDevice(
+					id = unSelectedTestDevice.id,
+					label = unSelectedTestDevice.label,
+				),
+				GetConnectedDevicesUseCase.ConnectedDevice(
+					id = "foo",
+					label = "bar",
+				),
 			)
 			coEvery {
 				selectedDevicesRepositoryMock.getSelectedDevices()
-			} returns listOf(selectedTestDevice)
+			} returns listOf(
+				selectedTestDevice,
+				unSelectedTestDevice,
+				Device(
+					id = "foo",
+					label = "bar",
+					isSelected = true,
+				),
+			)
 
 			val result = createUseCase().invoke()
 
-			assertEquals(1, result.size)
+			assertEquals(2, result.size)
 			assertEquals(selectedTestDevice, result[0])
+			assertEquals(
+				Device(
+					id = "foo",
+					label = "bar",
+					isSelected = true,
+				),
+				result[1],
+			)
 			coVerify {
 				saveSelectedDevicesUseCaseMock.invoke(devices = result)
 			}
