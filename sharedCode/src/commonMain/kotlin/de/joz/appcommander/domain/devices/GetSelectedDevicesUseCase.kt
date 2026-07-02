@@ -10,16 +10,16 @@ class GetSelectedDevicesUseCase(
 	private val saveSelectedDevicesUseCase: SaveSelectedDevicesUseCase,
 ) {
 	suspend operator fun invoke(): List<Device> {
-		val connectedDevices = getConnectedDevicesUseCase()
+		// val connectedDevices = getConnectedDevicesUseCase()
 		val selectedDevicesFromRepo = selectedDevicesRepository.getSelectedDevices()
 
-		val connected = selectedDevicesFromRepo.filter { device ->
-			connectedDevices.any { it.id == device.id }
-		}
-		val selectedDevices = connected.filter { device -> device.isSelected }
+		// val connected = selectedDevicesFromRepo.filter { device ->
+		// 	connectedDevices.any { it.id == device.id }
+		// }
+		// val selectedDevices = connected.filter { device -> device.isSelected }
 
-		saveSelectedDevicesUseCase(devices = selectedDevices)
+		// saveSelectedDevicesUseCase(devices = selectedDevices)
 
-		return selectedDevices
+		return selectedDevicesFromRepo
 	}
 }

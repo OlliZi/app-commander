@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_hint
@@ -23,15 +24,19 @@ import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ConnectedDevices(
+	viewModel: ConnectedDevicesViewModel = koinViewModel<ConnectedDevicesViewModel>(),
 	connectedDevices: List<Device>,
 	showHintLabel: Boolean,
 	onDeviceSelect: (Device) -> Unit,
 	onRefreshDevices: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
 	Column(
 		modifier = modifier.fillMaxWidth(),
 		verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -39,7 +44,7 @@ fun ConnectedDevices(
 		if (showHintLabel) {
 			TextLabel(
 				text = stringResource(
-					if (connectedDevices.isNotEmpty()) {
+					if (uiState.connectedDevices.isNotEmpty()) {
 						Res.string.scripts_hint_devices
 					} else {
 						Res.string.scripts_hint_no_devices
@@ -50,9 +55,15 @@ fun ConnectedDevices(
 		}
 
 		DevicesBar(
-			connectedDevices = connectedDevices,
-			onDeviceSelect = onDeviceSelect,
-			onRefreshDevices = onRefreshDevices,
+			connectedDevices = uiState.connectedDevices,
+			onDeviceSelect = {
+				onDeviceSelect(it) // mab not needed anymore
+				viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnDeviceSelect(selectedDevice = it))
+			},
+			onRefreshDevices = {
+				onRefreshDevices() // mab not needed anymore
+				viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnRefreshDevices)
+			},
 		)
 
 		if (showHintLabel) {
