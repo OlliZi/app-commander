@@ -15,7 +15,7 @@ class GetDevicesUseCase(
 				it.toDomainDevice(selectedDevices)
 			}
 
-			devices.sortedBy { device -> device.isSelected }
+			devices.sortedByDescending { device -> device.isSelected }
 		}.getOrDefault(emptyList())
 
 	private fun GetConnectedDevicesUseCase.ConnectedDevice.toDomainDevice(selectedDevices: List<Device>) =
