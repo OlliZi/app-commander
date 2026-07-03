@@ -38,7 +38,6 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.Edit
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
-import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_add_new_script
@@ -126,14 +125,7 @@ internal fun ScriptsContent(
 			val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
 			ConnectedDevices(
 				showHintLabel = true,
-				connectedDevices = uiState.connectedDevices,
 				modifier = paddingInline,
-				onDeviceSelect = {
-					onEvent(ScriptsViewModel.Event.OnDeviceSelected(device = it))
-				},
-				onRefreshDevices = {
-					onEvent(ScriptsViewModel.Event.OnRefreshDevices)
-				},
 			)
 
 			SectionDivider()
@@ -481,18 +473,6 @@ private fun RenderPreview(darkTheme: Boolean) {
 	) {
 		ScriptsContent(
 			uiState = ScriptsViewModel.UiState(
-				connectedDevices = listOf(
-					Device(
-						label = "Pixel 9",
-						isSelected = true,
-						id = "1",
-					),
-					Device(
-						label = "Pixel 8",
-						isSelected = false,
-						id = "2",
-					),
-				),
 				scripts = listOf(
 					Script(
 						description = "my script",

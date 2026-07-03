@@ -5,10 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
-import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.devices.GetDevicesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
-import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
@@ -33,7 +32,7 @@ import org.koin.core.annotation.InjectedParam
 @KoinViewModel
 class ScriptsViewModel(
 	@InjectedParam private val navController: NavController,
-	private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
+	private val getDevicesUseCase: GetDevicesUseCase,
 	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val getUserScriptsUseCase: GetUserScriptsUseCase,
@@ -52,7 +51,6 @@ class ScriptsViewModel(
 
 	init {
 		viewModelScope.launch(mainDispatcher) {
-			onRefreshDevices()
 			onRefreshScripts(getUserScriptsUseCase())
 
 			trackScriptsFileChangesUseCase().collect { newEntries ->
@@ -87,10 +85,6 @@ class ScriptsViewModel(
 					navController.navigate(NavigationScreens.SettingsScreen)
 				}
 
-				Event.OnRefreshDevices -> {
-					onRefreshDevices()
-				}
-
 				Event.OnOpenScriptFile -> {
 					onOpenScriptFile()
 				}
@@ -101,10 +95,6 @@ class ScriptsViewModel(
 
 				Event.OnClearLogging -> {
 					onClearLogging()
-				}
-
-				is Event.OnDeviceSelected -> {
-					onDeviceSelected(device = event.device)
 				}
 
 				is Event.OnExecuteScript -> {
@@ -133,21 +123,6 @@ class ScriptsViewModel(
 		}
 	}
 
-	private suspend fun onRefreshDevices() {
-		_uiState.update { oldState ->
-			val devices = getConnectedDevicesUseCase()
-			oldState.copy(
-				connectedDevices = devices.map { device ->
-					Device(
-						id = device.id,
-						label = device.label,
-						isSelected = devices.size == 1 || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
-					)
-				},
-			)
-		}
-	}
-
 	private fun onRefreshToolSections(changedValues: List<ChangedPreference>) {
 		_uiState.update { oldState ->
 			oldState.copy(
@@ -170,13 +145,11 @@ class ScriptsViewModel(
 				filter = filter,
 				scripts = jsonParseResult.scripts
 					.filter {
-						it.label.lowercase().contains(filter) ||
-							it.scripts.any { script ->
-								script.lowercase().contains(filter)
-							} ||
-							it.platform.name
-								.lowercase()
-								.contains(filter)
+						it.label.lowercase().contains(filter) || it.scripts.any { script ->
+							script.lowercase().contains(filter)
+						} || it.platform.name
+							.lowercase()
+							.contains(filter)
 					}.map { script ->
 						Script(
 							description = script.label,
@@ -191,27 +164,13 @@ class ScriptsViewModel(
 		}
 	}
 
-	private fun onDeviceSelected(device: Device) {
-		_uiState.update { oldState ->
-			oldState.copy(
-				connectedDevices = oldState.connectedDevices.map {
-					if (it.id == device.id) {
-						it.copy(isSelected = it.isSelected.not())
-					} else {
-						it
-					}
-				},
-			)
-		}
-	}
-
-	private fun onExecuteScript(script: Script) {
+	private suspend fun onExecuteScript(script: Script) {
 		if (script.originalScript.platform == ScriptsRepository.Platform.DESKTOP) {
 			viewModelScope.launch(ioDispatcher) {
 				executeScriptUseCase(script = script.originalScript)
 			}
 		} else {
-			_uiState.value.connectedDevices
+			getDevicesUseCase()
 				.filter {
 					it.isSelected
 				}.forEach { device ->
@@ -222,7 +181,7 @@ class ScriptsViewModel(
 		}
 	}
 
-	private fun onExecuteScriptText(
+	private suspend fun onExecuteScriptText(
 		script: String,
 		platform: ScriptsRepository.Platform,
 	) {
@@ -232,7 +191,7 @@ class ScriptsViewModel(
 				platform = platform,
 			)
 		} else {
-			_uiState.value.connectedDevices
+			getDevicesUseCase()
 				.filter {
 					it.isSelected
 				}.forEach { device ->
@@ -326,17 +285,11 @@ class ScriptsViewModel(
 	sealed interface Event {
 		data object OnNavigateToSettings : Event
 
-		data object OnRefreshDevices : Event
-
 		data object OnOpenScriptFile : Event
 
 		data object OnNewScript : Event
 
 		data object OnClearLogging : Event
-
-		data class OnDeviceSelected(
-			val device: Device,
-		) : Event
 
 		data class OnExecuteScript(
 			val script: Script,
@@ -361,7 +314,6 @@ class ScriptsViewModel(
 	}
 
 	data class UiState(
-		val connectedDevices: List<Device> = emptyList(),
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
 		val toolSections: List<ToolSection> = ToolSection.entries,

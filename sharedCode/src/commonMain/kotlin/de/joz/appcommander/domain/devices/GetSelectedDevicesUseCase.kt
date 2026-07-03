@@ -6,20 +6,6 @@ import org.koin.core.annotation.Factory
 @Factory
 class GetSelectedDevicesUseCase(
 	private val selectedDevicesRepository: SelectedDevicesRepository,
-	private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
-	private val saveSelectedDevicesUseCase: SaveSelectedDevicesUseCase,
 ) {
-	suspend operator fun invoke(): List<Device> {
-		// val connectedDevices = getConnectedDevicesUseCase()
-		val selectedDevicesFromRepo = selectedDevicesRepository.getSelectedDevices()
-
-		// val connected = selectedDevicesFromRepo.filter { device ->
-		// 	connectedDevices.any { it.id == device.id }
-		// }
-		// val selectedDevices = connected.filter { device -> device.isSelected }
-
-		// saveSelectedDevicesUseCase(devices = selectedDevices)
-
-		return selectedDevicesFromRepo
-	}
+	suspend operator fun invoke(): List<Device> = selectedDevicesRepository.getSelectedDevices()
 }
