@@ -24,6 +24,6 @@ class ObserveDevicesUseCase(
 		}
 
 	companion object {
-		private val WAIT_DELAY = 5000.milliseconds
+		private val WAIT_DELAY = 3000.milliseconds
 	}
 }
