@@ -28,15 +28,27 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ConnectedDevices(
-	viewModel: ConnectedDevicesViewModel = koinViewModel<ConnectedDevicesViewModel>(),
-	connectedDevices: List<Device>,
 	showHintLabel: Boolean,
-	onDeviceSelect: (Device) -> Unit,
-	onRefreshDevices: () -> Unit,
+	viewModel: ConnectedDevicesViewModel = koinViewModel<ConnectedDevicesViewModel>(),
 	modifier: Modifier = Modifier,
 ) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
+	ConnectedDevicesContent(
+		showHintLabel = showHintLabel,
+		connectedDevices = uiState.connectedDevices,
+		modifier = modifier,
+		onEvent = viewModel::onEvent,
+	)
+}
+
+@Composable
+private fun ConnectedDevicesContent(
+	showHintLabel: Boolean,
+	connectedDevices: List<Device>,
+	onEvent: (ConnectedDevicesViewModel.Event) -> Unit,
+	modifier: Modifier = Modifier,
+) {
 	Column(
 		modifier = modifier.fillMaxWidth(),
 		verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -44,7 +56,7 @@ fun ConnectedDevices(
 		if (showHintLabel) {
 			TextLabel(
 				text = stringResource(
-					if (uiState.connectedDevices.isNotEmpty()) {
+					if (connectedDevices.isNotEmpty()) {
 						Res.string.scripts_hint_devices
 					} else {
 						Res.string.scripts_hint_no_devices
@@ -55,14 +67,12 @@ fun ConnectedDevices(
 		}
 
 		DevicesBar(
-			connectedDevices = uiState.connectedDevices,
+			connectedDevices = connectedDevices,
 			onDeviceSelect = {
-				onDeviceSelect(it) // mab not needed anymore
-				viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnDeviceSelect(selectedDevice = it))
+				onEvent(ConnectedDevicesViewModel.Event.OnDeviceSelect(selectedDevice = it))
 			},
 			onRefreshDevices = {
-				onRefreshDevices() // mab not needed anymore
-				viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnRefreshDevices)
+				onEvent(ConnectedDevicesViewModel.Event.OnRefreshDevices)
 			},
 		)
 
@@ -122,7 +132,7 @@ internal fun PreviewConnectedDevices(
 	AppCommanderTheme(
 		darkTheme = previewData.uiState,
 	) {
-		ConnectedDevices(
+		ConnectedDevicesContent(
 			showHintLabel = true,
 			connectedDevices = listOf(
 				Device(
@@ -141,8 +151,7 @@ internal fun PreviewConnectedDevices(
 					isSelected = true,
 				),
 			),
-			onDeviceSelect = {},
-			onRefreshDevices = {},
+			onEvent = {},
 		)
 	}
 }
