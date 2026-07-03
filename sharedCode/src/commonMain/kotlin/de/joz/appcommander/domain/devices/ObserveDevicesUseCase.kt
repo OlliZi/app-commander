@@ -4,10 +4,10 @@ import de.joz.appcommander.domain.model.Device
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Single
 import kotlin.time.Duration.Companion.milliseconds
 
-@Factory
+@Single
 class ObserveDevicesUseCase(
 	private val getDevicesUseCase: GetDevicesUseCase,
 ) {
