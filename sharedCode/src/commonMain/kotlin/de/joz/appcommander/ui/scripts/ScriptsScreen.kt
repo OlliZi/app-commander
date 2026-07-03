@@ -133,7 +133,7 @@ internal fun ScriptsContent(
 			ScriptsSection(
 				scripts = uiState.scripts,
 				hint = uiState.hint,
-				isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
+				isAtMinimumOneDeviceSelected = uiState.isAtMinimumOneDeviceSelected,
 				modifier = Modifier.weight(1f).then(paddingInline),
 				onExecuteScript = {
 					onEvent(ScriptsViewModel.Event.OnExecuteScript(script = it))
