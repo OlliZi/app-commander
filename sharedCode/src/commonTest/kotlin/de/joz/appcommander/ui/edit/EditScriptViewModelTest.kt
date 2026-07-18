@@ -404,8 +404,8 @@ class EditScriptViewModelTest {
 			)
 			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
 				Device(
-					id = "id 1",
-					label = "device 1",
+					id = "",
+					label = "",
 					isSelected = false,
 				),
 			)
@@ -439,8 +439,8 @@ class EditScriptViewModelTest {
 			)
 			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
 				Device(
-					id = "egal",
-					label = "egal",
+					id = "id 1",
+					label = "2",
 					isSelected = true,
 				),
 			)
@@ -483,8 +483,8 @@ class EditScriptViewModelTest {
 			)
 			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
 				Device(
-					id = "egal",
-					label = "egal",
+					id = "",
+					label = "",
 					isSelected = false,
 				),
 			)
@@ -506,14 +506,7 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			coVerify {
-				executeScriptUseCaseMock.invoke(
-					script = ScriptsRepository.Script(
-						label = "",
-						scripts = listOf("script 2"),
-						platform = ScriptsRepository.Platform.IOS,
-					),
-					selectedDevice = "id 1",
-				)
+				executeScriptUseCaseMock wasNot called
 			}
 		}
 
