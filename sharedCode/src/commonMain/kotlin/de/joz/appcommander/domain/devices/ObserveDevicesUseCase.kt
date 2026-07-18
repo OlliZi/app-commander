@@ -16,7 +16,6 @@ class ObserveDevicesUseCase(
 		MutableSharedFlow<List<Device>>().onStart {
 			runCatching {
 				while (true) {
-					println("get devices...")
 					emit(getDevicesUseCase())
 					delay(WAIT_DELAY)
 				}

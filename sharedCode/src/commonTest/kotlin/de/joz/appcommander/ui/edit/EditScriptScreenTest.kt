@@ -553,7 +553,7 @@ class EditScriptScreenTest : TestRuleApplier() {
 		}
 	}
 
-	// @Test
+	@Test
 	fun `show confirmation when back button is clicked and script was changed before`() {
 		runComposeUiTest {
 			setupData()
