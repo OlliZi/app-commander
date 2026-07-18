@@ -1,4 +1,5 @@
-package de.joz.appcommander.ui.edit/*
+package de.joz.appcommander.ui.edit
+
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -15,9 +16,12 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
+import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.devices.GetDevicesUseCase
+import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptByKeyUseCase
@@ -25,19 +29,29 @@ import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Rule
+import org.koin.dsl.module
+import org.koin.ksp.generated.*
+import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
-class EditScriptScreenTest : TestRuleApplier() {
+class EditScriptScreenTest :
+	TestRuleApplier(),
+	KoinTest {
 	private val navControllerMock: NavController = mockk(relaxed = true)
 	private val scriptsRepositoryMock: ScriptsRepository = mockk(relaxed = true)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
@@ -54,11 +68,46 @@ class EditScriptScreenTest : TestRuleApplier() {
 	)
 	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
 	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
-	private val getDevicesUseCaseMock: GetDevicesUseCase = mockk(relaxed = true)
 
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
 	)
+	private val defaultTestDevices = listOf(
+		Device(
+			label = "emulator-5555",
+			id = "1",
+			isSelected = true,
+		),
+		Device(
+			label = "emulator-5556",
+			id = "2",
+			isSelected = false,
+		),
+		Device(
+			label = "Google Pixel 10",
+			id = "3",
+			isSelected = true,
+		),
+	)
+	private var testDevices = defaultTestDevices
+	private val getDevicesUseCaseMock = GetDevicesUseCaseMock {
+		testDevices
+	}
+
+	@get:Rule
+	val koinTestRule = KoinTestRule.create {
+		modules(DependencyInjection().module)
+		modules(
+			module {
+				single {
+					mockk<ObserveDevicesUseCase>(relaxed = false) {
+						every { this@mockk.invoke() } returns flowOf(testDevices)
+					}
+				}
+				single<GetDevicesUseCase> { getDevicesUseCaseMock }
+			},
+		)
+	}
 
 	@Test
 	fun `show default ui when no script was selected for editing before`() {
@@ -312,31 +361,31 @@ class EditScriptScreenTest : TestRuleApplier() {
 	@Test
 	fun `should refresh devices when refresh is clicked`() {
 		runComposeUiTest {
-			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
-				listOf(
-					ConnectedDevice(
-						id = "id 1",
-						label = "test device before refresh",
-					),
-				),
-				listOf(
-					ConnectedDevice(
-						id = "id 1",
-						label = "test device before refresh",
-					),
-					ConnectedDevice(
-						id = "id 2",
-						label = "test device after refresh",
-					),
+			testDevices = listOf(
+				Device(
+					id = "id 1",
+					label = "test device before refresh",
+					isSelected = true,
 				),
 			)
-
 			setupData()
 			setTestContent()
 
 			onNodeWithText("test device before refresh").isDisplayed()
 			onNodeWithText("test device after refresh").assertDoesNotExist()
 
+			testDevices = listOf(
+				Device(
+					id = "id 1",
+					label = "test device before refresh",
+					isSelected = true,
+				),
+				Device(
+					id = "id 2",
+					label = "test device after refresh",
+					isSelected = true,
+				),
+			)
 			onNodeWithText(text = "Refresh").performClick()
 
 			onNodeWithText("test device before refresh").isDisplayed()
@@ -347,24 +396,24 @@ class EditScriptScreenTest : TestRuleApplier() {
 	@Test
 	fun `should use selected device when script is executed`() {
 		runComposeUiTest {
+			testDevices = listOf(
+				Device(
+					id = "id 1",
+					label = "device 1",
+					isSelected = true,
+				),
+				Device(
+					id = "id 2",
+					label = "device 2",
+					isSelected = true,
+				),
+			)
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("echo"),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
-			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
-				listOf(
-					ConnectedDevice(
-						id = "id 1",
-						label = "device 1",
-					),
-					ConnectedDevice(
-						id = "id 2",
-						label = "device 2",
-					),
-				),
-			)
 
 			setupData(script = script)
 			setTestContent(scriptKey = script.hashCode())
@@ -607,4 +656,3 @@ class EditScriptScreenTest : TestRuleApplier() {
 		}
 	}
 }
-*/
