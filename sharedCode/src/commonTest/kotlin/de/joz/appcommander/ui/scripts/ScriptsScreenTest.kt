@@ -110,22 +110,30 @@ class ScriptsScreenTest :
 						ScriptsViewModel.Script(
 							description = "Dark mode",
 							scriptText = "adb shell cmd uimode night yes",
-							originalScript = mockk(),
+							originalScript = mockk {
+								every { platform } returns ScriptsRepository.Platform.ANDROID
+							},
 						),
 						ScriptsViewModel.Script(
 							description = "Light mode",
 							scriptText = "adb shell cmd uimode night no",
-							originalScript = mockk(),
+							originalScript = mockk {
+								every { platform } returns ScriptsRepository.Platform.ANDROID
+							},
 						),
 						ScriptsViewModel.Script(
 							description = "Login into app",
 							scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
-							originalScript = mockk(),
+							originalScript = mockk {
+								every { platform } returns ScriptsRepository.Platform.ANDROID
+							},
 						),
 						ScriptsViewModel.Script(
 							description = "Swipe through app",
 							scriptText = "#LOOP_10 adb shell input swipe 500 500 500 500",
-							originalScript = mockk(),
+							originalScript = mockk {
+								every { platform } returns ScriptsRepository.Platform.ANDROID
+							},
 						),
 					),
 					logging = listOf("1. adb devices", "2. adb shell cmd uimode night yes"),
