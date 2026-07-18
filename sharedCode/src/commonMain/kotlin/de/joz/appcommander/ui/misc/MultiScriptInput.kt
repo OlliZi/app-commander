@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -54,7 +55,7 @@ fun MultiScriptInput(
 		) {
 			Icon(
 				imageVector = FeatherIcons.Play,
-				tint = MaterialTheme.colorScheme.primary,
+				tint = if (isAtMinimumOneDeviceSelected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
 				contentDescription = "Execute all scripts",
 			)
 		}

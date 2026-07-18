@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -119,7 +120,7 @@ private fun PlayIcon(
 	) {
 		Icon(
 			imageVector = FeatherIcons.Play,
-			tint = MaterialTheme.colorScheme.primary,
+			tint = if (enabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
 			contentDescription = "Execute script text",
 		)
 	}
