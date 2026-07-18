@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.edit
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase.ConnectedDevice
+import de.joz.appcommander.domain.devices.GetDevicesUseCase
 import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
@@ -35,6 +36,7 @@ class EditScriptViewModelTest {
 	private val getUserScriptByKeyUseCaseMock: GetUserScriptByKeyUseCase = mockk(relaxed = false)
 	private val getScriptIdUseCaseMock: GetScriptIdUseCase = mockk(relaxed = true)
 	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
+	private val getDevicesUseCaseMock: GetDevicesUseCase = mockk(relaxed = true)
 
 	@BeforeTest
 	fun setUp() {
@@ -57,10 +59,6 @@ class EditScriptViewModelTest {
 			)
 			assertEquals(ScriptsRepository.Platform.ANDROID, viewModel.uiState.value.scriptUiState.selectedPlatform)
 			assertTrue(viewModel.uiState.value.showDeviceSelection)
-			assertTrue(
-				viewModel.uiState.value.connectedDevices
-					.isEmpty(),
-			)
 			assertFalse(viewModel.uiState.value.scriptChanged)
 			assertTrue(
 				viewModel.uiState.value.errorMessages
@@ -125,108 +123,6 @@ class EditScriptViewModelTest {
 			assertTrue(viewModel.uiState.value.scriptChanged)
 			viewModel.onEvent(event = EditScriptViewModel.Event.OnRemoveSubScript(1))
 			assertFalse(viewModel.uiState.value.scriptChanged)
-		}
-
-	@Test
-	fun `should refresh devices when event 'OnRefreshDevices' is fired`() =
-		runTest {
-			coEvery {
-				getConnectedDevicesUseCaseMock.invoke()
-			} returns listOf(ConnectedDevice(id = "1", label = "label 1"))
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnRefreshDevices)
-			runCurrent()
-
-			assertEquals(
-				Device(
-					id = "1",
-					label = "label 1",
-					isSelected = true,
-				),
-				viewModel.uiState.value.connectedDevices
-					.first(),
-			)
-
-			coVerify(exactly = 2) {
-				getConnectedDevicesUseCaseMock.invoke()
-			}
-		}
-
-	@Test
-	fun `should refresh devices and disable selected devices when event 'OnDeviceSelected' is fired`() =
-		runTest {
-			coEvery {
-				getConnectedDevicesUseCaseMock.invoke()
-			} returns listOf(ConnectedDevice(id = "1", label = "label 1"), ConnectedDevice(id = "2", label = "label 2"))
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(event = EditScriptViewModel.Event.OnRefreshDevices)
-			runCurrent()
-
-			assertEquals(
-				listOf(
-					Device(
-						id = "1",
-						label = "label 1",
-						isSelected = false,
-					),
-					Device(
-						id = "2",
-						label = "label 2",
-						isSelected = false,
-					),
-				),
-				viewModel.uiState.value.connectedDevices,
-			)
-
-			coVerify(exactly = 2) {
-				getConnectedDevicesUseCaseMock.invoke()
-			}
-		}
-
-	@Test
-	fun `should select device when event 'OnDeviceSelected' is fired`() =
-		runTest {
-			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
-				listOf(
-					ConnectedDevice(
-						id = "id 1",
-						label = "device 1",
-					),
-					ConnectedDevice(
-						id = "id 2",
-						label = "device 2",
-					),
-				),
-			)
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(
-				event = EditScriptViewModel.Event.OnDeviceSelected(
-					device = Device(
-						id = "id 1",
-						label = "device 1",
-						isSelected = false,
-					),
-				),
-			)
-
-			assertEquals(
-				listOf(
-					Device(
-						id = "id 1",
-						label = "device 1",
-						isSelected = true,
-					),
-					Device(
-						id = "id 2",
-						label = "device 2",
-						isSelected = false,
-					),
-				),
-				viewModel.uiState.value.connectedDevices,
-			)
 		}
 
 	@Test
@@ -470,6 +366,13 @@ class EditScriptViewModelTest {
 				scripts = listOf("script 1", "script 2"),
 				platform = ScriptsRepository.Platform.IOS,
 			)
+			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
+				Device(
+					id = "id 1",
+					label = "device 1",
+					isSelected = true,
+				),
+			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
 			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
 				listOf(
@@ -497,6 +400,13 @@ class EditScriptViewModelTest {
 				label = "",
 				scripts = listOf("script 1", "script 2"),
 				platform = ScriptsRepository.Platform.IOS,
+			)
+			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
+				Device(
+					id = "egal",
+					label = "egal",
+					isSelected = false,
+				),
 			)
 			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
 			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
@@ -610,7 +520,7 @@ class EditScriptViewModelTest {
 			removeUserScriptUseCase = removeUserScriptUseCaseMock,
 			getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 			getScriptIdUseCase = getScriptIdUseCaseMock,
-			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
+			getDevicesUseCase = getDevicesUseCaseMock,
 			saveUserScriptUseCaseResultMapper = SaveUserScriptUseCaseResultMapper(),
 			mainDispatcher = Dispatchers.Unconfined,
 			ioDispatcher = Dispatchers.Unconfined,

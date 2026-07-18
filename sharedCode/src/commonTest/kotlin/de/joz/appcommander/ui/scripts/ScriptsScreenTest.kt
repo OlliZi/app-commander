@@ -13,7 +13,6 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
-import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.ui.model.Hint
@@ -55,7 +54,7 @@ class ScriptsScreenTest {
 		runComposeUiTest {
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(
-					connectedDevices = listOf(
+				/*	connectedDevices = listOf(
 						Device(
 							label = "emulator-5555",
 							id = "1",
@@ -71,7 +70,7 @@ class ScriptsScreenTest {
 							id = "3",
 							isSelected = true,
 						),
-					),
+					),*/
 					scripts = listOf(
 						ScriptsViewModel.Script(
 							description = "Dark mode",
@@ -249,13 +248,13 @@ class ScriptsScreenTest {
 		runComposeUiTest {
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(
-					connectedDevices = listOf(
+					/*connectedDevices = listOf(
 						Device(
 							label = "Device A",
 							id = "1",
 							isSelected = true,
 						),
-					),
+					),*/
 				),
 			)
 

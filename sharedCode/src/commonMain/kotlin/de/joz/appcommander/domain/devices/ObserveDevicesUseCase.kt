@@ -12,15 +12,17 @@ import kotlin.time.Duration.Companion.milliseconds
 class ObserveDevicesUseCase(
 	private val getDevicesUseCase: GetDevicesUseCase,
 ) {
-	private val flowOfDevices = MutableSharedFlow<List<Device>>().onStart {
-		runCatching {
-			while (true) {
-				println("get devices...")
-				emit(getDevicesUseCase())
-				delay(WAIT_DELAY)
+	private val flowOfDevices by lazy {
+		MutableSharedFlow<List<Device>>().onStart {
+			runCatching {
+				while (true) {
+					println("get devices...")
+					emit(getDevicesUseCase())
+					delay(WAIT_DELAY)
+				}
+			}.onFailure {
+				println(it.message)
 			}
-		}.onFailure {
-			println(it.message)
 		}
 	}
 
