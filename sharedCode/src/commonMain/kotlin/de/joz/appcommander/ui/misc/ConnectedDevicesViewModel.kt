@@ -10,7 +10,6 @@ import de.joz.appcommander.domain.model.Device
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -28,7 +27,7 @@ class ConnectedDevicesViewModel(
 
 	init {
 		viewModelScope.launch(mainDispatcher) {
-			observeDevicesUseCase().distinctUntilChanged().collect {
+			observeDevicesUseCase().collect {
 				onRefreshDevices(it)
 			}
 		}
