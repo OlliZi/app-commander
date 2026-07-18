@@ -31,6 +31,7 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
 fun ScriptInput(
+	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScriptText: (String) -> Unit,
 	script: String = "",
 	onChangeScriptText: (String) -> Unit = { _ -> },
@@ -63,6 +64,7 @@ fun ScriptInput(
 					onAddScript = onAddScript,
 				)
 				PlayIcon(
+					enabled = isAtMinimumOneDeviceSelected,
 					onExecuteScriptText = {
 						onExecuteScriptText(inputValue)
 					},
@@ -107,8 +109,12 @@ private fun AddIcon(onAddScript: (() -> Unit)?) {
 }
 
 @Composable
-private fun PlayIcon(onExecuteScriptText: () -> Unit) {
+private fun PlayIcon(
+	onExecuteScriptText: () -> Unit,
+	enabled: Boolean = true,
+) {
 	IconButton(
+		enabled = enabled,
 		onClick = onExecuteScriptText,
 	) {
 		Icon(
@@ -139,6 +145,7 @@ internal fun PreviewScriptInput(
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			ScriptInput(
+				isAtMinimumOneDeviceSelected = true,
 				script = "adb devices",
 				onExecuteScriptText = {},
 			)

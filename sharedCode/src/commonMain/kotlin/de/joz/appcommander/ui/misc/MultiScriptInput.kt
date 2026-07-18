@@ -27,6 +27,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MultiScriptInput(
+	isAtMinimumOneDeviceSelected: Boolean,
 	scripts: List<String>,
 	onExecuteAllScriptsText: () -> Unit,
 	onChangeScriptText: (Int, String) -> Unit,
@@ -48,6 +49,7 @@ fun MultiScriptInput(
 			textLabelType = TextLabelType.BodyLarge,
 		)
 		IconButton(
+			enabled = isAtMinimumOneDeviceSelected,
 			onClick = onExecuteAllScriptsText,
 		) {
 			Icon(
@@ -63,6 +65,7 @@ fun MultiScriptInput(
 	) {
 		scripts.forEachIndexed { index, script ->
 			ScriptInput(
+				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
@@ -106,6 +109,7 @@ internal fun PreviewMultiScriptInput(
 		darkTheme = previewData.uiState,
 	) {
 		MultiScriptInput(
+			isAtMinimumOneDeviceSelected = true,
 			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
 			onRemoveScript = {},
 			onExecuteScriptText = {},

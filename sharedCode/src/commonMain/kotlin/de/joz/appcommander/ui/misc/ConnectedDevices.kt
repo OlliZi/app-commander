@@ -29,10 +29,13 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun ConnectedDevices(
 	showHintLabel: Boolean,
+	onIsAtMinimumOneDeviceSelected: (Boolean) -> Unit,
 	viewModel: ConnectedDevicesViewModel = koinViewModel<ConnectedDevicesViewModel>(),
 	modifier: Modifier = Modifier,
 ) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+	onIsAtMinimumOneDeviceSelected(uiState.connectedDevices.any { it.isSelected })
 
 	ConnectedDevicesContent(
 		showHintLabel = showHintLabel,

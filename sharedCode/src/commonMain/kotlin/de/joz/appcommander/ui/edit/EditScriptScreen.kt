@@ -46,6 +46,7 @@ import de.joz.appcommander.ui.misc.SimpleTextInput
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
+import de.joz.appcommander.ui.misc.UiHelper
 import de.joz.appcommander.ui.misc.lighter
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -131,6 +132,8 @@ internal fun EditScriptContent(
 			)
 		},
 	) { paddingValues ->
+		var isAtMinimumOneDeviceSelected by remember { mutableStateOf(false) }
+
 		Column(
 			Modifier
 				.fillMaxSize()
@@ -174,6 +177,10 @@ internal fun EditScriptContent(
 			SectionDivider()
 
 			MultiScriptInput(
+				isAtMinimumOneDeviceSelected = UiHelper.isScriptExecutableByUi(
+					isAtMinimumOneDeviceSelected,
+					uiState.scriptUiState.selectedPlatform,
+				),
 				scripts = uiState.scriptUiState.scripts,
 				onChangeScriptText = { index, script ->
 					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
@@ -216,6 +223,9 @@ internal fun EditScriptContent(
 
 					ConnectedDevices(
 						showHintLabel = false,
+						onIsAtMinimumOneDeviceSelected = {
+							isAtMinimumOneDeviceSelected = it
+						},
 					)
 				}
 			}
