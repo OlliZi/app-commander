@@ -13,19 +13,66 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
+import de.joz.appcommander.DependencyInjection
+import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Rule
+import org.koin.dsl.module
+import org.koin.ksp.generated.*
+import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
-class ScriptsScreenTest {
+class ScriptsScreenTest :
+	TestRuleApplier(),
+	KoinTest {
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
 	)
+
+	private var testDevices = listOf(
+		Device(
+			label = "emulator-5555",
+			id = "1",
+			isSelected = true,
+		),
+		Device(
+			label = "emulator-5556",
+			id = "2",
+			isSelected = false,
+		),
+		Device(
+			label = "Google Pixel 10",
+			id = "3",
+			isSelected = true,
+		),
+	)
+
+	@get:Rule
+	val koinTestRule = KoinTestRule.create {
+		modules(DependencyInjection().module)
+		modules(
+			module {
+				single {
+					mockk<ObserveDevicesUseCase>(relaxed = false) {
+						every { this@mockk.invoke() } returns flowOf(testDevices)
+					}
+				}
+				// You can also override the @MainDispatcher if needed
+				// single(named("MainDispatcher")) { Dispatchers.Unconfined }
+			},
+		)
+	}
 
 	@Test
 	fun `should show default label when no devices are connected`() {
@@ -54,23 +101,6 @@ class ScriptsScreenTest {
 		runComposeUiTest {
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(
-				/*	connectedDevices = listOf(
-						Device(
-							label = "emulator-5555",
-							id = "1",
-							isSelected = true,
-						),
-						Device(
-							label = "emulator-5556",
-							id = "2",
-							isSelected = false,
-						),
-						Device(
-							label = "Google Pixel 10",
-							id = "3",
-							isSelected = true,
-						),
-					),*/
 					scripts = listOf(
 						ScriptsViewModel.Script(
 							description = "Dark mode",
@@ -247,20 +277,14 @@ class ScriptsScreenTest {
 	fun `should show connected devices`() {
 		runComposeUiTest {
 			setTestContent(
-				uiState = ScriptsViewModel.UiState(
-					/*connectedDevices = listOf(
-						Device(
-							label = "Device A",
-							id = "1",
-							isSelected = true,
-						),
-					),*/
-				),
+				uiState = ScriptsViewModel.UiState(),
 			)
 
 			onNodeWithText("Hint: Activate the 'Developer options' on your device.").assertIsDisplayed()
 			onNodeWithText("Your connected devices:").assertIsDisplayed()
-			onNodeWithText("Device A").assertIsDisplayed()
+			onNodeWithText("emulator-5555").assertIsDisplayed()
+			onNodeWithText("emulator-5556").assertIsDisplayed()
+			onNodeWithText("Google Pixel 10").assertIsDisplayed()
 			onNodeWithText("Refresh").performClick()
 		}
 	}
