@@ -1,5 +1,4 @@
-package de.joz.appcommander.ui.edit
-/*
+package de.joz.appcommander.ui.edit/*
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -503,7 +502,7 @@ class EditScriptScreenTest : TestRuleApplier() {
 			onNodeWithText(text = "Remove script").performClick()
 			onNodeWithText(text = "No").performClick()
 
-			verify(exactly = 0) { scriptsRepositoryMock.removeScript(any()) }
+			verify { scriptsRepositoryMock wasNot called }
 		}
 	}
 

@@ -12,6 +12,7 @@ import de.joz.appcommander.domain.script.RemoveUserScriptUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.SaveUserScriptUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -305,7 +306,7 @@ class EditScriptViewModelTest {
 					.isNotEmpty(),
 			)
 			coVerify { saveUserScriptUseCaseMock.invoke(any(), null) }
-			verify(exactly = 0) { navControllerMock.navigateUp() }
+			verify { navControllerMock wasNot called }
 		}
 
 	@Test
@@ -394,7 +395,86 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should not execute script when event 'OnExecuteAllScripts' is fired but there is no selected device`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
+			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
+				Device(
+					id = "id 1",
+					label = "device 1",
+					isSelected = false,
+				),
+			)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnExecuteAllScripts,
+			)
+			runCurrent()
+
+			coVerify { executeScriptUseCaseMock wasNot called }
+		}
+
+	@Test
 	fun `should execute script when event 'OnExecuteSingleScript' is fired`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "",
+				scripts = listOf("script 1", "script 2"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
+			coEvery { getDevicesUseCaseMock.invoke() } returns listOf(
+				Device(
+					id = "egal",
+					label = "egal",
+					isSelected = true,
+				),
+			)
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns testScript
+			coEvery { getConnectedDevicesUseCaseMock() } returnsMany listOf(
+				listOf(
+					ConnectedDevice(
+						id = "id 1",
+						label = "device 1",
+					),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnExecuteSingleScript("script 2"),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock.invoke(
+					script = ScriptsRepository.Script(
+						label = "",
+						scripts = listOf("script 2"),
+						platform = ScriptsRepository.Platform.IOS,
+					),
+					selectedDevice = "id 1",
+				)
+			}
+		}
+
+	@Test
+	fun `should not execute script when event 'OnExecuteSingleScript' is fired but there is no selected device`() =
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "",
