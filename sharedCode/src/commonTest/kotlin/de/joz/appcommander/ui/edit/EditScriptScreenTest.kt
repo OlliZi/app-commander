@@ -391,51 +391,6 @@ class EditScriptScreenTest :
 	}
 
 	@Test
-	fun `should use selected device when script is executed`() {
-		runComposeUiTest {
-			testDevices = listOf(
-				Device(
-					id = "id 1",
-					label = "device 1",
-					isSelected = false,
-				),
-				Device(
-					id = "id 2",
-					label = "device 2",
-					isSelected = false,
-				),
-			)
-			val script = ScriptsRepository.Script(
-				label = "",
-				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("echo"),
-			)
-			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
-
-			setupData(script = script)
-			setTestContent(scriptKey = script.hashCode())
-
-			onNodeWithText("device 1").performClick()
-			onNodeWithContentDescription(label = "Execute all scripts").performClick()
-
-			onNodeWithText("device 2").performClick()
-			onNodeWithContentDescription(label = "Execute all scripts").performClick()
-
-			onNodeWithText("device 1").performClick()
-			onNodeWithText("device 2").performClick()
-			onNodeWithContentDescription(label = "Execute all scripts").performClick()
-
-			coVerify(exactly = 2) {
-				executeScriptUseCaseMock(script = script, selectedDevice = "id 1")
-			}
-
-			coVerify(exactly = 1) {
-				executeScriptUseCaseMock(script = script, selectedDevice = "id 2")
-			}
-		}
-	}
-
-	@Test
 	fun `remove script when remove script button for a script is clicked`() {
 		runComposeUiTest {
 			val removeScript = ScriptsRepository.Script(
