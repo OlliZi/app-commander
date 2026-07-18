@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import de.joz.appcommander.IODispatcher
 import de.joz.appcommander.MainDispatcher
 import de.joz.appcommander.domain.devices.GetDevicesUseCase
-import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
 import de.joz.appcommander.domain.navigation.NavigationScreens
@@ -34,7 +33,6 @@ import org.koin.core.annotation.InjectedParam
 class ScriptsViewModel(
 	@InjectedParam private val navController: NavController,
 	private val getDevicesUseCase: GetDevicesUseCase,
-	private val observeDevicesUseCase: ObserveDevicesUseCase,
 	private val getScriptIdUseCase: GetScriptIdUseCase,
 	private val executeScriptUseCase: ExecuteScriptUseCase,
 	private val getUserScriptsUseCase: GetUserScriptsUseCase,
@@ -76,14 +74,6 @@ class ScriptsViewModel(
 			val keys = ToolSection.entries.map { it.name }.toTypedArray()
 			getPreferenceUseCase.getAsFlow(keys = keys).collect { changedValues ->
 				onRefreshToolSections(changedValues)
-			}
-		}
-
-		viewModelScope.launch(mainDispatcher) {
-			observeDevicesUseCase().collect {
-				_uiState.update { oldState ->
-					oldState.copy(isAtMinimumOneDeviceSelected = it.any { device -> device.isSelected })
-				}
 			}
 		}
 	}
@@ -326,7 +316,6 @@ class ScriptsViewModel(
 	data class UiState(
 		val scripts: List<Script> = emptyList(),
 		val logging: List<String> = emptyList(),
-		val isAtMinimumOneDeviceSelected: Boolean = false,
 		val toolSections: List<ToolSection> = ToolSection.entries,
 		val filter: String = "",
 		val hint: Hint? = null,
