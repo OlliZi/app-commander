@@ -3,12 +3,16 @@ package de.joz.appcommander.domain.devices
 import de.joz.appcommander.domain.model.Device
 import org.koin.core.annotation.Factory
 
+interface GetDevicesUseCase {
+	suspend operator fun invoke(): List<Device>
+}
+
 @Factory
-class GetDevicesUseCase(
+class GetDevicesUseCaseImpl(
 	private val getSelectedDevicesUseCase: GetSelectedDevicesUseCase,
 	private val getConnectedDevicesUseCase: GetConnectedDevicesUseCase,
-) {
-	suspend operator fun invoke(): List<Device> =
+) : GetDevicesUseCase {
+	override suspend operator fun invoke(): List<Device> =
 		runCatching {
 			val selectedDevices = getSelectedDevicesUseCase()
 			val devices = getConnectedDevicesUseCase().map {

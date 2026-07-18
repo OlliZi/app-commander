@@ -14,9 +14,11 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import de.joz.appcommander.DependencyInjection
+import de.joz.appcommander.domain.devices.GetDevicesUseCase
 import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
 import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.model.Hint
@@ -39,8 +41,7 @@ class ScriptsScreenTest :
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
 	)
-
-	private var testDevices = listOf(
+	private val defaultTestDevices = listOf(
 		Device(
 			label = "emulator-5555",
 			id = "1",
@@ -57,6 +58,10 @@ class ScriptsScreenTest :
 			isSelected = true,
 		),
 	)
+	private var testDevices = defaultTestDevices
+	private val getDevicesUseCaseMock = GetDevicesUseCaseMock {
+		testDevices
+	}
 
 	@get:Rule
 	val koinTestRule = KoinTestRule.create {
@@ -68,8 +73,7 @@ class ScriptsScreenTest :
 						every { this@mockk.invoke() } returns flowOf(testDevices)
 					}
 				}
-				// You can also override the @MainDispatcher if needed
-				// single(named("MainDispatcher")) { Dispatchers.Unconfined }
+				single<GetDevicesUseCase> { getDevicesUseCaseMock }
 			},
 		)
 	}
@@ -77,6 +81,7 @@ class ScriptsScreenTest :
 	@Test
 	fun `should show default label when no devices are connected`() {
 		runComposeUiTest {
+			testDevices = emptyList()
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
 			)
@@ -292,17 +297,14 @@ class ScriptsScreenTest :
 	@Test
 	fun `should refresh devices when refresh button is clicked`() {
 		runComposeUiTest {
-			var isRefreshClicked = 0
 			setTestContent(
 				uiState = ScriptsViewModel.UiState(),
-				onEvent = {
-					isRefreshClicked++
-				},
+				onEvent = {},
 			)
 
 			onNodeWithText("Refresh").performClick()
 
-			assertEquals(1, isRefreshClicked)
+			assertEquals(1, getDevicesUseCaseMock.getCounterAndReset())
 		}
 	}
 
