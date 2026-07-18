@@ -17,8 +17,6 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
 import androidx.navigation.NavController
 import de.joz.appcommander.DependencyInjection
-import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
-import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase.ConnectedDevice
 import de.joz.appcommander.domain.devices.GetDevicesUseCase
 import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
 import de.joz.appcommander.domain.model.Device
@@ -33,7 +31,6 @@ import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
-import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -66,8 +63,7 @@ class EditScriptScreenTest :
 		getUserScriptByKeyUseCase = getUserScriptByKeyUseCaseMock,
 		runFileBackupUseCase = runFileBackupUseCaseMock,
 	)
-	private val removeUserScriptUseCaseMock = RemoveUserScriptUseCase(scriptsRepository = scriptsRepositoryMock)
-	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk(relaxed = true)
+	private val removeUserScriptUseCaseMock: RemoveUserScriptUseCase = mockk(relaxed = true)
 
 	private val screenshotVerifier = ScreenshotVerifier(
 		testClass = javaClass,
@@ -336,16 +332,17 @@ class EditScriptScreenTest :
 	@Test
 	fun `run all scripts when run button is clicked`() {
 		runComposeUiTest {
+			testDevices = listOf(
+				Device(
+					id = "id",
+					label = "test device",
+					isSelected = true,
+				),
+			)
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
 				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
-			)
-			coEvery { getConnectedDevicesUseCaseMock() } returns listOf(
-				ConnectedDevice(
-					id = "id",
-					label = "test device",
-				),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -400,12 +397,12 @@ class EditScriptScreenTest :
 				Device(
 					id = "id 1",
 					label = "device 1",
-					isSelected = true,
+					isSelected = false,
 				),
 				Device(
 					id = "id 2",
 					label = "device 2",
-					isSelected = true,
+					isSelected = false,
 				),
 			)
 			val script = ScriptsRepository.Script(
@@ -538,7 +535,7 @@ class EditScriptScreenTest :
 			onNodeWithText(text = "Remove script").performClick()
 			onNodeWithText(text = "Yes").performClick()
 
-			verify { scriptsRepositoryMock.removeScript(any()) }
+			verify { removeUserScriptUseCaseMock.invoke(any()) }
 		}
 	}
 
@@ -551,7 +548,7 @@ class EditScriptScreenTest :
 			onNodeWithText(text = "Remove script").performClick()
 			onNodeWithText(text = "No").performClick()
 
-			verify { scriptsRepositoryMock wasNot called }
+			verify(exactly = 0) { removeUserScriptUseCaseMock.invoke(any()) }
 		}
 	}
 
