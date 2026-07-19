@@ -1,8 +1,68 @@
 package de.joz.appcommander.domain.devices
 
+import de.joz.appcommander.domain.model.Device
+import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
+import kotlin.test.assertTrue
 
 class GetDevicesUseCaseImplTest {
 	private val getSelectedDevicesUseCaseMock: GetSelectedDevicesUseCase = mockk()
 	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
+
+	@Test
+	fun `should return empty list when no devices are connected`() =
+		runTest {
+			coEvery {
+				getSelectedDevicesUseCaseMock()
+			} returns listOf(
+				Device(id = "id 1", label = "label 1", isSelected = true),
+			)
+			coEvery {
+				getConnectedDevicesUseCaseMock()
+			} returns emptyList()
+
+			val useCase = createUseCase()
+
+			assertTrue(useCase.invoke().isEmpty())
+		}
+
+	@Test
+	fun `should return empty list when get connected devices crashes`() =
+		runTest {
+			coEvery {
+				getSelectedDevicesUseCaseMock()
+			} returns listOf(
+				Device(id = "id 1", label = "label 1", isSelected = true),
+			)
+			coEvery {
+				getConnectedDevicesUseCaseMock()
+			} throws Exception()
+
+			val useCase = createUseCase()
+
+			assertTrue(useCase.invoke().isEmpty())
+		}
+
+	@Test
+	fun `should return empty list when get selected devices crashes`() =
+		runTest {
+			coEvery {
+				getSelectedDevicesUseCaseMock()
+			} throws Exception()
+			coEvery {
+				getConnectedDevicesUseCaseMock()
+			} returns listOf(GetConnectedDevicesUseCase.ConnectedDevice(id = "id 1", label = "label 1"))
+
+			val useCase = createUseCase()
+
+			assertTrue(useCase.invoke().isEmpty())
+		}
+
+	private fun createUseCase() =
+		GetDevicesUseCaseImpl(
+			getSelectedDevicesUseCase = getSelectedDevicesUseCaseMock,
+			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
+		)
 }
