@@ -103,7 +103,7 @@ class EditScriptScreenComplex2Test :
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
-			every { getScriptIdUseCaseMock.invoke(any()) } returns (script?.hashCode() ?: 0)
+			every { getScriptIdUseCaseMock.invoke(any()) } returns (script.hashCode())
 			every { scriptsRepositoryMock.getScripts() } returns ScriptsRepository.JsonParseResult(
 				scripts = listOf(script),
 				parsingMetaData = null,
