@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GetDevicesUseCaseImplTest {
@@ -58,6 +59,36 @@ class GetDevicesUseCaseImplTest {
 			val useCase = createUseCase()
 
 			assertTrue(useCase.invoke().isEmpty())
+		}
+
+	@Test
+	fun `should order devices by selection state and return`() =
+		runTest {
+			coEvery {
+				getSelectedDevicesUseCaseMock()
+			} returns listOf(
+				Device(id = "unknown", label = "unknown", isSelected = false),
+				Device(id = "id 1", label = "label 1", isSelected = false),
+				Device(id = "id 3", label = "label 3", isSelected = false),
+			)
+			coEvery {
+				getConnectedDevicesUseCaseMock()
+			} returns listOf(
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 1", label = "label 1"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 3", label = "label 3"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 2", label = "label 2"),
+			)
+
+			val useCase = createUseCase()
+
+			assertEquals(
+				listOf(
+					Device(id = "id 1", label = "label 1", isSelected = true),
+					Device(id = "id 3", label = "label 3", isSelected = true),
+					Device(id = "id 2", label = "label 2", isSelected = false),
+				),
+				useCase.invoke(),
+			)
 		}
 
 	private fun createUseCase() =
