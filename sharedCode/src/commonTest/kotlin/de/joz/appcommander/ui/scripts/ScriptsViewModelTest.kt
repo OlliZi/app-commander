@@ -1,10 +1,45 @@
 package de.joz.appcommander.ui.scripts
 
-/*
+import androidx.navigation.NavController
+import de.joz.appcommander.domain.devices.GetDevicesUseCase
+import de.joz.appcommander.domain.logging.ClearLoggingUseCase
+import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.model.Device
+import de.joz.appcommander.domain.navigation.NavigationScreens
+import de.joz.appcommander.domain.preference.ChangedPreference
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
+import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.GetScriptIdUseCase
+import de.joz.appcommander.domain.script.GetUserScriptsUseCase
+import de.joz.appcommander.domain.script.OpenScriptFileUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
+import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.ui.model.Hint
+import de.joz.appcommander.ui.model.ToolSection
+import io.mockk.called
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class ScriptsViewModelTest {
 	private val navControllerMock: NavController = mockk(relaxed = true)
-	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
 	private val getDevicesUseCaseMock: GetDevicesUseCase = mockk(relaxed = true)
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
 	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk(relaxed = true)
@@ -59,6 +94,7 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my script",
 						scriptText = "foo",
+						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
 							scripts = listOf("foo"),
@@ -68,6 +104,7 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my another script",
 						scriptText = "bar",
+						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my another script",
 							scripts = listOf("bar"),
@@ -79,7 +116,7 @@ class ScriptsViewModelTest {
 			)
 
 			coVerify {
-				getDevicesUseCaseMock()
+				getDevicesUseCaseMock wasNot called
 				getUserScriptsUseCaseMock()
 				getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "")
 			}
@@ -167,8 +204,8 @@ class ScriptsViewModelTest {
 			verify(exactly = 4) {
 				getUserScriptsUseCaseMock.invoke()
 			}
-		}
-
+		} /*
+// MOVE TO CONNNECTDDE ICES VM
 	@Test
 	fun `should select device when event 'OnDeviceSelected' is fired`() =
 		runTest {
@@ -186,7 +223,7 @@ class ScriptsViewModelTest {
 					.first()
 					.isSelected,
 			)
-		}
+		}*/
 
 	@Test
 	fun `should navigate to edit a new script when event 'OnNewScript' is fired`() =
@@ -331,8 +368,7 @@ class ScriptsViewModelTest {
 			val viewModel = createViewModel()
 
 			assertEquals(listOf("1. foo", "2. bar"), viewModel.uiState.value.logging)
-		}
-
+		} /*
 	@Test
 	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
 		runTest {
@@ -400,8 +436,9 @@ class ScriptsViewModelTest {
 					selectedDevice = "3",
 				)
 			}
-		}
+		}*/
 
+	/*
 	@Test
 	fun `should keep device selected when devices are refreshed`() =
 		runTest {
@@ -444,6 +481,7 @@ class ScriptsViewModelTest {
 					.isSelected,
 			)
 		}
+	 */
 
 	@Test
 	fun `should reload scripts automatically when script are changed in the file`() =
@@ -693,4 +731,3 @@ class ScriptsViewModelTest {
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }
-*/
