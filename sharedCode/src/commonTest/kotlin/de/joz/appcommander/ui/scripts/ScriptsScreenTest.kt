@@ -554,7 +554,7 @@ class ScriptsScreenTest :
 	}
 
 	@Test
-	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
+	fun `should run script on devices when multiples devices are selected`() =
 		runComposeUiTest {
 			val testScript = ScriptsViewModel.Script(
 				scriptText = "echo bar",
