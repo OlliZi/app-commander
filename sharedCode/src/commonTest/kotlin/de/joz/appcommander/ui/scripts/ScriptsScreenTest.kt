@@ -7,7 +7,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -584,17 +584,17 @@ class ScriptsScreenTest :
 				},
 			)
 
-			waitUntilAtLeastOneExists(hasText(text = "Pixel 1"))
+			onNodeWithText(text = "Pixel 1").assertHasClickAction()
 			onNodeWithText(text = "Pixel 1").performClick()
 
-			waitUntilAtLeastOneExists(hasText(text = "Pixel 3"))
+			onNodeWithText(text = "Pixel 3").assertHasClickAction()
 			onNodeWithText(text = "Pixel 3").performClick()
 
 			waitUntilAtLeastOneExists(
-				hasTestTag(testTag = "script_button_0_true"),
+				matcher = hasTestTag(testTag = "script_button_0") and isEnabled(),
 				timeoutMillis = 3000L,
 			)
-			onNodeWithTag(testTag = "script_button_0_true").performClick()
+			onNodeWithTag(testTag = "script_button_0").performClick()
 
 			assertEquals(1, executeScriptEvents.size)
 			assertEquals(testScript, executeScriptEvents.first().script)
