@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.helper.ScreenshotVerifier
@@ -229,13 +228,6 @@ class UiElementsTest {
 			content = ::PreviewTitleBar,
 		)
 
-	private fun ComposeUiTest.verifyScreenshot(screenshotName: String) {
-		screenshotVerifier.verifyScreenshot(
-			source = this,
-			screenshotName = screenshotName,
-		)
-	}
-
 	private fun setupTestUiElement(
 		darkMode: Boolean,
 		content: @Composable (Boolean) -> Unit,
@@ -253,7 +245,8 @@ class UiElementsTest {
 
 			val screenshotName = content.toString().replace("fun ", "").replace("(kotlin.Boolean): kotlin.Unit", "")
 
-			verifyScreenshot(
+			screenshotVerifier.verifyScreenshot(
+				source = this,
 				screenshotName = screenshotName + "_" + if (darkMode) "dark" else "light",
 			)
 		}
