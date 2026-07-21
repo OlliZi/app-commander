@@ -1,9 +1,7 @@
 package de.joz.appcommander.ui.misc
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.domain.script.ScriptsRepository
@@ -21,8 +18,6 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.android
 import de.joz.appcommander.resources.desktop
 import de.joz.appcommander.resources.ios
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.DrawableResource
@@ -68,31 +63,24 @@ private fun ScriptsRepository.Platform.icon(): DrawableResource =
 @Composable
 internal fun PreviewPlatformIcon() {
 	PreviewRenderContainer { previewData ->
-		PreviewPlatformIcon(previewData)
+		PreviewPlatformIcon(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewPlatformIcon(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewPlatformIcon(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
-		Column(
-			verticalArrangement = Arrangement.spacedBy(8.dp),
-		) {
-			ScriptsRepository.Platform.entries.forEach {
-				PlatformIcon(
-					isActive = true,
-					platform = it,
-				)
-				PlatformIcon(
-					isActive = false,
-					platform = it,
-				)
-			}
+		ScriptsRepository.Platform.entries.forEach {
+			PlatformIcon(
+				isActive = true,
+				platform = it,
+			)
+			PlatformIcon(
+				isActive = false,
+				platform = it,
+			)
 		}
 	}
 }

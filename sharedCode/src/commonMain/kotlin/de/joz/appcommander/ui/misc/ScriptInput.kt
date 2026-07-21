@@ -20,13 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.FilePlus
 import compose.icons.feathericons.Play
 import compose.icons.feathericons.Trash
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
@@ -130,17 +127,14 @@ private fun PlayIcon(
 @Composable
 internal fun PreviewScriptInput() {
 	PreviewRenderContainer { previewData ->
-		PreviewScriptInput(previewData)
+		PreviewScriptInput(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewScriptInput(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewScriptInput(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		Column(
 			verticalArrangement = Arrangement.SpaceBetween,

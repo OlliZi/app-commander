@@ -6,11 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.domain.script.ScriptsRepository
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
@@ -39,20 +36,17 @@ fun PlatformSelection(
 @Composable
 internal fun PreviewPlatformSelection() {
 	PreviewRenderContainer { previewData ->
-		PreviewPlatformSelection(previewData)
+		PreviewPlatformSelection(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewPlatformSelection(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewPlatformSelection(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		PlatformSelection(
-			selectedPlatform = if (previewData.uiState) ScriptsRepository.Platform.ANDROID else ScriptsRepository.Platform.IOS,
+			selectedPlatform = if (darkMode) ScriptsRepository.Platform.ANDROID else ScriptsRepository.Platform.IOS,
 			onSelectPlatform = { _ -> },
 		)
 	}

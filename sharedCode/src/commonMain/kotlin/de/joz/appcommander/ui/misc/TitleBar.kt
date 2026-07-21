@@ -13,12 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Settings
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
@@ -72,17 +69,14 @@ data class TitleBarAction(
 @Composable
 internal fun PreviewTitleBar() {
 	PreviewRenderContainer { previewData ->
-		PreviewTitleBar(previewData)
+		PreviewTitleBar(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewTitleBar(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewTitleBar(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		Column(
 			verticalArrangement = Arrangement.SpaceBetween,

@@ -16,12 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_filter_section_title
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
@@ -70,17 +67,14 @@ fun Collapsable(
 @Composable
 internal fun PreviewCollapsable() {
 	PreviewRenderContainer { previewData ->
-		PreviewCollapsable(previewData)
+		PreviewCollapsable(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewCollapsable(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewCollapsable(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		Collapsable(
 			title = Res.string.scripts_filter_section_title,
