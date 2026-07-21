@@ -587,6 +587,7 @@ class ScriptsScreenTest :
 
 			waitUntilAtLeastOneExists(
 				hasTestTag(testTag = "script_button_0_true"),
+				timeoutMillis = 2000L,
 			)
 			onNodeWithTag(testTag = "script_button_0_true").performClick()
 
