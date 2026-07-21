@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.testTag
@@ -36,7 +38,12 @@ fun ConnectedDevices(
 ) {
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
-	onIsAtMinimumOneDeviceSelected(uiState.connectedDevices.any { it.isSelected })
+	val isAnySelected = remember(uiState.connectedDevices) {
+		uiState.connectedDevices.any { it.isSelected }
+	}
+	LaunchedEffect(isAnySelected) {
+		onIsAtMinimumOneDeviceSelected(isAnySelected)
+	}
 
 	ConnectedDevicesContent(
 		showHintLabel = showHintLabel,
