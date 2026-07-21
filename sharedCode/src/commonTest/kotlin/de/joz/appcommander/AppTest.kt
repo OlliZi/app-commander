@@ -5,6 +5,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
@@ -31,6 +32,9 @@ class AppTest :
 		modules(DependencyInjection().module)
 		modules(
 			module {
+				single<SavePreferenceUseCase> {
+					mockk()
+				}
 				single<ScriptsRepository> {
 					mockk {
 						every { getScripts() } returns ScriptsRepository.JsonParseResult(
