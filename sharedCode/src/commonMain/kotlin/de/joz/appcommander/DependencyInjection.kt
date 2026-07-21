@@ -13,6 +13,7 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 import java.io.File
 
 @Module(includes = [])
@@ -35,7 +36,7 @@ class DependencyInjection {
 	@Factory
 	fun provideScriptFile() = ScriptFile(scriptFile = getPreferenceFileStorePath(fileName = "scripts.json"))
 
-	@Factory
+	@Single
 	fun provideDatastore(): DataStore<Preferences> =
 		PreferenceDataStoreFactory.createWithPath(
 			corruptionHandler = null,
