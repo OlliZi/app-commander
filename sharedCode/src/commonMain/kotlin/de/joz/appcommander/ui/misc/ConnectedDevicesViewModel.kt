@@ -47,10 +47,16 @@ class ConnectedDevicesViewModel(
 		}
 	}
 
-	private fun onRefreshDevices(selectedDevices: List<Device>) {
+	private fun onRefreshDevices(devices: List<Device>) {
 		_uiState.update { oldState ->
 			oldState.copy(
-				connectedDevices = selectedDevices,
+				connectedDevices = devices.map { device ->
+					Device(
+						id = device.id,
+						label = device.label,
+						isSelected = devices.size == 1 || oldState.connectedDevices.any { it.id == device.id && it.isSelected },
+					)
+				},
 			)
 		}
 	}

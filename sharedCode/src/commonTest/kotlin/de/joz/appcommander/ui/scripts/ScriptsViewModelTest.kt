@@ -419,51 +419,6 @@ class ScriptsViewModelTest {
 			}
 		}*/
 
-	/*
-	@Test
-	fun `should keep device selected when devices are refreshed`() =
-		runTest {
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-			)
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices[1],
-				),
-			)
-			runCurrent()
-
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-			)
-
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-			runCurrent()
-
-			assertFalse(
-				viewModel.uiState.value.connectedDevices[0]
-					.isSelected,
-			)
-			assertTrue(
-				viewModel.uiState.value.connectedDevices[1]
-					.isSelected,
-			)
-			assertFalse(
-				viewModel.uiState.value.connectedDevices[2]
-					.isSelected,
-			)
-		}
-	 */
-
 	@Test
 	fun `should reload scripts automatically when script are changed in the file`() =
 		runTest {

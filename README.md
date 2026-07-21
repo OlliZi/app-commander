@@ -110,6 +110,7 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
+- Xurrent PR. Tests. ConnedcDevcie UI + Termiimal  + excute scripts
 - Create a video showing the UI with emulator and a real device
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
