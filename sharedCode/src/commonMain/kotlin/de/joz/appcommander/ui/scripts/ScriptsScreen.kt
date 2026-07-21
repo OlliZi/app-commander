@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.scripts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -225,7 +227,10 @@ private fun ScriptsSection(
 						modifier = Modifier.fillMaxWidth().offset(x = (-12).dp),
 						verticalAlignment = Alignment.CenterVertically,
 					) {
-						PlatformIcon(script.originalScript.platform)
+						PlatformIcon(
+							isActive = isButtonActive,
+							platform = script.originalScript.platform,
+						)
 						Column(
 							modifier = Modifier.fillMaxWidth().weight(1f),
 						) {
@@ -253,7 +258,10 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 						horizontalArrangement = Arrangement.SpaceBetween,
 					) {
-						PlatformIcon(script.originalScript.platform)
+						PlatformIcon(
+							isActive = isButtonActive,
+							platform = script.originalScript.platform,
+						)
 						TextLabel(
 							modifier = Modifier.weight(1f),
 							text = script.description,
@@ -466,16 +474,36 @@ private fun ExpandButtonItem(
 }
 
 @Composable
-private fun PlatformIcon(platform: ScriptsRepository.Platform) {
-	Icon(
-		painter = when (platform) {
-			ScriptsRepository.Platform.ANDROID -> painterResource(Res.drawable.android)
-			ScriptsRepository.Platform.IOS -> painterResource(Res.drawable.ios)
-			ScriptsRepository.Platform.DESKTOP -> painterResource(Res.drawable.desktop)
-		},
-		contentDescription = null,
-		tint = Color.Unspecified,
-	)
+private fun PlatformIcon(
+	isActive: Boolean,
+	platform: ScriptsRepository.Platform,
+) {
+	Box(
+		modifier = Modifier
+			.size(36.dp)
+			.size(36.dp)
+			.then(
+				if (isActive) {
+					Modifier.background(
+						Color.White,
+						CircleShape,
+					)
+				} else {
+					Modifier
+				},
+			).padding(2.dp),
+	) {
+		Icon(
+			modifier = Modifier.size(36.dp),
+			painter = when (platform) {
+				ScriptsRepository.Platform.ANDROID -> painterResource(Res.drawable.android)
+				ScriptsRepository.Platform.IOS -> painterResource(Res.drawable.ios)
+				ScriptsRepository.Platform.DESKTOP -> painterResource(Res.drawable.desktop)
+			},
+			contentDescription = null,
+			tint = Color.Unspecified,
+		)
+	}
 }
 
 @Preview
