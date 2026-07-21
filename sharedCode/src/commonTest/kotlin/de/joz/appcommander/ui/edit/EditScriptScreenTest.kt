@@ -389,6 +389,26 @@ class EditScriptScreenTest :
 	}
 
 	@Test
+	fun `always run all scripts when run button is clicked and the selected platform is Desktop`() {
+		runComposeUiTest {
+			testDevices = emptyList()
+			val script = ScriptsRepository.Script(
+				label = "",
+				platform = ScriptsRepository.Platform.DESKTOP,
+				scripts = listOf("foo bar"),
+			)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
+
+			onNodeWithContentDescription(label = "Execute all scripts").performClick()
+
+			coVerify { executeScriptUseCaseMock(script = script, selectedDevice = "") }
+		}
+	}
+
+	@Test
 	fun `should refresh devices when refresh is clicked`() {
 		runComposeUiTest {
 			testDevices = listOf(
