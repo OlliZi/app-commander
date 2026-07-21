@@ -5,6 +5,7 @@ import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.ScreenshotVerifier
@@ -33,8 +34,9 @@ class AppTest :
 		modules(
 			module {
 				single<SavePreferenceUseCase> {
-					mockk()
+					mockk(relaxed = true)
 				}
+				single<PreferencesRepository> { mockk(relaxed = true) }
 				single<ScriptsRepository> {
 					mockk {
 						every { getScripts() } returns ScriptsRepository.JsonParseResult(
