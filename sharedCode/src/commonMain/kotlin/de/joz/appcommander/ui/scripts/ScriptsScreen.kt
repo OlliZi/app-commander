@@ -222,7 +222,7 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 					) {
 						PlatformIcon(
-							isActive = !isButtonActive,
+							isActive = isButtonActive,
 							platform = script.originalScript.platform,
 						)
 						Column(
