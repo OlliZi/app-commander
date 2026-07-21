@@ -55,6 +55,7 @@ import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Collapsable
+import de.joz.appcommander.ui.misc.ConnectedDevices
 import de.joz.appcommander.ui.misc.ExpandButton
 import de.joz.appcommander.ui.misc.PlatformIcon
 import de.joz.appcommander.ui.misc.PlatformSelection
@@ -128,13 +129,13 @@ internal fun ScriptsContent(
 			val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
 			var isAtMinimumOneDeviceSelected by remember { mutableStateOf(false) }
 
-			/*ConnectedDevices(
+			ConnectedDevices(
 				showHintLabel = true,
 				modifier = paddingInline,
 				onIsAtMinimumOneDeviceSelected = {
 					isAtMinimumOneDeviceSelected = it
 				},
-			)*/
+			)
 
 			SectionDivider()
 
@@ -203,7 +204,10 @@ private fun ScriptsSection(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		itemsIndexed(scripts) { index, script ->
-			val isButtonActive = script.isExpanded
+			val isButtonActive = UiHelper.isScriptExecutableByUi(
+				isAtMinimumOneDeviceSelected,
+				script.originalScript.platform,
+			)
 
 			Button(
 				modifier = Modifier.testTag("script_button_$index"),
