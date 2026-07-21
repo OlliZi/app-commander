@@ -232,7 +232,7 @@ private fun ScriptsSection(
 							platform = script.originalScript.platform,
 						)
 						Column(
-							modifier = Modifier.fillMaxWidth().weight(1f),
+							modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 8.dp),
 						) {
 							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
@@ -263,7 +263,7 @@ private fun ScriptsSection(
 							platform = script.originalScript.platform,
 						)
 						TextLabel(
-							modifier = Modifier.weight(1f),
+							modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
 							text = script.description,
 							textLabelType = TextLabelType.BodyLarge,
 						)
@@ -531,7 +531,7 @@ private fun RenderPreview(darkTheme: Boolean) {
 			uiState = ScriptsViewModel.UiState(
 				scripts = listOf(
 					Script(
-						description = "my script",
+						description = "android my script",
 						scriptText = "adb devices",
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
@@ -541,13 +541,53 @@ private fun RenderPreview(darkTheme: Boolean) {
 						),
 					),
 					Script(
-						description = "my script",
+						description = "android my script",
 						scriptText = "adb long long long long long long long long long long long long script",
 						isExpanded = true,
 						originalScript = ScriptsRepository.Script(
 							label = "",
 							scripts = emptyList(),
 							platform = ScriptsRepository.Platform.ANDROID,
+						),
+					),
+					Script(
+						description = "ios my script",
+						scriptText = "ios devices",
+						isExpanded = false,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.IOS,
+						),
+					),
+					Script(
+						description = "ios my script",
+						scriptText = "ios long long long long long long long long long long long long script",
+						isExpanded = true,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.IOS,
+						),
+					),
+					Script(
+						description = "desktop my script",
+						scriptText = "desktop devices",
+						isExpanded = false,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.DESKTOP,
+						),
+					),
+					Script(
+						description = "desktop my script",
+						scriptText = "desktop long long long long long long long long long long long long script",
+						isExpanded = true,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.DESKTOP,
 						),
 					),
 				),
