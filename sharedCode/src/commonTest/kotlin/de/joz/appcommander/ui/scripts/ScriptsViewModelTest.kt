@@ -349,75 +349,7 @@ class ScriptsViewModelTest {
 			val viewModel = createViewModel()
 
 			assertEquals(listOf("1. foo", "2. bar"), viewModel.uiState.value.logging)
-		} /*
-	@Test
-	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
-		runTest {
-			val testScript = ScriptsRepository.Script(
-				label = "my script",
-				scripts = listOf("foo"),
-				platform = ScriptsRepository.Platform.ANDROID,
-			)
-
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-			)
-			coEvery {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "1",
-				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "")
-			coEvery {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "3",
-				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "")
-
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices
-						.first(),
-				),
-			)
-			runCurrent()
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices
-						.last(),
-				),
-			)
-			runCurrent()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnExecuteScript(
-					script = ScriptsViewModel.Script(
-						originalScript = testScript,
-						description = "",
-						scriptText = "",
-					),
-				),
-			)
-			runCurrent()
-
-			coVerify {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "1",
-				)
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "3",
-				)
-			}
-		}*/
+		}
 
 	@Test
 	fun `should reload scripts automatically when script are changed in the file`() =
