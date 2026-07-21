@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,6 +42,9 @@ import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.android
+import de.joz.appcommander.resources.desktop
+import de.joz.appcommander.resources.ios
 import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_filter_section_title
 import de.joz.appcommander.resources.scripts_json_multi_scripts
@@ -71,6 +73,7 @@ import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -222,6 +225,7 @@ private fun ScriptsSection(
 						modifier = Modifier.fillMaxWidth().offset(x = (-12).dp),
 						verticalAlignment = Alignment.CenterVertically,
 					) {
+						PlatformIcon(script.originalScript.platform)
 						Column(
 							modifier = Modifier.fillMaxWidth().weight(1f),
 						) {
@@ -249,20 +253,11 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 						horizontalArrangement = Arrangement.SpaceBetween,
 					) {
-						TextLabel(
-							text = script.description,
-							textLabelType = TextLabelType.BodyLarge,
-						)
-						TextLabel(
-							text = " | ",
-							textLabelType = TextLabelType.BodyMedium,
-						)
+						PlatformIcon(script.originalScript.platform)
 						TextLabel(
 							modifier = Modifier.weight(1f),
-							text = script.scriptText,
-							maxLines = 1,
-							overflow = TextOverflow.Ellipsis,
-							textLabelType = TextLabelType.BodyMedium,
+							text = script.description,
+							textLabelType = TextLabelType.BodyLarge,
 						)
 
 						ScriptItemToolIcons(
@@ -467,6 +462,19 @@ private fun ExpandButtonItem(
 		),
 		isExpanded = isExpanded,
 		onClick = onExpand,
+	)
+}
+
+@Composable
+private fun PlatformIcon(platform: ScriptsRepository.Platform) {
+	Icon(
+		painter = when (platform) {
+			ScriptsRepository.Platform.ANDROID -> painterResource(Res.drawable.android)
+			ScriptsRepository.Platform.IOS -> painterResource(Res.drawable.ios)
+			ScriptsRepository.Platform.DESKTOP -> painterResource(Res.drawable.desktop)
+		},
+		contentDescription = null,
+		tint = Color.Unspecified,
 	)
 }
 
