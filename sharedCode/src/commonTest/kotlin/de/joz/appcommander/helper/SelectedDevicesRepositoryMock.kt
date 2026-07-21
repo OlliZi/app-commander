@@ -8,7 +8,7 @@ class SelectedDevicesRepositoryMock(
 ) : SelectedDevicesRepository {
 	private var callSaveCounter = 0
 
-	fun getCounterSaveAndReset(): Int {
+	fun getSaveCounterAndReset(): Int {
 		val counter = callSaveCounter
 		callSaveCounter = 0
 		return counter

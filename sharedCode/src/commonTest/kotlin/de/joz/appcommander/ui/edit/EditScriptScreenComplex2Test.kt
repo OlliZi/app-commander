@@ -130,7 +130,7 @@ class EditScriptScreenComplex2Test :
 				executeScriptUseCaseMock(script = script, selectedDevice = "id 2")
 			}
 
-			assertEquals(4, selectedDevicesRepositoryMock.getCounterSaveAndReset())
+			assertEquals(4, selectedDevicesRepositoryMock.getSaveCounterAndReset())
 		}
 	}
 

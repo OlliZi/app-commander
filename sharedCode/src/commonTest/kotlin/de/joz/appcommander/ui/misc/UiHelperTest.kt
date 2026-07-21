@@ -14,7 +14,7 @@ class UiHelperTest {
 	}
 
 	@Test
-	fun `should return only true when platform is Desktop`() {
+	fun `should return always true when platform is Desktop`() {
 		ScriptsRepository.Platform.entries.forEach {
 			if (it == ScriptsRepository.Platform.DESKTOP) {
 				assertTrue(UiHelper.isScriptExecutableByUi(true, it))
