@@ -535,6 +535,37 @@ class EditScriptScreenTest :
 	}
 
 	@Test
+	fun `do not run one script when run button is clicked but there is no device selected`() {
+		runComposeUiTest {
+			testDevices = listOf(
+				Device(id = "id 1", label = "test device", isSelected = false),
+				Device(id = "id 2", label = "test device", isSelected = false),
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("echo Hello", "echo world!"),
+			)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
+
+			onAllNodes(hasContentDescription("Execute script text")).apply {
+				get(0).assertIsNotEnabled()
+				get(1).assertIsNotEnabled()
+
+				get(0).performClick() // nothing should happen
+				get(1).performClick() // nothing should happen
+			}
+
+			coVerify {
+				executeScriptUseCaseMock wasNot called
+			}
+		}
+	}
+
+	@Test
 	fun `delete script when delete button is clicked and confirmation approved`() {
 		runComposeUiTest {
 			setupData()
