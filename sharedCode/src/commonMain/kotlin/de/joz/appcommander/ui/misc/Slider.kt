@@ -10,14 +10,11 @@ import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
@@ -58,17 +55,14 @@ private fun SettingsViewModel.LabelValue.toUiString(): String =
 @Composable
 internal fun PreviewSlider() {
 	PreviewRenderContainer { previewData ->
-		PreviewSlider(previewData)
+		PreviewSlider(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewSlider(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewSlider(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		Column(
 			verticalArrangement = Arrangement.SpaceBetween,

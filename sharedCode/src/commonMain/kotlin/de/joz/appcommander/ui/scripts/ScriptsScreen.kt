@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -58,6 +57,7 @@ import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Collapsable
 import de.joz.appcommander.ui.misc.ConnectedDevices
 import de.joz.appcommander.ui.misc.ExpandButton
+import de.joz.appcommander.ui.misc.PlatformIcon
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
@@ -222,8 +222,12 @@ private fun ScriptsSection(
 						modifier = Modifier.fillMaxWidth().offset(x = (-12).dp),
 						verticalAlignment = Alignment.CenterVertically,
 					) {
+						PlatformIcon(
+							isActive = isButtonActive,
+							platform = script.originalScript.platform,
+						)
 						Column(
-							modifier = Modifier.fillMaxWidth().weight(1f),
+							modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 8.dp),
 						) {
 							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
@@ -249,20 +253,14 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 						horizontalArrangement = Arrangement.SpaceBetween,
 					) {
+						PlatformIcon(
+							isActive = isButtonActive,
+							platform = script.originalScript.platform,
+						)
 						TextLabel(
+							modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
 							text = script.description,
 							textLabelType = TextLabelType.BodyLarge,
-						)
-						TextLabel(
-							text = " | ",
-							textLabelType = TextLabelType.BodyMedium,
-						)
-						TextLabel(
-							modifier = Modifier.weight(1f),
-							text = script.scriptText,
-							maxLines = 1,
-							overflow = TextOverflow.Ellipsis,
-							textLabelType = TextLabelType.BodyMedium,
 						)
 
 						ScriptItemToolIcons(
@@ -495,7 +493,7 @@ private fun RenderPreview(darkTheme: Boolean) {
 			uiState = ScriptsViewModel.UiState(
 				scripts = listOf(
 					Script(
-						description = "my script",
+						description = "android my script",
 						scriptText = "adb devices",
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
@@ -505,13 +503,53 @@ private fun RenderPreview(darkTheme: Boolean) {
 						),
 					),
 					Script(
-						description = "my script",
+						description = "android my script",
 						scriptText = "adb long long long long long long long long long long long long script",
 						isExpanded = true,
 						originalScript = ScriptsRepository.Script(
 							label = "",
 							scripts = emptyList(),
 							platform = ScriptsRepository.Platform.ANDROID,
+						),
+					),
+					Script(
+						description = "ios my script",
+						scriptText = "ios devices",
+						isExpanded = false,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.IOS,
+						),
+					),
+					Script(
+						description = "ios my script",
+						scriptText = "ios long long long long long long long long long long long long script",
+						isExpanded = true,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.IOS,
+						),
+					),
+					Script(
+						description = "desktop my script",
+						scriptText = "desktop devices",
+						isExpanded = false,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.DESKTOP,
+						),
+					),
+					Script(
+						description = "desktop my script",
+						scriptText = "desktop long long long long long long long long long long long long script",
+						isExpanded = true,
+						originalScript = ScriptsRepository.Script(
+							label = "",
+							scripts = emptyList(),
+							platform = ScriptsRepository.Platform.DESKTOP,
 						),
 					),
 				),

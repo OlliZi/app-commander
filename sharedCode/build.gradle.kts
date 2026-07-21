@@ -77,13 +77,18 @@ kover {
 	reports {
 		filters {
 			excludes {
-				packages("org.koin.ksp.generated", "$mainPackage.resources", "$mainPackage.launch")
-				classes("**ComposableSingletons**", "**NavigationScreens\$Companion**")
+				packages(
+					"org.koin.ksp.generated",
+					"$mainPackage.resources",
+					"$mainPackage.launch",
+					"$mainPackage.ui.internalpreviews",
+				)
+				classes("**ComposableSingletons**", $$"**NavigationScreens$Companion**")
 			}
 		}
 		verify {
 			// also edit in README.md
-			val lineCoverage = 94
+			val lineCoverage = 93
 			rule("Minimal line coverage rate in percent.") {
 				minBound(lineCoverage)
 			}

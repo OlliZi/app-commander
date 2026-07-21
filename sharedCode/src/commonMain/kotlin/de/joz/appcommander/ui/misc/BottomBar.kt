@@ -12,14 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
@@ -62,17 +59,14 @@ data class BottomBarAction(
 @Composable
 internal fun PreviewBottomBar() {
 	PreviewRenderContainer { previewData ->
-		PreviewBottomBar(previewData)
+		PreviewBottomBar(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewBottomBar(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewBottomBar(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		BottomBar(
 			actions = listOf(

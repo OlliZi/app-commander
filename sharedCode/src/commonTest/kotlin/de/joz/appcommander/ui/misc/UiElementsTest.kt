@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
 import de.joz.appcommander.helper.ScreenshotVerifier
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import kotlin.test.Test
 
@@ -21,169 +19,235 @@ class UiElementsTest {
 	)
 
 	@Test
-	fun `should render all ui elements correctly in dark mode`() {
-		runComposeUiTest {
-			setupTestUi(
-				darkMode = true,
-			)
-
-			verifyScreenshot(
-				screenshotName = "all_ui_elements_in_dark_mode",
-			)
-		}
-	}
-
-	@Test
-	fun `should render all ui elements correctly in light mode`() {
-		runComposeUiTest {
-			setupTestUi(
-				darkMode = false,
-			)
-
-			verifyScreenshot(
-				screenshotName = "all_ui_elements_in_light_mode",
-			)
-		}
-	}
-
-	@Test
-	fun `should render PreviewBottomBar in all modes`() =
-		setupTestUiElement("PreviewBottomBar") {
-			PreviewBottomBar()
-		}
-
-	@Test
-	fun `should render PreviewConnectedDevices in all modes`() =
-		setupTestUiElement("PreviewConnectedDevices") {
-			PreviewConnectedDevices()
-		}
-
-	@Test
-	fun `should render PreviewMultiScriptInput in all modes`() =
-		setupTestUiElement("PreviewMultiScriptInput") {
-			PreviewMultiScriptInput()
-		}
-
-	@Test
-	fun `should render PreviewCollapsable in all modes`() =
-		setupTestUiElement("PreviewCollapsable") {
-			PreviewCollapsable()
-		}
-
-	@Test
-	fun `should render Confirmation in dark mode`() =
-		setupTestUiElement("PreviewConfirmation_dark") {
-			PreviewConfirmation(darkTheme = true)
-		}
-
-	@Test
-	fun `should render Confirmation in light mode`() =
-		setupTestUiElement("PreviewConfirmation_light") {
-			PreviewConfirmation(darkTheme = false)
-		}
-
-	@Test
-	fun `should render PreviewExpandButton in all modes`() =
-		setupTestUiElement("PreviewExpandButton") {
-			PreviewExpandButton()
-		}
-
-	@Test
-	fun `should render PreviewLabelledSwitch in all modes`() =
-		setupTestUiElement("PreviewLabelledSwitch") {
-			PreviewLabelledSwitch()
-		}
-
-	@Test
-	fun `should render PreviewPlatformSelection in all modes`() =
-		setupTestUiElement("PreviewPlatformSelection") {
-			PreviewPlatformSelection()
-		}
-
-	@Test
-	fun `should render PreviewScriptInput in all modes`() =
-		setupTestUiElement("PreviewScriptInput") {
-			PreviewScriptInput()
-		}
-
-	@Test
-	fun `should render PreviewSectionDivider in all modes`() =
-		setupTestUiElement("PreviewSectionDivider") {
-			PreviewSectionDivider()
-		}
-
-	@Test
-	fun `should render PreviewSimpleTextInput in all modes`() =
-		setupTestUiElement("PreviewSimpleTextInput") {
-			PreviewSimpleTextInput()
-		}
-
-	@Test
-	fun `should render PreviewSlider in all modes`() =
-		setupTestUiElement("PreviewSlider") {
-			PreviewSlider()
-		}
-
-	@Test
-	fun `should render PreviewTextLabel in all modes`() =
-		setupTestUiElement("PreviewTextLabel") {
-			PreviewTextLabel()
-		}
-
-	@Test
-	fun `should render PreviewTitleBar in all modes`() =
-		setupTestUiElement("PreviewTitleBar") {
-			PreviewTitleBar()
-		}
-
-	private fun ComposeUiTest.verifyScreenshot(screenshotName: String) {
-		screenshotVerifier.verifyScreenshot(
-			source = this,
-			screenshotName = screenshotName,
+	fun `should render PreviewBottomBar in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewBottomBar,
 		)
-	}
+
+	@Test
+	fun `should render PreviewBottomBar in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewBottomBar,
+		)
+
+	@Test
+	fun `should render PreviewPlatformIcon in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewPlatformIcon,
+		)
+
+	@Test
+	fun `should render PreviewPlatformIcon in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewPlatformIcon,
+		)
+
+	@Test
+	fun `should render PreviewConnectedDevices in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewConnectedDevices,
+		)
+
+	@Test
+	fun `should render PreviewConnectedDevices in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewConnectedDevices,
+		)
+
+	@Test
+	fun `should render PreviewMultiScriptInput in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewMultiScriptInput,
+		)
+
+	@Test
+	fun `should render PreviewMultiScriptInput in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewMultiScriptInput,
+		)
+
+	@Test
+	fun `should render PreviewCollapsable in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewCollapsable,
+		)
+
+	@Test
+	fun `should render PreviewCollapsable in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewCollapsable,
+		)
+
+	@Test
+	fun `should render PreviewConfirmation in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewConfirmation,
+		)
+
+	@Test
+	fun `should render PreviewConfirmation in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewConfirmation,
+		)
+
+	@Test
+	fun `should render PreviewExpandButton in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewExpandButton,
+		)
+
+	@Test
+	fun `should render PreviewExpandButton in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewExpandButton,
+		)
+
+	@Test
+	fun `should render PreviewLabelledSwitch in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewLabelledSwitch,
+		)
+
+	@Test
+	fun `should render PreviewLabelledSwitch in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewLabelledSwitch,
+		)
+
+	@Test
+	fun `should render PreviewPlatformSelection in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewPlatformSelection,
+		)
+
+	@Test
+	fun `should render PreviewPlatformSelection in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewPlatformSelection,
+		)
+
+	@Test
+	fun `should render PreviewScriptInput in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewScriptInput,
+		)
+
+	@Test
+	fun `should render PreviewScriptInput in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewScriptInput,
+		)
+
+	@Test
+	fun `should render PreviewSectionDivider in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewSectionDivider,
+		)
+
+	@Test
+	fun `should render PreviewSectionDivider in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewSectionDivider,
+		)
+
+	@Test
+	fun `should render PreviewSimpleTextInput in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewSimpleTextInput,
+		)
+
+	@Test
+	fun `should render PreviewSimpleTextInput in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewSimpleTextInput,
+		)
+
+	@Test
+	fun `should render PreviewSlider in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewSlider,
+		)
+
+	@Test
+	fun `should render PreviewSlider in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewSlider,
+		)
+
+	@Test
+	fun `should render PreviewTextLabel in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewTextLabel,
+		)
+
+	@Test
+	fun `should render PreviewTextLabel in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewTextLabel,
+		)
+
+	@Test
+	fun `should render PreviewTitleBar in all modes - light`() =
+		setupTestUiElement(
+			darkMode = false,
+			content = ::PreviewTitleBar,
+		)
+
+	@Test
+	fun `should render PreviewTitleBar in all modes - dark`() =
+		setupTestUiElement(
+			darkMode = true,
+			content = ::PreviewTitleBar,
+		)
 
 	private fun setupTestUiElement(
-		screenshotName: String,
-		content: @Composable () -> Unit,
+		darkMode: Boolean,
+		content: @Composable (Boolean) -> Unit,
 	) {
 		runComposeUiTest {
 			setContent {
-				Column(
-					modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-				) {
-					content()
-				}
-			}
-
-			verifyScreenshot(
-				screenshotName = screenshotName,
-			)
-		}
-	}
-
-	private fun ComposeUiTest.setupTestUi(darkMode: Boolean) {
-		setContent {
-			AppCommanderTheme(
-				darkTheme = darkMode,
-				content = {
+				AppCommanderTheme(darkTheme = darkMode, content = {
 					Column(
 						modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
 					) {
-						val uiState = PreviewData.createThemeDarkMode(darkMode)
-						PreviewBottomBar(uiState)
-						PreviewConnectedDevices(uiState)
-						PreviewExpandButton(uiState)
-						PreviewLabelledSwitch(uiState)
-						PreviewPlatformSelection(uiState)
-						PreviewScriptInput(uiState)
-						PreviewSectionDivider(uiState)
-						PreviewSimpleTextInput(uiState)
-						PreviewSlider(uiState)
-						PreviewTextLabel(uiState)
-						PreviewTitleBar(uiState)
+						content(darkMode)
 					}
-				},
+				})
+			}
+
+			val screenshotName = content.toString().replace("fun ", "").replace("(kotlin.Boolean): kotlin.Unit", "")
+
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = screenshotName + "_" + if (darkMode) "dark" else "light",
 			)
 		}
 	}

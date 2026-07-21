@@ -104,13 +104,12 @@ App-Commander is built with modern technologies and best practices:
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
-    *   Code Coverage with Kover (~ 95 %).
+    *   Code Coverage with Kover (~ 93 %).
     *   Execute code quality locally (on my jenkins) and in github-cloud.
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Add nice icon to selected plattform and on script button
 - Create a video showing the UI with emulator and a real device
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

@@ -13,15 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Play
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_run_all_scripts
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
 import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -97,17 +94,14 @@ private fun ScriptDivider() {
 @Composable
 internal fun PreviewMultiScriptInput() {
 	PreviewRenderContainer { previewData ->
-		PreviewMultiScriptInput(previewData)
+		PreviewMultiScriptInput(previewData.uiState)
 	}
 }
 
-@Preview
 @Composable
-internal fun PreviewMultiScriptInput(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewMultiScriptInput(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		MultiScriptInput(
 			isAtMinimumOneDeviceSelected = true,
