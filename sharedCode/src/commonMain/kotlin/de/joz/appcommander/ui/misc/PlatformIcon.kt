@@ -53,15 +53,15 @@ fun PlatformIcon(
 private fun ScriptsRepository.Platform.background(isActive: Boolean): Color =
 	when (this) {
 		ScriptsRepository.Platform.ANDROID -> Color.White
-		ScriptsRepository.Platform.IOS -> Color.White
-		ScriptsRepository.Platform.DESKTOP -> Color.White
+		ScriptsRepository.Platform.IOS -> if (isActive) Color.Unspecified else Color.White
+		ScriptsRepository.Platform.DESKTOP -> if (isActive) Color.Unspecified else Color.White
 	}
 
 private fun ScriptsRepository.Platform.padding(): Dp =
 	when (this) {
-		ScriptsRepository.Platform.ANDROID -> 2.dp
+		ScriptsRepository.Platform.ANDROID -> 1.dp
 		ScriptsRepository.Platform.IOS -> 6.dp
-		ScriptsRepository.Platform.DESKTOP -> 10.dp
+		ScriptsRepository.Platform.DESKTOP -> 8.dp
 	}
 
 private fun ScriptsRepository.Platform.icon(): DrawableResource =

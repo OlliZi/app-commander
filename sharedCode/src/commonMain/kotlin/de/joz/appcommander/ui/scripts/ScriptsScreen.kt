@@ -203,10 +203,7 @@ private fun ScriptsSection(
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		itemsIndexed(scripts) { index, script ->
-			val isButtonActive = UiHelper.isScriptExecutableByUi(
-				isAtMinimumOneDeviceSelected,
-				script.originalScript.platform,
-			)
+			val isButtonActive = script.isExpanded
 
 			Button(
 				modifier = Modifier.testTag("script_button_$index"),
