@@ -50,11 +50,20 @@ fun PlatformIcon(
 	}
 }
 
+@Composable
 private fun ScriptsRepository.Platform.background(isActive: Boolean): Color =
 	when (this) {
-		ScriptsRepository.Platform.ANDROID -> Color.White
-		ScriptsRepository.Platform.IOS -> if (isActive) Color.Unspecified else Color.White
-		ScriptsRepository.Platform.DESKTOP -> if (isActive) Color.Unspecified else Color.White
+		ScriptsRepository.Platform.ANDROID -> {
+			if (isActive) Color.Unspecified else Color.White
+		}
+
+		ScriptsRepository.Platform.IOS -> {
+			if (isActive) Color.Unspecified else Color.White
+		}
+
+		ScriptsRepository.Platform.DESKTOP -> {
+			if (isActive) Color.Unspecified else Color.White
+		}
 	}
 
 private fun ScriptsRepository.Platform.padding(): Dp =
