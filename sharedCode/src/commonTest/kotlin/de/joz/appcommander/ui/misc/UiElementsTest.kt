@@ -53,6 +53,12 @@ class UiElementsTest {
 		}
 
 	@Test
+	fun `should render PreviewPlatformIcon in all modes`() =
+		setupTestUiElement("PreviewPlatformIcon") {
+			PreviewPlatformIcon()
+		}
+
+	@Test
 	fun `should render PreviewConnectedDevices in all modes`() =
 		setupTestUiElement("PreviewConnectedDevices") {
 			PreviewConnectedDevices()

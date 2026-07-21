@@ -3,7 +3,6 @@ package de.joz.appcommander.ui.scripts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -44,9 +42,6 @@ import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.android
-import de.joz.appcommander.resources.desktop
-import de.joz.appcommander.resources.ios
 import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_filter_section_title
 import de.joz.appcommander.resources.scripts_json_multi_scripts
@@ -60,8 +55,8 @@ import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Collapsable
-import de.joz.appcommander.ui.misc.ConnectedDevices
 import de.joz.appcommander.ui.misc.ExpandButton
+import de.joz.appcommander.ui.misc.PlatformIcon
 import de.joz.appcommander.ui.misc.PlatformSelection
 import de.joz.appcommander.ui.misc.ScriptInput
 import de.joz.appcommander.ui.misc.SectionDivider
@@ -75,7 +70,6 @@ import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
 import de.joz.appcommander.ui.theme.AppCommanderTheme
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -134,13 +128,13 @@ internal fun ScriptsContent(
 			val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
 			var isAtMinimumOneDeviceSelected by remember { mutableStateOf(false) }
 
-			ConnectedDevices(
+			/*ConnectedDevices(
 				showHintLabel = true,
 				modifier = paddingInline,
 				onIsAtMinimumOneDeviceSelected = {
 					isAtMinimumOneDeviceSelected = it
 				},
-			)
+			)*/
 
 			SectionDivider()
 
@@ -228,7 +222,7 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 					) {
 						PlatformIcon(
-							isActive = isButtonActive,
+							isActive = !isButtonActive,
 							platform = script.originalScript.platform,
 						)
 						Column(
@@ -471,39 +465,6 @@ private fun ExpandButtonItem(
 		isExpanded = isExpanded,
 		onClick = onExpand,
 	)
-}
-
-@Composable
-private fun PlatformIcon(
-	isActive: Boolean,
-	platform: ScriptsRepository.Platform,
-) {
-	Box(
-		modifier = Modifier
-			.size(36.dp)
-			.size(36.dp)
-			.then(
-				if (isActive) {
-					Modifier.background(
-						Color.White,
-						CircleShape,
-					)
-				} else {
-					Modifier
-				},
-			).padding(2.dp),
-	) {
-		Icon(
-			modifier = Modifier.size(36.dp),
-			painter = when (platform) {
-				ScriptsRepository.Platform.ANDROID -> painterResource(Res.drawable.android)
-				ScriptsRepository.Platform.IOS -> painterResource(Res.drawable.ios)
-				ScriptsRepository.Platform.DESKTOP -> painterResource(Res.drawable.desktop)
-			},
-			contentDescription = null,
-			tint = Color.Unspecified,
-		)
-	}
 }
 
 @Preview
