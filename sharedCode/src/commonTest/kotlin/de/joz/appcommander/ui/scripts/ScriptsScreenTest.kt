@@ -4,6 +4,8 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -355,6 +357,61 @@ class ScriptsScreenTest :
 	}
 
 	@Test
+	fun `should not execute script when executed in terminal but there is no selected device for Android`() {
+		`should not execute script when executed in terminal but there is no selected device for platform`(
+			platform = ScriptsRepository.Platform.ANDROID,
+			expectedIsEnabled = false,
+		)
+	}
+
+	@Test
+	fun `should not execute script when executed in terminal but there is no selected device for iOS`() {
+		`should not execute script when executed in terminal but there is no selected device for platform`(
+			platform = ScriptsRepository.Platform.IOS,
+			expectedIsEnabled = false,
+		)
+	}
+
+	@Test
+	fun `should not execute script when executed in terminal but there is no selected device for Desktop`() {
+		`should not execute script when executed in terminal but there is no selected device for platform`(
+			platform = ScriptsRepository.Platform.DESKTOP,
+			expectedIsEnabled = true,
+		)
+	}
+
+	private fun `should not execute script when executed in terminal but there is no selected device for platform`(
+		platform: ScriptsRepository.Platform,
+		expectedIsEnabled: Boolean,
+	) {
+		runComposeUiTest {
+			testDevices = emptyList()
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(),
+				onEvent = {},
+			)
+
+			onNodeWithTag(
+				testTag = "expand_button_terminal",
+			).assertIsDisplayed().performClick()
+
+			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
+			onNodeWithTag(testTag = "text_field_script_input").performTextClearance()
+			onNodeWithTag(testTag = "text_field_script_input").performTextInput("foo bar")
+
+			onNodeWithText(
+				text = platform.label,
+			).assertIsDisplayed().performClick()
+
+			if (expectedIsEnabled) {
+				onNodeWithContentDescription(label = "Execute script text").assertIsEnabled()
+			} else {
+				onNodeWithContentDescription(label = "Execute script text").assertIsNotEnabled()
+			}
+		}
+	}
+
+	@Test
 	fun `should execute script when executed in terminal`() {
 		runComposeUiTest {
 			var selectedScriptText = ""
@@ -378,13 +435,13 @@ class ScriptsScreenTest :
 			onNodeWithTag(testTag = "text_field_script_input").performTextInput("foo bar")
 
 			onNodeWithText(
-				text = ScriptsRepository.Platform.IOS.label,
+				text = ScriptsRepository.Platform.DESKTOP.label,
 			).assertIsDisplayed().performClick()
 
 			onNodeWithContentDescription(label = "Execute script text").performClick()
 
 			assertEquals("foo bar", selectedScriptText)
-			assertEquals(ScriptsRepository.Platform.IOS, selectedPlatform)
+			assertEquals(ScriptsRepository.Platform.DESKTOP, selectedPlatform)
 		}
 	}
 
@@ -493,7 +550,75 @@ class ScriptsScreenTest :
 
 			assertEquals(filterText, "filter")
 		}
-	}
+	} /*
+	@Test
+	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "my script",
+				scripts = listOf("foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+
+			coEvery {
+				getConnectedDevicesUseCaseMock()
+			} returns listOf(
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
+			)
+			coEvery {
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "1",
+				)
+			} returns ExecuteScriptUseCase.Result.Success(output = "")
+			coEvery {
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "3",
+				)
+			} returns ExecuteScriptUseCase.Result.Success(output = "")
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = ScriptsViewModel.Event.OnDeviceSelected(
+					device = viewModel.uiState.value.connectedDevices
+						.first(),
+				),
+			)
+			runCurrent()
+			viewModel.onEvent(
+				event = ScriptsViewModel.Event.OnDeviceSelected(
+					device = viewModel.uiState.value.connectedDevices
+						.last(),
+				),
+			)
+			runCurrent()
+
+			viewModel.onEvent(
+				event = ScriptsViewModel.Event.OnExecuteScript(
+					script = ScriptsViewModel.Script(
+						originalScript = testScript,
+						description = "",
+						scriptText = "",
+					),
+				),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "1",
+				)
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "3",
+				)
+			}
+		}*/
 
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
