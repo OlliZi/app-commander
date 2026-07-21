@@ -7,11 +7,13 @@ import de.joz.appcommander.data.ScriptFile
 import de.joz.appcommander.data.getPreferenceFileStorePath
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 import okio.Path.Companion.toPath
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Factory
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 import java.io.File
 
 @Module(includes = [])
@@ -34,7 +36,7 @@ class DependencyInjection {
 	@Factory
 	fun provideScriptFile() = ScriptFile(scriptFile = getPreferenceFileStorePath(fileName = "scripts.json"))
 
-	@Factory
+	@Single
 	fun provideDatastore(): DataStore<Preferences> =
 		PreferenceDataStoreFactory.createWithPath(
 			corruptionHandler = null,
@@ -43,6 +45,13 @@ class DependencyInjection {
 				getPreferenceFileStorePath(fileName = "userprefs.preferences_pb").toPath()
 			},
 		)
+
+	@Factory
+	fun provideJson(): Json =
+		Json {
+			prettyPrint = true
+			ignoreUnknownKeys = true
+		}
 }
 
 @Named

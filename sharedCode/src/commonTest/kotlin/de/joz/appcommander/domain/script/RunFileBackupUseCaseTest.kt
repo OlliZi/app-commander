@@ -4,6 +4,7 @@ import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase.Companion.DEFAULT_SYSTEM_BACKUP_STORAGE_SIZE_IN_MB
 import de.joz.appcommander.domain.script.RunFileBackupUseCase.Companion.STORE_KEY_FOR_BACKUP_STORAGE
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -48,7 +49,7 @@ class RunFileBackupUseCaseTest {
 			assertIs<RunFileBackupUseCase.Result.Success>(result)
 			assertEquals(contentBefore, testFile.readText())
 			assertTrue(getAllFilesFromBackupDirectory().isEmpty())
-			coVerify(exactly = 0) { addLoggingUseCaseMock.invoke(any()) }
+			coVerify { addLoggingUseCaseMock wasNot called }
 		}
 
 	@Test

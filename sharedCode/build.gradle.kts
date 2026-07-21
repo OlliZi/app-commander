@@ -37,6 +37,8 @@ kotlin {
 			implementation(libs.kotlin.test)
 			implementation(libs.mockk)
 			implementation(libs.kotlinx.coroutines.test)
+			implementation(libs.koin.test)
+			implementation(libs.koin.test.rule)
 		}
 		jvmTest.dependencies {
 			implementation(compose.desktop.currentOs)

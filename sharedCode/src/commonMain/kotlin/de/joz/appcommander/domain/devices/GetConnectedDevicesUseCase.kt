@@ -1,5 +1,7 @@
-package de.joz.appcommander.domain.script
+package de.joz.appcommander.domain.devices
 
+import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.ScriptsRepository
 import org.koin.core.annotation.Factory
 
 @Factory

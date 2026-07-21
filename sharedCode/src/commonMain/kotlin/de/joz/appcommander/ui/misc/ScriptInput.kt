@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -31,6 +32,7 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
 fun ScriptInput(
+	isAtMinimumOneDeviceSelected: Boolean,
 	onExecuteScriptText: (String) -> Unit,
 	script: String = "",
 	onChangeScriptText: (String) -> Unit = { _ -> },
@@ -63,6 +65,7 @@ fun ScriptInput(
 					onAddScript = onAddScript,
 				)
 				PlayIcon(
+					enabled = isAtMinimumOneDeviceSelected,
 					onExecuteScriptText = {
 						onExecuteScriptText(inputValue)
 					},
@@ -107,13 +110,17 @@ private fun AddIcon(onAddScript: (() -> Unit)?) {
 }
 
 @Composable
-private fun PlayIcon(onExecuteScriptText: () -> Unit) {
+private fun PlayIcon(
+	onExecuteScriptText: () -> Unit,
+	enabled: Boolean = true,
+) {
 	IconButton(
+		enabled = enabled,
 		onClick = onExecuteScriptText,
 	) {
 		Icon(
 			imageVector = FeatherIcons.Play,
-			tint = MaterialTheme.colorScheme.primary,
+			tint = if (enabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
 			contentDescription = "Execute script text",
 		)
 	}
@@ -139,6 +146,7 @@ internal fun PreviewScriptInput(
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			ScriptInput(
+				isAtMinimumOneDeviceSelected = true,
 				script = "adb devices",
 				onExecuteScriptText = {},
 			)

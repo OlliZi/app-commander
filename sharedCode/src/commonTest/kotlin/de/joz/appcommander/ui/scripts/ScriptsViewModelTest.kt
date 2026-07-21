@@ -1,23 +1,24 @@
 package de.joz.appcommander.ui.scripts
 
 import androidx.navigation.NavController
+import de.joz.appcommander.domain.devices.GetDevicesUseCase
 import de.joz.appcommander.domain.logging.ClearLoggingUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.navigation.NavigationScreens
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
-import de.joz.appcommander.domain.script.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
-import de.joz.appcommander.ui.misc.model.Device
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -39,7 +40,7 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class ScriptsViewModelTest {
 	private val navControllerMock: NavController = mockk(relaxed = true)
-	private val getConnectedDevicesUseCaseMock: GetConnectedDevicesUseCase = mockk()
+	private val getDevicesUseCaseMock: GetDevicesUseCase = mockk(relaxed = true)
 	private val executeScriptUseCaseMock: ExecuteScriptUseCase = mockk(relaxed = true)
 	private val getUserScriptsUseCaseMock: GetUserScriptsUseCase = mockk(relaxed = true)
 	private val openScriptFileUseCaseMock: OpenScriptFileUseCase = mockk(relaxed = true)
@@ -54,11 +55,12 @@ class ScriptsViewModelTest {
 	@BeforeTest
 	fun setUp() {
 		coEvery {
-			getConnectedDevicesUseCaseMock()
+			getDevicesUseCaseMock()
 		} returns listOf(
-			GetConnectedDevicesUseCase.ConnectedDevice(
+			Device(
 				id = "p7",
 				label = "pixel 7",
+				isSelected = true,
 			),
 		)
 
@@ -89,20 +91,10 @@ class ScriptsViewModelTest {
 
 			assertEquals(
 				listOf(
-					Device(
-						label = "pixel 7",
-						id = "p7",
-						isSelected = true,
-					),
-				),
-				viewModel.uiState.value.connectedDevices,
-			)
-
-			assertEquals(
-				listOf(
 					ScriptsViewModel.Script(
 						description = "my script",
 						scriptText = "foo",
+						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
 							scripts = listOf("foo"),
@@ -112,6 +104,7 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my another script",
 						scriptText = "bar",
+						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my another script",
 							scripts = listOf("bar"),
@@ -123,7 +116,7 @@ class ScriptsViewModelTest {
 			)
 
 			coVerify {
-				getConnectedDevicesUseCaseMock()
+				getDevicesUseCaseMock wasNot called
 				getUserScriptsUseCaseMock()
 				getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "")
 			}
@@ -211,25 +204,6 @@ class ScriptsViewModelTest {
 			verify(exactly = 4) {
 				getUserScriptsUseCaseMock.invoke()
 			}
-		}
-
-	@Test
-	fun `should select device when event 'OnDeviceSelected' is fired`() =
-		runTest {
-			val viewModel = createViewModel()
-			val device = viewModel.uiState.value.connectedDevices
-				.first()
-			val preSelectedState = device.isSelected
-
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-			runCurrent()
-
-			assertTrue(preSelectedState)
-			assertFalse(
-				viewModel.uiState.value.connectedDevices
-					.first()
-					.isSelected,
-			)
 		}
 
 	@Test
@@ -375,118 +349,6 @@ class ScriptsViewModelTest {
 			val viewModel = createViewModel()
 
 			assertEquals(listOf("1. foo", "2. bar"), viewModel.uiState.value.logging)
-		}
-
-	@Test
-	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
-		runTest {
-			val testScript = ScriptsRepository.Script(
-				label = "my script",
-				scripts = listOf("foo"),
-				platform = ScriptsRepository.Platform.ANDROID,
-			)
-
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-			)
-			coEvery {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "1",
-				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "")
-			coEvery {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "3",
-				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "")
-
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices
-						.first(),
-				),
-			)
-			runCurrent()
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices
-						.last(),
-				),
-			)
-			runCurrent()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnExecuteScript(
-					script = ScriptsViewModel.Script(
-						originalScript = testScript,
-						description = "",
-						scriptText = "",
-					),
-				),
-			)
-			runCurrent()
-
-			coVerify {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "1",
-				)
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "3",
-				)
-			}
-		}
-
-	@Test
-	fun `should keep device selected when devices are refreshed`() =
-		runTest {
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-			)
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices[1],
-				),
-			)
-			runCurrent()
-
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-			)
-
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnRefreshDevices)
-			runCurrent()
-
-			assertFalse(
-				viewModel.uiState.value.connectedDevices[0]
-					.isSelected,
-			)
-			assertTrue(
-				viewModel.uiState.value.connectedDevices[1]
-					.isSelected,
-			)
-			assertFalse(
-				viewModel.uiState.value.connectedDevices[2]
-					.isSelected,
-			)
 		}
 
 	@Test
@@ -723,7 +585,7 @@ class ScriptsViewModelTest {
 	private fun createViewModel(): ScriptsViewModel =
 		ScriptsViewModel(
 			navController = navControllerMock,
-			getConnectedDevicesUseCase = getConnectedDevicesUseCaseMock,
+			getDevicesUseCase = getDevicesUseCaseMock,
 			executeScriptUseCase = executeScriptUseCaseMock,
 			getUserScriptsUseCase = getUserScriptsUseCaseMock,
 			openScriptFileUseCase = openScriptFileUseCaseMock,

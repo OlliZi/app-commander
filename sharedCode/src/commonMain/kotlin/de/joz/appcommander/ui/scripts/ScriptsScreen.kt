@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -25,11 +26,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,7 +66,7 @@ import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
 import de.joz.appcommander.ui.misc.TitleBar
 import de.joz.appcommander.ui.misc.TitleBarAction
-import de.joz.appcommander.ui.misc.model.Device
+import de.joz.appcommander.ui.misc.UiHelper
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import de.joz.appcommander.ui.scripts.ScriptsViewModel.Script
@@ -124,15 +127,13 @@ internal fun ScriptsContent(
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
 			val paddingInline = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+			var isAtMinimumOneDeviceSelected by remember { mutableStateOf(false) }
+
 			ConnectedDevices(
 				showHintLabel = true,
-				connectedDevices = uiState.connectedDevices,
 				modifier = paddingInline,
-				onDeviceSelect = {
-					onEvent(ScriptsViewModel.Event.OnDeviceSelected(device = it))
-				},
-				onRefreshDevices = {
-					onEvent(ScriptsViewModel.Event.OnRefreshDevices)
+				onIsAtMinimumOneDeviceSelected = {
+					isAtMinimumOneDeviceSelected = it
 				},
 			)
 
@@ -141,7 +142,7 @@ internal fun ScriptsContent(
 			ScriptsSection(
 				scripts = uiState.scripts,
 				hint = uiState.hint,
-				isAtMinimumOneDeviceSelected = uiState.connectedDevices.any { it.isSelected },
+				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 				modifier = Modifier.weight(1f).then(paddingInline),
 				onExecuteScript = {
 					onEvent(ScriptsViewModel.Event.OnExecuteScript(script = it))
@@ -163,6 +164,7 @@ internal fun ScriptsContent(
 			)
 
 			TerminalSection(
+				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 				show = uiState.toolSections.contains(ToolSection.TERMINAL),
 				onExecuteScriptText = { scriptText, platform ->
 					onEvent(
@@ -201,14 +203,19 @@ private fun ScriptsSection(
 		modifier = modifier,
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		items(scripts) { script ->
-			val isButtonActive =
-				isAtMinimumOneDeviceSelected || script.originalScript.platform == ScriptsRepository.Platform.DESKTOP
+		itemsIndexed(scripts) { index, script ->
+			val isButtonActive = UiHelper.isScriptExecutableByUi(
+				isAtMinimumOneDeviceSelected,
+				script.originalScript.platform,
+			)
 
 			Button(
+				modifier = Modifier.testTag("script_button_$index"),
 				enabled = isButtonActive,
 				shape = RoundedCornerShape(10.dp),
-				onClick = { onExecuteScript(script) },
+				onClick = {
+					onExecuteScript(script)
+				},
 			) {
 				if (script.isExpanded) {
 					Row(
@@ -379,6 +386,7 @@ private fun LoggingSection(
 
 @Composable
 private fun TerminalSection(
+	isAtMinimumOneDeviceSelected: Boolean,
 	show: Boolean,
 	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
 ) {
@@ -395,6 +403,10 @@ private fun TerminalSection(
 			modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 		) {
 			ScriptInput(
+				isAtMinimumOneDeviceSelected = UiHelper.isScriptExecutableByUi(
+					isAtMinimumOneDeviceSelected,
+					selectedPlatform,
+				),
 				script = stringResource(Res.string.scripts_terminal_placeholder),
 				onExecuteScriptText = {
 					onExecuteScriptText(it, selectedPlatform)
@@ -481,18 +493,6 @@ private fun RenderPreview(darkTheme: Boolean) {
 	) {
 		ScriptsContent(
 			uiState = ScriptsViewModel.UiState(
-				connectedDevices = listOf(
-					Device(
-						label = "Pixel 9",
-						isSelected = true,
-						id = "1",
-					),
-					Device(
-						label = "Pixel 8",
-						isSelected = false,
-						id = "2",
-					),
-				),
 				scripts = listOf(
 					Script(
 						description = "my script",

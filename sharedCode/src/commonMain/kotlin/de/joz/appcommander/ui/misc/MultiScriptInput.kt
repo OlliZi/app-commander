@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +28,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MultiScriptInput(
+	isAtMinimumOneDeviceSelected: Boolean,
 	scripts: List<String>,
 	onExecuteAllScriptsText: () -> Unit,
 	onChangeScriptText: (Int, String) -> Unit,
@@ -48,11 +50,12 @@ fun MultiScriptInput(
 			textLabelType = TextLabelType.BodyLarge,
 		)
 		IconButton(
+			enabled = isAtMinimumOneDeviceSelected,
 			onClick = onExecuteAllScriptsText,
 		) {
 			Icon(
 				imageVector = FeatherIcons.Play,
-				tint = MaterialTheme.colorScheme.primary,
+				tint = if (isAtMinimumOneDeviceSelected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
 				contentDescription = "Execute all scripts",
 			)
 		}
@@ -63,6 +66,7 @@ fun MultiScriptInput(
 	) {
 		scripts.forEachIndexed { index, script ->
 			ScriptInput(
+				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
@@ -106,6 +110,7 @@ internal fun PreviewMultiScriptInput(
 		darkTheme = previewData.uiState,
 	) {
 		MultiScriptInput(
+			isAtMinimumOneDeviceSelected = true,
 			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
 			onRemoveScript = {},
 			onExecuteScriptText = {},

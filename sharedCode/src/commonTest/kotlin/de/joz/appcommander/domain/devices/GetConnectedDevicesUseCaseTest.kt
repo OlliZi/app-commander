@@ -1,5 +1,6 @@
-package de.joz.appcommander.domain.script
+package de.joz.appcommander.domain.devices
 
+import de.joz.appcommander.domain.script.ExecuteScriptUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

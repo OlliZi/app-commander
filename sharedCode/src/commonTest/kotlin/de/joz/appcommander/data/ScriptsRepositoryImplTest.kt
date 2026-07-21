@@ -1,5 +1,6 @@
 package de.joz.appcommander.data
 
+import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import io.mockk.coVerify
@@ -152,6 +153,7 @@ class ScriptsRepositoryImplTest {
 				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
 				addLoggingUseCase = addLoggingUseCaseMock,
 				processBuilder = ProcessBuilder(),
+				jsonHandler = DependencyInjection().provideJson(),
 			)
 
 			testFile.writeText(
@@ -188,11 +190,11 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return custom scripts when file contains custom scripts`() =
 		runTest {
-			val prettyJson = Json {
+			val jsonHandler = Json {
 				prettyPrint = true
 			}
 			testFile.writeText(
-				text = prettyJson.encodeToString(
+				text = jsonHandler.encodeToString(
 					listOf(
 						ScriptsRepository.Script(
 							label = "my script",
@@ -287,6 +289,7 @@ class ScriptsRepositoryImplTest {
 				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
 				processBuilder = processBuilder,
 				addLoggingUseCase = addLoggingUseCaseMock,
+				jsonHandler = DependencyInjection().provideJson(),
 			).openScriptFile()
 
 			coVerify {
@@ -304,6 +307,7 @@ class ScriptsRepositoryImplTest {
 				scriptFile = ScriptFile(scriptFile = "unknown file"),
 				processBuilder = processBuilder,
 				addLoggingUseCase = addLoggingUseCaseMock,
+				jsonHandler = DependencyInjection().provideJson(),
 			).openScriptFile()
 
 			coVerify {
@@ -404,5 +408,6 @@ class ScriptsRepositoryImplTest {
 			scriptFile = ScriptFile(scriptFile = scriptFile),
 			addLoggingUseCase = addLoggingUseCaseMock,
 			processBuilder = ProcessBuilder(),
+			jsonHandler = DependencyInjection().provideJson(),
 		)
 }

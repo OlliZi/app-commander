@@ -110,9 +110,11 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Bug: Load identical selected devices in edit mode
+- Add nice icon to selected plattform and on script button
 - Create a video showing the UI with emulator and a real device
 - Create a demo app for Android
+  - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+  - Dummy screen: show automated clicks
 
 ## 🤝 Contributing
 
