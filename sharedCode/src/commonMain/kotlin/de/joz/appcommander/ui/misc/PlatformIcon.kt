@@ -35,7 +35,7 @@ fun PlatformIcon(
 ) {
 	Box(
 		modifier = Modifier
-			.size(48.dp)
+			.size(40.dp)
 			.background(
 				platform.background(isActive = isActive),
 				CircleShape,
@@ -69,8 +69,8 @@ private fun ScriptsRepository.Platform.background(isActive: Boolean): Color =
 private fun ScriptsRepository.Platform.padding(): Dp =
 	when (this) {
 		ScriptsRepository.Platform.ANDROID -> 1.dp
-		ScriptsRepository.Platform.IOS -> 6.dp
-		ScriptsRepository.Platform.DESKTOP -> 8.dp
+		ScriptsRepository.Platform.IOS -> 5.dp
+		ScriptsRepository.Platform.DESKTOP -> 7.dp
 	}
 
 private fun ScriptsRepository.Platform.icon(): DrawableResource =
