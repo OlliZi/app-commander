@@ -210,7 +210,7 @@ private fun ScriptsSection(
 			)
 
 			Button(
-				modifier = Modifier.testTag("script_button_$index"),
+				modifier = Modifier.testTag("script_button_${index}_$isButtonActive"),
 				enabled = isButtonActive,
 				shape = RoundedCornerShape(10.dp),
 				onClick = {

@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -106,7 +107,7 @@ private fun DevicesBar(
 		}
 		connectedDevices.forEach { device ->
 			Button(
-				modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f),
+				modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f).testTag(device.label),
 				onClick = {
 					onDeviceSelect(device)
 				},

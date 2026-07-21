@@ -550,75 +550,49 @@ class ScriptsScreenTest :
 
 			assertEquals(filterText, "filter")
 		}
-	} /*
+	}
+
 	@Test
 	fun `should run script on devices when 'OnExecuteScript' is fired and multiples devices are selected`() =
-		runTest {
-			val testScript = ScriptsRepository.Script(
-				label = "my script",
-				scripts = listOf("foo"),
-				platform = ScriptsRepository.Platform.ANDROID,
-			)
-
-			coEvery {
-				getConnectedDevicesUseCaseMock()
-			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "P1"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "P2"),
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "3", label = "P3"),
-			)
-			coEvery {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "1",
-				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "")
-			coEvery {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "3",
-				)
-			} returns ExecuteScriptUseCase.Result.Success(output = "")
-
-			val viewModel = createViewModel()
-
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices
-						.first(),
+		runComposeUiTest {
+			val testScript = ScriptsViewModel.Script(
+				scriptText = "echo bar",
+				description = "my script",
+				isExpanded = false,
+				originalScript = ScriptsRepository.Script(
+					label = "foo",
+					scripts = listOf("echo bar"),
+					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			)
-			runCurrent()
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnDeviceSelected(
-					device = viewModel.uiState.value.connectedDevices
-						.last(),
-				),
+			testDevices = listOf(
+				Device(id = "1", label = "Pixel 1", isSelected = false),
+				Device(id = "2", label = "Pixel 2", isSelected = false),
+				Device(id = "3", label = "Pixel 3", isSelected = false),
 			)
-			runCurrent()
 
-			viewModel.onEvent(
-				event = ScriptsViewModel.Event.OnExecuteScript(
-					script = ScriptsViewModel.Script(
-						originalScript = testScript,
-						description = "",
-						scriptText = "",
-					),
+			val executeScriptEvents = mutableListOf<ScriptsViewModel.Event.OnExecuteScript>()
+			setTestContent(
+				uiState = ScriptsViewModel.UiState(
+					scripts = listOf(testScript),
 				),
+				onEvent = {
+					if (it is ScriptsViewModel.Event.OnExecuteScript) {
+						executeScriptEvents.add(it)
+					}
+				},
 			)
-			runCurrent()
+			onNodeWithText(text = "Pixel 1").performClick()
+			onNodeWithText(text = "Pixel 3").performClick()
 
-			coVerify {
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "1",
-				)
-				executeScriptUseCaseMock(
-					script = testScript,
-					selectedDevice = "3",
-				)
-			}
-		}*/
+			waitUntilAtLeastOneExists(
+				hasTestTag(testTag = "script_button_0_true"),
+			)
+			onNodeWithTag(testTag = "script_button_0_true").performClick()
+
+			assertEquals(1, executeScriptEvents.size)
+			assertEquals(testScript, executeScriptEvents.first().script)
+		}
 
 	private fun ComposeUiTest.setTestContent(
 		uiState: ScriptsViewModel.UiState,
