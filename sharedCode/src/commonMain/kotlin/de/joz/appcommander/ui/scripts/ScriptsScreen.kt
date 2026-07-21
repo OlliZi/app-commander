@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -201,16 +203,19 @@ private fun ScriptsSection(
 		modifier = modifier,
 		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
-		items(scripts) { script ->
+		itemsIndexed(scripts) { index, script ->
 			val isButtonActive = UiHelper.isScriptExecutableByUi(
 				isAtMinimumOneDeviceSelected,
 				script.originalScript.platform,
 			)
 
 			Button(
+				modifier = Modifier.testTag("script_button_$index"),
 				enabled = isButtonActive,
 				shape = RoundedCornerShape(10.dp),
-				onClick = { onExecuteScript(script) },
+				onClick = {
+					onExecuteScript(script)
+				},
 			) {
 				if (script.isExpanded) {
 					Row(
