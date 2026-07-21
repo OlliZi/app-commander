@@ -37,7 +37,7 @@ fun PlatformIcon(
 		modifier = Modifier
 			.size(40.dp)
 			.background(
-				platform.background(isActive = isActive),
+				if (isActive) Color.Unspecified else Color.White,
 				CircleShape,
 			).padding(platform.padding()),
 	) {
@@ -49,22 +49,6 @@ fun PlatformIcon(
 		)
 	}
 }
-
-@Composable
-private fun ScriptsRepository.Platform.background(isActive: Boolean): Color =
-	when (this) {
-		ScriptsRepository.Platform.ANDROID -> {
-			if (isActive) Color.Unspecified else Color.White
-		}
-
-		ScriptsRepository.Platform.IOS -> {
-			if (isActive) Color.Unspecified else Color.White
-		}
-
-		ScriptsRepository.Platform.DESKTOP -> {
-			if (isActive) Color.Unspecified else Color.White
-		}
-	}
 
 private fun ScriptsRepository.Platform.padding(): Dp =
 	when (this) {
