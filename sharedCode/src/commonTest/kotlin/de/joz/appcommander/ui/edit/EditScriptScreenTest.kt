@@ -3,6 +3,7 @@ package de.joz.appcommander.ui.edit
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -31,6 +32,7 @@ import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -352,6 +354,37 @@ class EditScriptScreenTest :
 			onNodeWithContentDescription(label = "Execute all scripts").performClick()
 
 			coVerify { executeScriptUseCaseMock(script = script, selectedDevice = "id") }
+		}
+	}
+
+	@Test
+	fun `do not run all scripts when run button is clicked but there is no device selected`() {
+		runComposeUiTest {
+			testDevices = listOf(
+				Device(
+					id = "id",
+					label = "test device",
+					isSelected = false,
+				),
+				Device(
+					id = "id 2",
+					label = "test device 2",
+					isSelected = false,
+				),
+			)
+			val script = ScriptsRepository.Script(
+				label = "",
+				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+			)
+			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
+
+			setupData(script = script)
+			setTestContent(scriptKey = script.hashCode())
+
+			onNodeWithContentDescription(label = "Execute all scripts").assertIsNotEnabled()
+
+			coVerify { executeScriptUseCaseMock wasNot called }
 		}
 	}
 
