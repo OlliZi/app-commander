@@ -204,26 +204,7 @@ class ScriptsViewModelTest {
 			verify(exactly = 4) {
 				getUserScriptsUseCaseMock.invoke()
 			}
-		} /*
-// MOVE TO CONNNECTDDE ICES VM
-	@Test
-	fun `should select device when event 'OnDeviceSelected' is fired`() =
-		runTest {
-			val viewModel = createViewModel()
-			val device = viewModel.uiState.value.connectedDevices
-				.first()
-			val preSelectedState = device.isSelected
-
-			viewModel.onEvent(event = ScriptsViewModel.Event.OnDeviceSelected(device = device))
-			runCurrent()
-
-			assertTrue(preSelectedState)
-			assertFalse(
-				viewModel.uiState.value.connectedDevices
-					.first()
-					.isSelected,
-			)
-		}*/
+		}
 
 	@Test
 	fun `should navigate to edit a new script when event 'OnNewScript' is fired`() =

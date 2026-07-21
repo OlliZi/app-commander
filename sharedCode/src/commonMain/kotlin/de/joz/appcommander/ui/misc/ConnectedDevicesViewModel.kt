@@ -71,6 +71,10 @@ class ConnectedDevicesViewModel(
 		}
 	}
 
+	data class UiState(
+		val connectedDevices: List<Device> = emptyList(),
+	)
+
 	sealed interface Event {
 		data class OnDeviceSelect(
 			val selectedDevice: Device,
@@ -78,8 +82,4 @@ class ConnectedDevicesViewModel(
 
 		data object OnRefreshDevices : Event
 	}
-
-	data class UiState(
-		val connectedDevices: List<Device> = emptyList(),
-	)
 }
