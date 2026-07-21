@@ -1,6 +1,5 @@
 package de.joz.appcommander.ui.misc
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,7 +35,6 @@ fun MultiScriptInput(
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
-		modifier = Modifier.background(MaterialTheme.colorScheme.background),
 	) {
 		TextLabel(
 			text = stringResource(Res.string.edit_enter_or_edit),
