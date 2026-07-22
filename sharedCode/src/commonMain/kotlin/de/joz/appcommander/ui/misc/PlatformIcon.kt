@@ -43,7 +43,7 @@ fun PlatformIcon(platform: ScriptsRepository.Platform) {
 
 private fun ScriptsRepository.Platform.padding(): Dp =
 	when (this) {
-		ScriptsRepository.Platform.ANDROID -> 1.dp
+		ScriptsRepository.Platform.ANDROID -> 2.dp
 		ScriptsRepository.Platform.IOS -> 5.dp
 		ScriptsRepository.Platform.DESKTOP -> 7.dp
 	}
