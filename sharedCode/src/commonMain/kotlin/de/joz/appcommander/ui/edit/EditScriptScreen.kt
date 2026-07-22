@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.resources.Res
@@ -31,8 +30,7 @@ import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
-import de.joz.appcommander.ui.internalpreviews.AppCommanderPreviewParameterProvider
-import de.joz.appcommander.ui.internalpreviews.PreviewData
+import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
@@ -235,11 +233,16 @@ internal fun EditScriptContent(
 
 @Preview
 @Composable
-private fun PreviewEditScriptScreen(
-	@PreviewParameter(AppCommanderPreviewParameterProvider::class) previewData: PreviewData<Boolean>,
-) {
+internal fun PreviewEditScriptScreen() {
+	PreviewRenderContainer { previewData ->
+		PreviewEditScriptScreen(previewData.uiState)
+	}
+}
+
+@Composable
+private fun PreviewEditScriptScreen(darkMode: Boolean) {
 	AppCommanderTheme(
-		darkTheme = previewData.uiState,
+		darkTheme = darkMode,
 	) {
 		EditScriptContent(
 			uiState = EditScriptViewModel.UiState(),
