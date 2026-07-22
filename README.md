@@ -111,6 +111,8 @@ App-Commander is built with modern technologies and best practices:
 
 ## 👷TODOs
 - Create a video showing the UI with emulator and a real device
+- Full UI-test (integration test)
+- JSON-editor
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
