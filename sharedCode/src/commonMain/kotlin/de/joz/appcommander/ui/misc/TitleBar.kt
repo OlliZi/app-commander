@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import compose.icons.feathericons.Settings
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,9 +67,9 @@ data class TitleBarAction(
 
 @Preview
 @Composable
-internal fun PreviewTitleBar() {
-	PreviewRenderContainer { previewData ->
-		PreviewTitleBar(previewData.uiState)
+internal fun DarkLightPreviewTitleBarProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewTitleBar(darkMode)
 	}
 }
 

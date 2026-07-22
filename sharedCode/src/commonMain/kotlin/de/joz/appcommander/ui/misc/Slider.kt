@@ -15,7 +15,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_label
 import de.joz.appcommander.resources.settings_preference_ui_appearance_system
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -53,9 +53,9 @@ private fun SettingsViewModel.LabelValue.toUiString(): String =
 
 @Preview
 @Composable
-internal fun PreviewSlider() {
-	PreviewRenderContainer { previewData ->
-		PreviewSlider(previewData.uiState)
+internal fun DarkLightPreviewSliderProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewSlider(darkMode)
 	}
 }
 

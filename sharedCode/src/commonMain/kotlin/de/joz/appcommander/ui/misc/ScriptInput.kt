@@ -24,7 +24,7 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.FilePlus
 import compose.icons.feathericons.Play
 import compose.icons.feathericons.Trash
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -125,9 +125,9 @@ private fun PlayIcon(
 
 @Preview
 @Composable
-internal fun PreviewScriptInput() {
-	PreviewRenderContainer { previewData ->
-		PreviewScriptInput(previewData.uiState)
+internal fun DarkLightPreviewScriptInputProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewScriptInput(darkMode)
 	}
 }
 

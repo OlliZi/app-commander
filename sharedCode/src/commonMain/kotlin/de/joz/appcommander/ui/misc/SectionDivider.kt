@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -18,9 +18,9 @@ fun SectionDivider() {
 
 @Preview
 @Composable
-internal fun PreviewSectionDivider() {
-	PreviewRenderContainer { previewData ->
-		PreviewSectionDivider(previewData.uiState)
+internal fun DarkLightPreviewSectionDividerProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewSectionDivider(darkMode)
 	}
 }
 

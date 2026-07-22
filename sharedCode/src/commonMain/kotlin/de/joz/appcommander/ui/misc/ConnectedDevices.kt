@@ -21,7 +21,7 @@ import de.joz.appcommander.resources.scripts_hint
 import de.joz.appcommander.resources.scripts_hint_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices
 import de.joz.appcommander.resources.scripts_hint_no_devices_refresh
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -126,9 +126,9 @@ private fun DevicesBar(
 
 @Preview
 @Composable
-internal fun PreviewConnectedDevices() {
-	PreviewRenderContainer { previewData ->
-		PreviewConnectedDevices(previewData.uiState)
+internal fun DarkLightPreviewConnectedDevicesProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewConnectedDevices(darkMode)
 	}
 }
 

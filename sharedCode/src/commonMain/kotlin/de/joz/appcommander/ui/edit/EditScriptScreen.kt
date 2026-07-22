@@ -30,7 +30,7 @@ import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
 import de.joz.appcommander.resources.edit_title
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Confirmation
@@ -233,9 +233,9 @@ internal fun EditScriptContent(
 
 @Preview
 @Composable
-internal fun PreviewEditScriptScreen() {
-	PreviewRenderContainer { previewData ->
-		PreviewEditScriptScreen(previewData.uiState)
+internal fun DarkLightPreviewEditScriptScreenProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewEditScriptScreen(darkMode)
 	}
 }
 

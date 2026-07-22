@@ -19,7 +19,7 @@ import compose.icons.feathericons.Play
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_run_all_scripts
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -92,9 +92,9 @@ private fun ScriptDivider() {
 
 @Preview
 @Composable
-internal fun PreviewMultiScriptInput() {
-	PreviewRenderContainer { previewData ->
-		PreviewMultiScriptInput(previewData.uiState)
+internal fun DarkLightPreviewMultiScriptInputProvider() {
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewMultiScriptInput(darkMode)
 	}
 }
 
