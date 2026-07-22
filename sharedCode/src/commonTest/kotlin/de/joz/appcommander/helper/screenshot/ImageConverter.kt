@@ -10,7 +10,13 @@ class ImageConverter {
 		Image.makeFromBitmap(bitmap).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
 
 	fun trimHeight(bitmap: Bitmap): Bitmap {
-		val backgroundColor = bitmap.getColor(bitmap.width - 1, bitmap.height - 1)
+		val backgroundColor = bitmap.getColor(0, bitmap.height - 1)
+
+		if (backgroundColor != bitmap.getColor(0, 0)) {
+			// assume we have a full rendered screen
+			return bitmap
+		}
+
 		var lastContentRow = 0
 
 		for (y in bitmap.height - 1 downTo 0) {
@@ -42,7 +48,7 @@ class ImageConverter {
 		lastContentRow: Int,
 	): Bitmap {
 		val trimmedBitmap = Bitmap()
-		val trimmedHeight = lastContentRow.coerceAtMost(originalBitmap.height)
+		val trimmedHeight = (lastContentRow + BOTTOM_PADDING).coerceAtMost(originalBitmap.height)
 		trimmedBitmap.allocPixels(originalBitmap.imageInfo.withHeight(trimmedHeight))
 
 		val canvas = Canvas(trimmedBitmap)
@@ -53,5 +59,6 @@ class ImageConverter {
 
 	private companion object {
 		private const val IMAGE_QUALITY = 100
+		private const val BOTTOM_PADDING = 16
 	}
 }
