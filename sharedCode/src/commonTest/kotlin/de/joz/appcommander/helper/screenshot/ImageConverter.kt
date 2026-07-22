@@ -27,14 +27,26 @@ class ImageConverter {
 			}
 		}
 
-		if (lastContentRow == 0) return bitmap
+		return if (lastContentRow == 0) {
+			bitmap
+		} else {
+			renderTrimmedImage(
+				originalBitmap = bitmap,
+				lastContentRow = lastContentRow,
+			)
+		}
+	}
 
-		val trimmedHeight = lastContentRow.coerceAtMost(bitmap.height)
+	private fun renderTrimmedImage(
+		originalBitmap: Bitmap,
+		lastContentRow: Int,
+	): Bitmap {
 		val trimmedBitmap = Bitmap()
-		trimmedBitmap.allocPixels(bitmap.imageInfo.withHeight(trimmedHeight))
+		val trimmedHeight = lastContentRow.coerceAtMost(originalBitmap.height)
+		trimmedBitmap.allocPixels(originalBitmap.imageInfo.withHeight(trimmedHeight))
 
 		val canvas = Canvas(trimmedBitmap)
-		canvas.drawImage(Image.makeFromBitmap(bitmap), 0f, 0f)
+		canvas.drawImage(Image.makeFromBitmap(originalBitmap), 0f, 0f)
 
 		return trimmedBitmap
 	}
