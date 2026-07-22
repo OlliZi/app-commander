@@ -2,7 +2,6 @@ package de.joz.appcommander.helper.screenshot
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import de.joz.appcommander.helper.CreateScreenshotDifferenceUseCase
 import de.joz.appcommander.helper.IsJenkinsTestRunUseCase
 import de.joz.appcommander.helper.IsLocalTestRunUseCase
 import org.jetbrains.skia.Bitmap
