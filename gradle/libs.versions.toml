@@ -16,7 +16,7 @@ ktlintGradle = "14.2.0"
 
 koin-annotations = "2.3.1"
 json = "1.11.0"
-kover = "0.9.8"
+kover = "0.9.9"
 buildconfig = "6.0.10"
 
 [libraries]

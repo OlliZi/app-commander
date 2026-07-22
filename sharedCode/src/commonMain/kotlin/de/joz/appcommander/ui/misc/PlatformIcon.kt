@@ -40,7 +40,7 @@ fun PlatformIcon(
 			modifier = Modifier.fillMaxSize(),
 			painter = painterResource(platform.icon()),
 			contentDescription = null,
-			tint = Color.Unspecified,
+			tint = Color.Black,
 		)
 	}
 }

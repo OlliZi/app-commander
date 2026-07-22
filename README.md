@@ -28,9 +28,9 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **External Script Editing:** For advanced users, you can directly edit the `scripts.json` file.
 
 ## 💻 Supported Platform
-*   **🤖 Android**: Use Android Debug Bridge (adb) to run your scripts on Android devices (https://developer.android.com/tools/adb).
-*   **🍏 iOS**: There is no official documentation available from Apple. Maybe install idb (https://github.com/facebook/idb) and use idb to run your scripts on iOS devices.
-*   **💻 Desktop**: Run any installed software on your laptop or desktop computer.
+*   **<kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/android.svg)</kbd> Android**: Use Android Debug Bridge (adb) to run your scripts on Android devices (https://developer.android.com/tools/adb).
+*   **<kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/ios.svg)</kbd> iOS**: There is no official documentation available from Apple. Maybe install idb (https://github.com/facebook/idb) and use idb to run your scripts on iOS devices.
+*   **<kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/desktop.svg)</kbd> Desktop**: Run any installed software on your laptop or desktop computer.
 
 ## 🎥 First Impressions I
 <kbd><img src="preview_overview.gif" width="500"/></kbd>
@@ -111,6 +111,8 @@ App-Commander is built with modern technologies and best practices:
 
 ## 👷TODOs
 - Create a video showing the UI with emulator and a real device
+- Full UI-test (integration test)
+- JSON-editor
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
