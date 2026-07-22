@@ -68,8 +68,8 @@ class GetDevicesUseCaseImplTest {
 				getSelectedDevicesUseCaseMock()
 			} returns listOf(
 				Device(id = "unknown", label = "unknown", isSelected = false),
+				Device(id = "id 2", label = "label 2", isSelected = false),
 				Device(id = "id 1", label = "label 1", isSelected = false),
-				Device(id = "id 3", label = "label 3", isSelected = false),
 			)
 			coEvery {
 				getConnectedDevicesUseCaseMock()
@@ -83,9 +83,9 @@ class GetDevicesUseCaseImplTest {
 
 			assertEquals(
 				listOf(
-					Device(id = "id 3", label = "label 3", isSelected = true),
+					Device(id = "id 3", label = "label 3", isSelected = false),
 					Device(id = "id 1", label = "label 1", isSelected = true),
-					Device(id = "id 2", label = "label 2", isSelected = false),
+					Device(id = "id 2", label = "label 2", isSelected = true),
 				),
 				useCase.invoke(),
 			)
