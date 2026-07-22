@@ -223,7 +223,6 @@ private fun ScriptsSection(
 						verticalAlignment = Alignment.CenterVertically,
 					) {
 						PlatformIcon(
-							isActive = isButtonActive,
 							platform = script.originalScript.platform,
 						)
 						Column(
@@ -254,7 +253,6 @@ private fun ScriptsSection(
 						horizontalArrangement = Arrangement.SpaceBetween,
 					) {
 						PlatformIcon(
-							isActive = isButtonActive,
 							platform = script.originalScript.platform,
 						)
 						TextLabel(
