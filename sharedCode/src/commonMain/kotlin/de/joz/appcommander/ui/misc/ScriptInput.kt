@@ -125,7 +125,7 @@ private fun PlayIcon(
 
 @Preview
 @Composable
-internal fun DarkLightPreviewScriptInputProvider() {
+internal fun PreviewScriptInputProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewScriptInput(darkMode)
 	}

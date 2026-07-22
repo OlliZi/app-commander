@@ -126,7 +126,7 @@ private fun DevicesBar(
 
 @Preview
 @Composable
-internal fun DarkLightPreviewConnectedDevicesProvider() {
+internal fun PreviewConnectedDevicesProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewConnectedDevices(darkMode)
 	}

@@ -57,7 +57,7 @@ data class BottomBarAction(
 
 @Preview
 @Composable
-internal fun DarkLightPreviewBottomBarProvider() {
+internal fun PreviewBottomBarProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewBottomBar(darkMode)
 	}

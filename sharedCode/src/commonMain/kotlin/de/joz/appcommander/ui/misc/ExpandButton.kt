@@ -52,7 +52,7 @@ enum class ExpandButtonDirection {
 
 @Preview
 @Composable
-internal fun DarkLightPreviewExpandButtonProvider() {
+internal fun PreviewExpandButtonProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewExpandButton(darkMode)
 	}

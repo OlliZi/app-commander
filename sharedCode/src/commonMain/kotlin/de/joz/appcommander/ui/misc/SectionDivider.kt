@@ -18,7 +18,7 @@ fun SectionDivider() {
 
 @Preview
 @Composable
-internal fun DarkLightPreviewSectionDividerProvider() {
+internal fun PreviewSectionDividerProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewSectionDivider(darkMode)
 	}

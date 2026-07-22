@@ -62,7 +62,7 @@ fun SimpleTextInput(
 
 @Preview
 @Composable
-internal fun DarkLightPreviewSimpleTextInputProvider() {
+internal fun PreviewSimpleTextInputProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewSimpleTextInput(darkMode)
 	}

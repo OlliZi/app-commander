@@ -67,7 +67,7 @@ data class TitleBarAction(
 
 @Preview
 @Composable
-internal fun DarkLightPreviewTitleBarProvider() {
+internal fun PreviewTitleBarProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewTitleBar(darkMode)
 	}

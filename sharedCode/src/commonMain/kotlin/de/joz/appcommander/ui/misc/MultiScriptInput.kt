@@ -92,7 +92,7 @@ private fun ScriptDivider() {
 
 @Preview
 @Composable
-internal fun DarkLightPreviewMultiScriptInputProvider() {
+internal fun PreviewMultiScriptInputProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewMultiScriptInput(darkMode)
 	}

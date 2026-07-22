@@ -233,7 +233,7 @@ internal fun EditScriptContent(
 
 @Preview
 @Composable
-internal fun DarkLightPreviewEditScriptScreenProvider() {
+internal fun PreviewEditScriptScreen() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewEditScriptScreen(darkMode)
 	}

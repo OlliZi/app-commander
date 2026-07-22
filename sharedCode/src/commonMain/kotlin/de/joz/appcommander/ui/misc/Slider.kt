@@ -53,7 +53,7 @@ private fun SettingsViewModel.LabelValue.toUiString(): String =
 
 @Preview
 @Composable
-internal fun DarkLightPreviewSliderProvider() {
+internal fun PreviewSliderProvider() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewSlider(darkMode)
 	}
