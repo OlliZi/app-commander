@@ -22,8 +22,8 @@ import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
 import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.GetDevicesUseCaseMock
-import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
+import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.every
