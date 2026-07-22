@@ -31,7 +31,9 @@ class Screenshotter(
 				source.onNode(isRoot())
 			}
 
-			val pngByteArray = imageConverter.convertToPng(node.captureToImage().asSkiaBitmap())
+			val bitmap = node.captureToImage().asSkiaBitmap()
+			val trimmedBitmap = imageConverter.trimHeight(bitmap)
+			val pngByteArray = imageConverter.convertToPng(trimmedBitmap)
 
 			if (pngByteArray == null || pngByteArray.isEmpty()) {
 				throw Exception("Screenshot is empty.")
