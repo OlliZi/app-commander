@@ -59,7 +59,7 @@ buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
 		name = "MAIN_VERSION",
-		value = (if (isRelease) mainVersion else "Debug 6.7.8").also {
+		value = (if (isRelease) mainVersion else "6.7.8").also {
 			println("Applied version: $it")
 		},
 	)
