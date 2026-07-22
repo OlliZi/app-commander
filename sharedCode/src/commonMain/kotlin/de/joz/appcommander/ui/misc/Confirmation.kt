@@ -65,7 +65,7 @@ data class ConfirmationData(
 
 @Preview
 @Composable
-internal fun PreviewConfirmationProvider() {
+internal fun PreviewConfirmation() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewConfirmation(darkMode)
 	}

@@ -34,7 +34,7 @@ fun PlatformSelection(
 
 @Preview
 @Composable
-internal fun PreviewPlatformSelectionProvider() {
+internal fun PreviewPlatformSelection() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewPlatformSelection(darkMode)
 	}

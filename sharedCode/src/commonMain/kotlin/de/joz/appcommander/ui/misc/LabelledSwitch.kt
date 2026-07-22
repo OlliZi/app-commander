@@ -61,7 +61,7 @@ fun LabelledSwitch(
 
 @Preview
 @Composable
-internal fun PreviewLabelledSwitchProvider() {
+internal fun PreviewLabelledSwitch() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewLabelledSwitch(darkMode)
 	}

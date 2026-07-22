@@ -65,7 +65,7 @@ fun Collapsable(
 
 @Preview
 @Composable
-internal fun PreviewCollapsableProvider() {
+internal fun PreviewCollapsable() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewCollapsable(darkMode)
 	}

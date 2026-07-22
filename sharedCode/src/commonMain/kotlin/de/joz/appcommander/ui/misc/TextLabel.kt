@@ -57,7 +57,7 @@ enum class TextLabelType {
 
 @Preview
 @Composable
-internal fun PreviewTextLabelProvider() {
+internal fun PreviewTextLabel() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewTextLabel(darkMode)
 	}

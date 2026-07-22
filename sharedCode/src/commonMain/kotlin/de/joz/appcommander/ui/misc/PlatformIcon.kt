@@ -61,7 +61,7 @@ private fun ScriptsRepository.Platform.icon(): DrawableResource =
 
 @Preview
 @Composable
-internal fun PreviewPlatformIconProvider() {
+internal fun PreviewPlatformIcon() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewPlatformIcon(darkMode)
 	}
