@@ -28,10 +28,9 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **External Script Editing:** For advanced users, you can directly edit the `scripts.json` file.
 
 ## 💻 Supported Platform
-*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/android.svg" width="100"/></kbd> Android-test
-*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/android.svg" width="48"/></kbd> Android**: Use Android Debug Bridge (adb) to run your scripts on Android devices (https://developer.android.com/tools/adb).
-*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/ios.svg" width="48"/></kbd> iOS**: There is no official documentation available from Apple. Maybe install idb (https://github.com/facebook/idb) and use idb to run your scripts on iOS devices.
-*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/desktop.svg" width="48"/></kbd> Desktop**: Run any installed software on your laptop or desktop computer.
+*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/android.svg" width="32"/></kbd> Android**: Use Android Debug Bridge (adb) to run your scripts on Android devices (https://developer.android.com/tools/adb).
+*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/ios.svg" width="32"/></kbd> iOS**: There is no official documentation available from Apple. Maybe install idb (https://github.com/facebook/idb) and use idb to run your scripts on iOS devices.
+*   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/desktop.svg" width="32"/></kbd> Desktop**: Run any installed software on your laptop or desktop computer.
 
 ## 🎥 First Impressions I
 <kbd><img src="preview_overview.gif" width="500"/></kbd>
