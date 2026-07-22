@@ -62,20 +62,20 @@ class GetDevicesUseCaseImplTest {
 		}
 
 	@Test
-	fun `should order devices by selection state and return`() =
+	fun `should return devices by selection state`() =
 		runTest {
 			coEvery {
 				getSelectedDevicesUseCaseMock()
 			} returns listOf(
 				Device(id = "unknown", label = "unknown", isSelected = false),
+				Device(id = "id 2", label = "label 2", isSelected = false),
 				Device(id = "id 1", label = "label 1", isSelected = false),
-				Device(id = "id 3", label = "label 3", isSelected = false),
 			)
 			coEvery {
 				getConnectedDevicesUseCaseMock()
 			} returns listOf(
-				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 1", label = "label 1"),
 				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 3", label = "label 3"),
+				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 1", label = "label 1"),
 				GetConnectedDevicesUseCase.ConnectedDevice(id = "id 2", label = "label 2"),
 			)
 
@@ -83,9 +83,9 @@ class GetDevicesUseCaseImplTest {
 
 			assertEquals(
 				listOf(
+					Device(id = "id 3", label = "label 3", isSelected = false),
 					Device(id = "id 1", label = "label 1", isSelected = true),
-					Device(id = "id 3", label = "label 3", isSelected = true),
-					Device(id = "id 2", label = "label 2", isSelected = false),
+					Device(id = "id 2", label = "label 2", isSelected = true),
 				),
 				useCase.invoke(),
 			)

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_filter_section_title
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -66,8 +66,8 @@ fun Collapsable(
 @Preview
 @Composable
 internal fun PreviewCollapsable() {
-	PreviewRenderContainer { previewData ->
-		PreviewCollapsable(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewCollapsable(darkMode)
 	}
 }
 

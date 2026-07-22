@@ -15,11 +15,9 @@ class GetDevicesUseCaseImpl(
 	override suspend operator fun invoke(): List<Device> =
 		runCatching {
 			val selectedDevices = getSelectedDevicesUseCase()
-			val devices = getConnectedDevicesUseCase().map {
+			getConnectedDevicesUseCase().map {
 				it.toDomainDevice(selectedDevices)
 			}
-
-			devices.sortedByDescending { device -> device.isSelected }
 		}.getOrDefault(emptyList())
 
 	private fun GetConnectedDevicesUseCase.ConnectedDevice.toDomainDevice(selectedDevices: List<Device>) =

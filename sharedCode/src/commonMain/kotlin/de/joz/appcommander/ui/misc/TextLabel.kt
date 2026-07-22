@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -58,8 +58,8 @@ enum class TextLabelType {
 @Preview
 @Composable
 internal fun PreviewTextLabel() {
-	PreviewRenderContainer { previewData ->
-		PreviewTextLabel(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewTextLabel(darkMode)
 	}
 }
 

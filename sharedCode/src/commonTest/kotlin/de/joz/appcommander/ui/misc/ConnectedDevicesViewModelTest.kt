@@ -37,7 +37,7 @@ class ConnectedDevicesViewModelTest {
 
 			assertEquals(
 				listOf(
-					Device(id = "1", label = "P1", isSelected = false),
+					Device(id = "1", label = "P1", isSelected = true),
 					Device(id = "2", label = "P2", isSelected = false),
 				),
 				viewModel.uiState.value.connectedDevices,
@@ -45,11 +45,30 @@ class ConnectedDevicesViewModelTest {
 		}
 
 	@Test
-	fun `should load connected devices and select device when viewmodel is initialized and there is only one device`() =
+	fun `should load connected devices when viewmodel is initialized and there is only one unselected device`() =
 		runTest {
 			coEvery { observeDevicesUseCaseMock() } returns flowOf(
 				listOf(
 					Device(id = "1", label = "P1", isSelected = false),
+				),
+			)
+
+			val viewModel = createViewModel()
+
+			assertEquals(
+				listOf(
+					Device(id = "1", label = "P1", isSelected = false),
+				),
+				viewModel.uiState.value.connectedDevices,
+			)
+		}
+
+	@Test
+	fun `should load connected devices when viewmodel is initialized and there is only one selected device`() =
+		runTest {
+			coEvery { observeDevicesUseCaseMock() } returns flowOf(
+				listOf(
+					Device(id = "1", label = "P1", isSelected = true),
 				),
 			)
 
@@ -78,18 +97,26 @@ class ConnectedDevicesViewModelTest {
 				getDevicesUseCaseMock()
 			} returns listOf(
 				Device(id = "1", label = "after refresh -> second load", isSelected = false),
-				Device(id = "2", label = "after refresh -> second load", isSelected = false),
+				Device(id = "2", label = "after refresh -> second load", isSelected = true),
 				Device(id = "3", label = "after refresh -> second load", isSelected = false),
 			)
 
 			val viewModel = createViewModel()
+
+			assertEquals(
+				listOf(
+					Device(id = "1", label = "after init -> first load", isSelected = true),
+				),
+				viewModel.uiState.value.connectedDevices,
+			)
+
 			viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnRefreshDevices)
 			runCurrent()
 
 			assertEquals(
 				listOf(
-					Device(id = "1", label = "after refresh -> second load", isSelected = true),
-					Device(id = "2", label = "after refresh -> second load", isSelected = false),
+					Device(id = "1", label = "after refresh -> second load", isSelected = false),
+					Device(id = "2", label = "after refresh -> second load", isSelected = true),
 					Device(id = "3", label = "after refresh -> second load", isSelected = false),
 				),
 				viewModel.uiState.value.connectedDevices,
@@ -107,67 +134,32 @@ class ConnectedDevicesViewModelTest {
 			)
 
 			val viewModel = createViewModel()
-			val device = viewModel.uiState.value.connectedDevices
+			val device1 = viewModel.uiState.value.connectedDevices
 				.first()
-			val preSelectedState = device.isSelected
+			val preSelectedState1 = device1.isSelected
+			val device2 = viewModel.uiState.value.connectedDevices
+				.last()
+			val preSelectedState2 = device2.isSelected
 
-			viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnDeviceSelect(selectedDevice = device))
+			viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnDeviceSelect(selectedDevice = device1))
 			runCurrent()
 
-			val afterSelectedState = viewModel.uiState.value.connectedDevices
+			val afterSelectedState1 = viewModel.uiState.value.connectedDevices
 				.first()
 				.isSelected
+			val afterSelectedState2 = viewModel.uiState.value.connectedDevices
+				.last()
+				.isSelected
 
-			assertFalse(preSelectedState)
-			assertTrue(afterSelectedState)
+			assertTrue(preSelectedState1)
+			assertFalse(preSelectedState2)
+
+			assertFalse(afterSelectedState1)
+			assertFalse(afterSelectedState2)
 
 			coVerify {
 				saveSelectedDevicesUseCaseMock.invoke(viewModel.uiState.value.connectedDevices)
 			}
-		}
-
-	@Test
-	fun `should keep device selected when devices are refreshed`() =
-		runTest {
-			coEvery { observeDevicesUseCaseMock() } returns flowOf(
-				listOf(
-					Device(id = "1", label = "P1", isSelected = true),
-					Device(id = "2", label = "P2", isSelected = false),
-				),
-			)
-
-			coEvery {
-				getDevicesUseCaseMock()
-			} returns listOf(
-				Device(id = "1", label = "P1", isSelected = true),
-				Device(id = "2", label = "P2", isSelected = true),
-				Device(id = "3", label = "P3", isSelected = true),
-			)
-			val viewModel = createViewModel()
-			runCurrent()
-
-			viewModel.onEvent(
-				event = ConnectedDevicesViewModel.Event.OnDeviceSelect(
-					selectedDevice = viewModel.uiState.value.connectedDevices[1],
-				),
-			)
-			runCurrent()
-
-			viewModel.onEvent(event = ConnectedDevicesViewModel.Event.OnRefreshDevices)
-			runCurrent()
-
-			assertFalse(
-				viewModel.uiState.value.connectedDevices[0]
-					.isSelected,
-			)
-			assertTrue(
-				viewModel.uiState.value.connectedDevices[1]
-					.isSelected,
-			)
-			assertFalse(
-				viewModel.uiState.value.connectedDevices[2]
-					.isSelected,
-			)
 		}
 
 	private fun createViewModel() =

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -62,8 +62,8 @@ fun LabelledSwitch(
 @Preview
 @Composable
 internal fun PreviewLabelledSwitch() {
-	PreviewRenderContainer { previewData ->
-		PreviewLabelledSwitch(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewLabelledSwitch(darkMode)
 	}
 }
 

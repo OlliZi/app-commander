@@ -18,7 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -63,8 +63,8 @@ fun SimpleTextInput(
 @Preview
 @Composable
 internal fun PreviewSimpleTextInput() {
-	PreviewRenderContainer { previewData ->
-		PreviewSimpleTextInput(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewSimpleTextInput(darkMode)
 	}
 }
 

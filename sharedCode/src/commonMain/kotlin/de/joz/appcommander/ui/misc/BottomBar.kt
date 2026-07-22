@@ -17,7 +17,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -58,8 +58,8 @@ data class BottomBarAction(
 @Preview
 @Composable
 internal fun PreviewBottomBar() {
-	PreviewRenderContainer { previewData ->
-		PreviewBottomBar(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewBottomBar(darkMode)
 	}
 }
 

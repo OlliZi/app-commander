@@ -18,7 +18,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.android
 import de.joz.appcommander.resources.desktop
 import de.joz.appcommander.resources.ios
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -62,8 +62,8 @@ private fun ScriptsRepository.Platform.icon(): DrawableResource =
 @Preview
 @Composable
 internal fun PreviewPlatformIcon() {
-	PreviewRenderContainer { previewData ->
-		PreviewPlatformIcon(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewPlatformIcon(darkMode)
 	}
 }
 

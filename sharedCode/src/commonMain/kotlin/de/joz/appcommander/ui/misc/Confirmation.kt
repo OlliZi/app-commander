@@ -9,7 +9,7 @@ import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.confirmation_no
 import de.joz.appcommander.resources.confirmation_yes
 import de.joz.appcommander.resources.edit_confirmation_remove
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -66,8 +66,8 @@ data class ConfirmationData(
 @Preview
 @Composable
 internal fun PreviewConfirmation() {
-	PreviewRenderContainer { previewData ->
-		PreviewConfirmation(darkTheme = previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewConfirmation(darkMode)
 	}
 }
 

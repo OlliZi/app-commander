@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.domain.script.ScriptsRepository
-import de.joz.appcommander.ui.internalpreviews.PreviewRenderContainer
+import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
@@ -35,8 +35,8 @@ fun PlatformSelection(
 @Preview
 @Composable
 internal fun PreviewPlatformSelection() {
-	PreviewRenderContainer { previewData ->
-		PreviewPlatformSelection(previewData.uiState)
+	DarkLightPreviewContainerProvider { darkMode ->
+		PreviewPlatformSelection(darkMode)
 	}
 }
 
