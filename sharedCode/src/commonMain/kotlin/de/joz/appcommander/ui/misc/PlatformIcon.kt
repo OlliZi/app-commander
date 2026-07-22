@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.resources.Res
@@ -31,7 +30,7 @@ fun PlatformIcon(platform: ScriptsRepository.Platform) {
 			.background(
 				Color.White,
 				CircleShape,
-			).padding(platform.padding()),
+			).padding(all = 4.dp),
 	) {
 		Image(
 			modifier = Modifier.fillMaxSize(),
@@ -41,17 +40,10 @@ fun PlatformIcon(platform: ScriptsRepository.Platform) {
 	}
 }
 
-private fun ScriptsRepository.Platform.padding(): Dp =
-	when (this) {
-		ScriptsRepository.Platform.ANDROID -> 1.dp
-		ScriptsRepository.Platform.IOS -> 5.dp
-		ScriptsRepository.Platform.DESKTOP -> 7.dp
-	}
-
 private fun ScriptsRepository.Platform.icon(): DrawableResource =
 	when (this) {
-		ScriptsRepository.Platform.ANDROID -> Res.drawable.android
 		ScriptsRepository.Platform.IOS -> Res.drawable.ios
+		ScriptsRepository.Platform.ANDROID -> Res.drawable.android
 		ScriptsRepository.Platform.DESKTOP -> Res.drawable.desktop
 	}
 
