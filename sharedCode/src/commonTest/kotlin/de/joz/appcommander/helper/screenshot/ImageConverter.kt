@@ -11,17 +11,12 @@ class ImageConverter {
 		Image.makeFromBitmap(bitmap).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
 
 	fun trim(bitmap: Bitmap): Bitmap {
-		val backgroundColorLeft = bitmap.getColor(0, 0)
-		val backgroundColorRight = bitmap.getColor(bitmap.width - 1, 0)
-		val backgroundColorTop = bitmap.getColor(0, 0)
-		val backgroundColorBottom = bitmap.getColor(0, bitmap.height - 1)
-
 		val bounds = computeTrimBounds(
 			bitmap = bitmap,
-			backgroundColorLeft = backgroundColorLeft,
-			backgroundColorRight = backgroundColorRight,
-			backgroundColorTop = backgroundColorTop,
-			backgroundColorBottom = backgroundColorBottom,
+			backgroundColorLeft = bitmap.getColor(0, 0),
+			backgroundColorRight = bitmap.getColor(bitmap.width - 1, 0),
+			backgroundColorTop = bitmap.getColor(0, 0),
+			backgroundColorBottom = bitmap.getColor(0, bitmap.height - 1),
 		)
 
 		val w = abs(bounds.right - bounds.left) + 2 * PADDING
