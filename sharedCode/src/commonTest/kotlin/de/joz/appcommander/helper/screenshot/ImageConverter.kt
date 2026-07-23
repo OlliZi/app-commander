@@ -67,6 +67,7 @@ class ImageConverter {
 		backgroundColor: Int,
 	): TrimBounds {
 		var trimBounds = TrimBounds()
+
 		for (x in 0 until bitmap.width) {
 			var isLeftColumEmpty = true
 			var isRightColumEmpty = true
