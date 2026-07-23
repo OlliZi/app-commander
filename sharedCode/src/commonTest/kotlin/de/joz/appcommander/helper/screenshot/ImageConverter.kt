@@ -11,8 +11,9 @@ class ImageConverter {
 
 	fun trim(bitmap: Bitmap): Bitmap {
 		val backgroundColor = bitmap.getColor(0, 0)
-		val trimmedHeight = trimHeight(bitmap, backgroundColor)
-		return trimmedWidth(trimmedHeight, backgroundColor)
+		// val trimmedHeight = trimHeight(bitmap, backgroundColor)
+
+		return trimmedWidth(bitmap, backgroundColor)
 	}
 
 	private fun trimHeight(
@@ -50,31 +51,44 @@ class ImageConverter {
 		bitmap: Bitmap,
 		backgroundColor: Int,
 	): Bitmap {
-		var lastContentColumn = 0
+		val bounds = computeTrimBounds(bitmap, backgroundColor)
+		val trimmedBitmap = Bitmap()
+		val w = Math.abs(bounds.right - bounds.left) + 2 * PADDING
+		trimmedBitmap.allocPixels(bitmap.imageInfo.withWidth(w))
+		val canvas = Canvas(trimmedBitmap)
 
-		for (x in bitmap.width - 1 downTo 0) {
-			var isColumnEmpty = true
-			for (y in 0 until bitmap.height - 1) {
+		canvas.drawImage(Image.makeFromBitmap(bitmap), -bounds.left.toFloat() + PADDING, 0f)
+
+		return trimmedBitmap
+	}
+
+	private fun computeTrimBounds(
+		bitmap: Bitmap,
+		backgroundColor: Int,
+	): TrimBounds {
+		var trimBounds = TrimBounds()
+		for (x in 0 until bitmap.width) {
+			var isLeftColumEmpty = true
+			var isRightColumEmpty = true
+
+			for (y in 0 until bitmap.height) {
 				if (bitmap.getColor(x, y) != backgroundColor) {
-					isColumnEmpty = false
-					break
+					isLeftColumEmpty = false
+				}
+				if (bitmap.getColor(bitmap.width - 1 - x, y) != backgroundColor) {
+					isRightColumEmpty = false
 				}
 			}
-			if (!isColumnEmpty) {
-				lastContentColumn = x
-				break
+
+			if (!isLeftColumEmpty && trimBounds.left == -1) {
+				trimBounds = trimBounds.copy(left = x)
+			}
+			if (!isRightColumEmpty && trimBounds.right == -1) {
+				trimBounds = trimBounds.copy(right = bitmap.width - 1 - x)
 			}
 		}
 
-		return if (lastContentColumn == 0) {
-			bitmap
-		} else {
-			val trimmedBitmap = Bitmap()
-			val trimmedWidth = (lastContentColumn + PADDING).coerceAtMost(bitmap.width)
-			trimmedBitmap.allocPixels(bitmap.imageInfo.withWidth(trimmedWidth))
-			renderBitmap(bitmap, trimmedBitmap)
-			trimmedBitmap
-		}
+		return trimBounds
 	}
 
 	private fun renderBitmap(
@@ -84,6 +98,13 @@ class ImageConverter {
 		val canvas = Canvas(trimmedBitmap)
 		canvas.drawImage(Image.makeFromBitmap(originalBitmap), 0f, 0f)
 	}
+
+	data class TrimBounds(
+		val left: Int = -1,
+		val right: Int = -1,
+		val top: Int = -1,
+		val bottom: Int = -1,
+	)
 
 	private companion object {
 		private const val IMAGE_QUALITY = 100
