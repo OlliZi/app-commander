@@ -12,46 +12,6 @@ class ImageConverter {
 
 	fun trim(bitmap: Bitmap): Bitmap {
 		val backgroundColor = bitmap.getColor(0, 0)
-		// val trimmedHeight = trimHeight(bitmap, backgroundColor)
-
-		return trimmedWidth(bitmap, backgroundColor)
-	}
-
-	private fun trimHeight(
-		bitmap: Bitmap,
-		backgroundColor: Int,
-	): Bitmap {
-		var lastContentRow = 0
-
-		for (y in bitmap.height - 1 downTo 0) {
-			var isRowEmpty = true
-			for (x in 0 until bitmap.width) {
-				if (bitmap.getColor(x, y) != backgroundColor) {
-					isRowEmpty = false
-					break
-				}
-			}
-			if (!isRowEmpty) {
-				lastContentRow = y
-				break
-			}
-		}
-
-		return if (lastContentRow == 0) {
-			bitmap
-		} else {
-			val trimmedBitmap = Bitmap()
-			val trimmedHeight = (lastContentRow + PADDING).coerceAtMost(bitmap.height)
-			trimmedBitmap.allocPixels(bitmap.imageInfo.withHeight(trimmedHeight))
-			renderBitmap(bitmap, trimmedBitmap)
-			trimmedBitmap
-		}
-	}
-
-	private fun trimmedWidth(
-		bitmap: Bitmap,
-		backgroundColor: Int,
-	): Bitmap {
 		val bounds = computeTrimBounds(bitmap, backgroundColor)
 		val trimmedBitmap = Bitmap()
 		val w = abs(bounds.right - bounds.left) + 2 * PADDING
@@ -59,7 +19,11 @@ class ImageConverter {
 		trimmedBitmap.allocPixels(bitmap.imageInfo.withWidthHeight(w, h))
 
 		val canvas = Canvas(trimmedBitmap)
-		canvas.drawImage(Image.makeFromBitmap(bitmap), -bounds.left.toFloat() + PADDING, -bounds.top.toFloat() + PADDING)
+		canvas.drawImage(
+			Image.makeFromBitmap(bitmap),
+			-bounds.left.toFloat() + PADDING,
+			-bounds.top.toFloat() + PADDING,
+		)
 
 		return trimmedBitmap
 	}
@@ -116,14 +80,6 @@ class ImageConverter {
 		}
 
 		return trimBounds
-	}
-
-	private fun renderBitmap(
-		originalBitmap: Bitmap,
-		trimmedBitmap: Bitmap,
-	) {
-		val canvas = Canvas(trimmedBitmap)
-		canvas.drawImage(Image.makeFromBitmap(originalBitmap), 0f, 0f)
 	}
 
 	data class TrimBounds(
