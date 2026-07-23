@@ -32,7 +32,7 @@ class Screenshotter(
 			}
 
 			val bitmap = node.captureToImage().asSkiaBitmap()
-			val trimmedBitmap = imageConverter.trimHeight(bitmap)
+			val trimmedBitmap = imageConverter.trim(bitmap)
 			val pngByteArray = imageConverter.convertToPng(trimmedBitmap)
 
 			if (pngByteArray == null || pngByteArray.isEmpty()) {

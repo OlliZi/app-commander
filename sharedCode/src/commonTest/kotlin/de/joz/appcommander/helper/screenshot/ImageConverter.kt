@@ -9,14 +9,16 @@ class ImageConverter {
 	fun convertToPng(bitmap: Bitmap): ByteArray? =
 		Image.makeFromBitmap(bitmap).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
 
-	fun trimHeight(bitmap: Bitmap): Bitmap {
-		val backgroundColor = bitmap.getColor(0, bitmap.height - 1)
+	fun trim(bitmap: Bitmap): Bitmap {
+		val backgroundColor = bitmap.getColor(0, 0)
+		val trimmedHeight = trimHeight(bitmap, backgroundColor)
+		return trimmedWidth(trimmedHeight, backgroundColor)
+	}
 
-		if (backgroundColor != bitmap.getColor(0, 0)) {
-			// assume we have a full rendered screen
-			return bitmap
-		}
-
+	private fun trimHeight(
+		bitmap: Bitmap,
+		backgroundColor: Int,
+	): Bitmap {
 		var lastContentRow = 0
 
 		for (y in bitmap.height - 1 downTo 0) {
@@ -36,29 +38,55 @@ class ImageConverter {
 		return if (lastContentRow == 0) {
 			bitmap
 		} else {
-			renderTrimmedImage(
-				originalBitmap = bitmap,
-				lastContentRow = lastContentRow,
-			)
+			val trimmedBitmap = Bitmap()
+			val trimmedHeight = (lastContentRow + PADDING).coerceAtMost(bitmap.height)
+			trimmedBitmap.allocPixels(bitmap.imageInfo.withHeight(trimmedHeight))
+			renderBitmap(bitmap, trimmedBitmap)
+			trimmedBitmap
 		}
 	}
 
-	private fun renderTrimmedImage(
-		originalBitmap: Bitmap,
-		lastContentRow: Int,
+	private fun trimmedWidth(
+		bitmap: Bitmap,
+		backgroundColor: Int,
 	): Bitmap {
-		val trimmedBitmap = Bitmap()
-		val trimmedHeight = (lastContentRow + BOTTOM_PADDING).coerceAtMost(originalBitmap.height)
-		trimmedBitmap.allocPixels(originalBitmap.imageInfo.withHeight(trimmedHeight))
+		var lastContentColumn = 0
 
+		for (x in bitmap.width - 1 downTo 0) {
+			var isColumnEmpty = true
+			for (y in 0 until bitmap.height - 1) {
+				if (bitmap.getColor(x, y) != backgroundColor) {
+					isColumnEmpty = false
+					break
+				}
+			}
+			if (!isColumnEmpty) {
+				lastContentColumn = x
+				break
+			}
+		}
+
+		return if (lastContentColumn == 0) {
+			bitmap
+		} else {
+			val trimmedBitmap = Bitmap()
+			val trimmedWidth = (lastContentColumn + PADDING).coerceAtMost(bitmap.width)
+			trimmedBitmap.allocPixels(bitmap.imageInfo.withWidth(trimmedWidth))
+			renderBitmap(bitmap, trimmedBitmap)
+			trimmedBitmap
+		}
+	}
+
+	private fun renderBitmap(
+		originalBitmap: Bitmap,
+		trimmedBitmap: Bitmap,
+	) {
 		val canvas = Canvas(trimmedBitmap)
 		canvas.drawImage(Image.makeFromBitmap(originalBitmap), 0f, 0f)
-
-		return trimmedBitmap
 	}
 
 	private companion object {
 		private const val IMAGE_QUALITY = 100
-		private const val BOTTOM_PADDING = 16
+		private const val PADDING = 16
 	}
 }
