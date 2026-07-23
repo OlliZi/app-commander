@@ -8,8 +8,8 @@ import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
-import de.joz.appcommander.helper.ScreenshotVerifier
 import de.joz.appcommander.helper.TestRuleApplier
+import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.settings.SettingsViewModel
 import io.mockk.coEvery
 import io.mockk.every

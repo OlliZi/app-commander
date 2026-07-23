@@ -1,4 +1,4 @@
-package de.joz.appcommander.helper
+package de.joz.appcommander.helper.screenshot
 
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.Canvas

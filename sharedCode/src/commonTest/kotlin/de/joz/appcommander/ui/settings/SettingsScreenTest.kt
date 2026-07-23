@@ -14,7 +14,7 @@ import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
-import de.joz.appcommander.helper.ScreenshotVerifier
+import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.HIDE_WELCOME_SCREEN_PREF_KEY

@@ -1,14 +1,10 @@
-package de.joz.appcommander.helper
+package de.joz.appcommander.helper.screenshot
 
-import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isRoot
+import de.joz.appcommander.helper.IsJenkinsTestRunUseCase
+import de.joz.appcommander.helper.IsLocalTestRunUseCase
 import org.jetbrains.skia.Bitmap
-import org.jetbrains.skia.EncodedImageFormat
 import org.jetbrains.skia.Image
 import java.io.File
 import java.nio.file.Files
@@ -23,6 +19,8 @@ class ScreenshotVerifier<T>(
 	private val isLocalTestRunUseCase: IsLocalTestRunUseCase = IsLocalTestRunUseCase(),
 	private val isJenkinsTestRunUseCase: IsJenkinsTestRunUseCase = IsJenkinsTestRunUseCase(),
 	private val createScreenshotDifferenceUseCase: CreateScreenshotDifferenceUseCase = CreateScreenshotDifferenceUseCase(),
+	private val imageConverter: ImageConverter = ImageConverter(),
+	private val screenshotter: Screenshotter = Screenshotter(imageConverter),
 ) {
 	init {
 		storeDirectory.mkdirs()
@@ -32,9 +30,10 @@ class ScreenshotVerifier<T>(
 		source: ComposeUiTest,
 		screenshotName: String,
 	) {
-		val screenshotResult = takeScreenshot(
+		val screenshotResult = screenshotter.takeScreenshot(
 			source = source,
 			screenshotName = screenshotName,
+			storeDirectory = storeDirectory,
 		)
 
 		when (screenshotResult) {
@@ -49,36 +48,6 @@ class ScreenshotVerifier<T>(
 			}
 		}
 	}
-
-	private fun takeScreenshot(
-		source: ComposeUiTest,
-		screenshotName: String,
-	): ScreenshotResult =
-		runCatching {
-			val dialog = source.onNode(isDialog())
-
-			val node = try {
-				if (dialog.isDisplayed()) {
-					dialog
-				} else {
-					source.onNode(isRoot())
-				}
-			} catch (_: Throwable) {
-				source.onNode(isRoot())
-			}
-
-			val pngByteArray = convertToPng(node.captureToImage().asSkiaBitmap())
-
-			if (pngByteArray == null || pngByteArray.isEmpty()) {
-				throw Exception("Screenshot is empty.")
-			}
-
-			val file = File(storeDirectory, "$screenshotName.png")
-			file.writeBytes(pngByteArray)
-			ScreenshotResult.Success(screenshot = file)
-		}.getOrElse { throwable ->
-			ScreenshotResult.Failure(error = throwable)
-		}
 
 	private fun verifyAgainstGoldenImage(screenshotFile: File) {
 		val goldenImage = readGoldenImageFromSrcDir(
@@ -118,7 +87,7 @@ class ScreenshotVerifier<T>(
 
 				if (result.fraction > IMAGE_DIFF_THRESHOLD) {
 					val diffFile = File(goldenImage.parentFile, "${goldenImage.nameWithoutExtension}_diff.png")
-					diffFile.writeBytes(convertToPng(result.diffBitmap)!!)
+					diffFile.writeBytes(imageConverter.convertToPng(result.diffBitmap)!!)
 					val currentScreenshot = File(goldenImage.parentFile, goldenImage.name)
 					Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
 					fail(
@@ -154,21 +123,7 @@ class ScreenshotVerifier<T>(
 		return imageBitmap
 	}
 
-	private fun convertToPng(bitmap: Bitmap): ByteArray? =
-		Image.makeFromBitmap(bitmap).encodeToData(EncodedImageFormat.PNG, IMAGE_QUALITY)?.bytes
-
-	private sealed interface ScreenshotResult {
-		data class Success(
-			val screenshot: File,
-		) : ScreenshotResult
-
-		data class Failure(
-			val error: Throwable,
-		) : ScreenshotResult
-	}
-
 	companion object Companion {
 		private const val IMAGE_DIFF_THRESHOLD = 0.01f // 1 %
-		private const val IMAGE_QUALITY = 100
 	}
 }
