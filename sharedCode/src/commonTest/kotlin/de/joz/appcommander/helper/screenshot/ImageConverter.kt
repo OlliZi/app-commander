@@ -13,9 +13,11 @@ class ImageConverter {
 	fun trim(bitmap: Bitmap): Bitmap {
 		val backgroundColor = bitmap.getColor(0, 0)
 		val bounds = computeTrimBounds(bitmap, backgroundColor)
-		val trimmedBitmap = Bitmap()
+
 		val w = abs(bounds.right - bounds.left) + 2 * PADDING
 		val h = abs(bounds.bottom - bounds.top) + 2 * PADDING
+
+		val trimmedBitmap = Bitmap()
 		trimmedBitmap.allocPixels(bitmap.imageInfo.withWidthHeight(w, h))
 
 		val canvas = Canvas(trimmedBitmap)
@@ -24,7 +26,6 @@ class ImageConverter {
 			-bounds.left.toFloat() + PADDING,
 			-bounds.top.toFloat() + PADDING,
 		)
-
 		return trimmedBitmap
 	}
 
@@ -35,47 +36,24 @@ class ImageConverter {
 		var trimBounds = TrimBounds()
 
 		for (x in 0 until bitmap.width) {
-			var isLeftColumEmpty = true
-			var isRightColumEmpty = true
-
 			for (y in 0 until bitmap.height) {
-				if (bitmap.getColor(x, y) != backgroundColor) {
-					isLeftColumEmpty = false
-					if (trimBounds.left == -1) {
-						trimBounds = trimBounds.copy(left = x)
-					}
+				if (bitmap.getColor(x, y) != backgroundColor && trimBounds.left == -1) {
+					trimBounds = trimBounds.copy(left = x)
 				}
-				if (bitmap.getColor(bitmap.width - 1 - x, y) != backgroundColor) {
-					isRightColumEmpty = false
+				if (bitmap.getColor(bitmap.width - 1 - x, y) != backgroundColor && trimBounds.right == -1) {
+					trimBounds = trimBounds.copy(right = bitmap.width - 1 - x)
 				}
-			}
-
-			if (!isLeftColumEmpty && trimBounds.left == -1) {
-				// 	trimBounds = trimBounds.copy(left = x)
-			}
-			if (!isRightColumEmpty && trimBounds.right == -1) {
-				trimBounds = trimBounds.copy(right = bitmap.width - 1 - x)
 			}
 		}
 
 		for (y in 0 until bitmap.height) {
-			var isTopRorEmpty = true
-			var isBottomRowEmpty = true
-
 			for (x in 0 until bitmap.width) {
-				if (bitmap.getColor(x, y) != backgroundColor) {
-					isTopRorEmpty = false
+				if (bitmap.getColor(x, y) != backgroundColor && trimBounds.top == -1) {
+					trimBounds = trimBounds.copy(top = y)
 				}
-				if (bitmap.getColor(x, bitmap.height - 1 - y) != backgroundColor) {
-					isBottomRowEmpty = false
+				if (bitmap.getColor(x, bitmap.height - 1 - y) != backgroundColor && trimBounds.bottom == -1) {
+					trimBounds = trimBounds.copy(bottom = bitmap.height - 1 - y)
 				}
-			}
-
-			if (!isTopRorEmpty && trimBounds.top == -1) {
-				trimBounds = trimBounds.copy(top = y)
-			}
-			if (!isBottomRowEmpty && trimBounds.bottom == -1) {
-				trimBounds = trimBounds.copy(bottom = bitmap.height - 1 - y)
 			}
 		}
 
