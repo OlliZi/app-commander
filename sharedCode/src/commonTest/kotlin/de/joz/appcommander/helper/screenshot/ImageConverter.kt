@@ -13,24 +13,29 @@ class ImageConverter {
 	fun trim(bitmap: Bitmap): Bitmap {
 		val bounds = computeTrimBounds(
 			bitmap = bitmap,
-			backgroundColorLeft = bitmap.getColor(0, 0),
-			backgroundColorRight = bitmap.getColor(bitmap.width - 1, 0),
-			backgroundColorTop = bitmap.getColor(0, 0),
-			backgroundColorBottom = bitmap.getColor(0, bitmap.height - 1),
+			backgroundColorLeft = bitmap.getColor(0, bitmap.height / 2),
+			backgroundColorTop = bitmap.getColor(bitmap.width / 2, 0),
+			backgroundColorRight = bitmap.getColor(bitmap.width - 1, bitmap.height / 2),
+			backgroundColorBottom = bitmap.getColor(bitmap.width / 2, bitmap.height - 1),
 		)
 
-		val w = abs(bounds.right - bounds.left) + 2 * PADDING
-		val h = abs(bounds.bottom - bounds.top) + 2 * PADDING
+		val trimmedBitmap = Bitmap().apply {
+			allocPixels(
+				bitmap.imageInfo.withWidthHeight(
+					width = abs(bounds.right - bounds.left) + 2 * PADDING,
+					height = abs(bounds.bottom - bounds.top) + 2 * PADDING,
+				),
+			)
+		}
 
-		val trimmedBitmap = Bitmap()
-		trimmedBitmap.allocPixels(bitmap.imageInfo.withWidthHeight(w, h))
+		Canvas(trimmedBitmap).apply {
+			drawImage(
+				Image.makeFromBitmap(bitmap),
+				-bounds.left.toFloat() + PADDING,
+				-bounds.top.toFloat() + PADDING,
+			)
+		}
 
-		val canvas = Canvas(trimmedBitmap)
-		canvas.drawImage(
-			Image.makeFromBitmap(bitmap),
-			-bounds.left.toFloat() + PADDING,
-			-bounds.top.toFloat() + PADDING,
-		)
 		return trimmedBitmap
 	}
 
