@@ -162,7 +162,7 @@ class EndToEndTest :
 			// Filtering
 			click("expand_button_filter")
 			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
-			onNodeWithTag("text_field_simple_text").performTextInput("Dark")
+			onNodeWithTag("text_field_simple_text").performTextInput("Toggle dark")
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "e2e_4_scripts_filtered",
@@ -177,8 +177,9 @@ class EndToEndTest :
 				source = this,
 				screenshotName = "e2e_5_scripts_terminal",
 			)
+			click("expand_button_terminal")
 
-			// Logging and Script?
+			// Logging?
 
 			// Step 3: Edit Script Screen
 			onNodeWithContentDescription("Edit button").performClick()
