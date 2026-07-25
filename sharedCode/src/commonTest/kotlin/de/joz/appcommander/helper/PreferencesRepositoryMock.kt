@@ -3,6 +3,7 @@ package de.joz.appcommander.helper
 import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 class PreferencesRepositoryMock : PreferencesRepository {
 	var lastStoredValues = mutableMapOf<String, Any>()
@@ -22,9 +23,12 @@ class PreferencesRepositoryMock : PreferencesRepository {
 		defaultValue: Int,
 	): Int = lastStoredValues[key] as? Int ?: defaultValue
 
-	override suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> {
-		TODO("Not yet implemented")
-	}
+	override suspend fun getAsFlow(vararg keys: String): Flow<List<ChangedPreference>> =
+		flowOf(
+			lastStoredValues.map {
+				ChangedPreference(key = it.key, value = it.value)
+			},
+		)
 
 	override suspend fun <T> store(
 		key: String,

@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
@@ -18,7 +17,18 @@ import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.ScriptsRepositoryFake
 import de.joz.appcommander.helper.TestRuleApplier
+import de.joz.appcommander.helper.assertIsDisplayed
+import de.joz.appcommander.helper.click
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.resources.Res
+import de.joz.appcommander.resources.confirmation_no
+import de.joz.appcommander.resources.edit_action_abort
+import de.joz.appcommander.resources.edit_action_save
+import de.joz.appcommander.resources.edit_confirmation_change
+import de.joz.appcommander.resources.settings_title
+import de.joz.appcommander.resources.welcome_action
+import de.joz.appcommander.resources.welcome_catch_phrase
+import de.joz.appcommander.resources.welcome_title
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.junit.Rule
@@ -68,34 +78,34 @@ class EndToEndTest :
 			}
 
 			// Step 1: Welcome Screen
-			onNodeWithText("App-Commander").assertIsDisplayed()
-			onNodeWithText("Your bridge to connected devices").assertIsDisplayed()
+			assertIsDisplayed(Res.string.welcome_title)
+			assertIsDisplayed(Res.string.welcome_catch_phrase)
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_1_welcome")
 
-			onNodeWithText("Get started").performClick()
+			click(Res.string.welcome_action)
 
 			// Step 2: Scripts Screen
-			onNodeWithText("Your scripts").assertIsDisplayed()
-			onNodeWithText("emulator-5555").assertIsDisplayed()
-			onNodeWithText("Google Pixel 10").assertIsDisplayed()
+			assertIsDisplayed("Your scripts")
+			assertIsDisplayed("emulator-5555")
+			assertIsDisplayed("Google Pixel 10")
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_2_scripts_main")
 
 			// Select a device
-			onNodeWithText("emulator-5555").performClick()
+			click("emulator-5555")
 
 			// Expand and Execute a script
-			onNodeWithTag("expand_button", useUnmergedTree = true).performClick()
+			click("expand_button")
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_3_scripts_expanded")
-			onNodeWithTag("script_button_0").performClick()
+			click("script_button_0")
 
 			// Filtering
-			onNodeWithTag("expand_button_filter").performClick()
+			click("expand_button_filter")
 			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
 			onNodeWithTag("text_field_simple_text").performTextInput("Dark")
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_4_scripts_filtered")
 
 			// Terminal
-			onNodeWithTag("expand_button_terminal").performClick()
+			click("expand_button_terminal")
 			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
 			onNodeWithTag("text_field_script_input").performTextInput("ls")
 			onNodeWithContentDescription("Execute script text").assertIsEnabled()
@@ -103,31 +113,32 @@ class EndToEndTest :
 
 			// Step 3: Edit Script Screen
 			onNodeWithContentDescription("Edit button").performClick()
-			onNodeWithText("Edit script").assertIsDisplayed()
+			assertIsDisplayed("Edit script")
 
 			onNodeWithTag("text_field_simple_text").performTextInput(" (Modified)")
-			onNodeWithText("Desktop").performClick()
+			click("Desktop")
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_6_edit_script")
 
 			// Confirmation dialog on abort
-			onNodeWithText("Abort").performClick()
-			onNodeWithText("Do you want to discard your changes?").assertIsDisplayed()
+			click(Res.string.edit_action_abort)
+			assertIsDisplayed(Res.string.edit_confirmation_change)
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_7_edit_abort_dialog")
-			onNodeWithText("Dismiss").performClick()
+			click(Res.string.confirmation_no)
 
 			// Save and go back
-			onNodeWithText("Save").performClick()
+			click(Res.string.edit_action_save)
 
 			// Step 4: Settings
-			onNodeWithContentDescription("Settings").performClick()
-			onNodeWithText("Settings").assertIsDisplayed()
+			click(Res.string.settings_title)
+			assertIsDisplayed("Settings")
 
-			onNodeWithText("Show welcome screen").performScrollTo().assertIsDisplayed()
+			assertIsDisplayed("Show welcome screen")
 			onNodeWithTag("slider").performScrollTo().assertIsDisplayed()
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_8_settings")
 
+			// also in generic function?
 			onNodeWithContentDescription("Back").performClick()
-			onNodeWithText("Your scripts").assertIsDisplayed()
+			assertIsDisplayed("Your scripts")
 		}
 	}
 }
