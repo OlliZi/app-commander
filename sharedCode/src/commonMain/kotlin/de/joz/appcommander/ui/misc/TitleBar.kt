@@ -47,6 +47,7 @@ fun TitleBar(
 		actions = {
 			actions.forEach { actionItem ->
 				IconButton(
+					modifier = Modifier.testTag("action_button_${actionItem.icon.name}"),
 					onClick = actionItem.action,
 				) {
 					Icon(
