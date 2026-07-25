@@ -111,7 +111,7 @@ private fun DevicesBar(
 		}
 		connectedDevices.forEach { device ->
 			Button(
-				modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f).testTag(device.label),
+				modifier = Modifier.alpha(if (device.isSelected) 1f else 0.5f).testTag(device.id),
 				onClick = {
 					onDeviceSelect(device)
 				},

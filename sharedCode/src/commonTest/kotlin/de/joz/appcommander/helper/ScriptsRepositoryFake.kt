@@ -1,11 +1,12 @@
 package de.joz.appcommander.helper
 
-import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.domain.script.ScriptsRepository
 import java.io.File
 
-class ScriptsRepositoryFake : ScriptsRepository {
-	private var currentScripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS.toMutableList()
+class ScriptsRepositoryFake(
+	scripts: List<ScriptsRepository.Script>,
+) : ScriptsRepository {
+	private var currentScripts = scripts.toMutableList()
 
 	var openScriptFileCounter = 0
 		private set
