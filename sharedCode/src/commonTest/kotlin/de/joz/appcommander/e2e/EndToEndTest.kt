@@ -196,6 +196,7 @@ class EndToEndTest :
 				source = this,
 				screenshotName = "e2e_7_edit_abort_dialog",
 			)
+
 			click(Res.string.confirmation_no)
 
 			// Save and go back
