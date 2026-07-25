@@ -1,7 +1,9 @@
-package de.joz.appcommander
+package de.joz.appcommander.ui
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
+import de.joz.appcommander.App
+import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.data.ScriptsRepositoryImpl
 import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
@@ -16,7 +18,6 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Rule
 import org.koin.dsl.module
-import org.koin.ksp.generated.*
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import kotlin.test.Test

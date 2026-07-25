@@ -1,4 +1,4 @@
-package de.joz.appcommander
+package de.joz.appcommander.e2e
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -11,6 +11,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
+import de.joz.appcommander.App
+import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.script.ScriptsRepository
@@ -33,7 +35,6 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import org.junit.Rule
 import org.koin.dsl.module
-import org.koin.ksp.generated.*
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import kotlin.test.Test
@@ -88,28 +89,40 @@ class EndToEndTest :
 			assertIsDisplayed("Your scripts")
 			assertIsDisplayed("emulator-5555")
 			assertIsDisplayed("Google Pixel 10")
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_2_scripts_main")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "e2e_2_scripts_main",
+			)
 
 			// Select a device
 			click("emulator-5555")
 
 			// Expand and Execute a script
 			click("expand_button")
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_3_scripts_expanded")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "e2e_3_scripts_expanded",
+			)
 			click("script_button_0")
 
 			// Filtering
 			click("expand_button_filter")
 			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
 			onNodeWithTag("text_field_simple_text").performTextInput("Dark")
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_4_scripts_filtered")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "e2e_4_scripts_filtered",
+			)
 
 			// Terminal
 			click("expand_button_terminal")
 			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
 			onNodeWithTag("text_field_script_input").performTextInput("ls")
 			onNodeWithContentDescription("Execute script text").assertIsEnabled()
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_5_scripts_terminal")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "e2e_5_scripts_terminal",
+			)
 
 			// Step 3: Edit Script Screen
 			onNodeWithContentDescription("Edit button").performClick()
@@ -122,7 +135,10 @@ class EndToEndTest :
 			// Confirmation dialog on abort
 			click(Res.string.edit_action_abort)
 			assertIsDisplayed(Res.string.edit_confirmation_change)
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_7_edit_abort_dialog")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "e2e_7_edit_abort_dialog",
+			)
 			click(Res.string.confirmation_no)
 
 			// Save and go back
