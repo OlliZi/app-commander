@@ -11,11 +11,18 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Settings
 import de.joz.appcommander.App
 import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
+import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
+import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.preference.PreferencesRepository
+import de.joz.appcommander.domain.script.RunFileBackupUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.ScriptsRepositoryFake
 import de.joz.appcommander.helper.TestRuleApplier
@@ -27,12 +34,14 @@ import de.joz.appcommander.resources.confirmation_no
 import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_change
-import de.joz.appcommander.resources.settings_title
+import de.joz.appcommander.resources.edit_title
+import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.welcome_action
 import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_title
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.koin.dsl.module
 import org.koin.ksp.generated.*
@@ -48,6 +57,23 @@ class EndToEndTest :
 		testClass = javaClass,
 	)
 
+	private val testScripts = listOf(
+		ScriptsRepository.Script(
+			label = "Dark mode",
+			scripts = listOf("adb shell cmd uimode night yes"),
+			platform = ScriptsRepository.Platform.ANDROID,
+		),
+		ScriptsRepository.Script(
+			label = "Light mode",
+			scripts = listOf("adb shell cmd uimode night no"),
+			platform = ScriptsRepository.Platform.ANDROID,
+		),
+		ScriptsRepository.Script(
+			label = "Hello Test",
+			scripts = listOf("echo hello test"),
+			platform = ScriptsRepository.Platform.DESKTOP,
+		),
+	)
 	private val testDevices = listOf(
 		GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "emulator-5555"),
 		GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "Google Pixel 10"),
@@ -59,13 +85,30 @@ class EndToEndTest :
 		modules(
 			module {
 				single<PreferencesRepository> { PreferencesRepositoryMock() }
-				single<ScriptsRepository> {
-					ScriptsRepositoryFake()
-				}
-
+				single<ScriptsRepository> { ScriptsRepositoryFake(scripts = testScripts) }
 				single<GetConnectedDevicesUseCase> {
 					mockk {
 						coEvery { this@mockk.invoke() } returns testDevices
+					}
+				}
+				single<ObserveDevicesUseCase> {
+					mockk {
+						coEvery { this@mockk.invoke() } returns flowOf(
+							testDevices.map {
+								Device(
+									it.id,
+									it.label,
+									false,
+								)
+							},
+						)
+					}
+				}
+
+				single<TrackScriptsFileChangesUseCase> { mockk(relaxed = true) }
+				single<GetLoggingUseCase> {
+					mockk {
+						coEvery { this@mockk.invoke() } returns flowOf(emptyList())
 					}
 				}
 			},
@@ -99,12 +142,12 @@ class EndToEndTest :
 			click("emulator-5555")
 
 			// Expand and Execute a script
-			click("expand_button")
+			click("expand_button_script_1")
 			screenshotVerifier.verifyScreenshot(
 				source = this,
 				screenshotName = "e2e_3_scripts_expanded",
 			)
-			click("script_button_0")
+			click("script_button_1")
 
 			// Filtering
 			click("expand_button_filter")
@@ -127,7 +170,7 @@ class EndToEndTest :
 
 			// Step 3: Edit Script Screen
 			onNodeWithContentDescription("Edit button").performClick()
-			assertIsDisplayed("Edit script")
+			assertIsDisplayed(Res.string.edit_title)
 
 			onNodeWithTag("text_field_simple_text").performTextInput(" (Modified)")
 			click("Desktop")
@@ -146,16 +189,17 @@ class EndToEndTest :
 			click(Res.string.edit_action_save)
 
 			// Step 4: Settings
-			click(Res.string.settings_title)
+			click("action_button_${FeatherIcons.Settings.name}")
 			assertIsDisplayed("Settings")
 
-			assertIsDisplayed("Show welcome screen")
-			onNodeWithTag("slider").performScrollTo().assertIsDisplayed()
+			assertIsDisplayed(Res.string.settings_preference_show_welcome_screen)
+			onNodeWithTag(RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE).performScrollTo().assertIsDisplayed()
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_8_settings")
 
-			// also in generic function?
-			onNodeWithContentDescription("Back").performClick()
+			click("back_button")
 			assertIsDisplayed("Your scripts")
+
+			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_9_end")
 		}
 	}
 }
