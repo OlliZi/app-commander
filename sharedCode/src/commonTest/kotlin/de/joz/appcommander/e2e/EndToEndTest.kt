@@ -35,7 +35,9 @@ import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_change
 import de.joz.appcommander.resources.edit_title
+import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
+import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.resources.welcome_action
 import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_title
@@ -61,6 +63,14 @@ class EndToEndTest :
 		ScriptsRepository.Script(
 			label = "Dark mode",
 			scripts = listOf("adb shell cmd uimode night yes"),
+			platform = ScriptsRepository.Platform.ANDROID,
+		),
+		ScriptsRepository.Script(
+			label = "Toggle dark to light mode",
+			scripts = listOf(
+				"adb shell cmd uimode night yes",
+				"adb shell cmd uimode night no",
+			),
 			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
@@ -168,6 +178,8 @@ class EndToEndTest :
 				screenshotName = "e2e_5_scripts_terminal",
 			)
 
+			// Logging and Script?
+
 			// Step 3: Edit Script Screen
 			onNodeWithContentDescription("Edit button").performClick()
 			assertIsDisplayed(Res.string.edit_title)
@@ -190,14 +202,14 @@ class EndToEndTest :
 
 			// Step 4: Settings
 			click("action_button_${FeatherIcons.Settings.name}")
-			assertIsDisplayed("Settings")
+			assertIsDisplayed(Res.string.settings_title)
 
 			assertIsDisplayed(Res.string.settings_preference_show_welcome_screen)
 			onNodeWithTag(RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE).performScrollTo().assertIsDisplayed()
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_8_settings")
 
 			click("back_button")
-			assertIsDisplayed("Your scripts")
+			assertIsDisplayed(Res.string.scripts_title)
 
 			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_9_end")
 		}
