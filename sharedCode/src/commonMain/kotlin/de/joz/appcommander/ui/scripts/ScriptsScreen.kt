@@ -242,6 +242,7 @@ private fun ScriptsSection(
 						ScriptItemToolIcons(
 							isActive = isButtonActive,
 							isExpanded = true,
+							testTag = "expand_button_script_$index",
 							onExpand = { onExpand(script) },
 							onEditScript = { onEditScript(script) },
 						)
@@ -264,6 +265,7 @@ private fun ScriptsSection(
 						ScriptItemToolIcons(
 							isActive = isButtonActive,
 							isExpanded = false,
+							testTag = "expand_button_script_$index",
 							onExpand = { onExpand(script) },
 							onEditScript = { onEditScript(script) },
 						)
@@ -278,6 +280,7 @@ private fun ScriptsSection(
 private fun ScriptItemToolIcons(
 	isActive: Boolean,
 	isExpanded: Boolean,
+	testTag: String,
 	onEditScript: () -> Unit,
 	onExpand: () -> Unit,
 ) {
@@ -293,6 +296,7 @@ private fun ScriptItemToolIcons(
 			isActive = isActive,
 			isExpanded = isExpanded,
 			onExpand = onExpand,
+			testTag = testTag,
 		)
 	}
 }
@@ -447,6 +451,7 @@ private fun EditButtonItem(
 @Composable
 private fun ExpandButtonItem(
 	isActive: Boolean,
+	testTag: String,
 	isExpanded: Boolean,
 	onExpand: () -> Unit,
 ) {
@@ -463,6 +468,7 @@ private fun ExpandButtonItem(
 		),
 		isExpanded = isExpanded,
 		onClick = onExpand,
+		testTag = testTag,
 	)
 }
 
