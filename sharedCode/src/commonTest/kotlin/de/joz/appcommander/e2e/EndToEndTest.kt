@@ -35,6 +35,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import org.junit.Rule
 import org.koin.dsl.module
+import org.koin.ksp.generated.*
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import kotlin.test.Test
