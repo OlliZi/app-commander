@@ -12,24 +12,15 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.test.waitUntilAtLeastOneExists
-import de.joz.appcommander.data.ScriptsRepositoryImpl
-import de.joz.appcommander.domain.devices.GetDevicesUseCase
-import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
-import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
-import de.joz.appcommander.domain.model.Device
-import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.preference.PreferencesRepository
-import de.joz.appcommander.domain.preference.SavePreferenceUseCase
-import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
-import de.joz.appcommander.helper.GetDevicesUseCaseMock
+import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.helper.ScriptsRepositoryFake
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
-import de.joz.appcommander.ui.settings.SettingsViewModel
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.koin.dsl.module
 import org.koin.ksp.generated.*
@@ -46,8 +37,8 @@ class EndToEndTest :
 	)
 
 	private val testDevices = listOf(
-		Device(id = "1", label = "emulator-5555", isSelected = false),
-		Device(id = "2", label = "Google Pixel 10", isSelected = false),
+		GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "emulator-5555"),
+		GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "Google Pixel 10"),
 	)
 
 	@get:Rule
@@ -55,39 +46,15 @@ class EndToEndTest :
 		modules(DependencyInjection().module)
 		modules(
 			module {
-				single<SavePreferenceUseCase> { mockk(relaxed = true) }
-				single<PreferencesRepository> { mockk(relaxed = true) }
+				single<PreferencesRepository> { PreferencesRepositoryMock() }
 				single<ScriptsRepository> {
+					ScriptsRepositoryFake()
+				}
+
+				single<GetConnectedDevicesUseCase> {
 					mockk {
-						every { getScripts() } returns ScriptsRepository.JsonParseResult(
-							scripts = ScriptsRepositoryImpl.DEFAULT_SCRIPTS,
-							parsingMetaData = null,
-						)
+						coEvery { this@mockk.invoke() } returns testDevices
 					}
-				}
-				single<GetScriptIdUseCase> {
-					mockk {
-						every { this@mockk(any()) } returns 0
-					}
-				}
-				single<GetPreferenceUseCase> {
-					mockk {
-						coEvery {
-							get(SettingsViewModel.HIDE_WELCOME_SCREEN_PREF_KEY, any<Boolean>())
-						} returns false
-						coEvery {
-							get(ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE, any<Int>())
-						} returns ManageUiAppearanceUseCase.DEFAULT_SYSTEM_UI_APPEARANCE.optionIndex
-						coEvery { get(any(), any<String>()) } returns ""
-					}
-				}
-				single {
-					mockk<ObserveDevicesUseCase>(relaxed = false) {
-						every { this@mockk.invoke() } answers { flowOf(testDevices) }
-					}
-				}
-				single<GetDevicesUseCase> {
-					GetDevicesUseCaseMock { testDevices }
 				}
 			},
 		)
