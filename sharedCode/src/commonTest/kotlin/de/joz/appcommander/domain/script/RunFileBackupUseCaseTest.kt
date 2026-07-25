@@ -220,7 +220,7 @@ class RunFileBackupUseCaseTest {
 	fun `should log error when backup file cannot created`() =
 		runTest {
 			var callCounter = 0
-			val localScriptsRepository = ScriptsRepositoryMockHelper(
+			val localScriptsRepository = ScriptsRepositoryMock(
 				getScriptFileLambda = {
 					if (callCounter++ <= 1) {
 						testFile.absolutePath

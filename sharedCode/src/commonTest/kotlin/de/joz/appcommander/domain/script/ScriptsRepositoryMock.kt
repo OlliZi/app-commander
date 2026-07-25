@@ -1,6 +1,6 @@
 package de.joz.appcommander.domain.script
 
-class ScriptsRepositoryMockHelper(
+class ScriptsRepositoryMock(
 	private val getScriptsLambda: () -> ScriptsRepository.JsonParseResult = { TODO() },
 	private val openScriptFileLambda: () -> Unit = { TODO() },
 	private val updateScriptLambda: () -> ScriptsRepository.WriteScriptResult = { TODO() },
