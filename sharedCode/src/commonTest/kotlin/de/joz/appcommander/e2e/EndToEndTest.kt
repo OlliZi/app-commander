@@ -35,6 +35,7 @@ import de.joz.appcommander.resources.edit_action_abort
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_change
 import de.joz.appcommander.resources.edit_title
+import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_title
 import de.joz.appcommander.resources.settings_preference_show_logging_section
 import de.joz.appcommander.resources.settings_preference_show_terminal_section
@@ -52,6 +53,7 @@ import org.koin.ksp.generated.*
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class EndToEndTest :
@@ -90,6 +92,7 @@ class EndToEndTest :
 		GetConnectedDevicesUseCase.ConnectedDevice(id = "1", label = "emulator-5555"),
 		GetConnectedDevicesUseCase.ConnectedDevice(id = "2", label = "Google Pixel 10"),
 	)
+	private val scriptsRepositoryFake = ScriptsRepositoryFake(scripts = testScripts)
 
 	@get:Rule
 	val koinTestRule = KoinTestRule.create {
@@ -97,7 +100,7 @@ class EndToEndTest :
 		modules(
 			module {
 				single<PreferencesRepository> { PreferencesRepositoryMock() }
-				single<ScriptsRepository> { ScriptsRepositoryFake(scripts = testScripts) }
+				single<ScriptsRepository> { scriptsRepositoryFake }
 				single<GetConnectedDevicesUseCase> {
 					mockk {
 						coEvery { this@mockk.invoke() } returns testDevices
@@ -160,6 +163,9 @@ class EndToEndTest :
 				screenshotName = "e2e_3_scripts_expanded",
 			)
 			click("script_button_1")
+
+			click(Res.string.scripts_open_script_file)
+			assertEquals(1, scriptsRepositoryFake.getAndResetOpenScriptFileCounter())
 
 			// Filtering
 			click("expand_button_filter")
