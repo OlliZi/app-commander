@@ -29,6 +29,7 @@ class ScreenshotVerifier<T>(
 	fun verifyScreenshot(
 		source: ComposeUiTest,
 		screenshotName: String,
+		errorCollector: ((String) -> Unit)? = null,
 	) {
 		val screenshotResult = screenshotter.takeScreenshot(
 			source = source,
@@ -40,6 +41,9 @@ class ScreenshotVerifier<T>(
 			is ScreenshotResult.Success -> {
 				verifyAgainstGoldenImage(
 					screenshotFile = screenshotResult.screenshot,
+					errorCollector = { error ->
+						errorCollector?.let { errorCollector(error) } ?: fail(error)
+					},
 				)
 			}
 
@@ -49,14 +53,17 @@ class ScreenshotVerifier<T>(
 		}
 	}
 
-	private fun verifyAgainstGoldenImage(screenshotFile: File) {
+	private fun verifyAgainstGoldenImage(
+		screenshotFile: File,
+		errorCollector: ((String) -> Unit),
+	) {
 		val goldenImage = readGoldenImageFromSrcDir(
 			screenshotFileName = screenshotFile.name,
 		)
 
 		if (!goldenImage.exists()) {
 			Files.copy(screenshotFile.toPath(), goldenImage.toPath())
-			fail(
+			errorCollector(
 				"Golden image does not exist. Copied for your. Check your VCS.\n" + "Current: ${screenshotFile.absolutePath}\n" +
 					"Golden: ${goldenImage.absolutePath}",
 			)
@@ -72,8 +79,9 @@ class ScreenshotVerifier<T>(
 			}
 
 			is CreateScreenshotDifferenceUseCase.Result.SizeDoesNotMatch -> {
-				fail(
-					"Screenshot size does not match golden image size. Fix test or replace golden image with current screenshot.\n" +
+				errorCollector(
+					"Screenshot size does not match golden image size. " +
+						"Fix test or replace golden image with current screenshot.\n" +
 						"Current: ${screenshotFile.absolutePath}\n" +
 						"Golden: ${goldenImage.absolutePath}",
 				)
@@ -90,7 +98,8 @@ class ScreenshotVerifier<T>(
 					diffFile.writeBytes(imageConverter.convertToPng(result.diffBitmap)!!)
 					val currentScreenshot = File(goldenImage.parentFile, goldenImage.name)
 					Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
-					fail(
+
+					errorCollector(
 						"Screenshots differs. Take a look at the diff image.\n" + "Fraction: ${result.fraction}\n" +
 							"Diff: ${diffFile.absolutePath}\n" +
 							"Current: ${screenshotFile.absolutePath}\n" +
