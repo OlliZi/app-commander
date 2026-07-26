@@ -200,7 +200,7 @@ class ScriptsScreenTest :
 			)
 
 			onNodeWithTag(
-				testTag = "expand_button",
+				testTag = "expand_button_script_0",
 			).assertIsDisplayed().performClick()
 
 			screenshotVerifier.verifyScreenshot(
