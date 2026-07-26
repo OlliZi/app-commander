@@ -83,7 +83,7 @@ class EndToEndTest :
 		ScriptsRepository.Script(
 			label = "Light mode",
 			scripts = listOf("adb shell cmd uimode night no"),
-			platform = ScriptsRepository.Platform.ANDROID,
+			platform = ScriptsRepository.Platform.IOS,
 		),
 		ScriptsRepository.Script(
 			label = "Hello Test",
