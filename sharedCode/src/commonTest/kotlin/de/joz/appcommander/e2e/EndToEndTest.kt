@@ -36,6 +36,8 @@ import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_change
 import de.joz.appcommander.resources.edit_title
 import de.joz.appcommander.resources.scripts_title
+import de.joz.appcommander.resources.settings_preference_show_logging_section
+import de.joz.appcommander.resources.settings_preference_show_terminal_section
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.resources.welcome_action
@@ -118,7 +120,7 @@ class EndToEndTest :
 				single<TrackScriptsFileChangesUseCase> { mockk(relaxed = true) }
 				single<GetLoggingUseCase> {
 					mockk {
-						coEvery { this@mockk.invoke() } returns flowOf(emptyList())
+						coEvery { this@mockk.invoke() } returns flowOf(listOf("test log entry"))
 					}
 				}
 			},
@@ -167,6 +169,7 @@ class EndToEndTest :
 				source = this,
 				screenshotName = "e2e_4_scripts_filtered",
 			)
+			click("expand_button_filter")
 
 			// Terminal
 			click("expand_button_terminal")
@@ -179,7 +182,18 @@ class EndToEndTest :
 			)
 			click("expand_button_terminal")
 
-			// Logging?
+			// Logging
+			click("expand_button_logging")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "was",
+			)
+			assertIsDisplayed("1. test log entry")
+			screenshotVerifier.verifyScreenshot(
+				source = this,
+				screenshotName = "e2e_6_logging",
+			)
+			click("expand_button_logging")
 
 			// Step 3: Edit Script Screen
 			onNodeWithContentDescription("Edit button").performClick()
@@ -187,14 +201,14 @@ class EndToEndTest :
 
 			onNodeWithTag("text_field_simple_text").performTextInput(" (Modified)")
 			click("Desktop")
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_6_edit_script")
+			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_7_edit_script")
 
 			// Confirmation dialog on abort
 			click(Res.string.edit_action_abort)
 			assertIsDisplayed(Res.string.edit_confirmation_change)
 			screenshotVerifier.verifyScreenshot(
 				source = this,
-				screenshotName = "e2e_7_edit_abort_dialog",
+				screenshotName = "e2e_8_edit_abort_dialog",
 			)
 
 			click(Res.string.confirmation_no)
@@ -207,13 +221,16 @@ class EndToEndTest :
 			assertIsDisplayed(Res.string.settings_title)
 
 			assertIsDisplayed(Res.string.settings_preference_show_welcome_screen)
+			click(Res.string.settings_preference_show_logging_section)
+			click(Res.string.settings_preference_show_terminal_section)
+
 			onNodeWithTag(RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE).performScrollTo().assertIsDisplayed()
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_8_settings")
+			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_9_settings")
 
 			click("back_button")
 			assertIsDisplayed(Res.string.scripts_title)
 
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_9_end")
+			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_10_end")
 		}
 	}
 }
