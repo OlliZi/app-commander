@@ -184,10 +184,6 @@ class EndToEndTest :
 
 			// Logging
 			click("expand_button_logging")
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "was",
-			)
 			assertIsDisplayed("1. test log entry")
 			screenshotVerifier.verifyScreenshot(
 				source = this,
