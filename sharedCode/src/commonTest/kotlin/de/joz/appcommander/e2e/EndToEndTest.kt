@@ -1,5 +1,6 @@
 package de.joz.appcommander.e2e
 
+import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -52,8 +53,10 @@ import org.koin.dsl.module
 import org.koin.ksp.generated.*
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class EndToEndTest :
@@ -130,6 +133,16 @@ class EndToEndTest :
 		)
 	}
 
+	private val screenshotErrors = mutableListOf<String>()
+	private val screenshotErrorCollector: (String) -> Unit = { errorMessage ->
+		screenshotErrors.add(errorMessage)
+	}
+
+	@AfterTest
+	fun resolveScreenshotError() {
+		assertTrue(screenshotErrors.isEmpty(), screenshotErrors.joinToString(","))
+	}
+
 	@Test
 	fun `should navigate through entire app and perform deep interactions`() {
 		runComposeUiTest {
@@ -140,7 +153,7 @@ class EndToEndTest :
 			// Step 1: Welcome Screen
 			assertIsDisplayed(Res.string.welcome_title)
 			assertIsDisplayed(Res.string.welcome_catch_phrase)
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_1_welcome")
+			verifyScreenshot(screenshotName = "e2e_1_welcome")
 
 			click(Res.string.welcome_action)
 
@@ -148,20 +161,14 @@ class EndToEndTest :
 			assertIsDisplayed("Your scripts")
 			assertIsDisplayed("emulator-5555")
 			assertIsDisplayed("Google Pixel 10")
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "e2e_2_scripts_main",
-			)
+			verifyScreenshot(screenshotName = "e2e_2_scripts_main")
 
 			// Select a device
 			click("emulator-5555")
 
 			// Expand and Execute a script
 			click("expand_button_script_1")
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "e2e_3_scripts_expanded",
-			)
+			verifyScreenshot(screenshotName = "e2e_3_scripts_expanded")
 			click("script_button_1")
 
 			click(Res.string.scripts_open_script_file)
@@ -171,10 +178,7 @@ class EndToEndTest :
 			click("expand_button_filter")
 			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
 			onNodeWithTag("text_field_simple_text").performTextInput("Toggle dark")
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "e2e_4_scripts_filtered",
-			)
+			verifyScreenshot(screenshotName = "e2e_4_scripts_filtered")
 			click("expand_button_filter")
 
 			// Terminal
@@ -182,19 +186,13 @@ class EndToEndTest :
 			waitUntilAtLeastOneExists(hasTestTag("text_field_script_input"))
 			onNodeWithTag("text_field_script_input").performTextInput("ls")
 			onNodeWithContentDescription("Execute script text").assertIsEnabled()
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "e2e_5_scripts_terminal",
-			)
+			verifyScreenshot(screenshotName = "e2e_5_scripts_terminal")
 			click("expand_button_terminal")
 
 			// Logging
 			click("expand_button_logging")
 			assertIsDisplayed("1. test log entry")
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "e2e_6_logging",
-			)
+			verifyScreenshot(screenshotName = "e2e_6_logging")
 			click("expand_button_logging")
 
 			// Step 3: Edit Script Screen
@@ -203,15 +201,12 @@ class EndToEndTest :
 
 			onNodeWithTag("text_field_simple_text").performTextInput(" (Modified)")
 			click("Desktop")
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_7_edit_script")
+			verifyScreenshot(screenshotName = "e2e_7_edit_script")
 
 			// Confirmation dialog on abort
 			click(Res.string.edit_action_abort)
 			assertIsDisplayed(Res.string.edit_confirmation_change)
-			screenshotVerifier.verifyScreenshot(
-				source = this,
-				screenshotName = "e2e_8_edit_abort_dialog",
-			)
+			verifyScreenshot(screenshotName = "e2e_8_edit_abort_dialog")
 
 			click(Res.string.confirmation_no)
 
@@ -227,12 +222,20 @@ class EndToEndTest :
 			click(Res.string.settings_preference_show_terminal_section)
 
 			onNodeWithTag(RunFileBackupUseCase.STORE_KEY_FOR_BACKUP_STORAGE).performScrollTo().assertIsDisplayed()
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_9_settings")
+			verifyScreenshot(screenshotName = "e2e_9_settings")
 
 			click("back_button")
 			assertIsDisplayed(Res.string.scripts_title)
 
-			screenshotVerifier.verifyScreenshot(source = this, screenshotName = "e2e_10_end")
+			verifyScreenshot(screenshotName = "e2e_10_end")
 		}
+	}
+
+	private fun ComposeUiTest.verifyScreenshot(screenshotName: String) {
+		screenshotVerifier.verifyScreenshot(
+			screenshotName = screenshotName,
+			source = this,
+			errorCollector = screenshotErrorCollector,
+		)
 	}
 }
