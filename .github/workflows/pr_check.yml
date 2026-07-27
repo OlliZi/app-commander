@@ -52,7 +52,7 @@ jobs:
         with:
           commit_message: "ci: apply lint formatting and update screenshots"
           # Optional: specific files to add
-          file_pattern: 'src/*.kt *.png'
+          file_pattern: '*.png'
       
       - name: Commit and push screenshots and lint formatting changes ALT.
         if: failure()
