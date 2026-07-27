@@ -43,14 +43,12 @@ jobs:
         if: failure()
         run: |
           ./gradlew ktlintFormat --no-build-cache
-          
-      - name: Create pull request with screenshots and lint formatting.
-        uses: peter-evans/create-pull-request@v8
+
+      - name: Commit and push screenshots and lint formatting changes.
         if: failure()
-        with:
-          base: ${{ github.base_ref || 'main' }}
-          branch: lint-fixes
-          commit-message: 'ci: apply lint formatting and update screenshots'
-          title: 'ci: lint formatting and screenshot updates'
-          body: 'This PR was automatically created with lint formatting and screenshot updates from CI.'
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "ci: apply lint formatting and update screenshots" || echo "No changes to commit"
+          git push
