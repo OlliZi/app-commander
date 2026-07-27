@@ -53,3 +53,4 @@ jobs:
           commit-message: 'ci: apply lint formatting and update screenshots'
           title: 'ci: lint formatting and screenshot updates'
           body: 'This PR was automatically created with lint formatting and screenshot updates from CI.'
+          token: ${{ secrets.GITHUB_TOKEN }}
