@@ -51,4 +51,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "ci: apply lint formatting and update screenshots" || echo "No changes to commit"
-          git push
+          git push origin HEAD:${{ github.head_ref }}
