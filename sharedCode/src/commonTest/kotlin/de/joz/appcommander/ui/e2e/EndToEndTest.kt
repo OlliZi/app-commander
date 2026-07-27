@@ -1,4 +1,4 @@
-package de.joz.appcommander.e2e
+package de.joz.appcommander.ui.e2e
 
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi

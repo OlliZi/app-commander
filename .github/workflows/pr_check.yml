@@ -10,12 +10,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  
   pr_check_build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-
       - name: Run code analysis-tools and execute unit-tests.
         run: |
           ./gradlew detekt detektJvmMain --no-build-cache
@@ -39,16 +39,8 @@ jobs:
         with:
           report_paths: '**/build/test-results/jvmTest/TEST-*.xml'
           
-      - name: Run lint formatting if previous steps are failing.
+      - name: Commit and push screenshots changes.
+        uses: stefanzweifel/git-auto-commit-action@v5
         if: failure()
-        run: |
-          ./gradlew ktlintFormat --no-build-cache
-
-      - name: Commit and push screenshots and lint formatting changes.
-        if: failure()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "ci: apply lint formatting and update screenshots" || echo "No changes to commit"
-          git push
+        with:
+          commit_message: "CI: Update screenshots"
