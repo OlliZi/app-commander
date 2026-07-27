@@ -47,3 +47,9 @@ jobs:
       - name: Create pull request with screenshots and lint formatting.
         uses: peter-evans/create-pull-request@v8
         if: failure()
+        with:
+          base: ${{ github.base_ref || 'main' }}
+          branch: lint-fixes
+          commit-message: 'ci: apply lint formatting and update screenshots'
+          title: 'ci: lint formatting and screenshot updates'
+          body: 'This PR was automatically created with lint formatting and screenshot updates from CI.'
