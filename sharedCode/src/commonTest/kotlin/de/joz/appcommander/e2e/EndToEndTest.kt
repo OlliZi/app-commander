@@ -70,7 +70,7 @@ class EndToEndTest :
 		ScriptsRepository.Script(
 			label = "Dark mode test",
 			scripts = listOf("adb shell cmd uimode night yes TEST"),
-			platform = ScriptsRepository.Platform.ANDROID,
+			platform = ScriptsRepository.Platform.DESKTOP,
 		),
 		ScriptsRepository.Script(
 			label = "Toggle dark to light mode",
@@ -78,7 +78,7 @@ class EndToEndTest :
 				"adb shell cmd uimode night yes",
 				"adb shell cmd uimode night no",
 			),
-			platform = ScriptsRepository.Platform.ANDROID,
+			platform = ScriptsRepository.Platform.DESKTOP,
 		),
 		ScriptsRepository.Script(
 			label = "Light mode",
