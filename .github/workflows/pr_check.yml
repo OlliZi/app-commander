@@ -53,4 +53,4 @@ jobs:
           git commit -m "ci: apply lint formatting and update screenshots" || echo "No changes to commit"
           git push origin HEAD:${{ github.head_ref }}
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.JOZ_PR_AUTO_COMMIT_GITHUB_TOKEN }}
