@@ -47,6 +47,13 @@ jobs:
           ./gradlew ktlintFormat --no-build-cache
 
       - name: Commit and push screenshots and lint formatting changes.
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "ci: apply lint formatting and update screenshots"
+          # Optional: specific files to add
+          file_pattern: 'src/*.kt *.png'
+      
+      - name: Commit and push screenshots and lint formatting changes ALT.
         if: failure()
         run: |
           git config user.name "github-actions[bot]"
