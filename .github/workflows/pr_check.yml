@@ -39,7 +39,7 @@ jobs:
         with:
           report_paths: '**/build/test-results/jvmTest/TEST-*.xml'
           
-      - name: Commit and push screenshots and lint formatting changes.
+      - name: Commit and push screenshots changes.
         uses: stefanzweifel/git-auto-commit-action@v5
         if: failure()
         with:
