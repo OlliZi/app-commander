@@ -48,6 +48,7 @@ jobs:
 
       - name: Commit and push screenshots and lint formatting changes.
         uses: stefanzweifel/git-auto-commit-action@v5
+        if: failure()
         with:
           commit_message: "ci: apply lint formatting and update screenshots"
           # Optional: specific files to add
