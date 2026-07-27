@@ -51,8 +51,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b temp-branch
           git pull
+          git checkout -b temp-branch
           git add .
           git commit -m "ci: apply lint formatting and update screenshots" || echo "No changes to commit"
           git push origin temp-branch:${{ github.head_ref }}
