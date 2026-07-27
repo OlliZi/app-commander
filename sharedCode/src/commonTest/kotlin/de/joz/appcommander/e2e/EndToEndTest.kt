@@ -68,9 +68,9 @@ class EndToEndTest :
 
 	private val testScripts = listOf(
 		ScriptsRepository.Script(
-			label = "Dark mode test",
-			scripts = listOf("adb shell cmd uimode night yes TEST"),
-			platform = ScriptsRepository.Platform.IOS,
+			label = "Dark mode",
+			scripts = listOf("adb shell cmd uimode night yes"),
+			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
 			label = "Toggle dark to light mode",
@@ -78,7 +78,7 @@ class EndToEndTest :
 				"adb shell cmd uimode night yes",
 				"adb shell cmd uimode night no",
 			),
-			platform = ScriptsRepository.Platform.IOS,
+			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
 			label = "Light mode",
