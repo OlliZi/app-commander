@@ -19,6 +19,10 @@ import kotlinx.serialization.json.Json
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
+// https://github.com/jesusdmedinac/json-to-compose
+// https://github.com/snappdevelopment/JsonTree
+// https://github.com/memochou1993/json-editor/blob/master/docker-compose.yaml
+// https://github.com/json-editor/json-editor
 @KoinViewModel
 class JsonEditorViewModel(
 	@InjectedParam private val navController: NavController,
