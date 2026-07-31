@@ -34,3 +34,4 @@ plugins {
 
 include(":sharedCode")
 include(":desktopApp")
+include(":androidApp")
