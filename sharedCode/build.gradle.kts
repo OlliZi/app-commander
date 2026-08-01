@@ -4,6 +4,7 @@ private val isRelease = rootProject.ext["isRelease"].toString() == "true"
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
+	alias(libs.plugins.androidMultiplatformLibrary)
 	alias(libs.plugins.composeMultiplatform)
 	alias(libs.plugins.composeCompiler)
 	alias(libs.plugins.kotlinSerialization)
@@ -14,6 +15,11 @@ plugins {
 }
 
 kotlin {
+	androidLibrary {
+		namespace = "de.joz.appcommander.shared"
+		compileSdk = libs.versions.android.compileSdk.get().toInt()
+		minSdk = libs.versions.android.minSdk.get().toInt()
+	}
 	jvm()
 
 	sourceSets {
@@ -48,6 +54,7 @@ kotlin {
 
 dependencies {
 	add("kspJvm", libs.koin.ksp)
+	add("kspAndroid", libs.koin.ksp)
 }
 
 ksp {

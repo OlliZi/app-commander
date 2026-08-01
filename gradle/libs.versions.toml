@@ -1,8 +1,9 @@
 [versions]
 composeMultiplatform = "1.11.1"
-agp = "9.0.1"
-android-compileSdk = "36"
+agp = "9.3.1"
+android-compileSdk = "37"
 android-minSdk = "26"
+#noinspection OldTargetApi
 android-targetSdk = "36"
 
 androidx-lifecycle = "2.11.0"

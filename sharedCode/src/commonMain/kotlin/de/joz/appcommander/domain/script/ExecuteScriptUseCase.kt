@@ -70,7 +70,8 @@ class ExecuteScriptUseCase(
 			.command(commands)
 			.directory(workingDir)
 			.start()
-			.inputReader()
+			.inputStream
+			.bufferedReader()
 			.readText()
 
 	private fun injectDeviceId(
