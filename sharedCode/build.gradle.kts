@@ -14,12 +14,24 @@ plugins {
 	alias(libs.plugins.buildConfig)
 }
 
+compose.resources {
+	publicResClass = true
+	packageOfResClass = "$mainPackage.resources"
+	generateResClass = always
+}
+
 kotlin {
 	androidLibrary {
 		namespace = "de.joz.appcommander.shared"
-		compileSdk = libs.versions.android.compileSdk.get().toInt()
-		minSdk = libs.versions.android.minSdk.get().toInt()
+		compileSdk = libs.versions.android.compileSdk
+			.get()
+			.toInt()
+		minSdk = libs.versions.android.minSdk
+			.get()
+			.toInt()
+		androidResources { enable = true }
 	}
+
 	jvm()
 
 	sourceSets {
@@ -104,12 +116,6 @@ kover {
 			}
 		}
 	}
-}
-
-compose.resources {
-	publicResClass = true
-	packageOfResClass = "$mainPackage.resources"
-	generateResClass = always
 }
 
 tasks.register("runCodeCoverage") {
