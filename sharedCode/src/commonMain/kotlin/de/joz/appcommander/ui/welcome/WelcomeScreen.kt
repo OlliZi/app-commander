@@ -127,9 +127,9 @@ internal fun WelcomeContent(
 				textLabelType = TextLabelType.BodyLarge,
 				textAlign = TextAlign.Center,
 			)
-			Spacer(Modifier.height(12.dp))
+			Spacer(Modifier.height(24.dp))
 			Image(
-				modifier = Modifier.fillMaxWidth(fraction = 0.75f),
+				modifier = Modifier.fillMaxWidth(fraction = 0.8f),
 				painter = painterResource(Res.drawable.app_logo),
 				contentDescription = null,
 			)

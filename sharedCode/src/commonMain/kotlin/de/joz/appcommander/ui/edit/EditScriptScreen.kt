@@ -136,7 +136,8 @@ internal fun EditScriptContent(
 			Modifier
 				.fillMaxSize()
 				.padding(paddingValues)
-				.padding(16.dp)
+				.padding(horizontal = 16.dp)
+				.padding(bottom = 16.dp)
 				.verticalScroll(rememberScrollState()),
 			verticalArrangement = Arrangement.spacedBy(8.dp),
 		) {
