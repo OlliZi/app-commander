@@ -93,7 +93,7 @@ internal fun SettingsContent(
 				.padding(paddingValues)
 				.padding(16.dp)
 				.verticalScroll(rememberScrollState()),
-			verticalArrangement = Arrangement.Top,
+			verticalArrangement = Arrangement.spacedBy(16.dp),
 		) {
 			uiState.togglePreferences.forEach { toggleItem ->
 				LabelledSwitch(
