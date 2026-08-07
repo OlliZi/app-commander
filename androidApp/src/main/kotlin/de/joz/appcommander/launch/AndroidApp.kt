@@ -15,8 +15,6 @@ class AndroidApp : ComponentActivity() {
 		enableEdgeToEdge()
 		super.onCreate(savedInstanceState)
 
-		// initDataStoreContext(application) // TODO make better
-
 		setContent {
 			KoinApplication(
 				configuration = koinConfiguration(declaration = {
