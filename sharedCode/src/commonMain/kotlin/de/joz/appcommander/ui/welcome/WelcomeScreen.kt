@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -78,7 +78,18 @@ internal fun WelcomeContent(
 	Scaffold(
 		containerColor = MaterialTheme.colorScheme.surface,
 		modifier = modifier,
-	) {
+		bottomBar = {
+			Button(
+				modifier = Modifier.padding(all = 16.dp).navigationBarsPadding().fillMaxWidth(),
+				onClick = onNavigateToScripts,
+			) {
+				Text(
+					text = stringResource(Res.string.welcome_action),
+					style = MaterialTheme.typography.headlineSmall,
+				)
+			}
+		},
+	) { paddingValues ->
 		val yOffset = rememberInfiniteTransition(label = "bubble")
 			.animateFloat(
 				initialValue = -0.25f,
@@ -95,6 +106,7 @@ internal fun WelcomeContent(
 
 		Column(
 			Modifier
+				.padding(paddingValues)
 				.fillMaxSize()
 				.drawBehind {
 					renderBubbles(yOffset, isInTextExecution, bubblesStrategy)
@@ -117,24 +129,14 @@ internal fun WelcomeContent(
 			)
 			Spacer(Modifier.height(12.dp))
 			Image(
-				modifier = Modifier.size(500.dp),
+				modifier = Modifier.fillMaxWidth(fraction = 0.75f),
 				painter = painterResource(Res.drawable.app_logo),
 				contentDescription = null,
 			)
-			Spacer(Modifier.height(16.dp))
-			Button(
-				onClick = onNavigateToScripts,
-			) {
-				Text(
-					text = stringResource(Res.string.welcome_action),
-					style = MaterialTheme.typography.headlineSmall,
-				)
-			}
-			Spacer(Modifier.weight(1f))
 
 			var isChecked by remember { mutableStateOf(false) }
 			LabelledSwitch(
-				modifier = Modifier.padding(all = 16.dp).navigationBarsPadding(),
+				modifier = Modifier.padding(all = 16.dp),
 				label = stringResource(Res.string.welcome_do_not_show_again),
 				checked = isChecked,
 				onCheckedChange = {
