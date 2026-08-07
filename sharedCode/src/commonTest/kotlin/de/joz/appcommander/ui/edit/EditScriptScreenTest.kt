@@ -320,7 +320,7 @@ class EditScriptScreenTest :
 			}
 			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performClick()
 
-			onNodeWithText(text = "Save script").performClick()
+			onNodeWithText(text = "Save").performClick()
 
 			verify {
 				scriptsRepositoryMock.updateScript(
