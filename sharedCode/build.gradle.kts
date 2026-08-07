@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 private val mainPackage = rootProject.ext["mainPackage"].toString()
 private val mainVersion = rootProject.ext["mainVersion"].toString()
 private val isRelease = rootProject.ext["isRelease"].toString() == "true"
@@ -21,7 +23,9 @@ compose.resources {
 }
 
 kotlin {
-	androidLibrary {
+	jvm()
+
+	android {
 		namespace = "de.joz.appcommander.shared"
 		compileSdk = libs.versions.android.compileSdk
 			.get()
@@ -29,12 +33,28 @@ kotlin {
 		minSdk = libs.versions.android.minSdk
 			.get()
 			.toInt()
-		androidResources { enable = true }
+
+		compilerOptions {
+			jvmTarget = JvmTarget.JVM_11
+		}
+		androidResources {
+			enable = true
+		}
+		withHostTest {
+			isIncludeAndroidResources = true
+		}
+		withDeviceTestBuilder {
+			sourceSetTreeName = "test"
+		}.configure {
+			instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+		}
 	}
 
-	jvm()
-
 	sourceSets {
+		androidMain.dependencies {
+			implementation(libs.compose.uiToolingPreview)
+			implementation(libs.compose.uiTooling)
+		}
 		commonMain.dependencies {
 			implementation(libs.compose.runtime)
 			implementation(libs.compose.foundation)
@@ -67,6 +87,7 @@ kotlin {
 dependencies {
 	add("kspJvm", libs.koin.ksp)
 	add("kspAndroid", libs.koin.ksp)
+	androidRuntimeClasspath(libs.compose.uiTooling)
 }
 
 ksp {

@@ -16,8 +16,8 @@ kotlin {
 dependencies {
 	implementation(projects.sharedCode)
 	implementation(libs.androidx.activity.compose)
-	// implementation(libs.compose.uiToolingPreview)
-	// debugImplementation(libs.compose.uiTooling)
+	implementation(libs.compose.uiToolingPreview)
+	debugImplementation(libs.compose.uiTooling)
 }
 
 android {
@@ -38,8 +38,7 @@ android {
 			.toString()
 			.replace(".", "")
 			.toInt()
-		versionName = rootProject.ext["mainVersion"]
-			.toString()
+		versionName = rootProject.ext["mainVersion"].toString()
 	}
 	packaging {
 		resources {
@@ -54,5 +53,8 @@ android {
 	compileOptions {
 		sourceCompatibility = JavaVersion.VERSION_11
 		targetCompatibility = JavaVersion.VERSION_11
+	}
+	buildFeatures {
+		compose = true
 	}
 }
