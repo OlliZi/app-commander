@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import de.joz.appcommander.data.ScriptFile
 import de.joz.appcommander.data.getPreferenceFileStorePath
-import de.joz.appcommander.domain.platform.getOsPlatform
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json

@@ -1,4 +1,4 @@
-package de.joz.appcommander.domain.platform
+package de.joz.appcommander
 
 expect fun getOsPlatform(): OsPlatform
 
