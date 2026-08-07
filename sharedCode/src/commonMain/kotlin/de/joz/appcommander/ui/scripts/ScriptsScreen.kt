@@ -41,6 +41,7 @@ import compose.icons.feathericons.Edit
 import compose.icons.feathericons.Settings
 import compose.icons.feathericons.Trash
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.isDesktop
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.scripts_add_new_script
 import de.joz.appcommander.resources.scripts_filter_section_title
@@ -105,20 +106,26 @@ internal fun ScriptsContent(
 		},
 		bottomBar = {
 			BottomBar(
-				actions = listOf(
-					BottomBarAction(
-						label = Res.string.scripts_open_script_file,
-						action = {
-							onEvent(ScriptsViewModel.Event.OnOpenScriptFile)
-						},
-					),
-					BottomBarAction(
-						label = Res.string.scripts_add_new_script,
-						action = {
-							onEvent(ScriptsViewModel.Event.OnNewScript)
-						},
-					),
-				),
+				actions = buildList {
+					if (isDesktop()) {
+						add(
+							BottomBarAction(
+								label = Res.string.scripts_open_script_file,
+								action = {
+									onEvent(ScriptsViewModel.Event.OnOpenScriptFile)
+								},
+							),
+						)
+					}
+					add(
+						BottomBarAction(
+							label = Res.string.scripts_add_new_script,
+							action = {
+								onEvent(ScriptsViewModel.Event.OnNewScript)
+							},
+						),
+					)
+				},
 			)
 		},
 	) { paddingValues ->
