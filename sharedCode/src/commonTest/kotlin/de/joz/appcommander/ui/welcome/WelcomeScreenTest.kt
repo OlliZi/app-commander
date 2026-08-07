@@ -47,7 +47,7 @@ class WelcomeScreenTest {
 			onNodeWithText(
 				"Your programmable multi-device execution helper. Execute your scripts for your apps on multiple devices.",
 			).assertIsDisplayed()
-			onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
+			onNodeWithText("Start").assertIsDisplayed().assertHasClickAction()
 			onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
 		}
 	}
@@ -118,7 +118,7 @@ class WelcomeScreenTest {
 				navController = navController,
 			)
 
-			onNodeWithText("Let's go!").performClick()
+			onNodeWithText("Start").performClick()
 
 			verify { navController.navigate(NavigationScreens.ScriptsScreen) }
 		}

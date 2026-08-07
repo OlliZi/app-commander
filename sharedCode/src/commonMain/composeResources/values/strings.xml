@@ -41,8 +41,8 @@
     <string name="edit_script_placeholder">adb shell input tap </string>
     <string name="edit_select_platform">Select affected platform</string>
     <string name="edit_select_devices">Select device for testing your script</string>
-    <string name="edit_action_save">Save script</string>
-    <string name="edit_action_remove">Remove script</string>
+    <string name="edit_action_save">Save</string>
+    <string name="edit_action_remove">Remove</string>
     <string name="edit_action_abort">Close</string>
     <string name="edit_confirmation_remove">Are your sure you want to remove this script?</string>
     <string name="edit_confirmation_change">You have changes in your script. Are you sure you want to leave?</string>

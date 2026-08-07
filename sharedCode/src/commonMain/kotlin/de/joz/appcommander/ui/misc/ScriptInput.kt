@@ -84,7 +84,7 @@ private fun RemoveIcon(onRemoveScript: (() -> Unit)?) {
 		Icon(
 			imageVector = FeatherIcons.Trash,
 			tint = MaterialTheme.colorScheme.primary,
-			contentDescription = "Remove script",
+			contentDescription = "Remove",
 		)
 	}
 }

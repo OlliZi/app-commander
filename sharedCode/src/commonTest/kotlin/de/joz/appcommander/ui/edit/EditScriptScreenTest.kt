@@ -195,7 +195,7 @@ class EditScriptScreenTest :
 				scriptsRepositoryMock.updateScript(any(), any())
 			} returns ScriptsRepository.WriteScriptResult.Success(Unit)
 
-			onNodeWithText(text = "Save script").performClick()
+			onNodeWithText(text = "Save").performClick()
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
@@ -224,7 +224,7 @@ class EditScriptScreenTest :
 				scriptsRepositoryMock.updateScript(any(), any())
 			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
 
-			onNodeWithText(text = "Save script").performClick()
+			onNodeWithText(text = "Save").performClick()
 			waitUntilAtLeastOneExists(hasText(text = testScript.label))
 
 			screenshotVerifier.verifyScreenshot(
@@ -254,7 +254,7 @@ class EditScriptScreenTest :
 				scriptsRepositoryMock.updateScript(any(), any())
 			} returns ScriptsRepository.WriteScriptResult.SaveError("cannot save script")
 
-			onNodeWithText(text = "Save script").performClick()
+			onNodeWithText(text = "Save").performClick()
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
@@ -459,7 +459,7 @@ class EditScriptScreenTest :
 			onNodeWithText("script 1").isDisplayed()
 			onNodeWithText("script 2").isDisplayed()
 
-			onAllNodes(hasContentDescription("Remove script"))[0].apply {
+			onAllNodes(hasContentDescription("Remove"))[0].apply {
 				performClick()
 			}
 
@@ -571,7 +571,7 @@ class EditScriptScreenTest :
 			setupData()
 			setTestContent()
 
-			onNodeWithText(text = "Remove script").performClick()
+			onNodeWithText(text = "Remove").performClick()
 			onNodeWithText(text = "Yes").performClick()
 
 			verify { removeUserScriptUseCaseMock.invoke(any()) }
@@ -584,7 +584,7 @@ class EditScriptScreenTest :
 			setupData()
 			setTestContent()
 
-			onNodeWithText(text = "Remove script").performClick()
+			onNodeWithText(text = "Remove").performClick()
 			onNodeWithText(text = "No").performClick()
 
 			verify(exactly = 0) { removeUserScriptUseCaseMock.invoke(any()) }
