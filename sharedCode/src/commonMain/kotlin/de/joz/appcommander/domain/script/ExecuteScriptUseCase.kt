@@ -16,7 +16,7 @@ class ExecuteScriptUseCase(
 	suspend operator fun invoke(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
-		logError: Boolean = true,
+		log: Boolean = true,
 	): Result {
 		val scripts = script.scripts.map { it.trim() }
 
@@ -36,7 +36,7 @@ class ExecuteScriptUseCase(
 
 				(1..loopCount).forEach { _ ->
 					delay((if (loopCount > 1) 200 else 0).milliseconds)
-					if (logError) {
+					if (log) {
 						addLoggingUseCase(
 							"Execute script: '${plainCommand.joinToString(" ")}'" +
 								(if (selectedDevice.isNotEmpty()) " on device '$selectedDevice'." else "."),

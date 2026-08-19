@@ -355,7 +355,7 @@ class ScriptsRepositoryImplTest {
 			val repository = createRepository()
 
 			val scripts = repository.getScripts()
-			val oldScript = scripts.scripts.first()
+			val oldScript = scripts.scripts.last()
 			val scriptToUpdate = oldScript.copy(label = "bar")
 
 			val result = repository.updateScript(script = scriptToUpdate, oldScript = oldScript)
@@ -364,6 +364,7 @@ class ScriptsRepositoryImplTest {
 
 			val updatedScripts = repository.getScripts()
 			assertEquals(3, updatedScripts.scripts.size)
+			assertEquals(scriptToUpdate, updatedScripts.scripts.last())
 			assertFalse(updatedScripts.scripts.contains(oldScript))
 			assertTrue(updatedScripts.scripts.contains(scriptToUpdate))
 		}
