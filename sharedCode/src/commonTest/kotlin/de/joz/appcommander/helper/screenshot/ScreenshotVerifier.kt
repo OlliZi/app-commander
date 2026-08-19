@@ -79,6 +79,11 @@ class ScreenshotVerifier<T>(
 			}
 
 			is CreateScreenshotDifferenceUseCase.Result.SizeDoesNotMatch -> {
+				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
+					println("Can run screenshot-tests only on github.")
+					return
+				}
+
 				errorCollector(
 					"Screenshot size does not match golden image size. " +
 						"Fix test or replace golden image with current screenshot.\n" +
