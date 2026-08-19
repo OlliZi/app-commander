@@ -2,6 +2,7 @@ package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.helper.IsLocalTestRunUseCase
+import io.mockk.called
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -89,6 +90,36 @@ class ExecuteScriptUseCaseTest {
 			executeScriptUseCase(script = script, selectedDevice = "")
 
 			verify { addLoggingUseCaseMock.invoke("Execute script: 'echo foo'.") }
+		}
+
+	@Test
+	fun `should not log when not required`() =
+		runTest {
+			val executeScriptUseCase = createUseCase()
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("echo foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+
+			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", logError = false)
+
+			verify { addLoggingUseCaseMock wasNot called }
+		}
+
+	@Test
+	fun `should log when not required but an error occurred`() =
+		runTest {
+			val executeScriptUseCase = createUseCase()
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("foo_bar_unknown_command"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+
+			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", logError = false)
+
+			verify { addLoggingUseCaseMock.invoke(any()) }
 		}
 
 	@Test
