@@ -2,23 +2,26 @@ package de.joz.appcommander.helper
 
 import de.joz.appcommander.domain.script.ScriptsRepository
 import java.io.File
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
+@OptIn(ExperimentalAtomicApi::class)
 class ScriptsRepositoryFake(
 	scripts: List<ScriptsRepository.Script>,
 ) : ScriptsRepository {
 	private var currentScripts = scripts.toMutableList()
 
-	var openScriptFileCounter = 0
+	var openScriptFileCounter = AtomicInt(0)
 		private set
 
 	fun getAndResetOpenScriptFileCounter(): Int {
-		val counter = openScriptFileCounter
-		openScriptFileCounter = 0
+		val counter = openScriptFileCounter.load()
+		openScriptFileCounter.exchange(0)
 		return counter
 	}
 
 	override fun openScriptFile() {
-		openScriptFileCounter++
+		openScriptFileCounter.addAndFetch(1)
 	}
 
 	override fun getScripts(): ScriptsRepository.JsonParseResult =
