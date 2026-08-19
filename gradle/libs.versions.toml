@@ -15,7 +15,7 @@ compose-icons = "1.1.1"
 ktlintGradle = "14.2.0"
 
 koin-compiler = "2.3.1"
-koin-annotations = "4.2.2"
+koin-annotations = "2.3.1"
 json = "1.11.0"
 kover = "0.9.9"
 buildconfig = "6.0.10"
