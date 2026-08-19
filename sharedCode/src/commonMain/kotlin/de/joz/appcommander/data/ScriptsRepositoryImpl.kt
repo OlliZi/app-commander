@@ -58,7 +58,14 @@ class ScriptsRepositoryImpl(
 		oldScript: ScriptsRepository.Script,
 	): ScriptsRepository.WriteScriptResult =
 		runCatching {
-			ScriptsRepository.WriteScriptResult.Success(writeScriptsToFile(listOf(script) + getScripts().scripts - oldScript))
+			val scripts = getScripts().scripts.map {
+				if (it == oldScript) {
+					script
+				} else {
+					it
+				}
+			}
+			ScriptsRepository.WriteScriptResult.Success(writeScriptsToFile(scripts))
 		}.getOrElse { error -> ScriptsRepository.WriteScriptResult.UpdateError(message = error.message ?: "Unknown error") }
 
 	override fun saveScript(script: ScriptsRepository.Script): ScriptsRepository.WriteScriptResult =
