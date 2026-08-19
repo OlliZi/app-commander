@@ -33,7 +33,7 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/desktop.svg" width="32"/></kbd> Desktop**: Run any installed software on your laptop or desktop computer.
 
 ## 🎥 First Impressions I
-<kbd>[![App Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=zCbUy9uB4mI)</kbd>
+<kbd>[![App Demo](https://img.youtube.com/vi/zCbUy9uB4mI/0.jpg)](https://www.youtube.com/watch?v=zCbUy9uB4mI)</kbd>
 
 ## 📸 First Impressions II
 
