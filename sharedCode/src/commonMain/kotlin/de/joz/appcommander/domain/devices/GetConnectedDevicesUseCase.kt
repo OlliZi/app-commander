@@ -14,7 +14,7 @@ class GetConnectedDevicesUseCase(
 		when (
 			val result = executeScriptUseCase(
 				script = ANDROID_GET_DEVICES_SCRIPT,
-				logError = false,
+				log = false,
 			)
 		) {
 			is ExecuteScriptUseCase.Result.Error -> {
@@ -36,7 +36,7 @@ class GetConnectedDevicesUseCase(
 		return when (
 			val result = executeScriptUseCase(
 				script = IOS_GET_DEVICES_SCRIPT,
-				logError = false,
+				log = false,
 			)
 		) {
 			is ExecuteScriptUseCase.Result.Error -> {

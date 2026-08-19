@@ -102,7 +102,7 @@ class ExecuteScriptUseCaseTest {
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
-			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", logError = false)
+			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", log = false)
 
 			verify { addLoggingUseCaseMock wasNot called }
 		}
@@ -117,7 +117,7 @@ class ExecuteScriptUseCaseTest {
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
-			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", logError = false)
+			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", log = false)
 
 			verify { addLoggingUseCaseMock.invoke(any()) }
 		}

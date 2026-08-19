@@ -45,7 +45,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
 					selectedDevice = "",
-					logError = false,
+					log = false,
 				)
 			}
 		}
@@ -70,7 +70,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
 					selectedDevice = "",
-					logError = false,
+					log = false,
 				)
 			}
 		}
@@ -95,7 +95,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
 					selectedDevice = "",
-					logError = false,
+					log = false,
 				)
 			}
 		}
