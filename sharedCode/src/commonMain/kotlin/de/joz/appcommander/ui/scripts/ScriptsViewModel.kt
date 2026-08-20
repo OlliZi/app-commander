@@ -172,7 +172,7 @@ class ScriptsViewModel(
 					executeScriptUseCase(script = script.originalScript)
 				}
 			} else {
-				devices.forEach { device ->
+				devices.filter { it.isSelected }.forEach { device ->
 					viewModelScope.launch(ioDispatcher) {
 						executeScriptUseCase(script = script.originalScript, selectedDevice = device.id)
 					}
