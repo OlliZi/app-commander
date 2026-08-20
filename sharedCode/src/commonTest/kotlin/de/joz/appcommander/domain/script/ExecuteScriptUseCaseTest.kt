@@ -3,6 +3,7 @@ package de.joz.appcommander.domain.script
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.helper.IsLocalTestRunUseCase
 import io.mockk.called
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -165,10 +166,54 @@ class ExecuteScriptUseCaseTest {
 			}
 		}
 
-	private fun createUseCase() =
+	@Test
+	fun `should run for Desktop when no device is selected`() =
+		runTest {
+			val executeScriptUseCase = createUseCase()
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("foo_bar_unknown_command adb install app"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "")
+
+			assertTrue(result is ExecuteScriptUseCase.Result.Error)
+			assertTrue(result.message.startsWith("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"):"))
+			verify { addLoggingUseCaseMock.invoke(any()) }
+		}
+
+	@Test
+	fun `should run for Desktop and inject device id when device is selected`() =
+		runTest {
+			val processMock = mockk<Process>(relaxed = true) {
+				every { inputReader() } returns mockk {
+					every { readText() } returns "foo"
+				}
+			}
+			val processBuilderMock = mockk<ProcessBuilder>(relaxed = true) {
+				every { start() } returns processMock
+			}
+			val executeScriptUseCase = createUseCase(
+				processBuilder = processBuilderMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("adb install app"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel")
+
+			verify { processBuilderMock.command(listOf("adb", "-s", "Pixel", "install", "app")) }
+			assertTrue(result is ExecuteScriptUseCase.Result.Error)
+			verify { addLoggingUseCaseMock.invoke(any()) }
+		}
+
+	private fun createUseCase(processBuilder: ProcessBuilder = ProcessBuilder()) =
 		ExecuteScriptUseCase(
 			addLoggingUseCase = addLoggingUseCaseMock,
 			workingDir = File("."),
-			processBuilder = ProcessBuilder(),
+			processBuilder = processBuilder,
 		)
 }
