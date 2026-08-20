@@ -167,7 +167,7 @@ class ScriptsViewModel(
 	private suspend fun onExecuteScript(script: Script) {
 		if (script.originalScript.platform == ScriptsRepository.Platform.DESKTOP) {
 			val devices = getDevicesUseCase()
-			if (devices.isEmpty()) {
+			if (devices.isEmpty() || devices.all { !it.isSelected }) {
 				viewModelScope.launch(ioDispatcher) {
 					executeScriptUseCase(script = script.originalScript)
 				}
