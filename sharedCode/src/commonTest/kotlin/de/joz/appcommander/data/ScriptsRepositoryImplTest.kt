@@ -4,6 +4,7 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -372,9 +373,16 @@ class ScriptsRepositoryImplTest {
 	@Test
 	fun `should return an error when updating fails`() =
 		runTest {
-			val repository = createRepository()
+			val repository = createRepository(
+				jsonHandler = mockk {
+					every { encodeToString<List<ScriptsRepository.Script>>(any()) } throws Exception()
+				},
+			)
 
-			val result = repository.updateScript(script = mockk(), oldScript = mockk())
+			val result = repository.updateScript(
+				script = repository.getScripts().scripts.first(),
+				oldScript = mockk(),
+			)
 
 			assertIs<ScriptsRepository.WriteScriptResult.UpdateError>(result)
 			assertFalse(result.message.isBlank())
@@ -404,11 +412,13 @@ class ScriptsRepositoryImplTest {
 			assertFalse(result.message.isBlank())
 		}
 
-	private fun createRepository(scriptFile: String = testFile.absolutePath) =
-		ScriptsRepositoryImpl(
-			scriptFile = ScriptFile(scriptFile = scriptFile),
-			addLoggingUseCase = addLoggingUseCaseMock,
-			processBuilder = ProcessBuilder(),
-			jsonHandler = DependencyInjection().provideJson(),
-		)
+	private fun createRepository(
+		scriptFile: String = testFile.absolutePath,
+		jsonHandler: Json = DependencyInjection().provideJson(),
+	) = ScriptsRepositoryImpl(
+		scriptFile = ScriptFile(scriptFile = scriptFile),
+		addLoggingUseCase = addLoggingUseCaseMock,
+		jsonHandler = jsonHandler,
+		processBuilder = ProcessBuilder(),
+	)
 }
