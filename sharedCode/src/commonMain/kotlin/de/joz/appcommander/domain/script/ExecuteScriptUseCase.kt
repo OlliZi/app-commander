@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class ExecuteScriptUseCase(
 	private val addLoggingUseCase: AddLoggingUseCase,
 	private val workingDir: File,
-	private val processBuilder: ProcessBuilder,
+	private val processRunner: ProcessRunner,
 ) {
 	suspend operator fun invoke(
 		script: ScriptsRepository.Script,
@@ -69,12 +69,7 @@ class ExecuteScriptUseCase(
 		)
 
 	private fun innerExecuteScript(commands: List<String>) =
-		processBuilder
-			.command(commands)
-			.directory(workingDir)
-			.start()
-			.inputReader()
-			.readText()
+		processRunner.runProcess(commands = commands, workingDir = workingDir)
 
 	private fun injectDeviceId(
 		script: String,
