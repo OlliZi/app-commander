@@ -2,16 +2,19 @@ package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.helper.IsLocalTestRunUseCase
+import io.mockk.called
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class ExecuteScriptUseCaseTest {
 	private val addLoggingUseCaseMock: AddLoggingUseCase = mockk(relaxed = true)
+	private val processRunnerMock: ProcessRunner = mockk(relaxed = true)
 	private val isLocalTestRunUseCase = IsLocalTestRunUseCase()
 
 	@Test
@@ -92,6 +95,36 @@ class ExecuteScriptUseCaseTest {
 		}
 
 	@Test
+	fun `should not log when not required`() =
+		runTest {
+			val executeScriptUseCase = createUseCase()
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("echo foo"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+
+			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", log = false)
+
+			verify { addLoggingUseCaseMock wasNot called }
+		}
+
+	@Test
+	fun `should log when not required but an error occurred`() =
+		runTest {
+			val executeScriptUseCase = createUseCase()
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("foo_bar_unknown_command"),
+				platform = ScriptsRepository.Platform.ANDROID,
+			)
+
+			executeScriptUseCase(script = script, selectedDevice = "Pixel 7", log = false)
+
+			verify { addLoggingUseCaseMock.invoke(any()) }
+		}
+
+	@Test
 	fun `should return an failure if script execution fails`() =
 		runTest {
 			val executeScriptUseCase = createUseCase()
@@ -103,20 +136,22 @@ class ExecuteScriptUseCaseTest {
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "")
 
-			assertTrue(result is ExecuteScriptUseCase.Result.Error)
+			assertIs<ExecuteScriptUseCase.Result.Error>(result)
 			assertTrue(result.message.startsWith("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"):"))
 			verify { addLoggingUseCaseMock.invoke(any()) }
 		}
 
 	@Test
-	fun `should append device id in script execution`() =
+	fun `should append device id in script execution for Android`() =
 		runTest {
 			if (!isLocalTestRunUseCase()) {
-				println("Cannot run test neither on github nore on jenkins.")
+				println("Cannot run test neither on github nor on jenkins.")
 				return@runTest
 			}
 
-			val executeScriptUseCase = createUseCase()
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
 
 			val script = ScriptsRepository.Script(
 				label = "Test",
@@ -127,6 +162,7 @@ class ExecuteScriptUseCaseTest {
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
+			verify { processRunnerMock.runProcess(listOf("adb", "-s", "Pixel7", "devices"), File(".")) }
 			verify {
 				addLoggingUseCaseMock.invoke(
 					"Execute script: 'adb -s Pixel7 devices' on device 'Pixel7'.",
@@ -134,10 +170,78 @@ class ExecuteScriptUseCaseTest {
 			}
 		}
 
-	private fun createUseCase() =
+	@Test
+	fun `should append device id in script execution for iOS`() =
+		runTest {
+			if (!isLocalTestRunUseCase()) {
+				println("Cannot run test neither on github nor on jenkins.")
+				return@runTest
+			}
+
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
+
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("idb devices"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "iPhone")
+
+			assertIs<ExecuteScriptUseCase.Result.Success>(result)
+			verify { processRunnerMock.runProcess(listOf("idb", "-s", "iPhone", "devices"), File(".")) }
+			verify {
+				addLoggingUseCaseMock.invoke(
+					"Execute script: 'idb -s iPhone devices' on device 'iPhone'.",
+				)
+			}
+		}
+
+	@Test
+	fun `should run for Desktop when no device is selected`() =
+		runTest {
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("adb install app"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "")
+
+			assertTrue(result is ExecuteScriptUseCase.Result.Success)
+			verify { addLoggingUseCaseMock.invoke(any()) }
+			verify { processRunnerMock.runProcess(listOf("adb", "install", "app"), File(".")) }
+		}
+
+	@Test
+	fun `should run for Desktop and inject device id when device is selected`() =
+		runTest {
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("adb install app", "idb install app"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel")
+
+			assertTrue(result is ExecuteScriptUseCase.Result.Success)
+			verify { addLoggingUseCaseMock.invoke(any()) }
+			verify { processRunnerMock.runProcess(listOf("adb", "-s", "Pixel", "install", "app"), File(".")) }
+			verify { processRunnerMock.runProcess(listOf("idb", "-s", "Pixel", "install", "app"), File(".")) }
+		}
+
+	private fun createUseCase(processRunner: ProcessRunner = ProcessRunnerImpl(ProcessBuilder())) =
 		ExecuteScriptUseCase(
 			addLoggingUseCase = addLoggingUseCaseMock,
 			workingDir = File("."),
-			processBuilder = ProcessBuilder(),
+			processRunner = processRunner,
 		)
 }

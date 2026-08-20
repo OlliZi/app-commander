@@ -11,7 +11,12 @@ class GetConnectedDevicesUseCase(
 	suspend operator fun invoke(): List<ConnectedDevice> = getConnectedAndroidDevices() + getConnectedIOSDevices()
 
 	private suspend fun getConnectedAndroidDevices(): List<ConnectedDevice> =
-		when (val result = executeScriptUseCase(script = ANDROID_GET_DEVICES_SCRIPT)) {
+		when (
+			val result = executeScriptUseCase(
+				script = ANDROID_GET_DEVICES_SCRIPT,
+				log = false,
+			)
+		) {
 			is ExecuteScriptUseCase.Result.Error -> {
 				emptyList()
 			}
@@ -28,7 +33,12 @@ class GetConnectedDevicesUseCase(
 
 	private suspend fun getConnectedIOSDevices(): List<ConnectedDevice> {
 		// TODO
-		return when (val result = executeScriptUseCase(script = IOS_GET_DEVICES_SCRIPT)) {
+		return when (
+			val result = executeScriptUseCase(
+				script = IOS_GET_DEVICES_SCRIPT,
+				log = false,
+			)
+		) {
 			is ExecuteScriptUseCase.Result.Error -> {
 				emptyList()
 			}
@@ -57,7 +67,7 @@ class GetConnectedDevicesUseCase(
 		)
 		val IOS_GET_DEVICES_SCRIPT = ScriptsRepository.Script(
 			label = "Get connected iOS devices",
-			scripts = listOf("TODO for iOS"),
+			scripts = listOf("echo iOS"),
 			platform = ScriptsRepository.Platform.IOS,
 		)
 	}

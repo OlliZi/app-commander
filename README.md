@@ -32,8 +32,8 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/ios.svg" width="32"/></kbd> iOS**: There is no official documentation available from Apple. Maybe install idb (https://github.com/facebook/idb) and use idb to run your scripts on iOS devices.
 *   **<kbd><img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/desktop.svg" width="32"/></kbd> Desktop**: Run any installed software on your laptop or desktop computer.
 
-## 🎥 First Impressions I
-<kbd><img src="preview_overview.gif" width="500"/></kbd>
+## 🎥 First Impressions I (YouTube.com: https://www.youtube.com/watch?v=zCbUy9uB4mI)
+<kbd>[![App Demo](https://img.youtube.com/vi/zCbUy9uB4mI/0.jpg)](https://www.youtube.com/watch?v=zCbUy9uB4mI)</kbd>
 
 ## 📸 First Impressions II
 
@@ -110,7 +110,6 @@ App-Commander is built with modern technologies and best practices:
     *   Provide previews for all screens and composables.
 
 ## 👷TODOs
-- Create a video showing the UI with emulator and a real device
 - JSON-editor
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
