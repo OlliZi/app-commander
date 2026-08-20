@@ -68,7 +68,7 @@ class ExecuteScriptUseCase(
 				?.toIntOrNull() ?: 1,
 		)
 
-	private fun innerExecuteScript(commands: List<String>) =
+	private fun innerExecuteScript(commands: List<String>): String =
 		processRunner.runProcess(commands = commands, workingDir = workingDir)
 
 	private fun injectDeviceId(
