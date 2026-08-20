@@ -42,7 +42,8 @@ class ExecuteScriptUseCase(
 								(if (selectedDevice.isNotEmpty()) " on device '$selectedDevice'." else "."),
 						)
 					}
-					outputs.add("- ${innerExecuteScript(plainCommand)}")
+					val result = processRunner.runProcess(commands = plainCommand, workingDir = workingDir)
+					outputs.add("- $result")
 				}
 			}
 
@@ -67,9 +68,6 @@ class ExecuteScriptUseCase(
 				?.get(1)
 				?.toIntOrNull() ?: 1,
 		)
-
-	private fun innerExecuteScript(commands: List<String>): String =
-		processRunner.runProcess(commands = commands, workingDir = workingDir)
 
 	private fun injectDeviceId(
 		script: String,

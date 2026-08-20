@@ -193,7 +193,7 @@ class ExecuteScriptUseCaseTest {
 			)
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("adb install app"),
+				scripts = listOf("adb install app", "idb install app"),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -202,6 +202,7 @@ class ExecuteScriptUseCaseTest {
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
 			verify { addLoggingUseCaseMock.invoke(any()) }
 			verify { processRunnerMock.runProcess(listOf("adb", "-s", "Pixel", "install", "app"), File(".")) }
+			verify { processRunnerMock.runProcess(listOf("idb", "-s", "Pixel", "install", "app"), File(".")) }
 		}
 
 	private fun createUseCase(processRunner: ProcessRunner = ProcessRunnerImpl(ProcessBuilder())) =
