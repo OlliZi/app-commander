@@ -17,6 +17,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					any(),
 					any(),
+					any(),
 				)
 			} returns ExecuteScriptUseCase.Result.Success(
 				"List of devices attached\n\ndevice-7\tdevice",
@@ -44,6 +45,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
 					selectedDevice = "",
+					log = false,
 				)
 			}
 		}
@@ -54,6 +56,7 @@ class GetConnectedDevicesUseCaseTest {
 			val executeScriptUseCase: ExecuteScriptUseCase = mockk()
 			coEvery {
 				executeScriptUseCase(
+					any(),
 					any(),
 					any(),
 				)
@@ -67,6 +70,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
 					selectedDevice = "",
+					log = false,
 				)
 			}
 		}
@@ -77,6 +81,7 @@ class GetConnectedDevicesUseCaseTest {
 			val executeScriptUseCase: ExecuteScriptUseCase = mockk()
 			coEvery {
 				executeScriptUseCase(
+					any(),
 					any(),
 					any(),
 				)
@@ -90,6 +95,7 @@ class GetConnectedDevicesUseCaseTest {
 				executeScriptUseCase(
 					script = GetConnectedDevicesUseCase.ANDROID_GET_DEVICES_SCRIPT,
 					selectedDevice = "",
+					log = false,
 				)
 			}
 		}

@@ -525,13 +525,18 @@ class ScriptsViewModelTest {
 		}
 
 	@Test
-	fun `should run script for Desktop never on a device`() =
+	fun `should run script for Desktop when no devive is selected`() =
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
 				scripts = listOf("echo"),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
+
+			coEvery {
+				getDevicesUseCaseMock()
+			} returns emptyList()
+
 			val viewModel = createViewModel()
 			runCurrent()
 
@@ -550,6 +555,37 @@ class ScriptsViewModelTest {
 				executeScriptUseCaseMock(
 					script = testScript,
 					selectedDevice = "",
+				)
+			}
+		}
+
+	@Test
+	fun `should run script for Desktop when devives is selected and replace ADB or IDB with selected emulator`() =
+		runTest {
+			val testScript = ScriptsRepository.Script(
+				label = "desktop script",
+				scripts = listOf("adb install app", "idb install app"),
+				platform = ScriptsRepository.Platform.DESKTOP,
+			)
+
+			val viewModel = createViewModel()
+			runCurrent()
+
+			viewModel.onEvent(
+				event = ScriptsViewModel.Event.OnExecuteScript(
+					script = ScriptsViewModel.Script(
+						description = "desktop script",
+						scriptText = "replace adb/idb with adb/idb -s p7",
+						originalScript = testScript,
+					),
+				),
+			)
+			runCurrent()
+
+			coVerify {
+				executeScriptUseCaseMock(
+					script = testScript,
+					selectedDevice = "p7",
 				)
 			}
 		}

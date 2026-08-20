@@ -11,11 +11,12 @@ import kotlin.time.Duration.Companion.milliseconds
 class ExecuteScriptUseCase(
 	private val addLoggingUseCase: AddLoggingUseCase,
 	private val workingDir: File,
-	private val processBuilder: ProcessBuilder,
+	private val processRunner: ProcessRunner,
 ) {
 	suspend operator fun invoke(
 		script: ScriptsRepository.Script,
 		selectedDevice: String = "",
+		log: Boolean = true,
 	): Result {
 		val scripts = script.scripts.map { it.trim() }
 
@@ -35,11 +36,14 @@ class ExecuteScriptUseCase(
 
 				(1..loopCount).forEach { _ ->
 					delay((if (loopCount > 1) 200 else 0).milliseconds)
-					addLoggingUseCase(
-						"Execute script: '${plainCommand.joinToString(" ")}'" +
-							(if (selectedDevice.isNotEmpty()) " on device '$selectedDevice'." else "."),
-					)
-					outputs.add("- ${innerExecuteScript(plainCommand)}")
+					if (log) {
+						addLoggingUseCase(
+							"Execute script: '${plainCommand.joinToString(" ")}'" +
+								(if (selectedDevice.isNotEmpty()) " on device '$selectedDevice'." else "."),
+						)
+					}
+					val result = processRunner.runProcess(commands = plainCommand, workingDir = workingDir)
+					outputs.add("- $result")
 				}
 			}
 
@@ -65,14 +69,6 @@ class ExecuteScriptUseCase(
 				?.toIntOrNull() ?: 1,
 		)
 
-	private fun innerExecuteScript(commands: List<String>) =
-		processBuilder
-			.command(commands)
-			.directory(workingDir)
-			.start()
-			.inputReader()
-			.readText()
-
 	private fun injectDeviceId(
 		script: String,
 		platform: ScriptsRepository.Platform,
@@ -84,22 +80,51 @@ class ExecuteScriptUseCase(
 
 		return when (platform) {
 			ScriptsRepository.Platform.ANDROID -> {
-				script.replace(
-					"adb",
-					"adb -s $selectedDevice",
+				replaceAdbWithSelectedDevice(
+					script = script,
+					selectedDevice = selectedDevice,
 				)
 			}
 
-			// TODO
 			ScriptsRepository.Platform.IOS -> {
-				script
+				replaceIdbWithSelectedDevice(
+					script = script,
+					selectedDevice = selectedDevice,
+				)
 			}
 
 			ScriptsRepository.Platform.DESKTOP -> {
-				script
+				val desktopScript = replaceAdbWithSelectedDevice(
+					script = script,
+					selectedDevice = selectedDevice,
+				)
+
+				replaceIdbWithSelectedDevice(
+					script = desktopScript,
+					selectedDevice = selectedDevice,
+				)
 			}
 		}
 	}
+
+	private fun replaceAdbWithSelectedDevice(
+		script: String,
+		selectedDevice: String,
+	): String =
+		script.replace(
+			"adb",
+			"adb -s $selectedDevice",
+		)
+
+	// TODO
+	private fun replaceIdbWithSelectedDevice(
+		script: String,
+		selectedDevice: String,
+	): String =
+		script.replace(
+			"idb",
+			"idb -s $selectedDevice",
+		)
 
 	sealed interface Result {
 		data class Success(
