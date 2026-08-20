@@ -92,6 +92,11 @@ Unleash the full potential of App-Commander with these special commands in your 
 
 To create a distributable package, run the gradle task `package` or `package<Platform>` (e.g., `packageDmg`, `packageMsi`).
 
+For installation on a Mac:
+1. Install latest release to "/Applications", (e.g., `/Applications/App-Commander.app`). 
+2. Start with `open /Applications/App-Commander.app`).
+3. Verify in logging-tool that adb for Android is installed and running.
+
 ## 👨‍💻 For Developers: Technical Insights
 
 App-Commander is built with modern technologies and best practices:
