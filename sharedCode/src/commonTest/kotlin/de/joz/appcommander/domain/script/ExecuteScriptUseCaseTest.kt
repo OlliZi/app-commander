@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.runTest
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class ExecuteScriptUseCaseTest {
@@ -135,20 +136,22 @@ class ExecuteScriptUseCaseTest {
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "")
 
-			assertTrue(result is ExecuteScriptUseCase.Result.Error)
+			assertIs<ExecuteScriptUseCase.Result.Error>(result)
 			assertTrue(result.message.startsWith("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"):"))
 			verify { addLoggingUseCaseMock.invoke(any()) }
 		}
 
 	@Test
-	fun `should append device id in script execution`() =
+	fun `should append device id in script execution for Android`() =
 		runTest {
 			if (!isLocalTestRunUseCase()) {
-				println("Cannot run test neither on github nore on jenkins.")
+				println("Cannot run test neither on github nor on jenkins.")
 				return@runTest
 			}
 
-			val executeScriptUseCase = createUseCase()
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
 
 			val script = ScriptsRepository.Script(
 				label = "Test",
@@ -159,9 +162,39 @@ class ExecuteScriptUseCaseTest {
 			val result = executeScriptUseCase(script = script, selectedDevice = "Pixel7")
 
 			assertTrue(result is ExecuteScriptUseCase.Result.Success)
+			verify { processRunnerMock.runProcess(listOf("adb", "-s", "Pixel7", "devices"), File(".")) }
 			verify {
 				addLoggingUseCaseMock.invoke(
 					"Execute script: 'adb -s Pixel7 devices' on device 'Pixel7'.",
+				)
+			}
+		}
+
+	@Test
+	fun `should append device id in script execution for iOS`() =
+		runTest {
+			if (!isLocalTestRunUseCase()) {
+				println("Cannot run test neither on github nor on jenkins.")
+				return@runTest
+			}
+
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
+
+			val script = ScriptsRepository.Script(
+				label = "Test",
+				scripts = listOf("idb devices"),
+				platform = ScriptsRepository.Platform.IOS,
+			)
+
+			val result = executeScriptUseCase(script = script, selectedDevice = "iPhone")
+
+			assertIs<ExecuteScriptUseCase.Result.Success>(result)
+			verify { processRunnerMock.runProcess(listOf("idb", "-s", "iPhone", "devices"), File(".")) }
+			verify {
+				addLoggingUseCaseMock.invoke(
+					"Execute script: 'idb -s iPhone devices' on device 'iPhone'.",
 				)
 			}
 		}
