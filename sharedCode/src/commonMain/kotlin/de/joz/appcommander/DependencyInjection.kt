@@ -31,7 +31,7 @@ class DependencyInjection {
 	fun provideProcessBuilder() = ProcessBuilder()
 
 	@Factory
-	fun provideWorkingDirectory() = File(provideScriptFile().scriptFile).parentFile
+	fun provideWorkingDirectory() = File(".")
 
 	@Factory
 	fun provideScriptFile() = ScriptFile(scriptFile = getPreferenceFileStorePath(fileName = "scripts.json"))
