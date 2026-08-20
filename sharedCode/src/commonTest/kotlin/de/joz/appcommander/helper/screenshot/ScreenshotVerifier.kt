@@ -79,6 +79,9 @@ class ScreenshotVerifier<T>(
 			}
 
 			is CreateScreenshotDifferenceUseCase.Result.SizeDoesNotMatch -> {
+				val currentScreenshot = File(goldenImage.parentFile, goldenImage.name)
+				Files.copy(screenshotFile.toPath(), currentScreenshot.toPath(), StandardCopyOption.REPLACE_EXISTING)
+
 				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
 					println("Can run screenshot-tests only on github.")
 					return
@@ -87,6 +90,7 @@ class ScreenshotVerifier<T>(
 				errorCollector(
 					"Screenshot size does not match golden image size. " +
 						"Fix test or replace golden image with current screenshot.\n" +
+						"Copied for your. Check your VCS or your pull-request.\n" +
 						"Current: ${screenshotFile.absolutePath}\n" +
 						"Golden: ${goldenImage.absolutePath}",
 				)

@@ -20,7 +20,7 @@ import de.joz.appcommander.ui.misc.UnidirectionalDataFlowViewModel
 import de.joz.appcommander.ui.model.ToolSection
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -36,12 +36,12 @@ class SettingsViewModel(
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
 	UnidirectionalDataFlowViewModel<SettingsViewModel.UiState, SettingsViewModel.Event> {
-	private val _uiState = MutableStateFlow(UiState())
-	override val uiState = _uiState.asStateFlow()
+	override val uiState: StateFlow<UiState>
+		field = MutableStateFlow(UiState())
 
 	init {
 		viewModelScope.launch(mainDispatcher) {
-			_uiState.update { oldState ->
+			uiState.update { oldState ->
 				oldState.copy(
 					togglePreferences = buildList {
 						add(
@@ -137,7 +137,7 @@ class SettingsViewModel(
 
 	private suspend fun toggleItem(event: Event.OnToggleItem) {
 		savePreferenceUseCase(event.toggleItem.key, event.isChecked)
-		_uiState.update { oldState ->
+		uiState.update { oldState ->
 			oldState.copy(
 				togglePreferences = oldState.togglePreferences.map {
 					if (event.toggleItem == it) {
@@ -151,7 +151,7 @@ class SettingsViewModel(
 	}
 
 	private suspend fun sliderItem(event: Event.OnSliderItem) {
-		_uiState.update { oldState ->
+		uiState.update { oldState ->
 			oldState.copy(
 				sliderPreferences = oldState.sliderPreferences.map {
 					if (event.sliderItem.key == it.key) {

@@ -20,11 +20,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.joz.appcommander.BuildConfig
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.settings_footer
+import de.joz.appcommander.resources.settings_preference_show_filter_section
 import de.joz.appcommander.resources.settings_preference_show_welcome_screen
 import de.joz.appcommander.resources.settings_preference_track_scripts_file_delay_slider_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_label
+import de.joz.appcommander.resources.settings_preference_ui_appearance_light
 import de.joz.appcommander.resources.settings_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
-import de.joz.appcommander.ui.misc.SectionDivider
 import de.joz.appcommander.ui.misc.Slider
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
@@ -88,12 +90,13 @@ internal fun SettingsContent(
 		},
 	) { paddingValues ->
 		Column(
-			Modifier
+			modifier = Modifier
 				.fillMaxSize()
 				.padding(paddingValues)
-				.padding(16.dp)
+				.padding(horizontal = 16.dp)
+				.padding(bottom = 16.dp)
 				.verticalScroll(rememberScrollState()),
-			verticalArrangement = Arrangement.Top,
+			verticalArrangement = Arrangement.spacedBy(16.dp),
 		) {
 			uiState.togglePreferences.forEach { toggleItem ->
 				LabelledSwitch(
@@ -105,8 +108,6 @@ internal fun SettingsContent(
 					},
 				)
 			}
-
-			SectionDivider()
 
 			uiState.sliderPreferences.forEach { sliderItem ->
 				Slider(
@@ -140,6 +141,11 @@ private fun PreviewSettingsScreen() {
 					label = Res.string.settings_preference_show_welcome_screen,
 					key = "",
 				),
+				SettingsViewModel.ToggleItem(
+					isChecked = false,
+					label = Res.string.settings_preference_show_filter_section,
+					key = "",
+				),
 			),
 			sliderPreferences = listOf(
 				SettingsViewModel.SliderItem(
@@ -150,6 +156,15 @@ private fun PreviewSettingsScreen() {
 					maximum = 10f,
 					steps = 10,
 					labelValue = SettingsViewModel.LabelValue.IntRes(5),
+				),
+				SettingsViewModel.SliderItem(
+					label = Res.string.settings_preference_ui_appearance_label,
+					sliderValue = 3f,
+					key = "",
+					minimum = 1f,
+					maximum = 3f,
+					steps = 1,
+					labelValue = SettingsViewModel.LabelValue.StringRes(Res.string.settings_preference_ui_appearance_light),
 				),
 			),
 		),

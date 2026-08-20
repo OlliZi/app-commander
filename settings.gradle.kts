@@ -5,9 +5,12 @@ pluginManagement {
 	repositories {
 		google {
 			mavenContent {
-				includeGroupAndSubgroups("androidx")
-				includeGroupAndSubgroups("com.android")
-				includeGroupAndSubgroups("com.google")
+				includeGroup("androidx")
+				includeGroupByRegex("androidx\\..*")
+				includeGroup("com.android")
+				includeGroupByRegex("com\\.android\\..*")
+				includeGroup("com.google")
+				includeGroupByRegex("com\\.google\\..*")
 			}
 		}
 		mavenCentral()
@@ -19,9 +22,12 @@ dependencyResolutionManagement {
 	repositories {
 		google {
 			mavenContent {
-				includeGroupAndSubgroups("androidx")
-				includeGroupAndSubgroups("com.android")
-				includeGroupAndSubgroups("com.google")
+				includeGroup("androidx")
+				includeGroupByRegex("androidx\\..*")
+				includeGroup("com.android")
+				includeGroupByRegex("com\\.android\\..*")
+				includeGroup("com.google")
+				includeGroupByRegex("com\\.google\\..*")
 			}
 		}
 		mavenCentral()
@@ -34,3 +40,4 @@ plugins {
 
 include(":sharedCode")
 include(":desktopApp")
+include(":androidApp")

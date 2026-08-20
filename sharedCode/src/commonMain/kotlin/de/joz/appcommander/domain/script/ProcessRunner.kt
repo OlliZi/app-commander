@@ -22,6 +22,7 @@ class ProcessRunnerImpl(
 			.command(commands)
 			.directory(workingDir)
 			.start()
-			.inputReader()
+			.inputStream
+			.bufferedReader()
 			.readText()
 }

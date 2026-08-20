@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 private val mainPackage = rootProject.ext["mainPackage"].toString()
 private val mainVersion = rootProject.ext["mainVersion"].toString()
 private val isRelease = rootProject.ext["isRelease"].toString() == "true"
 
 plugins {
 	alias(libs.plugins.kotlinMultiplatform)
+	alias(libs.plugins.androidMultiplatformLibrary)
 	alias(libs.plugins.composeMultiplatform)
 	alias(libs.plugins.composeCompiler)
 	alias(libs.plugins.kotlinSerialization)
@@ -13,10 +16,37 @@ plugins {
 	alias(libs.plugins.buildConfig)
 }
 
+compose.resources {
+	publicResClass = true
+	packageOfResClass = "$mainPackage.resources"
+	generateResClass = always
+}
+
 kotlin {
 	jvm()
 
+	android {
+		namespace = "de.joz.appcommander.shared"
+		compileSdk = libs.versions.android.compileSdk
+			.get()
+			.toInt()
+		minSdk = libs.versions.android.minSdk
+			.get()
+			.toInt()
+
+		compilerOptions {
+			jvmTarget = JvmTarget.JVM_11
+		}
+		androidResources {
+			enable = true
+		}
+	}
+
 	sourceSets {
+		androidMain.dependencies {
+			implementation(libs.compose.uiToolingPreview)
+			implementation(libs.compose.uiTooling)
+		}
 		commonMain.dependencies {
 			implementation(libs.compose.runtime)
 			implementation(libs.compose.foundation)
@@ -48,6 +78,8 @@ kotlin {
 
 dependencies {
 	add("kspJvm", libs.koin.ksp)
+	add("kspAndroid", libs.koin.ksp)
+	androidRuntimeClasspath(libs.compose.uiTooling)
 }
 
 ksp {
@@ -97,12 +129,6 @@ kover {
 			}
 		}
 	}
-}
-
-compose.resources {
-	publicResClass = true
-	packageOfResClass = "$mainPackage.resources"
-	generateResClass = always
 }
 
 tasks.register("runCodeCoverage") {
