@@ -172,6 +172,7 @@ class EndToEndTest :
 			click("script_button_1")
 
 			click(Res.string.scripts_open_script_file)
+			waitForIdle()
 			assertEquals(1, scriptsRepositoryFake.getAndResetOpenScriptFileCounter())
 
 			// Filtering
