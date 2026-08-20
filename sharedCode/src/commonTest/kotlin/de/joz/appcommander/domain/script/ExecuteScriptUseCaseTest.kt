@@ -169,17 +169,18 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should run for Desktop when no device is selected`() =
 		runTest {
-			val executeScriptUseCase = createUseCase()
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("foo_bar_unknown_command adb install app"),
+				scripts = listOf("adb install app"),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
 			val result = executeScriptUseCase(script = script, selectedDevice = "")
 
-			assertTrue(result is ExecuteScriptUseCase.Result.Error)
-			assertTrue(result.message.startsWith("Cannot run program \"foo_bar_unknown_command\" (in directory \".\"):"))
+			assertTrue(result is ExecuteScriptUseCase.Result.Success)
 			verify { addLoggingUseCaseMock.invoke(any()) }
 			verify { processRunnerMock.runProcess(listOf("adb", "install", "app"), File(".")) }
 		}
@@ -187,7 +188,9 @@ class ExecuteScriptUseCaseTest {
 	@Test
 	fun `should run for Desktop and inject device id when device is selected`() =
 		runTest {
-			val executeScriptUseCase = createUseCase()
+			val executeScriptUseCase = createUseCase(
+				processRunner = processRunnerMock,
+			)
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				scripts = listOf("adb install app"),
@@ -201,10 +204,10 @@ class ExecuteScriptUseCaseTest {
 			verify { processRunnerMock.runProcess(listOf("adb", "-s", "Pixel", "install", "app"), File(".")) }
 		}
 
-	private fun createUseCase() =
+	private fun createUseCase(processRunner: ProcessRunner = ProcessRunnerImpl(ProcessBuilder())) =
 		ExecuteScriptUseCase(
 			addLoggingUseCase = addLoggingUseCaseMock,
 			workingDir = File("."),
-			processRunner = processRunnerMock,
+			processRunner = processRunner,
 		)
 }
