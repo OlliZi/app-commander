@@ -87,22 +87,51 @@ class ExecuteScriptUseCase(
 
 		return when (platform) {
 			ScriptsRepository.Platform.ANDROID -> {
-				script.replace(
-					"adb",
-					"adb -s $selectedDevice",
+				replaceAdbWithSelectedDevice(
+					script = script,
+					selectedDevice = selectedDevice,
 				)
 			}
 
-			// TODO
 			ScriptsRepository.Platform.IOS -> {
-				script
+				replaceIdbWithSelectedDevice(
+					script = script,
+					selectedDevice = selectedDevice,
+				)
 			}
 
 			ScriptsRepository.Platform.DESKTOP -> {
-				script
+				val desktopScript = replaceAdbWithSelectedDevice(
+					script = script,
+					selectedDevice = selectedDevice,
+				)
+
+				replaceIdbWithSelectedDevice(
+					script = desktopScript,
+					selectedDevice = selectedDevice,
+				)
 			}
 		}
 	}
+
+	private fun replaceAdbWithSelectedDevice(
+		script: String,
+		selectedDevice: String,
+	): String =
+		script.replace(
+			"adb",
+			"adb -s $selectedDevice",
+		)
+
+	// TODO
+	private fun replaceIdbWithSelectedDevice(
+		script: String,
+		selectedDevice: String,
+	): String =
+		script.replace(
+			"idb",
+			"idb -s $selectedDevice",
+		)
 
 	sealed interface Result {
 		data class Success(

@@ -114,7 +114,6 @@ App-Commander is built with modern technologies and best practices:
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
-- Replace adb with emulator also in desktop mode
 
 ## 🤝 Contributing
 
