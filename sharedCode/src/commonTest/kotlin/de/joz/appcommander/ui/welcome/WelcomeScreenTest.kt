@@ -9,6 +9,7 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.navigation.NavigationScreens
@@ -48,7 +49,7 @@ class WelcomeScreenTest {
 				"Your programmable multi-device execution helper. Execute your scripts for your apps on multiple devices.",
 			).assertIsDisplayed()
 			onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
-			onNodeWithText("Do not show welcome screen again.").assertIsDisplayed()
+			onNodeWithText("Do not show welcome screen again.").performScrollTo().assertIsDisplayed()
 		}
 	}
 
@@ -76,7 +77,7 @@ class WelcomeScreenTest {
 					useCustomBubbleStrategy = true,
 				)
 
-				onNodeWithText("Do not show welcome screen again.").performClick()
+				onNodeWithText("Do not show welcome screen again.").performScrollTo().performClick()
 
 				screenshotVerifier.verifyScreenshot(source = this, screenshotName = "toggle_click")
 			}
@@ -98,8 +99,8 @@ class WelcomeScreenTest {
 					navController = navController,
 				)
 
-				onNodeWithText("Do not show welcome screen again.").performClick()
-				onNodeWithText("Do not show welcome screen again.").performClick()
+				onNodeWithText("Do not show welcome screen again.").performScrollTo().performClick()
+				onNodeWithText("Do not show welcome screen again.").performScrollTo().performClick()
 			}
 
 			assertFalse(
