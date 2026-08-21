@@ -4,6 +4,8 @@
 
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
 
+Hello and welcome.
+
 App-Commander is a powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
 
 <kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/app_logo.png)</kbd>
@@ -114,11 +116,12 @@ App-Commander is built with modern technologies and best practices:
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
 
-## 👷TODOs
+## 👷Next ideas
 - JSON-editor
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
+- New "comment" field in data-structure
 
 ## 🤝 Contributing
 
