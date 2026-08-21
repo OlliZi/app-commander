@@ -121,7 +121,7 @@ App-Commander is built with modern technologies and best practices:
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
-- New "comment" field in data-structure
+- New "comment" field in data-structure + complex scripts example (click flow)
 
 ## 🤝 Contributing
 
