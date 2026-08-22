@@ -26,6 +26,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -170,6 +171,7 @@ class EditScriptViewModelTest {
 				label = "label",
 				scripts = listOf("script 1", "script 2"),
 				platform = ScriptsRepository.Platform.IOS,
+				comment = "comment",
 			)
 
 			val viewModel = createViewModel()
@@ -185,6 +187,7 @@ class EditScriptViewModelTest {
 			assertEquals(listOf("script 1", "new script 2"), viewModel.uiState.value.scriptUiState.scripts)
 			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
 			assertEquals("label", viewModel.uiState.value.scriptUiState.scriptName)
+			assertEquals("comment", viewModel.uiState.value.scriptUiState.comment)
 		}
 
 	@Test
@@ -332,6 +335,7 @@ class EditScriptViewModelTest {
 				scripts = listOf("foo"),
 				label = "bar",
 				platform = ScriptsRepository.Platform.IOS,
+				comment = null,
 			)
 
 			val viewModel = createViewModel(
@@ -341,6 +345,7 @@ class EditScriptViewModelTest {
 			assertEquals(listOf("foo"), viewModel.uiState.value.scriptUiState.scripts)
 			assertEquals("bar", viewModel.uiState.value.scriptUiState.scriptName)
 			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertNull(viewModel.uiState.value.scriptUiState.comment)
 
 			coVerify { getUserScriptByKeyUseCaseMock.invoke(any()) }
 		}

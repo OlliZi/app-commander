@@ -53,6 +53,7 @@ class EditScriptViewModel(
 				is Event.OnAddSubScript -> onAddSubScript(event.index)
 				is Event.OnRemoveSubScript -> onRemoveSubScript(event.index)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
+				is Event.OnChangeComment -> onChangeComment(event.comment)
 				is Event.OnExecuteSingleScript -> onExecuteSingleScript(event.script)
 				is Event.OnExecuteAllScripts -> onExecuteAllScripts()
 				is Event.OnSaveScript -> onSaveScript()
@@ -110,16 +111,22 @@ class EditScriptViewModel(
 		updateUiState(scriptName = scriptName)
 	}
 
+	private fun onChangeComment(comment: String) {
+		updateUiState(comment = comment)
+	}
+
 	private fun updateUiState(
 		scriptName: String? = null,
 		scripts: List<String>? = null,
 		selectedPlatform: ScriptsRepository.Platform? = null,
+		comment: String? = null,
 	) {
 		_uiState.update { oldState ->
 			val newScript = oldState.scriptUiState.copy(
 				scriptName = scriptName ?: oldState.scriptUiState.scriptName,
 				scripts = scripts ?: oldState.scriptUiState.scripts,
 				selectedPlatform = selectedPlatform ?: oldState.scriptUiState.selectedPlatform,
+				comment = comment ?: oldState.scriptUiState.comment,
 			)
 			oldState.copy(
 				scriptChanged = newScript != originalUiState.scriptUiState,
@@ -233,6 +240,7 @@ class EditScriptViewModel(
 				scriptName = script?.label.orEmpty(),
 				scripts = script?.scripts ?: listOf(""),
 				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
+				comment = script?.comment,
 			),
 		)
 
@@ -268,6 +276,10 @@ class EditScriptViewModel(
 			val scriptName: String,
 		) : Event
 
+		data class OnChangeComment(
+			val comment: String,
+		) : Event
+
 		data class OnSelectPlatform(
 			val platform: ScriptsRepository.Platform,
 		) : Event
@@ -284,6 +296,7 @@ class EditScriptViewModel(
 		val scripts: List<String> = emptyList(),
 		val scriptName: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
+		val comment: String? = null,
 	)
 
 	private fun ScriptUiState.toScriptsRepositoryScript() =
@@ -291,5 +304,6 @@ class EditScriptViewModel(
 			label = scriptName,
 			scripts = scripts,
 			platform = selectedPlatform,
+			comment = comment,
 		)
 }

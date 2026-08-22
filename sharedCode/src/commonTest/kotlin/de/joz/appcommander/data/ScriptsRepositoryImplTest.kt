@@ -51,11 +51,13 @@ class ScriptsRepositoryImplTest {
 						label = "Dark mode",
 						scripts = listOf("adb shell cmd uimode night yes"),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to dark mode",
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
 						scripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to light mode",
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
@@ -67,6 +69,7 @@ class ScriptsRepositoryImplTest {
 							"adb shell cmd uimode night no",
 						),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to dark to light to dark mode",
 					),
 				),
 				scripts.scripts,
@@ -89,11 +92,13 @@ class ScriptsRepositoryImplTest {
 						label = "Dark mode",
 						scripts = listOf("adb shell cmd uimode night yes"),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to dark mode",
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
 						scripts = listOf("adb shell cmd uimode night no"),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to light mode",
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
@@ -105,6 +110,7 @@ class ScriptsRepositoryImplTest {
 							"adb shell cmd uimode night no",
 						),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to dark to light to dark mode",
 					),
 				),
 				scripts.scripts,
@@ -166,7 +172,8 @@ class ScriptsRepositoryImplTest {
 						"scripts": [
 							 "adb shell cmd uimode night no"
 						],
-						"platform": "ANDROID"
+						"platform": "ANDROID",
+						"comMMMent": "error"
 					}
 				]
 				""".trimIndent(),
@@ -201,11 +208,13 @@ class ScriptsRepositoryImplTest {
 							label = "my script",
 							scripts = listOf("foo"),
 							platform = ScriptsRepository.Platform.ANDROID,
+							comment = "my comment",
 						),
 						ScriptsRepository.Script(
 							label = "my script abc",
 							scripts = listOf("bar"),
 							platform = ScriptsRepository.Platform.IOS,
+							comment = null,
 						),
 					),
 				),
@@ -224,11 +233,13 @@ class ScriptsRepositoryImplTest {
 						label = "my script",
 						scripts = listOf("foo"),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "my comment",
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
 						scripts = listOf("bar"),
 						platform = ScriptsRepository.Platform.IOS,
+						comment = null,
 					),
 				),
 				scripts.scripts,

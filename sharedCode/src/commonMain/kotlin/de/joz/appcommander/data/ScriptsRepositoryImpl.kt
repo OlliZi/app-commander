@@ -103,11 +103,13 @@ class ScriptsRepositoryImpl(
 				label = "Dark mode",
 				scripts = listOf("adb shell cmd uimode night yes"),
 				platform = ScriptsRepository.Platform.ANDROID,
+				comment = "Switches to dark mode",
 			),
 			ScriptsRepository.Script(
 				label = "Light mode",
 				scripts = listOf("adb shell cmd uimode night no"),
 				platform = ScriptsRepository.Platform.ANDROID,
+				comment = "Switches to light mode",
 			),
 			ScriptsRepository.Script(
 				label = "Switch dark to light to dark mode",
@@ -119,6 +121,7 @@ class ScriptsRepositoryImpl(
 					"adb shell cmd uimode night no",
 				),
 				platform = ScriptsRepository.Platform.ANDROID,
+				comment = "Switches to dark to light to dark mode",
 			),
 		)
 		private const val SCRIPT_TRIMMER = "&&"
