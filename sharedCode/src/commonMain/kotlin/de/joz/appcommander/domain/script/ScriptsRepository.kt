@@ -23,6 +23,7 @@ interface ScriptsRepository {
 		val label: String,
 		val platform: Platform,
 		val scripts: List<String>,
+		val comment: String? = null,
 	)
 
 	data class JsonParseResult(

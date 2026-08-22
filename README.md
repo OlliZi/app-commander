@@ -72,7 +72,8 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
     "sleep 1",
     "adb shell cmd uimode night no"
   ],
-  "platform": "ANDROID"
+  "platform": "ANDROID",
+  "comment": "Optional comment for the script. Can be null or empty."
 }
 ```
 
@@ -121,7 +122,6 @@ App-Commander is built with modern technologies and best practices:
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
-- New "comment" field in data-structure + complex scripts example (click flow)
 
 ## 🤝 Contributing
 
