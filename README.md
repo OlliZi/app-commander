@@ -73,7 +73,7 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
     "adb shell cmd uimode night no"
   ],
   "platform": "ANDROID",
-  "comment": "Optional comment for the script. Can be null or empty."
+  "comment": "Optional comment for the script. Can be null, unset, or empty."
 }
 ```
 
