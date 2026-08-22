@@ -120,6 +120,7 @@ class EditScriptViewModel(
 				scriptName = scriptName ?: oldState.scriptUiState.scriptName,
 				scripts = scripts ?: oldState.scriptUiState.scripts,
 				selectedPlatform = selectedPlatform ?: oldState.scriptUiState.selectedPlatform,
+				comment = oldState.scriptUiState.comment,
 			)
 			oldState.copy(
 				scriptChanged = newScript != originalUiState.scriptUiState,
@@ -233,6 +234,7 @@ class EditScriptViewModel(
 				scriptName = script?.label.orEmpty(),
 				scripts = script?.scripts ?: listOf(""),
 				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
+				comment = script?.comment,
 			),
 		)
 
@@ -284,6 +286,7 @@ class EditScriptViewModel(
 		val scripts: List<String> = emptyList(),
 		val scriptName: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
+		val comment: String? = null,
 	)
 
 	private fun ScriptUiState.toScriptsRepositoryScript() =
@@ -291,5 +294,6 @@ class EditScriptViewModel(
 			label = scriptName,
 			scripts = scripts,
 			platform = selectedPlatform,
+			comment = comment,
 		)
 }
