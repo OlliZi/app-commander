@@ -63,7 +63,7 @@ App-Commander lets you create a library of scripts. Each script consists of:
 
 Your scripts are stored in a `scripts.json` file located in the `.app_commander` directory in your user's home folder.
 
-**Example Script:**
+**Example Script I:**
 ```json
 {
   "label": "Toggle Dark Mode On and Off",
@@ -74,6 +74,29 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
   ],
   "platform": "ANDROID",
   "comment": "Optional comment for the script. Can be null, unset, or empty."
+}
+```
+**Complex example Script II:**
+```json
+{
+  "comment": "Clears and restarts the app. Then navigates through the app from login to some detail screen.",
+  "label": "Login automatically and navigate to detail screen X",
+  "scripts": [
+    "adb shell pm clear de.joz.kicktippAnalyser4android",
+    "adb shell am force-stop de.joz.kicktippAnalyser4android",
+    "adb shell am start -n de.joz.kicktippAnalyser4android/.MainActivity",
+    "sleep 2",
+    "adb shell input text 'testuser'",
+    "adb shell input keyevent 61",
+    "adb shell input text 'password'",
+    "sleep 2",
+    "adb shell input tap 850 2170",
+    "adb shell input tap 850 2170",
+    "adb shell input tap 850 2170",
+    "adb shell input tap 1000 2000",
+    "adb shell input tap 1000 2000"
+  ],
+  "platform": "ANDROID"
 }
 ```
 
