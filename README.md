@@ -2,6 +2,7 @@
 
 **Your programmable multi-device execution helper.**
 
+[![App-Commander - Release](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml)
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
 
 Hello and welcome.
