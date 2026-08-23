@@ -18,7 +18,7 @@ class ExecuteScriptUseCase(
 		selectedDevice: String = "",
 		log: Boolean = true,
 	): Result {
-		val scripts = script.scripts.map { it.trim() }
+		val scripts = script.scripts.map { it.subScript.trim() }
 
 		return runCatching {
 			val outputs = mutableListOf<String>()

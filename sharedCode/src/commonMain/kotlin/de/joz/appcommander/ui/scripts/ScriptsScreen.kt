@@ -52,6 +52,7 @@ import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_placeholder
 import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Collapsable
@@ -407,7 +408,7 @@ private fun TerminalSection(
 					isAtMinimumOneDeviceSelected,
 					selectedPlatform,
 				),
-				script = stringResource(Res.string.scripts_terminal_placeholder),
+				script = EditScriptViewModel.SubScript(subScript = stringResource(Res.string.scripts_terminal_placeholder)),
 				onExecuteScriptText = {
 					onExecuteScriptText(it, selectedPlatform)
 				},

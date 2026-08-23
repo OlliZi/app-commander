@@ -19,6 +19,7 @@ import compose.icons.feathericons.Play
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_run_all_scripts
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
@@ -26,12 +27,12 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun MultiScriptInput(
 	isAtMinimumOneDeviceSelected: Boolean,
-	scripts: List<String>,
+	scripts: List<EditScriptViewModel.SubScript>,
 	onExecuteAllScriptsText: () -> Unit,
-	onChangeScriptText: (Int, String) -> Unit,
+	onChangeScriptText: (Int, EditScriptViewModel.SubScript) -> Unit,
 	onRemoveScript: (Int) -> Unit,
 	onAddScriptText: (Int) -> Unit,
-	onExecuteScriptText: (String) -> Unit,
+	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
@@ -105,7 +106,9 @@ internal fun PreviewMultiScriptInput(darkMode: Boolean) {
 	) {
 		MultiScriptInput(
 			isAtMinimumOneDeviceSelected = true,
-			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
+			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123").map {
+				EditScriptViewModel.SubScript(subScript = it)
+			},
 			onRemoveScript = {},
 			onExecuteScriptText = {},
 			onExecuteAllScriptsText = {},

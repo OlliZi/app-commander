@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
+// add comment per strings crtipt
 @KoinViewModel
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
@@ -72,7 +73,7 @@ class EditScriptViewModel(
 
 	private fun onChangeScript(
 		index: Int,
-		script: String,
+		script: SubScript,
 	) {
 		updateUiState(
 			scripts = _uiState.value.scriptUiState.scripts.mapIndexed { oldIndex, oldScript ->
@@ -90,7 +91,7 @@ class EditScriptViewModel(
 			scripts = _uiState.value.scriptUiState.scripts
 				.toMutableList()
 				.apply {
-					add(index + 1, "<enter new script>")
+					add(index + 1, SubScript(subScript = "<enter new script>"))
 				}.toList(),
 		)
 	}
@@ -98,7 +99,7 @@ class EditScriptViewModel(
 	private fun onRemoveSubScript(index: Int) {
 		updateUiState(
 			scripts = if (_uiState.value.scriptUiState.scripts.size == 1) {
-				listOf("")
+				listOf(SubScript(subScript = ""))
 			} else {
 				_uiState.value.scriptUiState.scripts.filterIndexed { oldIndex, _ ->
 					oldIndex != index
@@ -117,7 +118,7 @@ class EditScriptViewModel(
 
 	private fun updateUiState(
 		scriptName: String? = null,
-		scripts: List<String>? = null,
+		scripts: List<SubScript>? = null,
 		selectedPlatform: ScriptsRepository.Platform? = null,
 		comment: String? = null,
 	) {
@@ -136,11 +137,11 @@ class EditScriptViewModel(
 		}
 	}
 
-	private suspend fun onExecuteSingleScript(script: String) {
+	private suspend fun onExecuteSingleScript(subScript: SubScript) {
 		val platform = _uiState.value.scriptUiState.selectedPlatform
 		if (platform == ScriptsRepository.Platform.DESKTOP) {
 			executeScriptHelper(
-				script = script,
+				subScript = subScript,
 				platform = platform,
 			)
 		} else {
@@ -149,7 +150,7 @@ class EditScriptViewModel(
 					it.isSelected
 				}.forEach { device ->
 					executeScriptHelper(
-						script = script,
+						subScript = subScript,
 						platform = platform,
 						device = device.id,
 					)
@@ -182,7 +183,7 @@ class EditScriptViewModel(
 	}
 
 	private fun executeScriptHelper(
-		script: String,
+		subScript: SubScript,
 		platform: ScriptsRepository.Platform,
 		device: String = "",
 	) {
@@ -190,7 +191,12 @@ class EditScriptViewModel(
 			executeScriptUseCase(
 				script = ScriptsRepository.Script(
 					label = "",
-					scripts = listOf(script),
+					scripts = listOf(
+						ScriptsRepository.SubScript(
+							subScript = subScript.subScript,
+							comment = subScript.comment,
+						),
+					),
 					platform = platform,
 				),
 				selectedDevice = device,
@@ -238,7 +244,9 @@ class EditScriptViewModel(
 			showDeviceSelection = script?.platform.canShowDeviceSelection(),
 			scriptUiState = ScriptUiState(
 				scriptName = script?.label.orEmpty(),
-				scripts = script?.scripts ?: listOf(""),
+				scripts = script?.scripts?.map { SubScript(subScript = it.subScript, comment = it.comment) } ?: listOf(
+					SubScript(subScript = ""),
+				),
 				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
 				comment = script?.comment,
 			),
@@ -254,14 +262,14 @@ class EditScriptViewModel(
 		data object OnRemoveScript : Event
 
 		data class OnExecuteSingleScript(
-			val script: String,
+			val script: SubScript,
 		) : Event
 
 		data object OnExecuteAllScripts : Event
 
 		data class OnChangeScript(
 			val index: Int,
-			val script: String,
+			val script: SubScript,
 		) : Event
 
 		data class OnAddSubScript(
@@ -293,16 +301,21 @@ class EditScriptViewModel(
 	)
 
 	data class ScriptUiState(
-		val scripts: List<String> = emptyList(),
+		val scripts: List<SubScript> = emptyList(),
 		val scriptName: String = "",
 		val selectedPlatform: ScriptsRepository.Platform = ScriptsRepository.Platform.ANDROID,
+		val comment: String? = null,
+	)
+
+	data class SubScript(
+		val subScript: String,
 		val comment: String? = null,
 	)
 
 	private fun ScriptUiState.toScriptsRepositoryScript() =
 		ScriptsRepository.Script(
 			label = scriptName,
-			scripts = scripts,
+			scripts = scripts.map { ScriptsRepository.SubScript(subScript = it.subScript, comment = it.comment) },
 			platform = selectedPlatform,
 			comment = comment,
 		)

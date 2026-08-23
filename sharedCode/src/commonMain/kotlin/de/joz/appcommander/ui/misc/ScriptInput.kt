@@ -24,19 +24,20 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.FilePlus
 import compose.icons.feathericons.Play
 import compose.icons.feathericons.Trash
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 
 @Composable
 fun ScriptInput(
 	isAtMinimumOneDeviceSelected: Boolean,
-	onExecuteScriptText: (String) -> Unit,
-	script: String = "",
-	onChangeScriptText: (String) -> Unit = { _ -> },
+	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
+	script: EditScriptViewModel.SubScript = EditScriptViewModel.SubScript(subScript = ""),
+	onChangeScriptText: (EditScriptViewModel.SubScript) -> Unit = { _ -> },
 	onRemoveScript: (() -> Unit)? = null,
 	onAddScript: (() -> Unit)? = null,
 ) {
-	var inputValue by remember(script) { mutableStateOf(script) }
+	var inputValue by remember(script) { mutableStateOf(script.subScript) }
 	TextField(
 		value = inputValue,
 		modifier = Modifier.fillMaxWidth().testTag("text_field_script_input"),
@@ -51,7 +52,7 @@ fun ScriptInput(
 		),
 		onValueChange = {
 			inputValue = it
-			onChangeScriptText(it)
+			onChangeScriptText(EditScriptViewModel.SubScript(subScript = it))
 		},
 		trailingIcon = {
 			Row {
@@ -64,7 +65,7 @@ fun ScriptInput(
 				PlayIcon(
 					enabled = isAtMinimumOneDeviceSelected,
 					onExecuteScriptText = {
-						onExecuteScriptText(inputValue)
+						onExecuteScriptText(EditScriptViewModel.SubScript(subScript = inputValue))
 					},
 				)
 			}
@@ -141,7 +142,7 @@ internal fun PreviewScriptInput(darkMode: Boolean) {
 		) {
 			ScriptInput(
 				isAtMinimumOneDeviceSelected = true,
-				script = "adb devices",
+				script = EditScriptViewModel.SubScript(subScript = "adb devices"),
 				onExecuteScriptText = {},
 			)
 		}

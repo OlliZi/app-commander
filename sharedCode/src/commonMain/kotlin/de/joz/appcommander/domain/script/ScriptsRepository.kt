@@ -18,17 +18,23 @@ interface ScriptsRepository {
 
 	fun getScriptFile(): String
 
+	data class JsonParseResult(
+		val scripts: List<Script>,
+		val parsingMetaData: ParsingMetaData?,
+	)
+
 	@Serializable
 	data class Script(
 		val label: String,
 		val platform: Platform,
-		val scripts: List<String>,
+		val scripts: List<SubScript>,
 		val comment: String? = null,
 	)
 
-	data class JsonParseResult(
-		val scripts: List<Script>,
-		val parsingMetaData: ParsingMetaData?,
+	@Serializable
+	data class SubScript(
+		val subScript: String,
+		val comment: String? = null,
 	)
 
 	sealed interface ParsingMetaData {

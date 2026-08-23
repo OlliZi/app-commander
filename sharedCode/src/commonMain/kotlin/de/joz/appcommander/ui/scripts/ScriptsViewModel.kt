@@ -146,7 +146,10 @@ class ScriptsViewModel(
 				scripts = jsonParseResult.scripts
 					.filter {
 						it.label.lowercase().contains(filter) || it.scripts.any { script ->
-							script.lowercase().contains(filter)
+							script.subScript.lowercase().contains(filter) || script.comment
+								.orEmpty()
+								.lowercase()
+								.contains(filter)
 						} || it.platform.name
 							.lowercase()
 							.contains(filter)
@@ -222,7 +225,7 @@ class ScriptsViewModel(
 			executeScriptUseCase(
 				script = ScriptsRepository.Script(
 					label = "",
-					scripts = listOf(script),
+					scripts = listOf(ScriptsRepository.SubScript(subScript = script)),
 					platform = platform,
 				),
 				selectedDevice = device,

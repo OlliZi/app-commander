@@ -89,7 +89,7 @@ class ScriptsRepositoryImpl(
 		scripts: List<ScriptsRepository.Script>,
 		fileJsonContent: String,
 	): ParsingMetaData? =
-		if (scripts.any { it.scripts.any { script -> script.contains(SCRIPT_TRIMMER) } }) {
+		if (scripts.any { it.scripts.any { script -> script.subScript.contains(SCRIPT_TRIMMER) } }) {
 			ParsingMetaData.MultiScriptsHint
 		} else if (fileJsonContent.contains(OLD_SCRIPT_FIELD)) {
 			ParsingMetaData.OldScriptFieldHint
@@ -101,24 +101,26 @@ class ScriptsRepositoryImpl(
 		val DEFAULT_SCRIPTS = listOf(
 			ScriptsRepository.Script(
 				label = "Dark mode",
-				scripts = listOf("adb shell cmd uimode night yes"),
+				scripts = listOf(
+					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night yes"),
+				),
 				platform = ScriptsRepository.Platform.ANDROID,
 				comment = "Switches to dark mode",
 			),
 			ScriptsRepository.Script(
 				label = "Light mode",
-				scripts = listOf("adb shell cmd uimode night no"),
+				scripts = listOf(ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night no")),
 				platform = ScriptsRepository.Platform.ANDROID,
 				comment = "Switches to light mode",
 			),
 			ScriptsRepository.Script(
 				label = "Switch dark to light to dark mode",
 				scripts = listOf(
-					"adb shell cmd uimode night no",
-					"sleep 1",
-					"adb shell cmd uimode night yes",
-					"sleep 1",
-					"adb shell cmd uimode night no",
+					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night no"),
+					ScriptsRepository.SubScript(subScript = "sleep 1"),
+					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night yes"),
+					ScriptsRepository.SubScript(subScript = "sleep 1"),
+					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night no"),
 				),
 				platform = ScriptsRepository.Platform.ANDROID,
 				comment = "Switches to dark to light to dark mode",
