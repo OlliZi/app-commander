@@ -11,8 +11,12 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 
 <kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/app_logo.png)</kbd>
 
-## 🎥 First Impressions I (YouTube.com: https://www.youtube.com/watch?v=zCbUy9uB4mI)
-<kbd>[![App Demo](https://img.youtube.com/vi/zCbUy9uB4mI/0.jpg)](https://www.youtube.com/watch?v=zCbUy9uB4mI)</kbd>
+## 🎥 First Impressions I (YouTube.com)
+| Demo & Preview                                                                                                        | Filter & Custom scripts for your apps                                                                                  | Write your own custom script                                                                                          |
+|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| https://youtu.be/zCbUy9uB4mI                                                                                          | https://youtu.be/WFwn_gXWGB4                                                                                           | https://youtu.be/jtDFyReQ2e4                                                                                          |
+| <kbd>[![App Demo 1](https://img.youtube.com/vi/zCbUy9uB4mI/0.jpg)](https://www.youtube.com/watch?v=zCbUy9uB4mI)</kbd> | <kbd>[![App Demo  2](https://img.youtube.com/vi/WFwn_gXWGB4/0.jpg)](https://www.youtube.com/watch?v=WFwn_gXWGB4)</kbd> | <kbd>[![App Demo 3](https://img.youtube.com/vi/jtDFyReQ2e4/0.jpg)](https://www.youtube.com/watch?v=jtDFyReQ2e4)</kbd> |
+
 
 ## 📸 First Impressions II
 
