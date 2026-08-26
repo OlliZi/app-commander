@@ -3,6 +3,7 @@ package de.joz.appcommander.data
 import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.helper.toSubScripts
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -49,13 +50,13 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						scripts = listOf("adb shell cmd uimode night yes"),
+						scripts = listOf("adb shell cmd uimode night yes").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "Switches to dark mode",
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "Switches to light mode",
 					),
@@ -67,7 +68,7 @@ class ScriptsRepositoryImplTest {
 							"adb shell cmd uimode night yes",
 							"sleep 1",
 							"adb shell cmd uimode night no",
-						),
+						).toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "Switches to dark to light to dark mode",
 					),
@@ -90,13 +91,13 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						scripts = listOf("adb shell cmd uimode night yes"),
+						scripts = listOf("adb shell cmd uimode night yes").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "Switches to dark mode",
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "Switches to light mode",
 					),
@@ -108,7 +109,7 @@ class ScriptsRepositoryImplTest {
 							"adb shell cmd uimode night yes",
 							"sleep 1",
 							"adb shell cmd uimode night no",
-						),
+						).toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "Switches to dark to light to dark mode",
 					),
@@ -143,7 +144,7 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no && sleep 1"),
+						scripts = listOf("adb shell cmd uimode night no && sleep 1").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -185,7 +186,7 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -206,13 +207,13 @@ class ScriptsRepositoryImplTest {
 					listOf(
 						ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 							comment = "my comment",
 						),
 						ScriptsRepository.Script(
 							label = "my script abc",
-							scripts = listOf("bar"),
+							scripts = listOf("bar").toSubScripts(),
 							platform = ScriptsRepository.Platform.IOS,
 							comment = null,
 						),
@@ -231,13 +232,13 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 						comment = "my comment",
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						scripts = listOf("bar"),
+						scripts = listOf("bar").toSubScripts(),
 						platform = ScriptsRepository.Platform.IOS,
 						comment = null,
 					),
@@ -276,12 +277,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						scripts = listOf("bar"),
+						scripts = listOf("bar").toSubScripts(),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
@@ -333,7 +334,7 @@ class ScriptsRepositoryImplTest {
 			val repository = createRepository()
 
 			val newScript = ScriptsRepository.Script(
-				scripts = listOf("bar"),
+				scripts = listOf("bar").toSubScripts(),
 				label = "my script abc",
 				platform = ScriptsRepository.Platform.IOS,
 			)

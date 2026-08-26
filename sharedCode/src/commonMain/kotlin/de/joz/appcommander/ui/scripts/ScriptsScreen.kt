@@ -167,10 +167,10 @@ internal fun ScriptsContent(
 			TerminalSection(
 				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 				show = uiState.toolSections.contains(ToolSection.TERMINAL),
-				onExecuteScriptText = { scriptText, platform ->
+				onExecuteScriptText = { subScript, platform ->
 					onEvent(
 						ScriptsViewModel.Event.OnExecuteScriptText(
-							script = scriptText,
+							script = subScript.subScript,
 							platform = platform,
 						),
 					)
@@ -389,7 +389,7 @@ private fun LoggingSection(
 private fun TerminalSection(
 	isAtMinimumOneDeviceSelected: Boolean,
 	show: Boolean,
-	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
+	onExecuteScriptText: (EditScriptViewModel.SubScript, ScriptsRepository.Platform) -> Unit,
 ) {
 	var selectedPlatform by rememberSaveable { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 	if (show.not()) {

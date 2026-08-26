@@ -31,6 +31,7 @@ import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.called
 import io.mockk.coEvery
@@ -126,7 +127,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "bar",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("foo"),
+				scripts = listOf("foo").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -146,7 +147,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "bar",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("foo"),
+				scripts = listOf("foo").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -181,7 +182,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -210,7 +211,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -240,7 +241,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -269,7 +270,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -290,12 +291,12 @@ class EditScriptScreenTest :
 			val baseScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			val expectedScript = ScriptsRepository.Script(
 				label = "new script name",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("new script 1", "sleep 0", "new script 2"),
+				scripts = listOf("new script 1", "sleep 0", "new script 2").toSubScripts(),
 			)
 			setupData(
 				script = baseScript,
@@ -344,7 +345,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -375,7 +376,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -395,7 +396,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("foo bar"),
+				scripts = listOf("foo bar").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -449,7 +450,7 @@ class EditScriptScreenTest :
 			val removeScript = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("script 1", "script 2"),
+				scripts = listOf("script 1", "script 2").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -474,7 +475,7 @@ class EditScriptScreenTest :
 			val addScript = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("script 1", "script 2"),
+				scripts = listOf("script 1", "script 2").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -501,7 +502,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("echo Hello", "echo world!"),
+				scripts = listOf("echo Hello", "echo world!").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -517,7 +518,7 @@ class EditScriptScreenTest :
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
 						label = "",
-						scripts = listOf("echo Hello"),
+						scripts = listOf("echo Hello").toSubScripts(),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
 					selectedDevice = "",
@@ -525,7 +526,7 @@ class EditScriptScreenTest :
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
 						label = "",
-						scripts = listOf("echo world!"),
+						scripts = listOf("echo world!").toSubScripts(),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
 					selectedDevice = "",
@@ -544,7 +545,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("echo Hello", "echo world!"),
+				scripts = listOf("echo Hello", "echo world!").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 

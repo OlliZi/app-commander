@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain.script
 
+import de.joz.appcommander.helper.toSubScripts
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -31,12 +32,12 @@ class GetScriptIdUseCaseTest {
 	@Test
 	fun `should return same script id`() {
 		val script = ScriptsRepository.Script(
-			scripts = listOf("foo"),
+			scripts = listOf("foo").toSubScripts(),
 			label = "bar",
 			platform = ScriptsRepository.Platform.ANDROID,
 		)
 		val scriptModified = script.copy(
-			scripts = listOf("bar"),
+			scripts = listOf("bar").toSubScripts(),
 			platform = ScriptsRepository.Platform.IOS,
 		)
 
@@ -55,7 +56,7 @@ class GetScriptIdUseCaseTest {
 			),
 			getScriptIdUseCase(
 				script = scriptModified.copy(
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			),

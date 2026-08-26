@@ -30,6 +30,7 @@ import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.helper.assertIsDisplayed
 import de.joz.appcommander.helper.click
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.confirmation_no
 import de.joz.appcommander.resources.edit_action_abort
@@ -69,7 +70,7 @@ class EndToEndTest :
 	private val testScripts = listOf(
 		ScriptsRepository.Script(
 			label = "Dark mode",
-			scripts = listOf("adb shell cmd uimode night yes"),
+			scripts = listOf("adb shell cmd uimode night yes").toSubScripts(),
 			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
@@ -77,17 +78,17 @@ class EndToEndTest :
 			scripts = listOf(
 				"adb shell cmd uimode night yes",
 				"adb shell cmd uimode night no",
-			),
+			).toSubScripts(),
 			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
 			label = "Light mode",
-			scripts = listOf("adb shell cmd uimode night no"),
+			scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
 			platform = ScriptsRepository.Platform.IOS,
 		),
 		ScriptsRepository.Script(
 			label = "Hello Test",
-			scripts = listOf("echo hello test"),
+			scripts = listOf("echo hello test").toSubScripts(),
 			platform = ScriptsRepository.Platform.DESKTOP,
 		),
 	)

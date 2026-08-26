@@ -16,6 +16,7 @@ import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.called
@@ -70,12 +71,12 @@ class ScriptsViewModelTest {
 			scripts = listOf(
 				ScriptsRepository.Script(
 					label = "my script",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "my another script",
-					scripts = listOf("bar"),
+					scripts = listOf("bar").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			),
@@ -97,7 +98,7 @@ class ScriptsViewModelTest {
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
@@ -107,7 +108,7 @@ class ScriptsViewModelTest {
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my another script",
-							scripts = listOf("bar"),
+							scripts = listOf("bar").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
@@ -333,7 +334,7 @@ class ScriptsViewModelTest {
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
 						label = "",
-						scripts = listOf("echo"),
+						scripts = listOf("echo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					selectedDevice = "p7",
@@ -365,7 +366,7 @@ class ScriptsViewModelTest {
 				scripts = listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -388,12 +389,12 @@ class ScriptsViewModelTest {
 					scripts = listOf(
 						ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 						ScriptsRepository.Script(
 							label = "abc",
-							scripts = listOf("123"),
+							scripts = listOf("123").toSubScripts(),
 							platform = ScriptsRepository.Platform.IOS,
 						),
 					),
@@ -409,7 +410,7 @@ class ScriptsViewModelTest {
 						isExpanded = true,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
@@ -419,7 +420,7 @@ class ScriptsViewModelTest {
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "abc",
-							scripts = listOf("123"),
+							scripts = listOf("123").toSubScripts(),
 							platform = ScriptsRepository.Platform.IOS,
 						),
 					),
@@ -529,7 +530,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -564,7 +565,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -610,7 +611,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
-				scripts = listOf("adb install app", "idb install app"),
+				scripts = listOf("adb install app", "idb install app").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -642,7 +643,7 @@ class ScriptsViewModelTest {
 			val desktop = ScriptsRepository.Platform.DESKTOP
 			val testScript = ScriptsRepository.Script(
 				label = "",
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 				platform = desktop,
 			)
 			val viewModel = createViewModel()
