@@ -131,7 +131,7 @@ class ScriptsRepositoryImplTest {
 						"label": "Light mode",
 						"scripts": [
 							{
-								"subScript": "adb shell cmd uimode night no && sleep 1",
+								"script": "adb shell cmd uimode night no && sleep 1",
 								"comment": "comment"
 							}
 						],
@@ -163,13 +163,14 @@ class ScriptsRepositoryImplTest {
 		}
 
 	@Test
-	fun `should return scripts and hint when scripts contains old 'script' field`() =
+	fun `should migrate to new script object scripts and hint when scripts contains old scripts list`() =
 		runTest {
+			val jsonHandler = DependencyInjection().provideJson()
 			val repository = ScriptsRepositoryImpl(
 				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
 				addLoggingUseCase = addLoggingUseCaseMock,
 				processBuilder = ProcessBuilder(),
-				jsonHandler = DependencyInjection().provideJson(),
+				jsonHandler = jsonHandler,
 			)
 
 			testFile.writeText(
@@ -179,10 +180,7 @@ class ScriptsRepositoryImplTest {
 						"label": "Light mode",
 						"script": "ERROR",
 						"scripts": [
-							 {
-							 	"subScript": "adb shell cmd uimode night no",
-							 	"comment": "comment"
-							 }
+						    "adb shell cmd uimode night no"
 						],
 						"platform": "ANDROID",
 						"comMMMent": "error"
@@ -200,7 +198,7 @@ class ScriptsRepositoryImplTest {
 						scripts = listOf(
 							ScriptsRepository.SubScript(
 								script = "adb shell cmd uimode night no",
-								comment = "comment",
+								comment = null,
 							),
 						),
 						platform = ScriptsRepository.Platform.ANDROID,
@@ -210,6 +208,7 @@ class ScriptsRepositoryImplTest {
 			)
 
 			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.OldScriptFieldHint)
+			assertEquals(testFile.readText(), jsonHandler.encodeToString(scripts.scripts))
 		}
 
 	@Test
@@ -271,7 +270,7 @@ class ScriptsRepositoryImplTest {
 				text =
 					"[\n" + "    {\n" + "        \"unknown\": \"null\",\n" + "        \"label\": \"my script\",\n" +
 						"        \"scripts\": [" +
-						"				{\"subScript\": \"foo 1\", \"comment\": \"bar\"}" +
+						"				{\"script\": \"foo 1\", \"comment\": \"bar\"}" +
 						"			],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
@@ -279,7 +278,7 @@ class ScriptsRepositoryImplTest {
 						"        \"unknown\": \"\",\n" +
 						"        \"label\": \"my script abc\",\n" +
 						"        \"comment\": \"comment\",\n" +
-						"        \"scripts\": [{\"subScript\": \"foo 2\"}],\n" +
+						"        \"scripts\": [{\"script\": \"foo 2\"}],\n" +
 						"        \"platform\": \"IOS\"\n" +
 						"    }\n" +
 						"]",
