@@ -33,10 +33,11 @@ class ScriptsRepositoryImpl(
 				parsingMetaData = checkScriptContainsTrimmer(script),
 			)
 		}.getOrElse { error ->
+			val fallback: (Throwable) -> JsonParseResult = { error -> loadDefault(error) }
 			if (error is JsonDecodingException && error.shortMessage.contains(SCRIPT_OBJECT_ERROR)) {
-				tryMigrateToNewScriptObjects()
+				tryMigrateToNewScriptObjects(fallback = fallback)
 			} else {
-				loadDefault(error)
+				fallback(error)
 			}
 		}
 
@@ -91,7 +92,7 @@ class ScriptsRepositoryImpl(
 			null
 		}
 
-	private fun tryMigrateToNewScriptObjects(): JsonParseResult {
+	private fun tryMigrateToNewScriptObjects(fallback: (Throwable) -> JsonParseResult): JsonParseResult {
 		return runCatching {
 			val jsonFile = File(scriptFile.scriptFile)
 			val scripts = jsonHandler.decodeFromString<List<OldScript>>(jsonFile.readText())
@@ -111,11 +112,11 @@ class ScriptsRepositoryImpl(
 				parsingMetaData = ParsingMetaData.OldScriptFieldHint,
 			)
 		}.getOrElse { error ->
-			loadDefault(error = error)
+			fallback(error)
 		}
 	}
 
-	private fun loadDefault(error: Throwable): JsonParseResult =
+	private fun loadDefault(error: Throwable) =
 		JsonParseResult(
 			scripts = DEFAULT_SCRIPTS,
 			parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
