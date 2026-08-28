@@ -295,6 +295,7 @@ class EditScriptScreenTest :
 			)
 			val expectedScript = ScriptsRepository.Script(
 				label = "new script name",
+				comment = "new script comment",
 				platform = ScriptsRepository.Platform.DESKTOP,
 				scripts = listOf("new script 1", "sleep 0", "new script 2").toSubScripts(),
 			)
@@ -626,7 +627,7 @@ class EditScriptScreenTest :
 			setupData()
 			setTestContent()
 
-			onNodeWithTag(testTag = "text_field_simple_text").apply {
+			onNodeWithTag(testTag = "text_field_simple_text_script").apply {
 				performTextClearance()
 				performTextInput("new script name")
 			}

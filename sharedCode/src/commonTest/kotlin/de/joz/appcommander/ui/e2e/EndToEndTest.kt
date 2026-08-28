@@ -178,8 +178,8 @@ class EndToEndTest :
 
 			// Filtering
 			click("expand_button_filter")
-			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text_script"))
-			onNodeWithTag("text_field_simple_text_script").performTextInput("Toggle dark")
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_filter"))
+			onNodeWithTag("text_field_simple_filter").performTextInput("Toggle dark")
 			verifyScreenshot(screenshotName = "e2e_4_scripts_filtered")
 			click("expand_button_filter")
 

@@ -336,7 +336,7 @@ private fun FilterSection(
 		title = Res.string.scripts_filter_section_title,
 		testTag = "expand_button_filter",
 	) {
-		SimpleTextInput(value = filter, onChangeTextChange = {
+		SimpleTextInput(value = filter, testTag = "text_field_simple_filter", onChangeTextChange = {
 			onFilterScripts(it)
 		})
 	}
