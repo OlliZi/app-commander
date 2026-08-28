@@ -25,11 +25,12 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 fun SimpleTextInput(
 	value: String = "",
 	onChangeTextChange: (String) -> Unit,
+	testTag: String = "text_field_simple_text",
 ) {
 	var inputValue by remember { mutableStateOf(value) }
 	TextField(
 		value = inputValue,
-		modifier = Modifier.fillMaxWidth().testTag("text_field_simple_text"),
+		modifier = Modifier.fillMaxWidth().testTag(testTag),
 		colors = TextFieldDefaults.colors(
 			unfocusedContainerColor = Color.White,
 			focusedContainerColor = Color.White,

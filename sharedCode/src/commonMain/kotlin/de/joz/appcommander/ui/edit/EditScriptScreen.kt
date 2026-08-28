@@ -168,6 +168,7 @@ internal fun EditScriptContent(
 			)
 			SimpleTextInput(
 				value = uiState.scriptUiState.scriptName,
+				testTag = "text_field_simple_text_script",
 				onChangeTextChange = {
 					onEvent(EditScriptViewModel.Event.OnChangeScriptName(scriptName = it))
 				},
@@ -179,6 +180,7 @@ internal fun EditScriptContent(
 			)
 			SimpleTextInput(
 				value = uiState.scriptUiState.comment.orEmpty(),
+				testTag = "text_field_simple_text_comment",
 				onChangeTextChange = {
 					onEvent(EditScriptViewModel.Event.OnChangeComment(comment = it))
 				},

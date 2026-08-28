@@ -178,8 +178,8 @@ class EndToEndTest :
 
 			// Filtering
 			click("expand_button_filter")
-			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
-			onNodeWithTag("text_field_simple_text").performTextInput("Toggle dark")
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text_script"))
+			onNodeWithTag("text_field_simple_text_script").performTextInput("Toggle dark")
 			verifyScreenshot(screenshotName = "e2e_4_scripts_filtered")
 			click("expand_button_filter")
 
@@ -201,7 +201,7 @@ class EndToEndTest :
 			onNodeWithContentDescription("Edit button").performClick()
 			assertIsDisplayed(Res.string.edit_title)
 
-			onNodeWithTag("text_field_simple_text").performTextInput(" (Modified)")
+			onNodeWithTag("text_field_simple_text_script").performTextInput(" (Modified)")
 			click("Desktop")
 			verifyScreenshot(screenshotName = "e2e_7_edit_script")
 

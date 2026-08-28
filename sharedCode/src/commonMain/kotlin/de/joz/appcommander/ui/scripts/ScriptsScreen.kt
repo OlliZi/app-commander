@@ -336,11 +336,9 @@ private fun FilterSection(
 		title = Res.string.scripts_filter_section_title,
 		testTag = "expand_button_filter",
 	) {
-		SimpleTextInput(
-			value = filter,
-		) {
+		SimpleTextInput(value = filter, onChangeTextChange = {
 			onFilterScripts(it)
-		}
+		})
 	}
 }
 

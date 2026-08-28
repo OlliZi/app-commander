@@ -303,9 +303,13 @@ class EditScriptScreenTest :
 			)
 			setTestContent(scriptKey = baseScript.hashCode())
 
-			onNodeWithTag(testTag = "text_field_simple_text").apply {
+			onNodeWithTag(testTag = "text_field_simple_text_script").apply {
 				performTextClearance()
 				performTextInput("new script name")
+			}
+			onNodeWithTag(testTag = "text_field_simple_text_comment").apply {
+				performTextClearance()
+				performTextInput("new script comment")
 			}
 			onAllNodes(hasTestTag("text_field_script_input"))[0].apply {
 				performTextClearance()

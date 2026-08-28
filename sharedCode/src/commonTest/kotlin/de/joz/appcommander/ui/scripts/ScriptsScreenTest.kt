@@ -546,9 +546,9 @@ class ScriptsScreenTest :
 				testTag = "expand_button_filter",
 			).assertIsDisplayed().performClick()
 
-			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
-			onNodeWithTag(testTag = "text_field_simple_text").performTextClearance()
-			onNodeWithTag(testTag = "text_field_simple_text").performTextInput("filter")
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text_script"))
+			onNodeWithTag(testTag = "text_field_simple_text_script").performTextClearance()
+			onNodeWithTag(testTag = "text_field_simple_text_script").performTextInput("filter")
 
 			assertEquals(filterText, "filter")
 		}
