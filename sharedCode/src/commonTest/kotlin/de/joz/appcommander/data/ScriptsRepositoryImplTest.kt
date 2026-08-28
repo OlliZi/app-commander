@@ -46,35 +46,8 @@ class ScriptsRepositoryImplTest {
 			val scripts = repository.getScripts()
 
 			assertTrue(testFile.exists())
-			assertEquals(
-				listOf(
-					ScriptsRepository.Script(
-						label = "Dark mode",
-						scripts = listOf("adb shell cmd uimode night yes").toSubScripts(),
-						platform = ScriptsRepository.Platform.ANDROID,
-						comment = "Switches to dark mode",
-					),
-					ScriptsRepository.Script(
-						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
-						platform = ScriptsRepository.Platform.ANDROID,
-						comment = "Switches to light mode",
-					),
-					ScriptsRepository.Script(
-						label = "Switch dark to light to dark mode",
-						scripts = listOf(
-							"adb shell cmd uimode night no",
-							"sleep 1",
-							"adb shell cmd uimode night yes",
-							"sleep 1",
-							"adb shell cmd uimode night no",
-						).toSubScripts(),
-						platform = ScriptsRepository.Platform.ANDROID,
-						comment = "Switches to dark to light to dark mode",
-					),
-				),
-				scripts.scripts,
-			)
+			assertTrue(scripts.scripts.isNotEmpty())
+			assertEquals(ScriptsRepositoryImpl.DEFAULT_SCRIPTS, scripts.scripts)
 			assertNull(scripts.parsingMetaData)
 		}
 
