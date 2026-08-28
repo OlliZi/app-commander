@@ -13,11 +13,6 @@ import okio.FileNotFoundException
 import org.koin.core.annotation.Single
 import java.io.File
 
-@JvmInline
-value class ScriptFile(
-	val scriptFile: String,
-)
-
 @Single
 class ScriptsRepositoryImpl(
 	private val addLoggingUseCase: AddLoggingUseCase,
@@ -98,13 +93,6 @@ class ScriptsRepositoryImpl(
 
 	private fun tryMigrateToNewScriptObjects(): JsonParseResult {
 		return runCatching {
-			@Serializable
-			data class OldScript(
-				val label: String,
-				val platform: Platform,
-				val scripts: List<String>,
-			)
-
 			val jsonFile = File(scriptFile.scriptFile)
 			val scripts = jsonHandler.decodeFromString<List<OldScript>>(jsonFile.readText())
 			val migratedScripts = scripts.map { oldScriptFormat ->
@@ -132,6 +120,13 @@ class ScriptsRepositoryImpl(
 			scripts = DEFAULT_SCRIPTS,
 			parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
 		)
+
+	@Serializable
+	internal data class OldScript(
+		val label: String,
+		val platform: Platform,
+		val scripts: List<String>,
+	)
 
 	companion object {
 		val DEFAULT_SCRIPTS = listOf(
