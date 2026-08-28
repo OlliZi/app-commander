@@ -130,7 +130,10 @@ class ScriptsRepositoryImplTest {
 					 {
 						"label": "Light mode",
 						"scripts": [
-							"adb shell cmd uimode night no && sleep 1"
+							{
+								"subScript": "adb shell cmd uimode night no && sleep 1",
+								"comment": "comment"
+							}
 						],
 						"platform": "ANDROID"
 					}
@@ -144,7 +147,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no && sleep 1").toSubScripts(),
+						scripts = listOf(
+							ScriptsRepository.SubScript(
+								subScript = "adb shell cmd uimode night no && sleep 1",
+								comment = "comment",
+							),
+						),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -171,7 +179,10 @@ class ScriptsRepositoryImplTest {
 						"label": "Light mode",
 						"script": "ERROR",
 						"scripts": [
-							 "adb shell cmd uimode night no"
+							 {
+							 	"subScript": "adb shell cmd uimode night no",
+							 	"comment": "comment"
+							 }
 						],
 						"platform": "ANDROID",
 						"comMMMent": "error"
@@ -186,7 +197,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
+						scripts = listOf(
+							ScriptsRepository.SubScript(
+								subScript = "adb shell cmd uimode night no",
+								comment = "comment",
+							),
+						),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -254,13 +270,16 @@ class ScriptsRepositoryImplTest {
 			testFile.writeText(
 				text =
 					"[\n" + "    {\n" + "        \"unknown\": \"null\",\n" + "        \"label\": \"my script\",\n" +
-						"        \"scripts\": [\"foo\"],\n" +
+						"        \"scripts\": [" +
+						"				{\"subScript\": \"foo 1\", \"comment\": \"bar\"}" +
+						"			],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
 						"    {\n" +
 						"        \"unknown\": \"\",\n" +
 						"        \"label\": \"my script abc\",\n" +
-						"        \"scripts\": [\"bar\"],\n" +
+						"        \"comment\": \"comment\",\n" +
+						"        \"scripts\": [{\"subScript\": \"foo 2\"}],\n" +
 						"        \"platform\": \"IOS\"\n" +
 						"    }\n" +
 						"]",
@@ -277,12 +296,13 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo").toSubScripts(),
+						scripts = listOf(ScriptsRepository.SubScript(subScript = "foo 1", comment = "bar")),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						scripts = listOf("bar").toSubScripts(),
+						comment = "comment",
+						scripts = listOf(ScriptsRepository.SubScript(subScript = "foo 2", comment = null)),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
