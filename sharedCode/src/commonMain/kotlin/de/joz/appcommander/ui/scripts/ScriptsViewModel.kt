@@ -280,7 +280,8 @@ class ScriptsViewModel(
 		clearLoggingUseCase()
 	}
 
-	private fun formatScripts(script: ScriptsRepository.Script): String = script.scripts.joinToString("\n")
+	private fun formatScripts(script: ScriptsRepository.Script): String =
+		script.scripts.joinToString("\n") { it.subScript }
 
 	private fun mapHint(parsingMetaData: ScriptsRepository.ParsingMetaData?): Hint? {
 		if (parsingMetaData == null) {

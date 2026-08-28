@@ -402,30 +402,33 @@ class ScriptsViewModelTest {
 				),
 			)
 
+			assertEquals(2, viewModel.uiState.value.scripts.size)
 			assertEquals(
-				listOf(
-					ScriptsViewModel.Script(
-						description = "my script",
-						scriptText = "foo",
-						isExpanded = true,
-						originalScript = ScriptsRepository.Script(
-							label = "my script",
-							scripts = listOf("foo").toSubScripts(),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
-					),
-					ScriptsViewModel.Script(
-						description = "abc",
-						scriptText = "123",
-						isExpanded = false,
-						originalScript = ScriptsRepository.Script(
-							label = "abc",
-							scripts = listOf("123").toSubScripts(),
-							platform = ScriptsRepository.Platform.IOS,
-						),
+				ScriptsViewModel.Script(
+					description = "my script",
+					scriptText = "foo",
+					isExpanded = true,
+					originalScript = ScriptsRepository.Script(
+						label = "my script",
+						scripts = listOf("foo").toSubScripts(),
+						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
-				viewModel.uiState.value.scripts,
+				viewModel.uiState.value.scripts[0],
+			)
+
+			assertEquals(
+				ScriptsViewModel.Script(
+					description = "abc",
+					scriptText = "123",
+					isExpanded = false,
+					originalScript = ScriptsRepository.Script(
+						label = "abc",
+						scripts = listOf("123").toSubScripts(),
+						platform = ScriptsRepository.Platform.IOS,
+					),
+				),
+				viewModel.uiState.value.scripts[1],
 			)
 		}
 

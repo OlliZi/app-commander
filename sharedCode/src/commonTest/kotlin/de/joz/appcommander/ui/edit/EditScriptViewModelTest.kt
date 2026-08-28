@@ -287,7 +287,7 @@ class EditScriptViewModelTest {
 				viewModel.uiState.value.scriptUiState.scripts[0],
 			)
 			assertEquals(
-				EditScriptViewModel.SubScript(subScript = "script 2"),
+				EditScriptViewModel.SubScript(subScript = "script 3"),
 				viewModel.uiState.value.scriptUiState.scripts[1],
 			)
 		}
