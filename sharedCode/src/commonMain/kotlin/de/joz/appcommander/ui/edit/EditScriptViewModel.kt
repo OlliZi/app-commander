@@ -193,7 +193,7 @@ class EditScriptViewModel(
 					label = "",
 					scripts = listOf(
 						ScriptsRepository.SubScript(
-							subScript = subScript.subScript,
+							script = subScript.subScript,
 							comment = subScript.comment,
 						),
 					),
@@ -244,7 +244,7 @@ class EditScriptViewModel(
 			showDeviceSelection = script?.platform.canShowDeviceSelection(),
 			scriptUiState = ScriptUiState(
 				scriptName = script?.label.orEmpty(),
-				scripts = script?.scripts?.map { SubScript(subScript = it.subScript, comment = it.comment) } ?: listOf(
+				scripts = script?.scripts?.map { SubScript(subScript = it.script, comment = it.comment) } ?: listOf(
 					SubScript(subScript = ""),
 				),
 				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
@@ -315,7 +315,7 @@ class EditScriptViewModel(
 	private fun ScriptUiState.toScriptsRepositoryScript() =
 		ScriptsRepository.Script(
 			label = scriptName,
-			scripts = scripts.map { ScriptsRepository.SubScript(subScript = it.subScript, comment = it.comment) },
+			scripts = scripts.map { ScriptsRepository.SubScript(script = it.subScript, comment = it.comment) },
 			platform = selectedPlatform,
 			comment = comment,
 		)

@@ -146,7 +146,7 @@ class ScriptsViewModel(
 				scripts = jsonParseResult.scripts
 					.filter {
 						it.label.lowercase().contains(filter) || it.scripts.any { script ->
-							script.subScript.lowercase().contains(filter) || script.comment
+							script.script.lowercase().contains(filter) || script.comment
 								.orEmpty()
 								.lowercase()
 								.contains(filter)
@@ -225,7 +225,7 @@ class ScriptsViewModel(
 			executeScriptUseCase(
 				script = ScriptsRepository.Script(
 					label = "",
-					scripts = listOf(ScriptsRepository.SubScript(subScript = script)),
+					scripts = listOf(ScriptsRepository.SubScript(script = script)),
 					platform = platform,
 				),
 				selectedDevice = device,
@@ -280,8 +280,7 @@ class ScriptsViewModel(
 		clearLoggingUseCase()
 	}
 
-	private fun formatScripts(script: ScriptsRepository.Script): String =
-		script.scripts.joinToString("\n") { it.subScript }
+	private fun formatScripts(script: ScriptsRepository.Script): String = script.scripts.joinToString("\n") { it.script }
 
 	private fun mapHint(parsingMetaData: ScriptsRepository.ParsingMetaData?): Hint? {
 		if (parsingMetaData == null) {

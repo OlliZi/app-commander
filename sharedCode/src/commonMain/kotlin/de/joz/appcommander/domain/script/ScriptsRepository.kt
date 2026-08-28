@@ -33,7 +33,7 @@ interface ScriptsRepository {
 
 	@Serializable
 	data class SubScript(
-		val subScript: String,
+		val script: String,
 		val comment: String? = null,
 	)
 

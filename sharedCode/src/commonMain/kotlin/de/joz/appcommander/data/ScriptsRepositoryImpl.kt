@@ -4,7 +4,11 @@ import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
 import de.joz.appcommander.domain.script.ScriptsRepository.ParsingMetaData
+import de.joz.appcommander.domain.script.ScriptsRepository.Platform
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonDecodingException
 import okio.FileNotFoundException
 import org.koin.core.annotation.Single
 import java.io.File
@@ -21,24 +25,24 @@ class ScriptsRepositoryImpl(
 	private val scriptFile: ScriptFile,
 	private val jsonHandler: Json,
 ) : ScriptsRepository {
+	@OptIn(ExperimentalSerializationApi::class)
 	override fun getScripts(): JsonParseResult =
 		runCatching {
 			val jsonFile = File(scriptFile.scriptFile)
 			if (!jsonFile.exists()) {
 				jsonFile.writeText(text = jsonHandler.encodeToString(DEFAULT_SCRIPTS))
 			}
-			val scriptsFromFile = jsonFile.readText()
-			val script = jsonHandler.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
-			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
+			val script = jsonHandler.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
 			JsonParseResult(
 				scripts = script,
-				parsingMetaData = parsingMetaData,
+				parsingMetaData = checkScriptContainsTrimmer(script),
 			)
 		}.getOrElse { error ->
-			JsonParseResult(
-				scripts = DEFAULT_SCRIPTS,
-				parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
-			)
+			if (error is JsonDecodingException && error.shortMessage.contains(SCRIPT_OBJECT_ERROR)) {
+				tryMigrateToNewScriptObjects()
+			} else {
+				loadDefault(error)
+			}
 		}
 
 	override fun openScriptFile() {
@@ -85,48 +89,80 @@ class ScriptsRepositoryImpl(
 		jsonFile.writeText(text = jsonHandler.encodeToString(scripts))
 	}
 
-	private fun checkScriptContainsTrimmer(
-		scripts: List<ScriptsRepository.Script>,
-		fileJsonContent: String,
-	): ParsingMetaData? =
-		if (scripts.any { it.scripts.any { script -> script.subScript.contains(SCRIPT_TRIMMER) } }) {
+	private fun checkScriptContainsTrimmer(scripts: List<ScriptsRepository.Script>): ParsingMetaData? =
+		if (scripts.any { it.scripts.any { script -> script.script.contains(SCRIPT_TRIMMER) } }) {
 			ParsingMetaData.MultiScriptsHint
-		} else if (fileJsonContent.contains(OLD_SCRIPT_FIELD)) {
-			ParsingMetaData.OldScriptFieldHint
 		} else {
 			null
 		}
+
+	private fun loadDefault(error: Throwable): JsonParseResult =
+		JsonParseResult(
+			scripts = DEFAULT_SCRIPTS,
+			parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
+		)
+
+	private fun tryMigrateToNewScriptObjects(): JsonParseResult {
+		return runCatching {
+			@Serializable
+			data class OldScript(
+				val label: String,
+				val platform: Platform,
+				val scripts: List<String>,
+			)
+
+			val jsonFile = File(scriptFile.scriptFile)
+			val scripts = jsonHandler.decodeFromString<List<OldScript>>(jsonFile.readText())
+			// TODO wirte fo file
+			val migratedScripts = scripts.map { oldScriptFormat ->
+				ScriptsRepository.Script(
+					label = oldScriptFormat.label,
+					platform = oldScriptFormat.platform,
+					scripts = oldScriptFormat.scripts.map { ScriptsRepository.SubScript(script = it) },
+					comment = null,
+				)
+			}
+			jsonFile.writeText(text = jsonHandler.encodeToString(migratedScripts))
+
+			return JsonParseResult(
+				scripts = migratedScripts,
+				parsingMetaData = ParsingMetaData.OldScriptFieldHint,
+			)
+		}.getOrElse { error ->
+			loadDefault(error = error)
+		}
+	}
 
 	companion object {
 		val DEFAULT_SCRIPTS = listOf(
 			ScriptsRepository.Script(
 				label = "Dark mode",
 				scripts = listOf(
-					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night yes"),
+					ScriptsRepository.SubScript(script = "adb shell cmd uimode night yes"),
 				),
-				platform = ScriptsRepository.Platform.ANDROID,
+				platform = Platform.ANDROID,
 				comment = "Switches to dark mode",
 			),
 			ScriptsRepository.Script(
 				label = "Light mode",
-				scripts = listOf(ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night no")),
-				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf(ScriptsRepository.SubScript(script = "adb shell cmd uimode night no")),
+				platform = Platform.ANDROID,
 				comment = "Switches to light mode",
 			),
 			ScriptsRepository.Script(
 				label = "Switch dark to light to dark mode",
 				scripts = listOf(
-					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night no"),
-					ScriptsRepository.SubScript(subScript = "sleep 1"),
-					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night yes"),
-					ScriptsRepository.SubScript(subScript = "sleep 1"),
-					ScriptsRepository.SubScript(subScript = "adb shell cmd uimode night no"),
+					ScriptsRepository.SubScript(script = "adb shell cmd uimode night no"),
+					ScriptsRepository.SubScript(script = "sleep 1"),
+					ScriptsRepository.SubScript(script = "adb shell cmd uimode night yes"),
+					ScriptsRepository.SubScript(script = "sleep 1"),
+					ScriptsRepository.SubScript(script = "adb shell cmd uimode night no"),
 				),
-				platform = ScriptsRepository.Platform.ANDROID,
+				platform = Platform.ANDROID,
 				comment = "Switches to dark to light to dark mode",
 			),
 		)
 		private const val SCRIPT_TRIMMER = "&&"
-		private const val OLD_SCRIPT_FIELD = "\"script\""
+		private const val SCRIPT_OBJECT_ERROR = "Expected start of the object '{'"
 	}
 }

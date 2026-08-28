@@ -149,7 +149,7 @@ class ScriptsRepositoryImplTest {
 						label = "Light mode",
 						scripts = listOf(
 							ScriptsRepository.SubScript(
-								subScript = "adb shell cmd uimode night no && sleep 1",
+								script = "adb shell cmd uimode night no && sleep 1",
 								comment = "comment",
 							),
 						),
@@ -199,7 +199,7 @@ class ScriptsRepositoryImplTest {
 						label = "Light mode",
 						scripts = listOf(
 							ScriptsRepository.SubScript(
-								subScript = "adb shell cmd uimode night no",
+								script = "adb shell cmd uimode night no",
 								comment = "comment",
 							),
 						),
@@ -296,13 +296,13 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf(ScriptsRepository.SubScript(subScript = "foo 1", comment = "bar")),
+						scripts = listOf(ScriptsRepository.SubScript(script = "foo 1", comment = "bar")),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
 						comment = "comment",
-						scripts = listOf(ScriptsRepository.SubScript(subScript = "foo 2", comment = null)),
+						scripts = listOf(ScriptsRepository.SubScript(script = "foo 2", comment = null)),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),

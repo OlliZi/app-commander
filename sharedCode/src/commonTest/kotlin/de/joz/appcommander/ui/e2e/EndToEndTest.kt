@@ -202,6 +202,7 @@ class EndToEndTest :
 			assertIsDisplayed(Res.string.edit_title)
 
 			onNodeWithTag("text_field_simple_text_script").performTextInput(" (Modified)")
+			onNodeWithTag("text_field_simple_text_comment").performTextInput(" my custom comment")
 			click("Desktop")
 			verifyScreenshot(screenshotName = "e2e_7_edit_script")
 
