@@ -113,7 +113,6 @@ class ScriptsRepositoryImpl(
 
 			val jsonFile = File(scriptFile.scriptFile)
 			val scripts = jsonHandler.decodeFromString<List<OldScript>>(jsonFile.readText())
-			// TODO wirte fo file
 			val migratedScripts = scripts.map { oldScriptFormat ->
 				ScriptsRepository.Script(
 					label = oldScriptFormat.label,
@@ -122,6 +121,7 @@ class ScriptsRepositoryImpl(
 					comment = null,
 				)
 			}
+
 			jsonFile.writeText(text = jsonHandler.encodeToString(migratedScripts))
 
 			return JsonParseResult(
