@@ -349,7 +349,7 @@ class ScriptsScreenTest :
 				testTag = "expand_button_terminal",
 			).assertIsDisplayed().performClick()
 
-			onNodeWithText("adb devices").assertIsDisplayed()
+			onNodeWithText("adb shell input tap 200 200").assertIsDisplayed()
 			onNodeWithContentDescription("Execute script text").assertIsDisplayed()
 
 			ScriptsRepository.Platform.entries.forEach {
@@ -546,9 +546,9 @@ class ScriptsScreenTest :
 				testTag = "expand_button_filter",
 			).assertIsDisplayed().performClick()
 
-			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text_script"))
-			onNodeWithTag(testTag = "text_field_simple_text_script").performTextClearance()
-			onNodeWithTag(testTag = "text_field_simple_text_script").performTextInput("filter")
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_filter"))
+			onNodeWithTag(testTag = "text_field_simple_filter").performTextClearance()
+			onNodeWithTag(testTag = "text_field_simple_filter").performTextInput("filter")
 
 			assertEquals(filterText, "filter")
 		}
