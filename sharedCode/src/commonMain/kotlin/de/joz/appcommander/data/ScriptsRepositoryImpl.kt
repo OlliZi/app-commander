@@ -96,12 +96,6 @@ class ScriptsRepositoryImpl(
 			null
 		}
 
-	private fun loadDefault(error: Throwable): JsonParseResult =
-		JsonParseResult(
-			scripts = DEFAULT_SCRIPTS,
-			parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
-		)
-
 	private fun tryMigrateToNewScriptObjects(): JsonParseResult {
 		return runCatching {
 			@Serializable
@@ -133,6 +127,12 @@ class ScriptsRepositoryImpl(
 		}
 	}
 
+	private fun loadDefault(error: Throwable): JsonParseResult =
+		JsonParseResult(
+			scripts = DEFAULT_SCRIPTS,
+			parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
+		)
+
 	companion object {
 		val DEFAULT_SCRIPTS = listOf(
 			ScriptsRepository.Script(
@@ -163,6 +163,6 @@ class ScriptsRepositoryImpl(
 			),
 		)
 		private const val SCRIPT_TRIMMER = "&&"
-		private const val SCRIPT_OBJECT_ERROR = "Expected start of the object '{'"
+		const val SCRIPT_OBJECT_ERROR = "Expected start of the object '{'"
 	}
 }
