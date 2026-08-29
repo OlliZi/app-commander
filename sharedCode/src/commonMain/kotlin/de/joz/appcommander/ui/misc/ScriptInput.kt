@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,15 +57,21 @@ fun ScriptInput(
 		},
 		trailingIcon = {
 			Row {
-				RemoveIcon(
-					onRemoveScript = onRemoveScript,
+				ActionButtonIcon(
+					icon = FeatherIcons.Trash,
+					onAction = onRemoveScript,
+					contentDescription = "Remove script",
 				)
-				AddIcon(
-					onAddScript = onAddScript,
+				ActionButtonIcon(
+					icon = FeatherIcons.FilePlus,
+					onAction = onAddScript,
+					contentDescription = "Add script",
 				)
-				PlayIcon(
+				ActionButtonIcon(
+					icon = FeatherIcons.Play,
 					enabled = isAtMinimumOneDeviceSelected,
-					onExecuteScriptText = {
+					contentDescription = "Execute script text",
+					onAction = {
 						onExecuteScriptText(EditScriptViewModel.SubScript(subScript = inputValue))
 					},
 				)
@@ -74,52 +81,24 @@ fun ScriptInput(
 }
 
 @Composable
-private fun RemoveIcon(onRemoveScript: (() -> Unit)?) {
-	if (onRemoveScript == null) {
-		return
-	}
-
-	IconButton(
-		onClick = onRemoveScript,
-	) {
-		Icon(
-			imageVector = FeatherIcons.Trash,
-			tint = MaterialTheme.colorScheme.primary,
-			contentDescription = "Remove script",
-		)
-	}
-}
-
-@Composable
-private fun AddIcon(onAddScript: (() -> Unit)?) {
-	if (onAddScript == null) {
-		return
-	}
-
-	IconButton(
-		onClick = onAddScript,
-	) {
-		Icon(
-			imageVector = FeatherIcons.FilePlus,
-			tint = MaterialTheme.colorScheme.primary,
-			contentDescription = "Add script",
-		)
-	}
-}
-
-@Composable
-private fun PlayIcon(
-	onExecuteScriptText: () -> Unit,
+private fun ActionButtonIcon(
+	icon: ImageVector,
+	contentDescription: String,
+	onAction: (() -> Unit)? = null,
 	enabled: Boolean = true,
 ) {
+	if (onAction == null) {
+		return
+	}
+
 	IconButton(
 		enabled = enabled,
-		onClick = onExecuteScriptText,
+		onClick = onAction,
 	) {
 		Icon(
-			imageVector = FeatherIcons.Play,
+			imageVector = icon,
 			tint = if (enabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
-			contentDescription = "Execute script text",
+			contentDescription = contentDescription,
 		)
 	}
 }
