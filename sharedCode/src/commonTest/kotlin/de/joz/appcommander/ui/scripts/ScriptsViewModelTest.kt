@@ -72,13 +72,21 @@ class ScriptsViewModelTest {
 			scripts = listOf(
 				ScriptsRepository.Script(
 					label = "my script",
+					comment = null,
 					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "my another script",
-					scripts = listOf("bar").toSubScripts(),
-					platform = ScriptsRepository.Platform.ANDROID,
+					comment = "comment to another script",
+					scripts = listOf(
+						ScriptsRepository.ScriptCode.Script(script = "bar"),
+						ScriptsRepository.ScriptCode.CommentedScript(
+							script = "script with comment",
+							comment = "comment to script",
+						),
+					),
+					platform = ScriptsRepository.Platform.DESKTOP,
 				),
 			),
 			parsingMetaData = null,
@@ -99,18 +107,26 @@ class ScriptsViewModelTest {
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
+							comment = null,
 							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
 					ScriptsViewModel.Script(
 						description = "my another script",
-						scriptText = "bar",
+						scriptText = "bar\nscript with comment",
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my another script",
-							scripts = listOf("bar").toSubScripts(),
-							platform = ScriptsRepository.Platform.ANDROID,
+							comment = "comment to another script",
+							scripts = listOf(
+								ScriptsRepository.ScriptCode.Script(script = "bar"),
+								ScriptsRepository.ScriptCode.CommentedScript(
+									script = "script with comment",
+									comment = "comment to script",
+								),
+							),
+							platform = ScriptsRepository.Platform.DESKTOP,
 						),
 					),
 				),
@@ -186,7 +202,7 @@ class ScriptsViewModelTest {
 			)
 			assertEquals(
 				filter2,
-				preferencesRepositoryMock.lastStoredValues.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY),
+				preferencesRepositoryMock.lastStoredValues[FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY],
 			)
 
 			// test description of script
@@ -202,6 +218,8 @@ class ScriptsViewModelTest {
 				filter3,
 				preferencesRepositoryMock.lastStoredValues[FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY],
 			)
+
+			// TODO // test comment of script
 
 			verify(exactly = 4) {
 				getUserScriptsUseCaseMock.invoke()

@@ -10,10 +10,11 @@ class FilterScriptUseCase(
 	suspend operator fun invoke(scripts: List<ScriptsRepository.Script>): FilterResult {
 		val filterText = getPreferenceUseCase.get(SCRIPT_FILTER_PREF_KEY, "").lowercase()
 		val filteredScripts = scripts.filter { script ->
-			filterLabel(script, filterText) or filterPlatform(script, filterText) or filterScripts(
-				script,
-				filterText,
-			) or filterComment(script, filterText)
+			val filterLabel = filterLabel(script, filterText)
+			val filterPlatform = filterPlatform(script, filterText)
+			val filterScripts = filterScripts(script, filterText)
+			val filterComment = filterComment(script, filterText)
+			return@filter filterLabel or filterPlatform or filterScripts or filterComment
 		}
 
 		return FilterResult(
@@ -37,15 +38,18 @@ class FilterScriptUseCase(
 		filter: String,
 	): Boolean =
 		script.scripts.any { script ->
-			script.script.filterLowerCase(filter) || when (script) {
+			val scriptFilter = script.script.filterLowerCase(filter)
+			val commentFilter = when (script) {
 				is ScriptsRepository.ScriptCode.CommentedScript -> {
 					script.comment.filterLowerCase(filter)
 				}
 
 				is ScriptsRepository.ScriptCode.Script -> {
-					true
+					false
 				}
 			}
+
+			return@any scriptFilter or commentFilter
 		}
 
 	private fun filterComment(
@@ -53,7 +57,7 @@ class FilterScriptUseCase(
 		filter: String,
 	): Boolean =
 		if (script.comment == null) {
-			true
+			false
 		} else {
 			script.comment.filterLowerCase(filter)
 		}
