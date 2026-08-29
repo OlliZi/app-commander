@@ -68,9 +68,15 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
 {
   "label": "Toggle Dark Mode On and Off",
   "scripts": [
-    "adb shell cmd uimode night yes",
+    {
+      "script": "adb shell cmd uimode night yes",
+      "comment": "optional comment"
+    },
     "sleep 1",
-    "adb shell cmd uimode night no"
+    {
+      "script": "adb shell cmd uimode night no",
+      "comment": "optional comment"
+    }
   ],
   "platform": "ANDROID",
   "comment": "Optional comment for the script. Can be null, unset, or empty."
@@ -82,18 +88,26 @@ Your scripts are stored in a `scripts.json` file located in the `.app_commander`
   "comment": "Clears and restarts the app. Then navigates through the app from login to some detail screen.",
   "label": "Login automatically and navigate to detail screen X",
   "scripts": [
-    "adb shell pm clear de.joz.kicktippAnalyser4android",
+    {
+      "script": "adb shell pm clear de.joz.kicktippAnalyser4android",
+      "comment": "Do a fresh app start"
+    },
     "adb shell am force-stop de.joz.kicktippAnalyser4android",
     "adb shell am start -n de.joz.kicktippAnalyser4android/.MainActivity",
-    "sleep 2",
+    {
+      "script": "sleep 2",
+      "comment": "Wait for app to start and perform login"
+    },
     "adb shell input text 'testuser'",
     "adb shell input keyevent 61",
     "adb shell input text 'password'",
-    "sleep 2",
+    {
+      "script": "sleep 2",
+      "comment": "Navigate to detail screen"
+    },
     "adb shell input tap 850 2170",
     "adb shell input tap 850 2170",
     "adb shell input tap 850 2170",
-    "adb shell input tap 1000 2000",
     "adb shell input tap 1000 2000"
   ],
   "platform": "ANDROID"
