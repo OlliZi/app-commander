@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -234,6 +235,14 @@ private fun ScriptsSection(
 								text = script.description,
 								textLabelType = TextLabelType.BodyLarge,
 							)
+							if (!script.comment.isNullOrEmpty()) {
+								TextLabel(
+									modifier = Modifier.fillMaxWidth(),
+									text = script.comment,
+									textLabelType = TextLabelType.BodySmall,
+								)
+							}
+							HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp).fillMaxWidth())
 							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
 								text = script.scriptText,
@@ -304,14 +313,11 @@ private fun ScriptItemToolIcons(
 
 @Composable
 private fun Hint(hint: Hint?) {
-	if (hint == null) {
-		return
-	}
-
 	val text = when (hint) {
 		is Hint.Error -> stringResource(Res.string.scripts_json_parsing_error, hint.throwable.message.orEmpty())
 		is Hint.MultiScripts -> stringResource(Res.string.scripts_json_multi_scripts)
 		is Hint.OldScriptFieldHint -> stringResource(Res.string.scripts_json_old_script_field)
+		else -> return
 	}
 
 	TextLabel(
@@ -508,6 +514,7 @@ private fun RenderPreview(darkTheme: Boolean) {
 					Script(
 						description = "android my script",
 						scriptText = "adb long long long long long long long long long long long long script",
+						comment = "some fine granular comment",
 						isExpanded = true,
 						originalScript = ScriptsRepository.Script(
 							label = "",

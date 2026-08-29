@@ -148,6 +148,7 @@ class ScriptsViewModel(
 				scripts = filterResult.scripts.map { script ->
 					Script(
 						description = script.label,
+						comment = script.comment,
 						scriptText = formatScripts(script),
 						originalScript = script,
 						isExpanded = _uiState.value.scripts.any {
@@ -329,6 +330,7 @@ class ScriptsViewModel(
 		val description: String,
 		val scriptText: String,
 		val originalScript: ScriptsRepository.Script,
+		val comment: String? = null,
 		val isExpanded: Boolean = false,
 	)
 }
