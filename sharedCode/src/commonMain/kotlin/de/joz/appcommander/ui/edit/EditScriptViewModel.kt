@@ -191,12 +191,7 @@ class EditScriptViewModel(
 			executeScriptUseCase(
 				script = ScriptsRepository.Script(
 					label = "",
-					scripts = listOf(
-						ScriptsRepository.SubScript(
-							script = subScript.subScript,
-							comment = subScript.comment,
-						),
-					),
+					scripts = listOf((subScript.mapToRepositoryScript())),
 					platform = platform,
 				),
 				selectedDevice = device,
@@ -244,7 +239,16 @@ class EditScriptViewModel(
 			showDeviceSelection = script?.platform.canShowDeviceSelection(),
 			scriptUiState = ScriptUiState(
 				scriptName = script?.label.orEmpty(),
-				scripts = script?.scripts?.map { SubScript(subScript = it.script, comment = it.comment) } ?: listOf(
+				scripts = script?.scripts?.map {
+					when (it) {
+						is ScriptsRepository.ScriptCode.Script -> SubScript(subScript = it.script, comment = null)
+
+						is ScriptsRepository.ScriptCode.CommentedScript -> SubScript(
+							subScript = it.script,
+							comment = it.comment,
+						)
+					}
+				} ?: listOf(
 					SubScript(subScript = ""),
 				),
 				selectedPlatform = script?.platform ?: ScriptsRepository.Platform.ANDROID,
@@ -315,8 +319,25 @@ class EditScriptViewModel(
 	private fun ScriptUiState.toScriptsRepositoryScript() =
 		ScriptsRepository.Script(
 			label = scriptName,
-			scripts = scripts.map { ScriptsRepository.SubScript(script = it.subScript, comment = it.comment) },
+			scripts = mapToRepositoryScripts(),
 			platform = selectedPlatform,
 			comment = comment,
 		)
+
+	private fun ScriptUiState.mapToRepositoryScripts(): List<ScriptsRepository.ScriptCode> =
+		scripts.map {
+			it.mapToRepositoryScript()
+		}
+
+	private fun SubScript.mapToRepositoryScript(): ScriptsRepository.ScriptCode =
+		if (comment.isNullOrEmpty()) {
+			ScriptsRepository.ScriptCode.Script(
+				script = subScript,
+			)
+		} else {
+			ScriptsRepository.ScriptCode.CommentedScript(
+				script = subScript,
+				comment = comment,
+			)
+		}
 }
