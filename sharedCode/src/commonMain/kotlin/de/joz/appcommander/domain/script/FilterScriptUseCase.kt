@@ -1,0 +1,69 @@
+package de.joz.appcommander.domain.script
+
+import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+
+class FilterScriptUseCase(
+	private val getPreferenceUseCase: GetPreferenceUseCase,
+) {
+	suspend operator fun invoke(scripts: List<ScriptsRepository.Script>): FilterResult {
+		val filterText = getPreferenceUseCase.get(SCRIPT_FILTER_PREF_KEY, "").lowercase()
+		val filteredScripts = scripts.filter { script ->
+			filterLabel(script, filterText) or filterPlatform(script, filterText) or filterScripts(
+				script,
+				filterText,
+			) or filterComment(script, filterText)
+		}
+
+		return FilterResult(
+			scripts = filteredScripts,
+			filterText = filterText,
+		)
+	}
+
+	private fun filterLabel(
+		script: ScriptsRepository.Script,
+		filter: String,
+	): Boolean = script.label.filterLowerCase(filter)
+
+	private fun filterPlatform(
+		script: ScriptsRepository.Script,
+		filter: String,
+	): Boolean = script.platform.name.filterLowerCase(filter)
+
+	private fun filterScripts(
+		script: ScriptsRepository.Script,
+		filter: String,
+	): Boolean =
+		script.scripts.any { script ->
+			script.script.filterLowerCase(filter) || when (script) {
+				is ScriptsRepository.ScriptCode.CommentedScript -> {
+					script.comment.filterLowerCase(filter)
+				}
+
+				is ScriptsRepository.ScriptCode.Script -> {
+					true
+				}
+			}
+		}
+
+	private fun filterComment(
+		script: ScriptsRepository.Script,
+		filter: String,
+	): Boolean =
+		if (script.comment == null) {
+			true
+		} else {
+			script.comment.filterLowerCase(filter)
+		}
+
+	private fun String.filterLowerCase(filter: String) = lowercase().contains(filter)
+
+	data class FilterResult(
+		val scripts: List<ScriptsRepository.Script>,
+		val filterText: String,
+	)
+
+	companion object {
+		const val SCRIPT_FILTER_PREF_KEY = "SCRIPT_FILTER"
+	}
+}
