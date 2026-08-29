@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,7 +44,7 @@ fun ScriptInput(
 	var inputValue by remember(script) { mutableStateOf(script.subScript) }
 	TextField(
 		value = inputValue,
-		modifier = Modifier.fillMaxWidth().testTag("text_field_script_input"),
+		modifier = Modifier.height(46.dp).fillMaxWidth().testTag("text_field_script_input"),
 		colors = TextFieldDefaults.colors(
 			unfocusedContainerColor = Color.White,
 			focusedContainerColor = Color.White,
