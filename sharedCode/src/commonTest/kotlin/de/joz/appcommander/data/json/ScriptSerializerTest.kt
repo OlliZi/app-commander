@@ -23,13 +23,16 @@ class ScriptSerializerTest {
 		)
 
 		val serialized = json.encodeToString(ScriptSerializer, script)
-		val expected = "{\"label\":\"Test Label\",\"platform\":\"ANDROID\",\"scripts\":[\"command 1\",{\"script\":\"command 2\",\"comment\":\"comment 2\"}],\"comment\":\"Main Comment\"}"
+		val expected = "{\"label\":\"Test Label\",\"platform\":\"ANDROID\",\"scripts\":" +
+			"[\"command 1\",{\"script\":\"command 2\",\"comment\":\"comment 2\"}]," +
+			"\"comment\":\"Main Comment\"}"
 		assertEquals(expected, serialized)
 	}
 
 	@Test
 	fun `should deserialize Script from JSON`() {
-		val jsonString = "{\"label\":\"Test Label\",\"platform\":\"ANDROID\",\"scripts\":[\"command 1\",{\"script\":\"command 2\",\"comment\":\"comment 2\"}],\"comment\":\"Main Comment\"}"
+		val jsonString = "{\"label\":\"Test Label\",\"platform\":\"ANDROID\",\"scripts\":" + "" +
+			"[\"command 1\",{\"script\":\"command 2\",\"comment\":\"comment 2\"}],\"comment\":\"Main Comment\"}"
 		val deserialized = json.decodeFromString(ScriptSerializer, jsonString)
 
 		val expected = ScriptsRepository.Script(
