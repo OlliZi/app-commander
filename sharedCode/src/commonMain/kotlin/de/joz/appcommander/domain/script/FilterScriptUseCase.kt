@@ -1,7 +1,9 @@
 package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
+import org.koin.core.annotation.Factory
 
+@Factory
 class FilterScriptUseCase(
 	private val getPreferenceUseCase: GetPreferenceUseCase,
 ) {
