@@ -49,12 +49,6 @@ interface ScriptsRepository {
 		) : ScriptCode
 	}
 
-	@Serializable
-	data class SubScript(
-		val script: String,
-		val comment: String? = null,
-	)
-
 	sealed interface ParsingMetaData {
 		data class ParsingError(
 			val throwable: Throwable,

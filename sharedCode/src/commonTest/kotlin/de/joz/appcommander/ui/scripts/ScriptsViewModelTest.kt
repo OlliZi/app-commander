@@ -10,6 +10,7 @@ import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.FilterScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
@@ -119,7 +120,7 @@ class ScriptsViewModelTest {
 			coVerify {
 				getDevicesUseCaseMock wasNot called
 				getUserScriptsUseCaseMock()
-				getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "")
+				getPreferenceUseCaseMock.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, "")
 			}
 		}
 
@@ -143,7 +144,7 @@ class ScriptsViewModelTest {
 
 			// test label of script
 			val filter1 = "BaR"
-			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter1
+			coEvery { getPreferenceUseCaseMock.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, "") } returns filter1
 
 			assertEquals(2, viewModel.uiState.value.scripts.size)
 
@@ -169,7 +170,7 @@ class ScriptsViewModelTest {
 			val filter2 = ScriptsRepository.Platform.IOS.name
 			coEvery {
 				getPreferenceUseCaseMock.get(
-					ScriptsViewModel.SCRIPT_FILTER_PREF_KEY,
+					FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY,
 					"",
 				)
 			} returns filter2.lowercase()
@@ -185,12 +186,12 @@ class ScriptsViewModelTest {
 			)
 			assertEquals(
 				filter2,
-				preferencesRepositoryMock.lastStoredValues.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY),
+				preferencesRepositoryMock.lastStoredValues.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY),
 			)
 
 			// test description of script
 			val filter3 = "my another script"
-			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter3
+			coEvery { getPreferenceUseCaseMock.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, "") } returns filter3
 			viewModel.onEvent(
 				event = ScriptsViewModel.Event.OnFilterScripts(
 					filter = filter3,
@@ -199,7 +200,7 @@ class ScriptsViewModelTest {
 			runCurrent()
 			assertEquals(
 				filter3,
-				preferencesRepositoryMock.lastStoredValues.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY),
+				preferencesRepositoryMock.lastStoredValues[FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY],
 			)
 
 			verify(exactly = 4) {
@@ -682,6 +683,7 @@ class ScriptsViewModelTest {
 			mainDispatcher = Dispatchers.Unconfined,
 			getPreferenceUseCase = getPreferenceUseCaseMock,
 			savePreferenceUseCase = savePreferenceUseCaseMock,
+			filterScriptUseCase = FilterScriptUseCase(getPreferenceUseCaseMock),
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }

@@ -21,7 +21,7 @@ object ScriptCodeSerializer : KSerializer<ScriptsRepository.ScriptCode> {
 		value: ScriptsRepository.ScriptCode,
 	) {
 		when (value) {
-			is ScriptsRepository.ScriptCode.Script -> simpleScriptSerializer.serialize(encoder, value)
+			is ScriptsRepository.ScriptCode.Script -> encoder.encodeString(value.script)
 			is ScriptsRepository.ScriptCode.CommentedScript -> commentedScriptSerializer.serialize(encoder, value)
 		}
 	}
