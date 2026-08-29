@@ -6,9 +6,7 @@ import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
 import de.joz.appcommander.domain.script.ScriptsRepository.ParsingMetaData
 import de.joz.appcommander.domain.script.ScriptsRepository.Platform
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonDecodingException
 import okio.FileNotFoundException
 import org.koin.core.annotation.Single
 import java.io.File
@@ -33,12 +31,10 @@ class ScriptsRepositoryImpl(
 				parsingMetaData = checkScriptContainsTrimmer(script),
 			)
 		}.getOrElse { error ->
-			val fallback: (Throwable) -> JsonParseResult = { error -> loadDefault(error) }
-			if (error is JsonDecodingException && error.shortMessage.contains(SCRIPT_OBJECT_ERROR)) {
-				tryMigrateToNewScriptObjects(fallback = fallback)
-			} else {
-				fallback(error)
-			}
+			JsonParseResult(
+				scripts = DEFAULT_SCRIPTS,
+				parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
+			)
 		}
 
 	override fun openScriptFile() {
@@ -91,43 +87,6 @@ class ScriptsRepositoryImpl(
 		} else {
 			null
 		}
-
-	private fun tryMigrateToNewScriptObjects(fallback: (Throwable) -> JsonParseResult): JsonParseResult {
-		return runCatching {
-			val jsonFile = File(scriptFile.scriptFile)
-			val scripts = jsonHandler.decodeFromString<List<OldScript>>(jsonFile.readText())
-			val migratedScripts = scripts.map { oldScriptFormat ->
-				ScriptsRepository.Script(
-					label = oldScriptFormat.label,
-					platform = oldScriptFormat.platform,
-					scripts = oldScriptFormat.scripts.map { ScriptsRepository.ScriptCode.Script(script = it) },
-					comment = null,
-				)
-			}
-
-			jsonFile.writeText(text = jsonHandler.encodeToString(migratedScripts))
-
-			return JsonParseResult(
-				scripts = migratedScripts,
-				parsingMetaData = ParsingMetaData.OldScriptFieldHint,
-			)
-		}.getOrElse { error ->
-			fallback(error)
-		}
-	}
-
-	private fun loadDefault(error: Throwable) =
-		JsonParseResult(
-			scripts = DEFAULT_SCRIPTS,
-			parsingMetaData = ParsingMetaData.ParsingError(throwable = error),
-		)
-
-	@Serializable
-	internal data class OldScript(
-		val label: String,
-		val platform: Platform,
-		val scripts: List<String>,
-	)
 
 	companion object {
 		val DEFAULT_SCRIPTS = listOf(

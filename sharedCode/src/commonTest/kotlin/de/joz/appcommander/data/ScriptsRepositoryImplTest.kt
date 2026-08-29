@@ -136,54 +136,6 @@ class ScriptsRepositoryImplTest {
 		}
 
 	@Test
-	fun `should migrate to new script object scripts and hint when scripts contains old scripts list`() =
-		runTest {
-			val jsonHandler = DependencyInjection().provideJson()
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
-				addLoggingUseCase = addLoggingUseCaseMock,
-				processBuilder = ProcessBuilder(),
-				jsonHandler = jsonHandler,
-			)
-
-			testFile.writeText(
-				"""
-				[
-					 {
-						"label": "Light mode",
-						"script": "ERROR",
-						"scripts": [
-						    "adb shell cmd uimode night no"
-						],
-						"platform": "ANDROID",
-						"comMMMent": "error"
-					}
-				]
-				""".trimIndent(),
-			)
-
-			val scripts = repository.getScripts()
-
-			assertEquals(
-				listOf(
-					ScriptsRepository.Script(
-						label = "Light mode",
-						scripts = listOf(
-							ScriptsRepository.ScriptCode.Script(
-								script = "adb shell cmd uimode night no",
-							),
-						),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-				),
-				scripts.scripts,
-			)
-
-			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.OldScriptFieldHint)
-			assertEquals(testFile.readText(), jsonHandler.encodeToString(scripts.scripts))
-		}
-
-	@Test
 	fun `should return custom scripts when file contains custom scripts`() =
 		runTest {
 			val jsonHandler = Json {
