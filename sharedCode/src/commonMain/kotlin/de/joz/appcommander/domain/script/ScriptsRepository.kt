@@ -1,7 +1,7 @@
 package de.joz.appcommander.domain.script
 
-import de.joz.appcommander.data.ScriptCodeSerializer
-import de.joz.appcommander.data.ScriptSerializer
+import de.joz.appcommander.data.json.ScriptCodeSerializer
+import de.joz.appcommander.data.json.ScriptSerializer
 import kotlinx.serialization.Serializable
 
 interface ScriptsRepository {

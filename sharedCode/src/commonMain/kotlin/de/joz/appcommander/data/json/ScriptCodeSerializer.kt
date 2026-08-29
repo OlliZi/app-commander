@@ -1,4 +1,4 @@
-package de.joz.appcommander.data
+package de.joz.appcommander.data.json
 
 import de.joz.appcommander.domain.script.ScriptsRepository
 import kotlinx.serialization.KSerializer
