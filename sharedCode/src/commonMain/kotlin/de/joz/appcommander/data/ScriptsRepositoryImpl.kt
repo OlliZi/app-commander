@@ -100,7 +100,7 @@ class ScriptsRepositoryImpl(
 				ScriptsRepository.Script(
 					label = oldScriptFormat.label,
 					platform = oldScriptFormat.platform,
-					scripts = oldScriptFormat.scripts.map { ScriptsRepository.SubScript(script = it) },
+					scripts = oldScriptFormat.scripts.map { ScriptsRepository.ScriptCode.Script(script = it) },
 					comment = null,
 				)
 			}
@@ -134,25 +134,25 @@ class ScriptsRepositoryImpl(
 			ScriptsRepository.Script(
 				label = "Dark mode",
 				scripts = listOf(
-					ScriptsRepository.SubScript(script = "adb shell cmd uimode night yes"),
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night yes"),
 				),
 				platform = Platform.ANDROID,
 				comment = "Switches to dark mode",
 			),
 			ScriptsRepository.Script(
 				label = "Light mode",
-				scripts = listOf(ScriptsRepository.SubScript(script = "adb shell cmd uimode night no")),
+				scripts = listOf(ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night no")),
 				platform = Platform.ANDROID,
 				comment = "Switches to light mode",
 			),
 			ScriptsRepository.Script(
 				label = "Switch dark to light to dark mode",
 				scripts = listOf(
-					ScriptsRepository.SubScript(script = "adb shell cmd uimode night no"),
-					ScriptsRepository.SubScript(script = "sleep 1"),
-					ScriptsRepository.SubScript(script = "adb shell cmd uimode night yes"),
-					ScriptsRepository.SubScript(script = "sleep 1"),
-					ScriptsRepository.SubScript(script = "adb shell cmd uimode night no"),
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night no"),
+					ScriptsRepository.ScriptCode.Script(script = "sleep 1"),
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night yes"),
+					ScriptsRepository.ScriptCode.Script(script = "sleep 1"),
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night no"),
 				),
 				platform = Platform.ANDROID,
 				comment = "Switches to dark to light to dark mode",
