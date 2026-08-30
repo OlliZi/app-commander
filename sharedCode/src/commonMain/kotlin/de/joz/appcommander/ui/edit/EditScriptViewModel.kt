@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
-// add comment per strings crtipt
 @KoinViewModel
 class EditScriptViewModel(
 	@InjectedParam private val navController: NavController,
@@ -100,7 +99,7 @@ class EditScriptViewModel(
 	private fun onRemoveSubScript(index: Int) {
 		updateUiState(
 			scripts = if (_uiState.value.scriptUiState.scripts.size == 1) {
-				listOf(SubScript(subScript = ""))
+				listOf(SubScript(subScript = "", comment = null))
 			} else {
 				_uiState.value.scriptUiState.scripts.filterIndexed { oldIndex, _ ->
 					oldIndex != index

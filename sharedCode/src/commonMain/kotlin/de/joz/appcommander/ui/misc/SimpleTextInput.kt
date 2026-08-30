@@ -30,7 +30,7 @@ fun SimpleTextInput(
 	testTag: String = "text_field_simple_text",
 	modifier: Modifier = Modifier,
 ) {
-	var inputValue by remember { mutableStateOf(value) }
+	var inputValue by remember(value) { mutableStateOf(value) }
 	TextField(
 		shape = RoundedCornerShape(10.dp),
 		value = inputValue,
