@@ -53,6 +53,7 @@ class EditScriptViewModel(
 				is Event.OnChangeScript -> onChangeScript(event.index, event.script)
 				is Event.OnAddSubScript -> onAddSubScript(event.index)
 				is Event.OnRemoveSubScript -> onRemoveSubScript(event.index)
+				is Event.OnChangeSubScriptComment -> onChangeSubScriptComment(event.index, event.comment)
 				is Event.OnChangeScriptName -> onChangeScriptName(event.scriptName)
 				is Event.OnChangeComment -> onChangeComment(event.comment)
 				is Event.OnExecuteSingleScript -> onExecuteSingleScript(event.script)
@@ -103,6 +104,21 @@ class EditScriptViewModel(
 			} else {
 				_uiState.value.scriptUiState.scripts.filterIndexed { oldIndex, _ ->
 					oldIndex != index
+				}
+			},
+		)
+	}
+
+	private fun onChangeSubScriptComment(
+		index: Int,
+		comment: String,
+	) {
+		updateUiState(
+			scripts = _uiState.value.scriptUiState.scripts.mapIndexed { i, script ->
+				if (i == index) {
+					script.copy(comment = comment)
+				} else {
+					script
 				}
 			},
 		)
@@ -274,6 +290,11 @@ class EditScriptViewModel(
 		data class OnChangeScript(
 			val index: Int,
 			val script: SubScript,
+		) : Event
+
+		data class OnChangeSubScriptComment(
+			val index: Int,
+			val comment: String,
 		) : Event
 
 		data class OnAddSubScript(

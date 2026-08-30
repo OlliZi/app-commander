@@ -30,6 +30,7 @@ fun MultiScriptInput(
 	scripts: List<EditScriptViewModel.SubScript>,
 	onExecuteAllScriptsText: () -> Unit,
 	onChangeScriptText: (Int, EditScriptViewModel.SubScript) -> Unit,
+	onChangeScriptComment: (Int, String) -> Unit,
 	onRemoveScript: (Int) -> Unit,
 	onAddScriptText: (Int) -> Unit,
 	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
@@ -69,6 +70,9 @@ fun MultiScriptInput(
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
 					onChangeScriptText(index, editedScript)
+				},
+				onChangeScriptComment = { comment ->
+					onChangeScriptComment(index, comment)
 				},
 				onAddScript = {
 					onAddScriptText(index)
@@ -114,6 +118,7 @@ internal fun PreviewMultiScriptInput(darkMode: Boolean) {
 			onExecuteAllScriptsText = {},
 			onAddScriptText = {},
 			onChangeScriptText = { _, _ -> },
+			onChangeScriptComment = { _, _ -> },
 		)
 	}
 }
