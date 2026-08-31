@@ -104,6 +104,7 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my script",
 						scriptText = "foo",
+						comment = null,
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
@@ -115,6 +116,7 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my another script",
 						scriptText = "bar\nscript with comment",
+						comment = "comment to another script",
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my another script",

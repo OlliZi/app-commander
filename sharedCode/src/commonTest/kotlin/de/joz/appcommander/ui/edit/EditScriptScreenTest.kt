@@ -514,6 +514,11 @@ class EditScriptScreenTest :
 			setupData(script = script)
 			setTestContent(scriptKey = script.hashCode())
 
+			onAllNodes(hasTestTag("show_more_button")).apply {
+				get(0).performClick()
+				get(1).performClick()
+			}
+
 			onAllNodes(hasContentDescription("Execute script text")).apply {
 				get(0).performClick()
 				get(1).performClick()
@@ -556,6 +561,11 @@ class EditScriptScreenTest :
 
 			setupData(script = script)
 			setTestContent(scriptKey = script.hashCode())
+
+			onAllNodes(hasTestTag("show_more_button")).apply {
+				get(0).performClick()
+				get(1).performClick()
+			}
 
 			onAllNodes(hasContentDescription("Execute script text")).apply {
 				get(0).assertIsNotEnabled()
