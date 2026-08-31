@@ -43,7 +43,7 @@ private val ICON_SIZE = 36.dp
 
 @Composable
 fun ScriptInput(
-	isAtMinimumOneDeviceSelected: Boolean,
+	executeScriptButtonEnabled: Boolean,
 	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
 	script: EditScriptViewModel.SubScript = EditScriptViewModel.SubScript(subScript = ""),
 	onChangeScriptText: (EditScriptViewModel.SubScript) -> Unit = { _ -> },
@@ -87,7 +87,7 @@ fun ScriptInput(
 						)
 						ActionButtonIcon(
 							icon = FeatherIcons.Play,
-							enabled = isAtMinimumOneDeviceSelected,
+							enabled = executeScriptButtonEnabled,
 							contentDescription = "Execute script text",
 							onAction = {
 								onExecuteScriptText(EditScriptViewModel.SubScript(subScript = inputValue))
@@ -171,7 +171,7 @@ internal fun PreviewScriptInput(darkMode: Boolean) {
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			ScriptInput(
-				isAtMinimumOneDeviceSelected = true,
+				executeScriptButtonEnabled = true,
 				script = EditScriptViewModel.SubScript(subScript = "adb devices"),
 				onExecuteScriptText = {},
 			)
