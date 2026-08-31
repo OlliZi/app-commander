@@ -26,7 +26,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MultiScriptInput(
-	isAtMinimumOneDeviceSelected: Boolean,
+	executeScriptButtonEnabled: Boolean,
 	scripts: List<EditScriptViewModel.SubScript>,
 	onExecuteAllScriptsText: () -> Unit,
 	onChangeScriptText: (Int, EditScriptViewModel.SubScript) -> Unit,
@@ -49,12 +49,12 @@ fun MultiScriptInput(
 			textLabelType = TextLabelType.BodyLarge,
 		)
 		IconButton(
-			enabled = isAtMinimumOneDeviceSelected,
+			enabled = executeScriptButtonEnabled,
 			onClick = onExecuteAllScriptsText,
 		) {
 			Icon(
 				imageVector = FeatherIcons.Play,
-				tint = if (isAtMinimumOneDeviceSelected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+				tint = if (executeScriptButtonEnabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
 				contentDescription = "Execute all scripts",
 			)
 		}
@@ -65,7 +65,7 @@ fun MultiScriptInput(
 	) {
 		scripts.forEachIndexed { index, script ->
 			ScriptInput(
-				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+				executeScriptButtonEnabled = executeScriptButtonEnabled,
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
@@ -109,7 +109,7 @@ internal fun PreviewMultiScriptInput(darkMode: Boolean) {
 		darkTheme = darkMode,
 	) {
 		MultiScriptInput(
-			isAtMinimumOneDeviceSelected = true,
+			executeScriptButtonEnabled = true,
 			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123").map {
 				EditScriptViewModel.SubScript(subScript = it)
 			},

@@ -189,7 +189,7 @@ internal fun EditScriptContent(
 			SectionDivider()
 
 			MultiScriptInput(
-				isAtMinimumOneDeviceSelected = UiHelper.isScriptExecutableByUi(
+				executeScriptButtonEnabled = UiHelper.isScriptExecutableByUi(
 					isAtMinimumOneDeviceSelected,
 					uiState.scriptUiState.selectedPlatform,
 				),
