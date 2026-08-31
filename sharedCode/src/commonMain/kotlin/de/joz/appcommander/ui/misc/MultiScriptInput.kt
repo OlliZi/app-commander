@@ -66,6 +66,7 @@ fun MultiScriptInput(
 		scripts.forEachIndexed { index, script ->
 			ScriptInput(
 				executeScriptButtonEnabled = executeScriptButtonEnabled,
+				showMoreButton = true,
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->

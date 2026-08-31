@@ -44,6 +44,7 @@ private val ICON_SIZE = 36.dp
 @Composable
 fun ScriptInput(
 	executeScriptButtonEnabled: Boolean,
+	showMoreButton: Boolean,
 	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
 	script: EditScriptViewModel.SubScript = EditScriptViewModel.SubScript(subScript = ""),
 	onChangeScriptText: (EditScriptViewModel.SubScript) -> Unit = { _ -> },
@@ -75,16 +76,16 @@ fun ScriptInput(
 			trailingIcon = {
 				Row {
 					ActionButtonIcon(
+						icon = FeatherIcons.Trash,
+						onAction = onRemoveScript,
+						contentDescription = "Remove script",
+					)
+					ActionButtonIcon(
 						icon = FeatherIcons.FilePlus,
 						onAction = onAddScript,
 						contentDescription = "Add script",
 					)
-					if (showMoreUi) {
-						ActionButtonIcon(
-							icon = FeatherIcons.Trash,
-							onAction = onRemoveScript,
-							contentDescription = "Remove script",
-						)
+					if (showMoreUi or !showMoreButton) {
 						ActionButtonIcon(
 							icon = FeatherIcons.Play,
 							enabled = executeScriptButtonEnabled,
@@ -94,14 +95,17 @@ fun ScriptInput(
 							},
 						)
 					}
-					ExpandButton(
-						modifier = Modifier.size(ICON_SIZE),
-						isExpanded = showMoreUi,
-						direction = ExpandButtonDirection.BOTTOM_TO_TOP,
-						onClick = {
-							showMoreUi = !showMoreUi
-						},
-					)
+					if (showMoreButton) {
+						ExpandButton(
+							modifier = Modifier.size(ICON_SIZE),
+							isExpanded = showMoreUi,
+							direction = ExpandButtonDirection.BOTTOM_TO_TOP,
+							testTag = "show_more_button",
+							onClick = {
+								showMoreUi = !showMoreUi
+							},
+						)
+					}
 				}
 			},
 		)
@@ -172,6 +176,7 @@ internal fun PreviewScriptInput(darkMode: Boolean) {
 		) {
 			ScriptInput(
 				executeScriptButtonEnabled = true,
+				showMoreButton = true,
 				script = EditScriptViewModel.SubScript(subScript = "adb devices"),
 				onExecuteScriptText = {},
 			)

@@ -408,10 +408,11 @@ private fun TerminalSection(
 			modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 		) {
 			ScriptInput(
-				isAtMinimumOneDeviceSelected = UiHelper.isScriptExecutableByUi(
+				executeScriptButtonEnabled = UiHelper.isScriptExecutableByUi(
 					isAtMinimumOneDeviceSelected,
 					selectedPlatform,
 				),
+				showMoreButton = false,
 				script = EditScriptViewModel.SubScript(subScript = stringResource(Res.string.scripts_terminal_placeholder)),
 				onExecuteScriptText = {
 					onExecuteScriptText(it, selectedPlatform)
