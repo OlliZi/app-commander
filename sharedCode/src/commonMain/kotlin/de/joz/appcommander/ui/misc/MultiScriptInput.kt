@@ -105,7 +105,7 @@ private fun PreviewMultiScriptInput() {
 }
 
 @Composable
-private fun PreviewMultiScriptInput(darkMode: Boolean) {
+internal fun PreviewMultiScriptInput(darkMode: Boolean) {
 	AppCommanderTheme(
 		darkTheme = darkMode,
 	) {
