@@ -19,6 +19,7 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
@@ -103,7 +104,12 @@ class EndToEndTest :
 		modules(DependencyInjection().module)
 		modules(
 			module {
-				single<PreferencesRepository> { PreferencesRepositoryMock() }
+				single<PreferencesRepository> {
+					PreferencesRepositoryMock().apply {
+						lastStoredValues[ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE] =
+							ManageUiAppearanceUseCase.UiAppearance.DARK.optionIndex
+					}
+				}
 				single<ScriptsRepository> { scriptsRepositoryFake }
 				single<GetConnectedDevicesUseCase> {
 					mockk {
