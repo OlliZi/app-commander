@@ -141,7 +141,7 @@ class EndToEndTest :
 
 	@AfterTest
 	fun resolveScreenshotError() {
-		assertTrue(screenshotErrors.isEmpty(), screenshotErrors.joinToString(","))
+		assertTrue(screenshotErrors.isEmpty(), screenshotErrors.joinToString(". ").trim())
 	}
 
 	@Test
