@@ -131,7 +131,7 @@ internal fun SettingsContent(
 
 @Preview
 @Composable
-internal fun PreviewSettingsScreen() {
+private fun PreviewSettingsScreen() {
 	SettingsContent(
 		uiState = SettingsViewModel.UiState(
 			togglePreferences = listOf(

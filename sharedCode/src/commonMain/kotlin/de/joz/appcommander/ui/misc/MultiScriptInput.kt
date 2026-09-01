@@ -98,14 +98,14 @@ private fun ScriptDivider() {
 
 @Preview
 @Composable
-internal fun PreviewMultiScriptInput() {
+private fun PreviewMultiScriptInput() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewMultiScriptInput(darkMode)
 	}
 }
 
 @Composable
-internal fun PreviewMultiScriptInput(darkMode: Boolean) {
+private fun PreviewMultiScriptInput(darkMode: Boolean) {
 	AppCommanderTheme(
 		darkTheme = darkMode,
 	) {

@@ -84,6 +84,9 @@ kover {
 					"$mainPackage.ui.internalpreviews",
 				)
 				classes("**ComposableSingletons**", $$"**NavigationScreens$Companion**")
+				annotatedBy(
+					"androidx.compose.ui.tooling.preview.Preview",
+				)
 			}
 		}
 		verify {
