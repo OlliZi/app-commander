@@ -84,6 +84,7 @@ class ScreenshotVerifier<T>(
 					return
 				}
 
+				Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
 				errorCollector(
 					"Screenshot size does not match golden image size. " +
 						"Fix test or replace golden image with current screenshot.\n" +
