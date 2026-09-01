@@ -170,7 +170,7 @@ private fun DrawScope.renderBubbles(
 
 @Preview
 @Composable
-private fun PreviewWelcomeScreen() {
+internal fun PreviewWelcomeScreen() {
 	WelcomeContent(
 		bubblesStrategy = FadingInBubblesStrategy(),
 		onNavigateToScripts = {},

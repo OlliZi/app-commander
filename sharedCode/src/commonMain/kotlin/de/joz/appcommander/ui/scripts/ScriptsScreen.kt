@@ -480,7 +480,7 @@ private fun ExpandButtonItem(
 
 @Preview
 @Composable
-private fun PreviewScriptScreen_Dark() {
+internal fun PreviewScriptScreen_Dark() {
 	RenderPreview(
 		darkTheme = true,
 	)
@@ -488,7 +488,7 @@ private fun PreviewScriptScreen_Dark() {
 
 @Preview
 @Composable
-private fun PreviewScriptScreen_Light() {
+internal fun PreviewScriptScreen_Light() {
 	RenderPreview(
 		darkTheme = false,
 	)
