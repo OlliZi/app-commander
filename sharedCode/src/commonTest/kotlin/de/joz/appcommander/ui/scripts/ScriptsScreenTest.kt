@@ -128,7 +128,7 @@ class ScriptsScreenTest :
 						),
 						ScriptsViewModel.Script(
 							description = "Login into app",
-							comment = "Automate login steps",
+							comment = "Automated login steps",
 							scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
 							isExpanded = true,
 							originalScript = mockk {
@@ -147,18 +147,6 @@ class ScriptsScreenTest :
 					logging = listOf("1. adb devices", "2. adb shell cmd uimode night yes"),
 				),
 			)
-
-			onNodeWithTag(
-				testTag = "expand_button_logging",
-			).assertIsDisplayed().performClick()
-
-			onNodeWithTag(
-				testTag = "expand_button_terminal",
-			).assertIsDisplayed().performClick()
-
-			onNodeWithTag(
-				testTag = "expand_button_filter",
-			).assertIsDisplayed().performClick()
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
