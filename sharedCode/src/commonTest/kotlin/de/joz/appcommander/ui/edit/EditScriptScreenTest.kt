@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
@@ -318,11 +319,11 @@ class EditScriptScreenTest :
 				comment = "new script comment",
 				platform = ScriptsRepository.Platform.DESKTOP,
 				scripts = listOf(
-					ScriptsRepository.ScriptCode.CommentedScript(script = "new script 1", comment = "comment 2"),
+					ScriptsRepository.ScriptCode.CommentedScript(script = "new script 1", comment = "comment 1"),
 					ScriptsRepository.ScriptCode.CommentedScript(script = "sleep 1", comment = "comment 2"),
 					ScriptsRepository.ScriptCode.CommentedScript(
 						script = "new script 2",
-						comment = "comment 2",
+						comment = "comment 3",
 					),
 				),
 			)
@@ -373,7 +374,7 @@ class EditScriptScreenTest :
 				performTextInput("comment 3")
 			}
 
-			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performClick()
+			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performScrollTo().performClick()
 
 			onNodeWithText(text = "Save script").performClick()
 
