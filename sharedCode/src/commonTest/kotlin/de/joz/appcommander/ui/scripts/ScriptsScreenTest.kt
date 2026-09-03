@@ -113,6 +113,7 @@ class ScriptsScreenTest :
 					scripts = listOf(
 						ScriptsViewModel.Script(
 							description = "Dark mode",
+							comment = "some comment",
 							scriptText = "adb shell cmd uimode night yes",
 							originalScript = mockk {
 								every { platform } returns ScriptsRepository.Platform.ANDROID
@@ -134,6 +135,7 @@ class ScriptsScreenTest :
 						),
 						ScriptsViewModel.Script(
 							description = "Swipe through app",
+							comment = null,
 							scriptText = "#LOOP_10 adb shell input swipe 500 500 500 500",
 							originalScript = mockk {
 								every { platform } returns ScriptsRepository.Platform.ANDROID
