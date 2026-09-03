@@ -118,16 +118,16 @@ class EditScriptViewModelTest {
 			assertFalse(viewModel.uiState.value.scriptChanged)
 
 			viewModel.onEvent(
-				event = EditScriptViewModel.Event.OnChangeScript(
-					0,
-					EditScriptViewModel.SubScript(subScript = "foo", comment = null),
+				event = EditScriptViewModel.Event.OnChangeSubScript(
+					index = 0,
+					script = "foo",
 				),
 			)
 			assertTrue(viewModel.uiState.value.scriptChanged)
 			viewModel.onEvent(
-				event = EditScriptViewModel.Event.OnChangeScript(
-					0,
-					EditScriptViewModel.SubScript(subScript = "script 1", comment = null),
+				event = EditScriptViewModel.Event.OnChangeSubScript(
+					index = 0,
+					script = "script 1",
 				),
 			)
 			assertFalse(viewModel.uiState.value.scriptChanged)
@@ -188,9 +188,9 @@ class EditScriptViewModelTest {
 			val viewModel = createViewModel()
 
 			viewModel.onEvent(
-				event = EditScriptViewModel.Event.OnChangeScript(
+				event = EditScriptViewModel.Event.OnChangeSubScript(
 					index = 1,
-					script = EditScriptViewModel.SubScript(subScript = "new script 2"),
+					script = "new script 2",
 				),
 			)
 			runCurrent()
