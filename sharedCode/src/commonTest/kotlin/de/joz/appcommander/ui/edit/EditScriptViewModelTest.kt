@@ -208,6 +208,48 @@ class EditScriptViewModelTest {
 		}
 
 	@Test
+	fun `should change comment of a sub script when event 'OnChangeSubScriptComment' is fired`() =
+		runTest {
+			every { getUserScriptByKeyUseCaseMock.invoke(any()) } returns ScriptsRepository.Script(
+				label = "label",
+				scripts = listOf(
+					ScriptsRepository.ScriptCode.Script(script = "script 1"),
+					ScriptsRepository.ScriptCode.CommentedScript(script = "script 2", comment = "foo comment"),
+				),
+				platform = ScriptsRepository.Platform.IOS,
+				comment = "comment",
+			)
+
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnChangeSubScriptComment(
+					index = 0,
+					comment = "new comment 0",
+				),
+			)
+			runCurrent()
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnChangeSubScriptComment(
+					index = 1,
+					comment = "new comment 1",
+				),
+			)
+			runCurrent()
+
+			assertEquals(
+				listOf(
+					EditScriptViewModel.SubScript(subScript = "script 1", comment = "new comment 0"),
+					EditScriptViewModel.SubScript(subScript = "script 2", comment = "new comment 1"),
+				),
+				viewModel.uiState.value.scriptUiState.scripts,
+			)
+			assertEquals(ScriptsRepository.Platform.IOS, viewModel.uiState.value.scriptUiState.selectedPlatform)
+			assertEquals("label", viewModel.uiState.value.scriptUiState.scriptName)
+			assertEquals("comment", viewModel.uiState.value.scriptUiState.comment)
+		}
+
+	@Test
 	fun `should change name of script when event 'OnChangeScriptName' is fired`() =
 		runTest {
 			val viewModel = createViewModel()
@@ -220,6 +262,21 @@ class EditScriptViewModelTest {
 			runCurrent()
 
 			assertEquals("new name", viewModel.uiState.value.scriptUiState.scriptName)
+		}
+
+	@Test
+	fun `should change comment of script when event 'OnChangeComment' is fired`() =
+		runTest {
+			val viewModel = createViewModel()
+
+			viewModel.onEvent(
+				event = EditScriptViewModel.Event.OnChangeComment(
+					comment = "comment name",
+				),
+			)
+			runCurrent()
+
+			assertEquals("comment name", viewModel.uiState.value.scriptUiState.comment)
 		}
 
 	@Test
