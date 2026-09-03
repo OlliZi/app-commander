@@ -49,7 +49,7 @@ class EditScriptViewModel(
 			when (event) {
 				is Event.OnNavigateBack -> onNavigateBack()
 				is Event.OnSelectPlatform -> onSelectPlatform(event.platform)
-				is Event.OnChangeScript -> onChangeScript(event.index, event.script)
+				is Event.OnChangeSubScript -> onChangeScript(event.index, event.script)
 				is Event.OnAddSubScript -> onAddSubScript(event.index)
 				is Event.OnRemoveSubScript -> onRemoveSubScript(event.index)
 				is Event.OnChangeSubScriptComment -> onChangeSubScriptComment(event.index, event.comment)
@@ -73,12 +73,12 @@ class EditScriptViewModel(
 
 	private fun onChangeScript(
 		index: Int,
-		script: SubScript,
+		script: String,
 	) {
 		updateUiState(
 			scripts = _uiState.value.scriptUiState.scripts.mapIndexed { oldIndex, oldScript ->
 				if (oldIndex == index) {
-					script
+					oldScript.copy(subScript = script)
 				} else {
 					oldScript
 				}
@@ -286,9 +286,9 @@ class EditScriptViewModel(
 
 		data object OnExecuteAllScripts : Event
 
-		data class OnChangeScript(
+		data class OnChangeSubScript(
 			val index: Int,
-			val script: SubScript,
+			val script: String,
 		) : Event
 
 		data class OnChangeSubScriptComment(

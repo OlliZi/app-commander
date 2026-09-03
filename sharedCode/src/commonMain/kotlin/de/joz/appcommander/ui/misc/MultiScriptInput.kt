@@ -29,7 +29,7 @@ fun MultiScriptInput(
 	executeScriptButtonEnabled: Boolean,
 	scripts: List<EditScriptViewModel.SubScript>,
 	onExecuteAllScriptsText: () -> Unit,
-	onChangeScriptText: (Int, EditScriptViewModel.SubScript) -> Unit,
+	onChangeScriptText: (Int, String) -> Unit,
 	onChangeScriptComment: (Int, String) -> Unit,
 	onRemoveScript: (Int) -> Unit,
 	onAddScriptText: (Int) -> Unit,

@@ -195,7 +195,7 @@ internal fun EditScriptContent(
 				),
 				scripts = uiState.scriptUiState.scripts,
 				onChangeScriptText = { index, script ->
-					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
+					onEvent(EditScriptViewModel.Event.OnChangeSubScript(index = index, script = script))
 				},
 				onChangeScriptComment = { index, comment ->
 					onEvent(EditScriptViewModel.Event.OnChangeSubScriptComment(index = index, comment = comment))

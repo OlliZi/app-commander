@@ -47,7 +47,7 @@ fun ScriptInput(
 	showMoreButton: Boolean,
 	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
 	script: EditScriptViewModel.SubScript = EditScriptViewModel.SubScript(subScript = ""),
-	onChangeScriptText: (EditScriptViewModel.SubScript) -> Unit = { _ -> },
+	onChangeScriptText: (String) -> Unit = { _ -> },
 	onChangeScriptComment: (String) -> Unit = { _ -> },
 	onRemoveScript: (() -> Unit)? = null,
 	onAddScript: (() -> Unit)? = null,
@@ -71,7 +71,7 @@ fun ScriptInput(
 			),
 			onValueChange = {
 				inputValue = it
-				onChangeScriptText(EditScriptViewModel.SubScript(subScript = it))
+				onChangeScriptText(it)
 			},
 			trailingIcon = {
 				Row {

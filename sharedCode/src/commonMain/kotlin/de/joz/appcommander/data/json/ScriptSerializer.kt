@@ -36,25 +36,19 @@ object ScriptSerializer : KSerializer<ScriptsRepository.Script> {
 
 	override fun deserialize(decoder: Decoder): ScriptsRepository.Script {
 		val jsonDecoder = decoder as? JsonDecoder
-		if (jsonDecoder != null) {
-			val element = jsonDecoder.decodeJsonElement()
-			if (element is JsonObject) {
-				val surrogate = jsonDecoder.json.decodeFromJsonElement<ScriptSurrogate>(element)
-				return ScriptsRepository.Script(
-					label = surrogate.label,
-					platform = surrogate.platform,
-					scripts = surrogate.scripts,
-					comment = surrogate.comment,
-				)
-			}
+			?: throw UnsupportedOperationException("This serializer is only for JSON")
+
+		val element = jsonDecoder.decodeJsonElement()
+		if (element is JsonObject) {
+			val surrogate = jsonDecoder.json.decodeFromJsonElement<ScriptSurrogate>(element)
+			return ScriptsRepository.Script(
+				label = surrogate.label,
+				platform = surrogate.platform,
+				scripts = surrogate.scripts,
+				comment = surrogate.comment,
+			)
 		}
 
-		val surrogate = decoder.decodeSerializableValue(ScriptSurrogate.serializer())
-		return ScriptsRepository.Script(
-			label = surrogate.label,
-			platform = surrogate.platform,
-			scripts = surrogate.scripts,
-			comment = surrogate.comment,
-		)
+		throw UnsupportedOperationException("This serializer is only for JSON")
 	}
 }
