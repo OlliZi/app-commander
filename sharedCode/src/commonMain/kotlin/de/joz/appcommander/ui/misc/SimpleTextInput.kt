@@ -50,6 +50,7 @@ fun SimpleTextInput(
 		},
 		trailingIcon = {
 			IconButton(
+				modifier = Modifier.testTag("text_field_simple_text_clear_text"),
 				onClick = {
 					inputValue = ""
 					onChangeTextChange("")

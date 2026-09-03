@@ -547,7 +547,7 @@ class ScriptsScreenTest :
 			).assertIsDisplayed().performClick()
 
 			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_filter"))
-			onNodeWithTag(testTag = "text_field_simple_filter").performTextClearance()
+			onNodeWithTag(testTag = "text_field_simple_text_clear_text").performClick()
 			onNodeWithTag(testTag = "text_field_simple_filter").performTextInput("filter")
 
 			assertEquals(filterText, "filter")
