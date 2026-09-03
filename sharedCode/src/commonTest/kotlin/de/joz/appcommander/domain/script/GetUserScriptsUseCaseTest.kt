@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain.script
 
+import de.joz.appcommander.helper.toSubScripts
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -18,7 +19,7 @@ class GetUserScriptsUseCaseTest {
 				scripts = listOf(
 					ScriptsRepository.Script(
 						label = "foo",
-						scripts = listOf("echo"),
+						scripts = listOf("echo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -33,7 +34,7 @@ class GetUserScriptsUseCaseTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "foo",
-						scripts = listOf("echo"),
+						scripts = listOf("echo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),

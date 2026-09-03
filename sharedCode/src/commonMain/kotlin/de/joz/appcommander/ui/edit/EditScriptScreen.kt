@@ -26,6 +26,7 @@ import de.joz.appcommander.resources.edit_action_remove
 import de.joz.appcommander.resources.edit_action_save
 import de.joz.appcommander.resources.edit_confirmation_change
 import de.joz.appcommander.resources.edit_confirmation_remove
+import de.joz.appcommander.resources.edit_script_comment
 import de.joz.appcommander.resources.edit_script_name
 import de.joz.appcommander.resources.edit_select_devices
 import de.joz.appcommander.resources.edit_select_platform
@@ -167,21 +168,37 @@ internal fun EditScriptContent(
 			)
 			SimpleTextInput(
 				value = uiState.scriptUiState.scriptName,
+				testTag = "text_field_simple_text_script",
 				onChangeTextChange = {
 					onEvent(EditScriptViewModel.Event.OnChangeScriptName(scriptName = it))
+				},
+			)
+
+			TextLabel(
+				text = stringResource(Res.string.edit_script_comment),
+				textLabelType = TextLabelType.BodyLarge,
+			)
+			SimpleTextInput(
+				value = uiState.scriptUiState.comment.orEmpty(),
+				testTag = "text_field_simple_text_comment",
+				onChangeTextChange = {
+					onEvent(EditScriptViewModel.Event.OnChangeComment(comment = it))
 				},
 			)
 
 			SectionDivider()
 
 			MultiScriptInput(
-				isAtMinimumOneDeviceSelected = UiHelper.isScriptExecutableByUi(
+				executeScriptButtonEnabled = UiHelper.isScriptExecutableByUi(
 					isAtMinimumOneDeviceSelected,
 					uiState.scriptUiState.selectedPlatform,
 				),
 				scripts = uiState.scriptUiState.scripts,
 				onChangeScriptText = { index, script ->
-					onEvent(EditScriptViewModel.Event.OnChangeScript(index = index, script = script))
+					onEvent(EditScriptViewModel.Event.OnChangeSubScript(index = index, script = script))
+				},
+				onChangeScriptComment = { index, comment ->
+					onEvent(EditScriptViewModel.Event.OnChangeSubScriptComment(index = index, comment = comment))
 				},
 				onAddScriptText = { index ->
 					onEvent(EditScriptViewModel.Event.OnAddSubScript(index = index))

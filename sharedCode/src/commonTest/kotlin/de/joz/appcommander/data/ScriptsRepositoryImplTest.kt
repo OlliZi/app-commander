@@ -3,6 +3,7 @@ package de.joz.appcommander.data
 import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
+import de.joz.appcommander.helper.toSubScripts
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -45,32 +46,8 @@ class ScriptsRepositoryImplTest {
 			val scripts = repository.getScripts()
 
 			assertTrue(testFile.exists())
-			assertEquals(
-				listOf(
-					ScriptsRepository.Script(
-						label = "Dark mode",
-						scripts = listOf("adb shell cmd uimode night yes"),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-					ScriptsRepository.Script(
-						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no"),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-					ScriptsRepository.Script(
-						label = "Switch dark to light to dark mode",
-						scripts = listOf(
-							"adb shell cmd uimode night no",
-							"sleep 1",
-							"adb shell cmd uimode night yes",
-							"sleep 1",
-							"adb shell cmd uimode night no",
-						),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-				),
-				scripts.scripts,
-			)
+			assertTrue(scripts.scripts.isNotEmpty())
+			assertEquals(ScriptsRepositoryImpl.DEFAULT_SCRIPTS, scripts.scripts)
 			assertNull(scripts.parsingMetaData)
 		}
 
@@ -87,13 +64,15 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Dark mode",
-						scripts = listOf("adb shell cmd uimode night yes"),
+						scripts = listOf("adb shell cmd uimode night yes").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to dark mode",
 					),
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no"),
+						scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to light mode",
 					),
 					ScriptsRepository.Script(
 						label = "Switch dark to light to dark mode",
@@ -103,8 +82,9 @@ class ScriptsRepositoryImplTest {
 							"adb shell cmd uimode night yes",
 							"sleep 1",
 							"adb shell cmd uimode night no",
-						),
+						).toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "Switches to dark to light to dark mode",
 					),
 				),
 				scripts.scripts,
@@ -123,7 +103,10 @@ class ScriptsRepositoryImplTest {
 					 {
 						"label": "Light mode",
 						"scripts": [
-							"adb shell cmd uimode night no && sleep 1"
+							{
+								"script": "adb shell cmd uimode night no && sleep 1",
+								"comment": "comment"
+							}
 						],
 						"platform": "ANDROID"
 					}
@@ -137,7 +120,12 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no && sleep 1"),
+						scripts = listOf(
+							ScriptsRepository.ScriptCode.CommentedScript(
+								script = "adb shell cmd uimode night no && sleep 1",
+								comment = "comment",
+							),
+						),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -145,47 +133,6 @@ class ScriptsRepositoryImplTest {
 			)
 
 			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.MultiScriptsHint)
-		}
-
-	@Test
-	fun `should return scripts and hint when scripts contains old 'script' field`() =
-		runTest {
-			val repository = ScriptsRepositoryImpl(
-				scriptFile = ScriptFile(scriptFile = testFile.absolutePath),
-				addLoggingUseCase = addLoggingUseCaseMock,
-				processBuilder = ProcessBuilder(),
-				jsonHandler = DependencyInjection().provideJson(),
-			)
-
-			testFile.writeText(
-				"""
-				[
-					 {
-						"label": "Light mode",
-						"script": "ERROR",
-						"scripts": [
-							 "adb shell cmd uimode night no"
-						],
-						"platform": "ANDROID"
-					}
-				]
-				""".trimIndent(),
-			)
-
-			val scripts = repository.getScripts()
-
-			assertEquals(
-				listOf(
-					ScriptsRepository.Script(
-						label = "Light mode",
-						scripts = listOf("adb shell cmd uimode night no"),
-						platform = ScriptsRepository.Platform.ANDROID,
-					),
-				),
-				scripts.scripts,
-			)
-
-			assertTrue(scripts.parsingMetaData is ScriptsRepository.ParsingMetaData.OldScriptFieldHint)
 		}
 
 	@Test
@@ -199,13 +146,15 @@ class ScriptsRepositoryImplTest {
 					listOf(
 						ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
+							comment = "my comment",
 						),
 						ScriptsRepository.Script(
 							label = "my script abc",
-							scripts = listOf("bar"),
+							scripts = listOf("bar").toSubScripts(),
 							platform = ScriptsRepository.Platform.IOS,
+							comment = null,
 						),
 					),
 				),
@@ -222,13 +171,15 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
+						comment = "my comment",
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						scripts = listOf("bar"),
+						scripts = listOf("bar").toSubScripts(),
 						platform = ScriptsRepository.Platform.IOS,
+						comment = null,
 					),
 				),
 				scripts.scripts,
@@ -242,13 +193,16 @@ class ScriptsRepositoryImplTest {
 			testFile.writeText(
 				text =
 					"[\n" + "    {\n" + "        \"unknown\": \"null\",\n" + "        \"label\": \"my script\",\n" +
-						"        \"scripts\": [\"foo\"],\n" +
+						"        \"scripts\": [" +
+						"				{\"script\": \"foo 1\", \"comment\": \"bar\"}" +
+						"			],\n" +
 						"        \"platform\": \"ANDROID\"\n" +
 						"    },\n" +
 						"    {\n" +
 						"        \"unknown\": \"\",\n" +
 						"        \"label\": \"my script abc\",\n" +
-						"        \"scripts\": [\"bar\"],\n" +
+						"        \"comment\": \"comment\",\n" +
+						"        \"scripts\": [{\"script\": \"foo 2\"}],\n" +
 						"        \"platform\": \"IOS\"\n" +
 						"    }\n" +
 						"]",
@@ -265,12 +219,13 @@ class ScriptsRepositoryImplTest {
 				listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo"),
+						scripts = listOf(ScriptsRepository.ScriptCode.CommentedScript(script = "foo 1", comment = "bar")),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					ScriptsRepository.Script(
 						label = "my script abc",
-						scripts = listOf("bar"),
+						comment = "comment",
+						scripts = listOf(ScriptsRepository.ScriptCode.Script(script = "foo 2")),
 						platform = ScriptsRepository.Platform.IOS,
 					),
 				),
@@ -322,7 +277,7 @@ class ScriptsRepositoryImplTest {
 			val repository = createRepository()
 
 			val newScript = ScriptsRepository.Script(
-				scripts = listOf("bar"),
+				scripts = listOf("bar").toSubScripts(),
 				label = "my script abc",
 				platform = ScriptsRepository.Platform.IOS,
 			)

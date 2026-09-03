@@ -3,6 +3,7 @@ package de.joz.appcommander.domain.script
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.helper.TestRuleApplier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.settings.SettingsViewModel.Companion.TRACK_SCRIPTS_FILE_DELAY_SLIDER_PREF_KEY
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -105,7 +106,7 @@ class TrackScriptsFileChangesUseCaseTest : TestRuleApplier() {
 		scripts = (1..count).map {
 			ScriptsRepository.Script(
 				label = "foo $it",
-				scripts = listOf("echo $it"),
+				scripts = listOf("echo $it").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 		},

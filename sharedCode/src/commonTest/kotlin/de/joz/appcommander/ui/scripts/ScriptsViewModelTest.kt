@@ -10,12 +10,14 @@ import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.FilterScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.TrackScriptsFileChangesUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.model.ToolSection
 import io.mockk.called
@@ -70,13 +72,21 @@ class ScriptsViewModelTest {
 			scripts = listOf(
 				ScriptsRepository.Script(
 					label = "my script",
-					scripts = listOf("foo"),
+					comment = null,
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				ScriptsRepository.Script(
 					label = "my another script",
-					scripts = listOf("bar"),
-					platform = ScriptsRepository.Platform.ANDROID,
+					comment = "comment to another script",
+					scripts = listOf(
+						ScriptsRepository.ScriptCode.Script(script = "bar"),
+						ScriptsRepository.ScriptCode.CommentedScript(
+							script = "script with comment",
+							comment = "comment to script",
+						),
+					),
+					platform = ScriptsRepository.Platform.DESKTOP,
 				),
 			),
 			parsingMetaData = null,
@@ -94,21 +104,31 @@ class ScriptsViewModelTest {
 					ScriptsViewModel.Script(
 						description = "my script",
 						scriptText = "foo",
+						comment = null,
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							comment = null,
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 					),
 					ScriptsViewModel.Script(
 						description = "my another script",
-						scriptText = "bar",
+						scriptText = "bar\nscript with comment",
+						comment = "comment to another script",
 						isExpanded = false,
 						originalScript = ScriptsRepository.Script(
 							label = "my another script",
-							scripts = listOf("bar"),
-							platform = ScriptsRepository.Platform.ANDROID,
+							comment = "comment to another script",
+							scripts = listOf(
+								ScriptsRepository.ScriptCode.Script(script = "bar"),
+								ScriptsRepository.ScriptCode.CommentedScript(
+									script = "script with comment",
+									comment = "comment to script",
+								),
+							),
+							platform = ScriptsRepository.Platform.DESKTOP,
 						),
 					),
 				),
@@ -118,7 +138,7 @@ class ScriptsViewModelTest {
 			coVerify {
 				getDevicesUseCaseMock wasNot called
 				getUserScriptsUseCaseMock()
-				getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "")
+				getPreferenceUseCaseMock.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, "")
 			}
 		}
 
@@ -142,7 +162,7 @@ class ScriptsViewModelTest {
 
 			// test label of script
 			val filter1 = "BaR"
-			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter1
+			coEvery { getPreferenceUseCaseMock.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, "") } returns filter1
 
 			assertEquals(2, viewModel.uiState.value.scripts.size)
 
@@ -168,7 +188,7 @@ class ScriptsViewModelTest {
 			val filter2 = ScriptsRepository.Platform.IOS.name
 			coEvery {
 				getPreferenceUseCaseMock.get(
-					ScriptsViewModel.SCRIPT_FILTER_PREF_KEY,
+					FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY,
 					"",
 				)
 			} returns filter2.lowercase()
@@ -184,12 +204,12 @@ class ScriptsViewModelTest {
 			)
 			assertEquals(
 				filter2,
-				preferencesRepositoryMock.lastStoredValues.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY),
+				preferencesRepositoryMock.lastStoredValues[FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY],
 			)
 
 			// test description of script
 			val filter3 = "my another script"
-			coEvery { getPreferenceUseCaseMock.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY, "") } returns filter3
+			coEvery { getPreferenceUseCaseMock.get(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, "") } returns filter3
 			viewModel.onEvent(
 				event = ScriptsViewModel.Event.OnFilterScripts(
 					filter = filter3,
@@ -198,8 +218,10 @@ class ScriptsViewModelTest {
 			runCurrent()
 			assertEquals(
 				filter3,
-				preferencesRepositoryMock.lastStoredValues.get(ScriptsViewModel.SCRIPT_FILTER_PREF_KEY),
+				preferencesRepositoryMock.lastStoredValues[FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY],
 			)
+
+			// TODO // test comment of script
 
 			verify(exactly = 4) {
 				getUserScriptsUseCaseMock.invoke()
@@ -333,7 +355,7 @@ class ScriptsViewModelTest {
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
 						label = "",
-						scripts = listOf("echo"),
+						scripts = listOf("echo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					selectedDevice = "p7",
@@ -365,7 +387,7 @@ class ScriptsViewModelTest {
 				scripts = listOf(
 					ScriptsRepository.Script(
 						label = "my script",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
@@ -388,12 +410,12 @@ class ScriptsViewModelTest {
 					scripts = listOf(
 						ScriptsRepository.Script(
 							label = "my script",
-							scripts = listOf("foo"),
+							scripts = listOf("foo").toSubScripts(),
 							platform = ScriptsRepository.Platform.ANDROID,
 						),
 						ScriptsRepository.Script(
 							label = "abc",
-							scripts = listOf("123"),
+							scripts = listOf("123").toSubScripts(),
 							platform = ScriptsRepository.Platform.IOS,
 						),
 					),
@@ -401,30 +423,33 @@ class ScriptsViewModelTest {
 				),
 			)
 
+			assertEquals(2, viewModel.uiState.value.scripts.size)
 			assertEquals(
-				listOf(
-					ScriptsViewModel.Script(
-						description = "my script",
-						scriptText = "foo",
-						isExpanded = true,
-						originalScript = ScriptsRepository.Script(
-							label = "my script",
-							scripts = listOf("foo"),
-							platform = ScriptsRepository.Platform.ANDROID,
-						),
-					),
-					ScriptsViewModel.Script(
-						description = "abc",
-						scriptText = "123",
-						isExpanded = false,
-						originalScript = ScriptsRepository.Script(
-							label = "abc",
-							scripts = listOf("123"),
-							platform = ScriptsRepository.Platform.IOS,
-						),
+				ScriptsViewModel.Script(
+					description = "my script",
+					scriptText = "foo",
+					isExpanded = true,
+					originalScript = ScriptsRepository.Script(
+						label = "my script",
+						scripts = listOf("foo").toSubScripts(),
+						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				),
-				viewModel.uiState.value.scripts,
+				viewModel.uiState.value.scripts[0],
+			)
+
+			assertEquals(
+				ScriptsViewModel.Script(
+					description = "abc",
+					scriptText = "123",
+					isExpanded = false,
+					originalScript = ScriptsRepository.Script(
+						label = "abc",
+						scripts = listOf("123").toSubScripts(),
+						platform = ScriptsRepository.Platform.IOS,
+					),
+				),
+				viewModel.uiState.value.scripts[1],
 			)
 		}
 
@@ -529,7 +554,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -564,7 +589,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -610,7 +635,7 @@ class ScriptsViewModelTest {
 		runTest {
 			val testScript = ScriptsRepository.Script(
 				label = "desktop script",
-				scripts = listOf("adb install app", "idb install app"),
+				scripts = listOf("adb install app", "idb install app").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -642,7 +667,7 @@ class ScriptsViewModelTest {
 			val desktop = ScriptsRepository.Platform.DESKTOP
 			val testScript = ScriptsRepository.Script(
 				label = "",
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 				platform = desktop,
 			)
 			val viewModel = createViewModel()
@@ -678,6 +703,7 @@ class ScriptsViewModelTest {
 			mainDispatcher = Dispatchers.Unconfined,
 			getPreferenceUseCase = getPreferenceUseCaseMock,
 			savePreferenceUseCase = savePreferenceUseCaseMock,
+			filterScriptUseCase = FilterScriptUseCase(getPreferenceUseCaseMock),
 			ioDispatcher = Dispatchers.Unconfined,
 		)
 }

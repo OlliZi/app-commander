@@ -24,6 +24,7 @@ import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.model.Hint
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.every
@@ -112,6 +113,7 @@ class ScriptsScreenTest :
 					scripts = listOf(
 						ScriptsViewModel.Script(
 							description = "Dark mode",
+							comment = "some comment",
 							scriptText = "adb shell cmd uimode night yes",
 							originalScript = mockk {
 								every { platform } returns ScriptsRepository.Platform.ANDROID
@@ -126,13 +128,16 @@ class ScriptsScreenTest :
 						),
 						ScriptsViewModel.Script(
 							description = "Login into app",
+							comment = "Automated login steps",
 							scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
+							isExpanded = true,
 							originalScript = mockk {
 								every { platform } returns ScriptsRepository.Platform.ANDROID
 							},
 						),
 						ScriptsViewModel.Script(
 							description = "Swipe through app",
+							comment = null,
 							scriptText = "#LOOP_10 adb shell input swipe 500 500 500 500",
 							originalScript = mockk {
 								every { platform } returns ScriptsRepository.Platform.ANDROID
@@ -142,10 +147,6 @@ class ScriptsScreenTest :
 					logging = listOf("1. adb devices", "2. adb shell cmd uimode night yes"),
 				),
 			)
-
-			onNodeWithTag(
-				testTag = "expand_button_logging",
-			).assertIsDisplayed().performClick()
 
 			screenshotVerifier.verifyScreenshot(
 				source = this,
@@ -348,7 +349,7 @@ class ScriptsScreenTest :
 				testTag = "expand_button_terminal",
 			).assertIsDisplayed().performClick()
 
-			onNodeWithText("adb devices").assertIsDisplayed()
+			onNodeWithText("adb shell input tap 200 200").assertIsDisplayed()
 			onNodeWithContentDescription("Execute script text").assertIsDisplayed()
 
 			ScriptsRepository.Platform.entries.forEach {
@@ -545,9 +546,9 @@ class ScriptsScreenTest :
 				testTag = "expand_button_filter",
 			).assertIsDisplayed().performClick()
 
-			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
-			onNodeWithTag(testTag = "text_field_simple_text").performTextClearance()
-			onNodeWithTag(testTag = "text_field_simple_text").performTextInput("filter")
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_filter"))
+			onNodeWithTag(testTag = "text_field_simple_text_clear_text").performClick()
+			onNodeWithTag(testTag = "text_field_simple_filter").performTextInput("filter")
 
 			assertEquals(filterText, "filter")
 		}
@@ -562,7 +563,7 @@ class ScriptsScreenTest :
 				isExpanded = false,
 				originalScript = ScriptsRepository.Script(
 					label = "foo",
-					scripts = listOf("echo bar"),
+					scripts = listOf("echo bar").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			)

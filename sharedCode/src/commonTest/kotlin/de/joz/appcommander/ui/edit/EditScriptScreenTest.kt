@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runComposeUiTest
@@ -31,6 +32,7 @@ import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.called
 import io.mockk.coEvery
@@ -126,7 +128,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "bar",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("foo"),
+				scripts = listOf("foo").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -146,7 +148,7 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "bar",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("foo"),
+				scripts = listOf("foo").toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -181,7 +183,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -210,7 +216,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -240,7 +250,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -269,7 +283,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -290,35 +308,73 @@ class EditScriptScreenTest :
 			val baseScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no"),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			val expectedScript = ScriptsRepository.Script(
 				label = "new script name",
+				comment = "new script comment",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("new script 1", "sleep 0", "new script 2"),
+				scripts = listOf(
+					ScriptsRepository.ScriptCode.CommentedScript(script = "new script 1", comment = "comment 1"),
+					ScriptsRepository.ScriptCode.CommentedScript(script = "sleep 1", comment = "comment 2"),
+					ScriptsRepository.ScriptCode.CommentedScript(
+						script = "new script 2",
+						comment = "comment 3",
+					),
+				),
 			)
 			setupData(
 				script = baseScript,
 			)
 			setTestContent(scriptKey = baseScript.hashCode())
 
-			onNodeWithTag(testTag = "text_field_simple_text").apply {
+			onNodeWithTag(testTag = "text_field_simple_text_script").apply {
 				performTextClearance()
 				performTextInput("new script name")
 			}
-			onAllNodes(hasTestTag("text_field_script_input"))[0].apply {
+			onNodeWithTag(testTag = "text_field_simple_text_comment").apply {
+				performTextClearance()
+				performTextInput("new script comment")
+			}
+
+			val scriptInputs = onAllNodes(hasTestTag("text_field_script_input"))
+			scriptInputs[0].apply {
 				performTextClearance()
 				performTextInput("new script 1")
 			}
-			onAllNodes(hasTestTag("text_field_script_input"))[1].apply {
+			scriptInputs[1].apply {
 				performTextClearance()
-				performTextInput("sleep 0")
+				performTextInput("sleep 1")
 			}
-			onAllNodes(hasTestTag("text_field_script_input"))[2].apply {
+			scriptInputs[2].apply {
 				performTextClearance()
 				performTextInput("new script 2")
 			}
-			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performClick()
+
+			val moreInputs = onAllNodes(hasTestTag("show_more_button"))
+			moreInputs[0].performClick()
+			moreInputs[1].performClick()
+			moreInputs[2].performClick()
+
+			val commentInputs = onAllNodes(hasTestTag("text_field_script_comment"))
+			commentInputs[0].apply {
+				performTextClearance()
+				performTextInput("comment 1")
+			}
+			commentInputs[1].apply {
+				performTextClearance()
+				performTextInput("comment 2")
+			}
+			commentInputs[2].apply {
+				performTextClearance()
+				performTextInput("comment 3")
+			}
+
+			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performScrollTo().performClick()
 
 			onNodeWithText(text = "Save script").performClick()
 
@@ -344,7 +400,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -375,7 +431,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no"),
+				scripts = listOf("adb shell cmd uimode night yes", "adb shell cmd uimode night no").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -395,7 +451,7 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("foo bar"),
+				scripts = listOf("foo bar").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -449,7 +505,7 @@ class EditScriptScreenTest :
 			val removeScript = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("script 1", "script 2"),
+				scripts = listOf("script 1", "script 2").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -474,7 +530,7 @@ class EditScriptScreenTest :
 			val addScript = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("script 1", "script 2"),
+				scripts = listOf("script 1", "script 2").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
@@ -501,12 +557,17 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("echo Hello", "echo world!"),
+				scripts = listOf("echo Hello", "echo world!").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = script)
 			setTestContent(scriptKey = script.hashCode())
+
+			onAllNodes(hasTestTag("show_more_button")).apply {
+				get(0).performClick()
+				get(1).performClick()
+			}
 
 			onAllNodes(hasContentDescription("Execute script text")).apply {
 				get(0).performClick()
@@ -517,7 +578,7 @@ class EditScriptScreenTest :
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
 						label = "",
-						scripts = listOf("echo Hello"),
+						scripts = listOf("echo Hello").toSubScripts(),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
 					selectedDevice = "",
@@ -525,7 +586,7 @@ class EditScriptScreenTest :
 				executeScriptUseCaseMock(
 					script = ScriptsRepository.Script(
 						label = "",
-						scripts = listOf("echo world!"),
+						scripts = listOf("echo world!").toSubScripts(),
 						platform = ScriptsRepository.Platform.DESKTOP,
 					),
 					selectedDevice = "",
@@ -544,12 +605,17 @@ class EditScriptScreenTest :
 			val script = ScriptsRepository.Script(
 				label = "Test",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("echo Hello", "echo world!"),
+				scripts = listOf("echo Hello", "echo world!").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
 			setupData(script = script)
 			setTestContent(scriptKey = script.hashCode())
+
+			onAllNodes(hasTestTag("show_more_button")).apply {
+				get(0).performClick()
+				get(1).performClick()
+			}
 
 			onAllNodes(hasContentDescription("Execute script text")).apply {
 				get(0).assertIsNotEnabled()
@@ -621,7 +687,7 @@ class EditScriptScreenTest :
 			setupData()
 			setTestContent()
 
-			onNodeWithTag(testTag = "text_field_simple_text").apply {
+			onNodeWithTag(testTag = "text_field_simple_text_script").apply {
 				performTextClearance()
 				performTextInput("new script name")
 			}

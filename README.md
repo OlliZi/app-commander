@@ -68,14 +68,52 @@ App-Commander lets you create a library of scripts. Each script consists of:
 
 Your scripts are stored in a `scripts.json` file located in the `.app_commander` directory in your user's home folder.
 
-**Example Script:**
+**Example Script I:**
 ```json
 {
   "label": "Toggle Dark Mode On and Off",
   "scripts": [
-    "adb shell cmd uimode night yes",
+    {
+      "script": "adb shell cmd uimode night yes",
+      "comment": "optional comment"
+    },
     "sleep 1",
-    "adb shell cmd uimode night no"
+    {
+      "script": "adb shell cmd uimode night no",
+      "comment": "optional comment"
+    }
+  ],
+  "platform": "ANDROID",
+  "comment": "Optional comment for the script. Can be null, unset, or empty."
+}
+```
+**Complex example Script II:**
+```json
+{
+  "comment": "Clears and restarts the app. Then navigates through the app from login to some detail screen.",
+  "label": "Login automatically and navigate to detail screen X",
+  "scripts": [
+    {
+      "script": "adb shell pm clear de.joz.kicktippAnalyser4android",
+      "comment": "Do a fresh app start"
+    },
+    "adb shell am force-stop de.joz.kicktippAnalyser4android",
+    "adb shell am start -n de.joz.kicktippAnalyser4android/.MainActivity",
+    {
+      "script": "sleep 2",
+      "comment": "Wait for app to start and perform login"
+    },
+    "adb shell input text 'testuser'",
+    "adb shell input keyevent 61",
+    "adb shell input text 'password'",
+    {
+      "script": "sleep 2",
+      "comment": "Navigate to detail screen"
+    },
+    "adb shell input tap 850 2170",
+    "adb shell input tap 850 2170",
+    "adb shell input tap 850 2170",
+    "adb shell input tap 1000 2000"
   ],
   "platform": "ANDROID"
 }
@@ -116,7 +154,7 @@ App-Commander is built with modern technologies and best practices:
 *   **Code Quality:**
     *   Static analysis with Detekt and Ktlint.
     *   Comprehensive testing including UI tests, unit tests, and screenshot tests.
-    *   Code Coverage with Kover (~ 94 %).
+    *   Code Coverage with Kover: ~97 %.
     *   Execute code quality locally (on my jenkins) and in github-cloud.
 *   **Composable Preview:**
     *   Provide previews for all screens and composables.
@@ -126,7 +164,6 @@ App-Commander is built with modern technologies and best practices:
 - Create a demo app for Android
   - AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
   - Dummy screen: show automated clicks
-- New "comment" field in data-structure + complex scripts example (click flow)
 
 ## 🤝 Contributing
 

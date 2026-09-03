@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +53,7 @@ import de.joz.appcommander.resources.scripts_open_script_file
 import de.joz.appcommander.resources.scripts_terminal_placeholder
 import de.joz.appcommander.resources.scripts_terminal_section_title
 import de.joz.appcommander.resources.scripts_title
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.misc.BottomBar
 import de.joz.appcommander.ui.misc.BottomBarAction
 import de.joz.appcommander.ui.misc.Collapsable
@@ -166,10 +168,10 @@ internal fun ScriptsContent(
 			TerminalSection(
 				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
 				show = uiState.toolSections.contains(ToolSection.TERMINAL),
-				onExecuteScriptText = { scriptText, platform ->
+				onExecuteScriptText = { subScript, platform ->
 					onEvent(
 						ScriptsViewModel.Event.OnExecuteScriptText(
-							script = scriptText,
+							script = subScript.subScript,
 							platform = platform,
 						),
 					)
@@ -233,6 +235,14 @@ private fun ScriptsSection(
 								text = script.description,
 								textLabelType = TextLabelType.BodyLarge,
 							)
+							if (!script.comment.isNullOrEmpty()) {
+								TextLabel(
+									modifier = Modifier.fillMaxWidth(),
+									text = script.comment,
+									textLabelType = TextLabelType.BodySmall,
+								)
+							}
+							HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp).fillMaxWidth())
 							TextLabel(
 								modifier = Modifier.fillMaxWidth(),
 								text = script.scriptText,
@@ -303,14 +313,11 @@ private fun ScriptItemToolIcons(
 
 @Composable
 private fun Hint(hint: Hint?) {
-	if (hint == null) {
-		return
-	}
-
 	val text = when (hint) {
 		is Hint.Error -> stringResource(Res.string.scripts_json_parsing_error, hint.throwable.message.orEmpty())
 		is Hint.MultiScripts -> stringResource(Res.string.scripts_json_multi_scripts)
 		is Hint.OldScriptFieldHint -> stringResource(Res.string.scripts_json_old_script_field)
+		else -> return
 	}
 
 	TextLabel(
@@ -335,11 +342,9 @@ private fun FilterSection(
 		title = Res.string.scripts_filter_section_title,
 		testTag = "expand_button_filter",
 	) {
-		SimpleTextInput(
-			value = filter,
-		) {
+		SimpleTextInput(value = filter, testTag = "text_field_simple_filter", onChangeTextChange = {
 			onFilterScripts(it)
-		}
+		})
 	}
 }
 
@@ -388,7 +393,7 @@ private fun LoggingSection(
 private fun TerminalSection(
 	isAtMinimumOneDeviceSelected: Boolean,
 	show: Boolean,
-	onExecuteScriptText: (String, ScriptsRepository.Platform) -> Unit,
+	onExecuteScriptText: (EditScriptViewModel.SubScript, ScriptsRepository.Platform) -> Unit,
 ) {
 	var selectedPlatform by rememberSaveable { mutableStateOf(ScriptsRepository.Platform.ANDROID) }
 	if (show.not()) {
@@ -403,11 +408,12 @@ private fun TerminalSection(
 			modifier = Modifier.wrapContentHeight().fillMaxWidth().padding(8.dp),
 		) {
 			ScriptInput(
-				isAtMinimumOneDeviceSelected = UiHelper.isScriptExecutableByUi(
+				executeScriptButtonEnabled = UiHelper.isScriptExecutableByUi(
 					isAtMinimumOneDeviceSelected,
 					selectedPlatform,
 				),
-				script = stringResource(Res.string.scripts_terminal_placeholder),
+				showMoreButton = false,
+				script = EditScriptViewModel.SubScript(subScript = stringResource(Res.string.scripts_terminal_placeholder)),
 				onExecuteScriptText = {
 					onExecuteScriptText(it, selectedPlatform)
 				},
@@ -509,6 +515,7 @@ private fun RenderPreview(darkTheme: Boolean) {
 					Script(
 						description = "android my script",
 						scriptText = "adb long long long long long long long long long long long long script",
+						comment = "some fine granular comment",
 						isExpanded = true,
 						originalScript = ScriptsRepository.Script(
 							label = "",

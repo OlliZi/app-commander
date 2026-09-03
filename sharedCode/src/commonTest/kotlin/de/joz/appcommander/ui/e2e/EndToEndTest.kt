@@ -19,6 +19,7 @@ import de.joz.appcommander.DependencyInjection
 import de.joz.appcommander.domain.devices.GetConnectedDevicesUseCase
 import de.joz.appcommander.domain.devices.ObserveDevicesUseCase
 import de.joz.appcommander.domain.logging.GetLoggingUseCase
+import de.joz.appcommander.domain.misc.ManageUiAppearanceUseCase
 import de.joz.appcommander.domain.model.Device
 import de.joz.appcommander.domain.preference.PreferencesRepository
 import de.joz.appcommander.domain.script.RunFileBackupUseCase
@@ -30,6 +31,7 @@ import de.joz.appcommander.helper.TestRuleApplier
 import de.joz.appcommander.helper.assertIsDisplayed
 import de.joz.appcommander.helper.click
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.confirmation_no
 import de.joz.appcommander.resources.edit_action_abort
@@ -69,7 +71,7 @@ class EndToEndTest :
 	private val testScripts = listOf(
 		ScriptsRepository.Script(
 			label = "Dark mode",
-			scripts = listOf("adb shell cmd uimode night yes"),
+			scripts = listOf("adb shell cmd uimode night yes").toSubScripts(),
 			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
@@ -77,17 +79,17 @@ class EndToEndTest :
 			scripts = listOf(
 				"adb shell cmd uimode night yes",
 				"adb shell cmd uimode night no",
-			),
+			).toSubScripts(),
 			platform = ScriptsRepository.Platform.ANDROID,
 		),
 		ScriptsRepository.Script(
 			label = "Light mode",
-			scripts = listOf("adb shell cmd uimode night no"),
+			scripts = listOf("adb shell cmd uimode night no").toSubScripts(),
 			platform = ScriptsRepository.Platform.IOS,
 		),
 		ScriptsRepository.Script(
 			label = "Hello Test",
-			scripts = listOf("echo hello test"),
+			scripts = listOf("echo hello test").toSubScripts(),
 			platform = ScriptsRepository.Platform.DESKTOP,
 		),
 	)
@@ -102,7 +104,12 @@ class EndToEndTest :
 		modules(DependencyInjection().module)
 		modules(
 			module {
-				single<PreferencesRepository> { PreferencesRepositoryMock() }
+				single<PreferencesRepository> {
+					PreferencesRepositoryMock().apply {
+						lastStoredValues[ManageUiAppearanceUseCase.STORE_KEY_FOR_SYSTEM_UI_APPEARANCE] =
+							ManageUiAppearanceUseCase.UiAppearance.DARK.optionIndex
+					}
+				}
 				single<ScriptsRepository> { scriptsRepositoryFake }
 				single<GetConnectedDevicesUseCase> {
 					mockk {
@@ -140,7 +147,7 @@ class EndToEndTest :
 
 	@AfterTest
 	fun resolveScreenshotError() {
-		assertTrue(screenshotErrors.isEmpty(), screenshotErrors.joinToString(","))
+		assertTrue(screenshotErrors.isEmpty(), screenshotErrors.joinToString(". ").trim())
 	}
 
 	@Test
@@ -177,8 +184,8 @@ class EndToEndTest :
 
 			// Filtering
 			click("expand_button_filter")
-			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_text"))
-			onNodeWithTag("text_field_simple_text").performTextInput("Toggle dark")
+			waitUntilAtLeastOneExists(hasTestTag("text_field_simple_filter"))
+			onNodeWithTag("text_field_simple_filter").performTextInput("Toggle dark")
 			verifyScreenshot(screenshotName = "e2e_4_scripts_filtered")
 			click("expand_button_filter")
 
@@ -200,7 +207,8 @@ class EndToEndTest :
 			onNodeWithContentDescription("Edit button").performClick()
 			assertIsDisplayed(Res.string.edit_title)
 
-			onNodeWithTag("text_field_simple_text").performTextInput(" (Modified)")
+			onNodeWithTag("text_field_simple_text_script").performTextInput(" (Modified)")
+			onNodeWithTag("text_field_simple_text_comment").performTextInput(" my custom comment")
 			click("Desktop")
 			verifyScreenshot(screenshotName = "e2e_7_edit_script")
 

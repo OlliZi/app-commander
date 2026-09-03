@@ -1,6 +1,7 @@
 package de.joz.appcommander.ui.misc
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
 import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
@@ -25,11 +27,14 @@ import de.joz.appcommander.ui.theme.AppCommanderTheme
 fun SimpleTextInput(
 	value: String = "",
 	onChangeTextChange: (String) -> Unit,
+	testTag: String = "text_field_simple_text",
+	modifier: Modifier = Modifier,
 ) {
-	var inputValue by remember { mutableStateOf(value) }
+	var inputValue by remember(value) { mutableStateOf(value) }
 	TextField(
+		shape = RoundedCornerShape(10.dp),
 		value = inputValue,
-		modifier = Modifier.fillMaxWidth().testTag("text_field_simple_text"),
+		modifier = modifier.fillMaxWidth().testTag(testTag),
 		colors = TextFieldDefaults.colors(
 			unfocusedContainerColor = Color.White,
 			focusedContainerColor = Color.White,
@@ -45,6 +50,7 @@ fun SimpleTextInput(
 		},
 		trailingIcon = {
 			IconButton(
+				modifier = Modifier.testTag("text_field_simple_text_clear_text"),
 				onClick = {
 					inputValue = ""
 					onChangeTextChange("")

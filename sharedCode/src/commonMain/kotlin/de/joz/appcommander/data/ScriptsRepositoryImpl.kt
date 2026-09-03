@@ -4,15 +4,12 @@ import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.domain.script.ScriptsRepository.JsonParseResult
 import de.joz.appcommander.domain.script.ScriptsRepository.ParsingMetaData
+import de.joz.appcommander.domain.script.ScriptsRepository.Platform
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okio.FileNotFoundException
 import org.koin.core.annotation.Single
 import java.io.File
-
-@JvmInline
-value class ScriptFile(
-	val scriptFile: String,
-)
 
 @Single
 class ScriptsRepositoryImpl(
@@ -21,18 +18,17 @@ class ScriptsRepositoryImpl(
 	private val scriptFile: ScriptFile,
 	private val jsonHandler: Json,
 ) : ScriptsRepository {
+	@OptIn(ExperimentalSerializationApi::class)
 	override fun getScripts(): JsonParseResult =
 		runCatching {
 			val jsonFile = File(scriptFile.scriptFile)
 			if (!jsonFile.exists()) {
 				jsonFile.writeText(text = jsonHandler.encodeToString(DEFAULT_SCRIPTS))
 			}
-			val scriptsFromFile = jsonFile.readText()
-			val script = jsonHandler.decodeFromString<List<ScriptsRepository.Script>>(scriptsFromFile)
-			val parsingMetaData = checkScriptContainsTrimmer(script, scriptsFromFile)
+			val script = jsonHandler.decodeFromString<List<ScriptsRepository.Script>>(jsonFile.readText())
 			JsonParseResult(
 				scripts = script,
-				parsingMetaData = parsingMetaData,
+				parsingMetaData = checkScriptContainsTrimmer(script),
 			)
 		}.getOrElse { error ->
 			JsonParseResult(
@@ -85,14 +81,9 @@ class ScriptsRepositoryImpl(
 		jsonFile.writeText(text = jsonHandler.encodeToString(scripts))
 	}
 
-	private fun checkScriptContainsTrimmer(
-		scripts: List<ScriptsRepository.Script>,
-		fileJsonContent: String,
-	): ParsingMetaData? =
-		if (scripts.any { it.scripts.any { script -> script.contains(SCRIPT_TRIMMER) } }) {
+	private fun checkScriptContainsTrimmer(scripts: List<ScriptsRepository.Script>): ParsingMetaData? =
+		if (scripts.any { it.scripts.any { script -> script.script.contains(SCRIPT_TRIMMER) } }) {
 			ParsingMetaData.MultiScriptsHint
-		} else if (fileJsonContent.contains(OLD_SCRIPT_FIELD)) {
-			ParsingMetaData.OldScriptFieldHint
 		} else {
 			null
 		}
@@ -101,27 +92,32 @@ class ScriptsRepositoryImpl(
 		val DEFAULT_SCRIPTS = listOf(
 			ScriptsRepository.Script(
 				label = "Dark mode",
-				scripts = listOf("adb shell cmd uimode night yes"),
-				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf(
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night yes"),
+				),
+				platform = Platform.ANDROID,
+				comment = "Switches to dark mode",
 			),
 			ScriptsRepository.Script(
 				label = "Light mode",
-				scripts = listOf("adb shell cmd uimode night no"),
-				platform = ScriptsRepository.Platform.ANDROID,
+				scripts = listOf(ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night no")),
+				platform = Platform.ANDROID,
+				comment = "Switches to light mode",
 			),
 			ScriptsRepository.Script(
 				label = "Switch dark to light to dark mode",
 				scripts = listOf(
-					"adb shell cmd uimode night no",
-					"sleep 1",
-					"adb shell cmd uimode night yes",
-					"sleep 1",
-					"adb shell cmd uimode night no",
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night no"),
+					ScriptsRepository.ScriptCode.Script(script = "sleep 1"),
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night yes"),
+					ScriptsRepository.ScriptCode.Script(script = "sleep 1"),
+					ScriptsRepository.ScriptCode.Script(script = "adb shell cmd uimode night no"),
 				),
-				platform = ScriptsRepository.Platform.ANDROID,
+				platform = Platform.ANDROID,
+				comment = "Switches to dark to light to dark mode",
 			),
 		)
 		private const val SCRIPT_TRIMMER = "&&"
-		private const val OLD_SCRIPT_FIELD = "\"script\""
+		const val SCRIPT_OBJECT_ERROR = "Expected start of the object '{'"
 	}
 }
