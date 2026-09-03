@@ -128,7 +128,9 @@ class ScriptsScreenTest :
 						),
 						ScriptsViewModel.Script(
 							description = "Login into app",
+							comment = "Automate login steps",
 							scriptText = "adb shell input text \"USER\" && adb shell input \"HIDDEN\"",
+							isExpanded = true,
 							originalScript = mockk {
 								every { platform } returns ScriptsRepository.Platform.ANDROID
 							},
@@ -148,6 +150,14 @@ class ScriptsScreenTest :
 
 			onNodeWithTag(
 				testTag = "expand_button_logging",
+			).assertIsDisplayed().performClick()
+
+			onNodeWithTag(
+				testTag = "expand_button_terminal",
+			).assertIsDisplayed().performClick()
+
+			onNodeWithTag(
+				testTag = "expand_button_filter",
 			).assertIsDisplayed().performClick()
 
 			screenshotVerifier.verifyScreenshot(
