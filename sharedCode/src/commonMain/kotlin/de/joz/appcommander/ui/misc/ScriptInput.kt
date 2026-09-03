@@ -124,6 +124,7 @@ fun ScriptInput(
 				)
 				SimpleTextInput(
 					value = script.comment.orEmpty(),
+					testTag = "text_field_script_comment",
 					onChangeTextChange = { comment ->
 						onChangeScriptComment(comment)
 					},

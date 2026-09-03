@@ -182,7 +182,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -211,7 +215,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -241,7 +249,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -270,7 +282,11 @@ class EditScriptScreenTest :
 			val testScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			setupData(
 				script = testScript,
@@ -291,13 +307,24 @@ class EditScriptScreenTest :
 			val baseScript = ScriptsRepository.Script(
 				label = "Toggle Dark Mode On and Off",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("adb shell cmd uimode night yes", "sleep 3", "adb shell cmd uimode night no").toSubScripts(),
+				scripts = listOf(
+					"adb shell cmd uimode night yes",
+					"sleep 3",
+					"adb shell cmd uimode night no",
+				).toSubScripts(),
 			)
 			val expectedScript = ScriptsRepository.Script(
 				label = "new script name",
 				comment = "new script comment",
 				platform = ScriptsRepository.Platform.DESKTOP,
-				scripts = listOf("new script 1", "sleep 0", "new script 2").toSubScripts(),
+				scripts = listOf(
+					ScriptsRepository.ScriptCode.CommentedScript(script = "new script 1", comment = "comment 2"),
+					ScriptsRepository.ScriptCode.CommentedScript(script = "sleep 1", comment = "comment 2"),
+					ScriptsRepository.ScriptCode.CommentedScript(
+						script = "new script 2",
+						comment = "comment 2",
+					),
+				),
 			)
 			setupData(
 				script = baseScript,
@@ -312,18 +339,40 @@ class EditScriptScreenTest :
 				performTextClearance()
 				performTextInput("new script comment")
 			}
-			onAllNodes(hasTestTag("text_field_script_input"))[0].apply {
+
+			val scriptInputs = onAllNodes(hasTestTag("text_field_script_input"))
+			scriptInputs[0].apply {
 				performTextClearance()
 				performTextInput("new script 1")
 			}
-			onAllNodes(hasTestTag("text_field_script_input"))[1].apply {
+			scriptInputs[1].apply {
 				performTextClearance()
-				performTextInput("sleep 0")
+				performTextInput("sleep 1")
 			}
-			onAllNodes(hasTestTag("text_field_script_input"))[2].apply {
+			scriptInputs[2].apply {
 				performTextClearance()
 				performTextInput("new script 2")
 			}
+
+			val moreInputs = onAllNodes(hasTestTag("show_more_button"))
+			moreInputs[0].performClick()
+			moreInputs[1].performClick()
+			moreInputs[2].performClick()
+
+			val commentInputs = onAllNodes(hasTestTag("text_field_script_comment"))
+			commentInputs[0].apply {
+				performTextClearance()
+				performTextInput("comment 1")
+			}
+			commentInputs[1].apply {
+				performTextClearance()
+				performTextInput("comment 2")
+			}
+			commentInputs[2].apply {
+				performTextClearance()
+				performTextInput("comment 3")
+			}
+
 			onNodeWithText(text = ScriptsRepository.Platform.DESKTOP.label).performClick()
 
 			onNodeWithText(text = "Save script").performClick()
