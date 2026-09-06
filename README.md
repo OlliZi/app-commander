@@ -20,6 +20,7 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 *   **Powerful Scripting:**
     *   **Looping:** Run a command multiple times with a simple prefix.
     *   **Chaining:** Execute a series of commands in sequence.
+    *   **External software:** Execute each tool or software (with CLI support) that are installed on your machine.
 *   **User-Friendly Interface:**
     *   Light and Dark modes to suit your preference.
     *   Settings screen to customize the app behavior.
