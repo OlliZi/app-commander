@@ -80,7 +80,7 @@ class ScreenshotVerifier<T>(
 
 			is CreateScreenshotDifferenceUseCase.Result.SizeDoesNotMatch -> {
 				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
-					println("Can run screenshot-tests only on github.")
+					println("Can run screenshot-tests only on github (screeshot: '${screenshotFile.name}').")
 					return
 				}
 
@@ -95,7 +95,7 @@ class ScreenshotVerifier<T>(
 
 			is CreateScreenshotDifferenceUseCase.Result.ThresholdMatch -> {
 				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
-					println("Can run screenshot-tests only on github.")
+					println("Can run screenshot-tests only on github (screeshot: '${screenshotFile.name}').")
 					return
 				}
 

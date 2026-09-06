@@ -207,8 +207,13 @@ class EndToEndTest :
 			onNodeWithContentDescription("Edit button").performClick()
 			assertIsDisplayed(Res.string.edit_title)
 
-			onNodeWithTag("text_field_simple_text_script").performTextInput(" (Modified)")
-			onNodeWithTag("text_field_simple_text_comment").performTextInput(" my custom comment")
+			onNodeWithTag("text_field_simple_text_script").performTextInput("(Modified)-")
+			onNodeWithTag("text_field_simple_text_comment").performTextInput("my custom comment")
+			onAllNodes(hasTestTag("show_more_button"))[0].performClick()
+			onAllNodes(hasTestTag("text_field_script_comment"))[0].apply {
+				performScrollTo()
+				performTextInput("sub script comment")
+			}
 			click("Desktop")
 			verifyScreenshot(screenshotName = "e2e_7_edit_script")
 
