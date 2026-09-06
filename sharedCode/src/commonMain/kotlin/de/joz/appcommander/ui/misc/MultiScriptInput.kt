@@ -19,19 +19,21 @@ import compose.icons.feathericons.Play
 import de.joz.appcommander.resources.Res
 import de.joz.appcommander.resources.edit_enter_or_edit
 import de.joz.appcommander.resources.edit_run_all_scripts
+import de.joz.appcommander.ui.edit.EditScriptViewModel
 import de.joz.appcommander.ui.internalpreviews.DarkLightPreviewContainerProvider
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MultiScriptInput(
-	isAtMinimumOneDeviceSelected: Boolean,
-	scripts: List<String>,
+	executeScriptButtonEnabled: Boolean,
+	scripts: List<EditScriptViewModel.SubScript>,
 	onExecuteAllScriptsText: () -> Unit,
 	onChangeScriptText: (Int, String) -> Unit,
+	onChangeScriptComment: (Int, String) -> Unit,
 	onRemoveScript: (Int) -> Unit,
 	onAddScriptText: (Int) -> Unit,
-	onExecuteScriptText: (String) -> Unit,
+	onExecuteScriptText: (EditScriptViewModel.SubScript) -> Unit,
 ) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
@@ -47,12 +49,12 @@ fun MultiScriptInput(
 			textLabelType = TextLabelType.BodyLarge,
 		)
 		IconButton(
-			enabled = isAtMinimumOneDeviceSelected,
+			enabled = executeScriptButtonEnabled,
 			onClick = onExecuteAllScriptsText,
 		) {
 			Icon(
 				imageVector = FeatherIcons.Play,
-				tint = if (isAtMinimumOneDeviceSelected) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+				tint = if (executeScriptButtonEnabled) MaterialTheme.colorScheme.primary else LocalContentColor.current,
 				contentDescription = "Execute all scripts",
 			)
 		}
@@ -63,11 +65,15 @@ fun MultiScriptInput(
 	) {
 		scripts.forEachIndexed { index, script ->
 			ScriptInput(
-				isAtMinimumOneDeviceSelected = isAtMinimumOneDeviceSelected,
+				executeScriptButtonEnabled = executeScriptButtonEnabled,
+				showMoreButton = true,
 				script = script,
 				onExecuteScriptText = onExecuteScriptText,
 				onChangeScriptText = { editedScript ->
 					onChangeScriptText(index, editedScript)
+				},
+				onChangeScriptComment = { comment ->
+					onChangeScriptComment(index, comment)
 				},
 				onAddScript = {
 					onAddScriptText(index)
@@ -92,7 +98,7 @@ private fun ScriptDivider() {
 
 @Preview
 @Composable
-internal fun PreviewMultiScriptInput() {
+private fun PreviewMultiScriptInput() {
 	DarkLightPreviewContainerProvider { darkMode ->
 		PreviewMultiScriptInput(darkMode)
 	}
@@ -104,13 +110,16 @@ internal fun PreviewMultiScriptInput(darkMode: Boolean) {
 		darkTheme = darkMode,
 	) {
 		MultiScriptInput(
-			isAtMinimumOneDeviceSelected = true,
-			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123"),
+			executeScriptButtonEnabled = true,
+			scripts = listOf("adb devices", "adb shell echo foo", "adb shell echo bar", "adb shell echo 123").map {
+				EditScriptViewModel.SubScript(subScript = it)
+			},
 			onRemoveScript = {},
 			onExecuteScriptText = {},
 			onExecuteAllScriptsText = {},
 			onAddScriptText = {},
 			onChangeScriptText = { _, _ -> },
+			onChangeScriptComment = { _, _ -> },
 		)
 	}
 }

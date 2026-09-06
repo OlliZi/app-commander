@@ -2,6 +2,7 @@ package de.joz.appcommander.domain.script
 
 import de.joz.appcommander.domain.logging.AddLoggingUseCase
 import de.joz.appcommander.helper.IsLocalTestRunUseCase
+import de.joz.appcommander.helper.toSubScripts
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,7 +24,7 @@ class ExecuteScriptUseCaseTest {
 			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("echo foo"),
+				scripts = listOf("echo foo").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -45,7 +46,7 @@ class ExecuteScriptUseCaseTest {
 					"echo bar",
 					"#LOOP_2 echo loop",
 					"echo test",
-				),
+				).toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -68,7 +69,7 @@ class ExecuteScriptUseCaseTest {
 			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("#LOOP_3 echo foo"),
+				scripts = listOf("#LOOP_3 echo foo").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -85,7 +86,7 @@ class ExecuteScriptUseCaseTest {
 			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("echo foo"),
+				scripts = listOf("echo foo").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -100,7 +101,7 @@ class ExecuteScriptUseCaseTest {
 			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("echo foo"),
+				scripts = listOf("echo foo").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -115,7 +116,7 @@ class ExecuteScriptUseCaseTest {
 			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("foo_bar_unknown_command"),
+				scripts = listOf("foo_bar_unknown_command").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -130,7 +131,7 @@ class ExecuteScriptUseCaseTest {
 			val executeScriptUseCase = createUseCase()
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("foo_bar_unknown_command"),
+				scripts = listOf("foo_bar_unknown_command").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -155,7 +156,7 @@ class ExecuteScriptUseCaseTest {
 
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("adb devices"),
+				scripts = listOf("adb devices").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -184,7 +185,7 @@ class ExecuteScriptUseCaseTest {
 
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("idb devices"),
+				scripts = listOf("idb devices").toSubScripts(),
 				platform = ScriptsRepository.Platform.IOS,
 			)
 
@@ -207,7 +208,7 @@ class ExecuteScriptUseCaseTest {
 			)
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("adb install app"),
+				scripts = listOf("adb install app").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 
@@ -226,7 +227,7 @@ class ExecuteScriptUseCaseTest {
 			)
 			val script = ScriptsRepository.Script(
 				label = "Test",
-				scripts = listOf("adb install app", "idb install app"),
+				scripts = listOf("adb install app", "idb install app").toSubScripts(),
 				platform = ScriptsRepository.Platform.DESKTOP,
 			)
 

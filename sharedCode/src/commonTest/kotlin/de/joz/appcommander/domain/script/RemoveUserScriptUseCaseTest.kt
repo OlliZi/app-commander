@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain.script
 
+import de.joz.appcommander.helper.toSubScripts
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -17,7 +18,7 @@ class RemoveUserScriptUseCaseTest {
 			removeUserScriptUseCase(
 				script = ScriptsRepository.Script(
 					label = "key",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 			)
@@ -26,7 +27,7 @@ class RemoveUserScriptUseCaseTest {
 				scriptsRepositoryMock.removeScript(
 					script = ScriptsRepository.Script(
 						label = "key",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				)

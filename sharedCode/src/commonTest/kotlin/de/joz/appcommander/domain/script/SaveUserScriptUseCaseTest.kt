@@ -1,5 +1,6 @@
 package de.joz.appcommander.domain.script
 
+import de.joz.appcommander.helper.toSubScripts
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -30,7 +31,7 @@ class SaveUserScriptUseCaseTest {
 			savePreferenceUseCase(
 				script = ScriptsRepository.Script(
 					label = "key",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				scriptKey = null,
@@ -40,7 +41,7 @@ class SaveUserScriptUseCaseTest {
 				scriptsRepositoryMock.saveScript(
 					script = ScriptsRepository.Script(
 						label = "key",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 				)
@@ -57,12 +58,12 @@ class SaveUserScriptUseCaseTest {
 
 			val newScript = ScriptsRepository.Script(
 				label = "key",
-				scripts = listOf("foo"),
+				scripts = listOf("foo").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 			val oldScript = ScriptsRepository.Script(
 				label = "key",
-				scripts = listOf("bar"),
+				scripts = listOf("bar").toSubScripts(),
 				platform = ScriptsRepository.Platform.ANDROID,
 			)
 
@@ -85,7 +86,7 @@ class SaveUserScriptUseCaseTest {
 				scriptsRepositoryMock.updateScript(
 					script = ScriptsRepository.Script(
 						label = "key",
-						scripts = listOf("foo"),
+						scripts = listOf("foo").toSubScripts(),
 						platform = ScriptsRepository.Platform.ANDROID,
 					),
 					oldScript = oldScript,
@@ -113,7 +114,7 @@ class SaveUserScriptUseCaseTest {
 			val result = savePreferenceUseCase(
 				script = ScriptsRepository.Script(
 					label = "key",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				scriptKey = null,
@@ -142,7 +143,7 @@ class SaveUserScriptUseCaseTest {
 			val result = savePreferenceUseCase(
 				script = ScriptsRepository.Script(
 					label = "key",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				scriptKey = null,
@@ -171,7 +172,7 @@ class SaveUserScriptUseCaseTest {
 			val result = savePreferenceUseCase(
 				script = ScriptsRepository.Script(
 					label = "key",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				scriptKey = null,
@@ -200,7 +201,7 @@ class SaveUserScriptUseCaseTest {
 			val result = savePreferenceUseCase(
 				script = ScriptsRepository.Script(
 					label = "key",
-					scripts = listOf("foo"),
+					scripts = listOf("foo").toSubScripts(),
 					platform = ScriptsRepository.Platform.ANDROID,
 				),
 				scriptKey = null,

@@ -13,6 +13,7 @@ import de.joz.appcommander.domain.preference.ChangedPreference
 import de.joz.appcommander.domain.preference.GetPreferenceUseCase
 import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.domain.script.ExecuteScriptUseCase
+import de.joz.appcommander.domain.script.FilterScriptUseCase
 import de.joz.appcommander.domain.script.GetScriptIdUseCase
 import de.joz.appcommander.domain.script.GetUserScriptsUseCase
 import de.joz.appcommander.domain.script.OpenScriptFileUseCase
@@ -42,6 +43,7 @@ class ScriptsViewModel(
 	private val getLoggingUseCase: GetLoggingUseCase,
 	private val getPreferenceUseCase: GetPreferenceUseCase,
 	private val savePreferenceUseCase: SavePreferenceUseCase,
+	private val filterScriptUseCase: FilterScriptUseCase,
 	@MainDispatcher private val mainDispatcher: CoroutineDispatcher,
 	@IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(),
@@ -137,29 +139,23 @@ class ScriptsViewModel(
 	}
 
 	private suspend fun onRefreshScripts(jsonParseResult: ScriptsRepository.JsonParseResult) {
-		val filter = getPreferenceUseCase.get(SCRIPT_FILTER_PREF_KEY, "").lowercase()
+		val filterResult = filterScriptUseCase(scripts = jsonParseResult.scripts)
 
 		_uiState.update { oldState ->
 			oldState.copy(
 				hint = mapHint(jsonParseResult.parsingMetaData),
-				filter = filter,
-				scripts = jsonParseResult.scripts
-					.filter {
-						it.label.lowercase().contains(filter) || it.scripts.any { script ->
-							script.lowercase().contains(filter)
-						} || it.platform.name
-							.lowercase()
-							.contains(filter)
-					}.map { script ->
-						Script(
-							description = script.label,
-							scriptText = formatScripts(script),
-							originalScript = script,
-							isExpanded = _uiState.value.scripts.any {
-								(it.description == script.label || it.scriptText == formatScripts(script)) && it.isExpanded
-							},
-						)
-					},
+				filter = filterResult.filterText,
+				scripts = filterResult.scripts.map { script ->
+					Script(
+						description = script.label,
+						comment = script.comment,
+						scriptText = formatScripts(script),
+						originalScript = script,
+						isExpanded = _uiState.value.scripts.any {
+							(it.description == script.label || it.scriptText == formatScripts(script)) && it.isExpanded
+						},
+					)
+				},
 			)
 		}
 	}
@@ -222,7 +218,7 @@ class ScriptsViewModel(
 			executeScriptUseCase(
 				script = ScriptsRepository.Script(
 					label = "",
-					scripts = listOf(script),
+					scripts = listOf(ScriptsRepository.ScriptCode.Script(script = script)),
 					platform = platform,
 				),
 				selectedDevice = device,
@@ -255,7 +251,7 @@ class ScriptsViewModel(
 	}
 
 	private suspend fun onFilterScripts(filter: String) {
-		savePreferenceUseCase(SCRIPT_FILTER_PREF_KEY, filter)
+		savePreferenceUseCase(FilterScriptUseCase.SCRIPT_FILTER_PREF_KEY, filter)
 		onRefreshScripts(jsonParseResult = getUserScriptsUseCase())
 	}
 
@@ -277,7 +273,7 @@ class ScriptsViewModel(
 		clearLoggingUseCase()
 	}
 
-	private fun formatScripts(script: ScriptsRepository.Script): String = script.scripts.joinToString("\n")
+	private fun formatScripts(script: ScriptsRepository.Script): String = script.scripts.joinToString("\n") { it.script }
 
 	private fun mapHint(parsingMetaData: ScriptsRepository.ParsingMetaData?): Hint? {
 		if (parsingMetaData == null) {
@@ -334,10 +330,7 @@ class ScriptsViewModel(
 		val description: String,
 		val scriptText: String,
 		val originalScript: ScriptsRepository.Script,
+		val comment: String? = null,
 		val isExpanded: Boolean = false,
 	)
-
-	companion object {
-		const val SCRIPT_FILTER_PREF_KEY = "SCRIPT_FILTER"
-	}
 }

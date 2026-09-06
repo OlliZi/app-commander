@@ -80,10 +80,11 @@ class ScreenshotVerifier<T>(
 
 			is CreateScreenshotDifferenceUseCase.Result.SizeDoesNotMatch -> {
 				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
-					println("Can run screenshot-tests only on github.")
+					println("Can run screenshot-tests only on github (screeshot: '${screenshotFile.name}').")
 					return
 				}
 
+				Files.copy(screenshotFile.toPath(), goldenImage.toPath(), StandardCopyOption.REPLACE_EXISTING)
 				errorCollector(
 					"Screenshot size does not match golden image size. " +
 						"Fix test or replace golden image with current screenshot.\n" +
@@ -94,7 +95,7 @@ class ScreenshotVerifier<T>(
 
 			is CreateScreenshotDifferenceUseCase.Result.ThresholdMatch -> {
 				if (isLocalTestRunUseCase() || isJenkinsTestRunUseCase()) {
-					println("Can run screenshot-tests only on github.")
+					println("Can run screenshot-tests only on github (screeshot: '${screenshotFile.name}').")
 					return
 				}
 

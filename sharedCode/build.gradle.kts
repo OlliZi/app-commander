@@ -84,11 +84,14 @@ kover {
 					"$mainPackage.ui.internalpreviews",
 				)
 				classes("**ComposableSingletons**", $$"**NavigationScreens$Companion**")
+				annotatedBy(
+					"androidx.compose.ui.tooling.preview.Preview",
+				)
 			}
 		}
 		verify {
 			// also edit in README.md
-			val lineCoverage = 94
+			val lineCoverage = 98
 			rule("Minimal line coverage rate in percent.") {
 				minBound(lineCoverage)
 			}

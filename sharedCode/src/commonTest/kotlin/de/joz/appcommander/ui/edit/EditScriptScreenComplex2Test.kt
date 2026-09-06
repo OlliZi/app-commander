@@ -22,6 +22,7 @@ import de.joz.appcommander.domain.script.ScriptsRepository
 import de.joz.appcommander.helper.GetDevicesUseCaseMock
 import de.joz.appcommander.helper.SelectedDevicesRepositoryMock
 import de.joz.appcommander.helper.TestRuleApplier
+import de.joz.appcommander.helper.toSubScripts
 import de.joz.appcommander.ui.theme.AppCommanderTheme
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -99,7 +100,7 @@ class EditScriptScreenComplex2Test :
 			val script = ScriptsRepository.Script(
 				label = "",
 				platform = ScriptsRepository.Platform.ANDROID,
-				scripts = listOf("echo"),
+				scripts = listOf("echo").toSubScripts(),
 			)
 			coEvery { executeScriptUseCaseMock(any(), any()) } returns ExecuteScriptUseCase.Result.Success("")
 
