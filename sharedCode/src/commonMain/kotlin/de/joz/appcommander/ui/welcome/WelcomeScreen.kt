@@ -9,10 +9,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -107,14 +105,14 @@ internal fun WelcomeContent(
 			}
 		},
 	) { paddingValues ->
-		val yOffset = rememberInfiniteTransition(label = "bubble")
+		val progressValue = rememberInfiniteTransition(label = "bubble")
 			.animateFloat(
-				initialValue = -0.25f,
-				targetValue = 1.5f,
+				initialValue = 0.2f,
+				targetValue = 1.8f,
 				animationSpec = infiniteRepeatable(
-					repeatMode = RepeatMode.Restart,
+					repeatMode = RepeatMode.Reverse,
 					animation = tween(
-						durationMillis = 6000,
+						durationMillis = 5000,
 						easing = LinearEasing,
 					),
 				),
@@ -126,36 +124,34 @@ internal fun WelcomeContent(
 				.padding(paddingValues)
 				.fillMaxSize()
 				.drawBehind {
-					renderBubbles(yOffset, isInTextExecution, bubblesStrategy)
+					renderBubbles(progressValue, isInTextExecution, bubblesStrategy)
 				}.padding(16.dp)
 				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally,
 			verticalArrangement = Arrangement.Center,
 		) {
 			TextLabel(
-				modifier = Modifier.padding(top = 32.dp),
 				text = stringResource(Res.string.welcome_title),
 				textLabelType = TextLabelType.HeadlineLarge,
 				textAlign = TextAlign.Center,
 			)
-			Spacer(Modifier.height(24.dp))
+			Image(
+				modifier = Modifier.size(320.dp),
+				painter = painterResource(Res.drawable.app_logo),
+				contentDescription = null,
+			)
 			TextLabel(
 				modifier = Modifier.padding(horizontal = 32.dp),
 				text = stringResource(Res.string.welcome_catch_phrase),
 				textLabelType = TextLabelType.HeadlineMedium,
 				textAlign = TextAlign.Center,
 			)
-			Image(
-				modifier = Modifier.size(400.dp),
-				painter = painterResource(Res.drawable.app_logo),
-				contentDescription = null,
-			)
 		}
 	}
 }
 
 private fun DrawScope.renderBubbles(
-	yOffset: Float,
+	progressValue: Float,
 	isInTextExecution: Boolean,
 	bubblesStrategy: BubblesStrategy,
 ) {
@@ -169,7 +165,7 @@ private fun DrawScope.renderBubbles(
 		bubblesStrategy.drawBubbles(
 			drawScope = this,
 			size = size,
-			step = yOffset,
+			step = progressValue,
 		)
 	}
 }
