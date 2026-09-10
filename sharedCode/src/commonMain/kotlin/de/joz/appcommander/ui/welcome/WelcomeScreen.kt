@@ -9,12 +9,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -42,8 +41,8 @@ import de.joz.appcommander.resources.welcome_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
-import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
-import de.joz.appcommander.ui.welcome.bubble.FadingInBubblesStrategy
+import de.joz.appcommander.ui.welcome.animation.AnimationStrategy
+import de.joz.appcommander.ui.welcome.animation.FadingInAnimationStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -51,7 +50,7 @@ import org.jetbrains.compose.resources.stringResource
 fun WelcomeScreen(
 	viewModel: WelcomeViewModel,
 	modifier: Modifier = Modifier,
-	bubblesStrategy: BubblesStrategy,
+	animationStrategy: AnimationStrategy,
 	isInTextExecution: Boolean = false,
 ) {
 	WelcomeContent(
@@ -62,14 +61,14 @@ fun WelcomeScreen(
 			viewModel.onEvent(event = WelcomeViewModel.Event.OnDoNotShowWelcomeAgain(value = checked))
 		},
 		modifier = modifier,
-		bubblesStrategy = bubblesStrategy,
+		animationStrategy = animationStrategy,
 		isInTextExecution = isInTextExecution,
 	)
 }
 
 @Composable
 internal fun WelcomeContent(
-	bubblesStrategy: BubblesStrategy,
+	animationStrategy: AnimationStrategy,
 	onNavigateToScripts: () -> Unit,
 	onDoNotShowWelcomeAgain: (Boolean) -> Unit,
 	isInTextExecution: Boolean,
@@ -79,29 +78,45 @@ internal fun WelcomeContent(
 		containerColor = MaterialTheme.colorScheme.surface,
 		modifier = modifier,
 		bottomBar = {
-			Button(
-				modifier = Modifier.padding(all = 16.dp).navigationBarsPadding().fillMaxWidth(),
-				onClick = onNavigateToScripts,
+			Column(
+				modifier = Modifier.fillMaxWidth(),
+				horizontalAlignment = Alignment.CenterHorizontally,
+				verticalArrangement = Arrangement.spacedBy(16.dp),
 			) {
-				Text(
-					text = stringResource(Res.string.welcome_action),
-					style = MaterialTheme.typography.headlineSmall,
+				var isChecked by remember { mutableStateOf(false) }
+				LabelledSwitch(
+					modifier = Modifier.padding(horizontal = 32.dp),
+					label = stringResource(Res.string.welcome_do_not_show_again),
+					checked = isChecked,
+					onCheckedChange = {
+						isChecked = !isChecked
+						onDoNotShowWelcomeAgain(isChecked)
+					},
 				)
+				Button(
+					modifier = Modifier.padding(horizontal = 32.dp).padding(bottom = 32.dp).width(300.dp),
+					onClick = onNavigateToScripts,
+				) {
+					Text(
+						text = stringResource(Res.string.welcome_action),
+						style = MaterialTheme.typography.headlineSmall,
+					)
+				}
 			}
 		},
 	) { paddingValues ->
-		val yOffset = rememberInfiniteTransition(label = "bubble")
+		val progressValue = rememberInfiniteTransition(label = "token animation")
 			.animateFloat(
-				initialValue = -0.25f,
-				targetValue = 1.5f,
+				initialValue = 0.2f,
+				targetValue = 1.8f,
 				animationSpec = infiniteRepeatable(
-					repeatMode = RepeatMode.Restart,
+					repeatMode = RepeatMode.Reverse,
 					animation = tween(
-						durationMillis = 4000,
+						durationMillis = 5000,
 						easing = LinearEasing,
 					),
 				),
-				label = "bubble",
+				label = "token animation",
 			).value
 
 		Column(
@@ -109,61 +124,48 @@ internal fun WelcomeContent(
 				.padding(paddingValues)
 				.fillMaxSize()
 				.drawBehind {
-					renderBubbles(yOffset, isInTextExecution, bubblesStrategy)
+					renderAnimation(progressValue, isInTextExecution, animationStrategy)
 				}.padding(16.dp)
 				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally,
 			verticalArrangement = Arrangement.Center,
 		) {
 			TextLabel(
-				modifier = Modifier.padding(top = 24.dp),
 				text = stringResource(Res.string.welcome_title),
-				textLabelType = TextLabelType.HeadlineMedium,
+				textLabelType = TextLabelType.HeadlineLarge,
 				textAlign = TextAlign.Center,
 			)
-			Spacer(Modifier.height(16.dp))
-			TextLabel(
-				text = stringResource(Res.string.welcome_catch_phrase),
-				textLabelType = TextLabelType.BodyLarge,
-				textAlign = TextAlign.Center,
-			)
-			Spacer(Modifier.height(24.dp))
 			Image(
-				modifier = Modifier.fillMaxWidth(fraction = 0.8f),
+				modifier = Modifier.size(320.dp),
 				painter = painterResource(Res.drawable.app_logo),
 				contentDescription = null,
 			)
-
-			var isChecked by remember { mutableStateOf(false) }
-			LabelledSwitch(
-				modifier = Modifier.padding(all = 16.dp),
-				label = stringResource(Res.string.welcome_do_not_show_again),
-				checked = isChecked,
-				onCheckedChange = {
-					isChecked = !isChecked
-					onDoNotShowWelcomeAgain(isChecked)
-				},
+			TextLabel(
+				modifier = Modifier.padding(horizontal = 32.dp),
+				text = stringResource(Res.string.welcome_catch_phrase),
+				textLabelType = TextLabelType.HeadlineMedium,
+				textAlign = TextAlign.Center,
 			)
 		}
 	}
 }
 
-private fun DrawScope.renderBubbles(
-	yOffset: Float,
+private fun DrawScope.renderAnimation(
+	progressValue: Float,
 	isInTextExecution: Boolean,
-	bubblesStrategy: BubblesStrategy,
+	animationStrategy: AnimationStrategy,
 ) {
 	if (isInTextExecution) {
-		bubblesStrategy.drawBubbles(
+		animationStrategy.render(
 			drawScope = this,
 			size = size,
 			step = 0.6f,
 		)
 	} else {
-		bubblesStrategy.drawBubbles(
+		animationStrategy.render(
 			drawScope = this,
 			size = size,
-			step = yOffset,
+			step = progressValue,
 		)
 	}
 }
@@ -172,7 +174,7 @@ private fun DrawScope.renderBubbles(
 @Composable
 private fun PreviewWelcomeScreen() {
 	WelcomeContent(
-		bubblesStrategy = FadingInBubblesStrategy(),
+		animationStrategy = FadingInAnimationStrategy(),
 		onNavigateToScripts = {},
 		onDoNotShowWelcomeAgain = {},
 		isInTextExecution = false,

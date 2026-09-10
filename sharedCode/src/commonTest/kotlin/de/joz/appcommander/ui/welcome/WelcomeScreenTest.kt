@@ -9,7 +9,6 @@ import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.navigation.NavController
 import de.joz.appcommander.domain.navigation.NavigationScreens
@@ -17,8 +16,8 @@ import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
-import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
-import de.joz.appcommander.ui.welcome.bubble.MultiBubblesStrategy
+import de.joz.appcommander.ui.welcome.animation.AnimationStrategy
+import de.joz.appcommander.ui.welcome.animation.FadingInAnimationStrategy
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -44,23 +43,21 @@ class WelcomeScreenTest {
 				)
 			}
 
-			onNodeWithText("Welcome to \n'App-Commander'.").assertIsDisplayed()
-			onNodeWithText(
-				"Your programmable multi-device execution helper. Execute your scripts for your apps on multiple devices.",
-			).assertIsDisplayed()
-			onNodeWithText("Let's go!").assertIsDisplayed().assertHasClickAction()
-			onNodeWithText("Do not show welcome screen again.").performScrollTo().assertIsDisplayed()
+			onNodeWithText("Welcome to \nApp-Commander.").assertIsDisplayed()
+			onNodeWithText("Your programmable multi-device execution helper for your apps.").assertIsDisplayed()
+			onNodeWithText("Start").assertIsDisplayed().assertHasClickAction()
+			onNodeWithText("Hide welcome screen on next start").assertIsDisplayed()
 		}
 	}
 
 	@Test
-	fun `should render animation bubbles when app is started`() =
+	fun `should render animation tokens when app is started`() =
 		runTest {
 			val navController: NavController = mockk(relaxed = true)
 			runComposeUiTest {
 				setTestContent(
 					navController = navController,
-					useCustomBubbleStrategy = false,
+					useCustomAnimationStrategy = false,
 				)
 
 				screenshotVerifier.verifyScreenshot(source = this, screenshotName = "animation")
@@ -74,10 +71,10 @@ class WelcomeScreenTest {
 			runComposeUiTest {
 				setTestContent(
 					navController = navController,
-					useCustomBubbleStrategy = true,
+					useCustomAnimationStrategy = true,
 				)
 
-				onNodeWithText("Do not show welcome screen again.").performScrollTo().performClick()
+				onNodeWithText("Hide welcome screen on next start").performClick()
 
 				screenshotVerifier.verifyScreenshot(source = this, screenshotName = "toggle_click")
 			}
@@ -99,8 +96,8 @@ class WelcomeScreenTest {
 					navController = navController,
 				)
 
-				onNodeWithText("Do not show welcome screen again.").performScrollTo().performClick()
-				onNodeWithText("Do not show welcome screen again.").performScrollTo().performClick()
+				onNodeWithText("Hide welcome screen on next start").performClick()
+				onNodeWithText("Hide welcome screen on next start").performClick()
 			}
 
 			assertFalse(
@@ -119,7 +116,7 @@ class WelcomeScreenTest {
 				navController = navController,
 			)
 
-			onNodeWithText("Let's go!").performClick()
+			onNodeWithText("Start").performClick()
 
 			verify { navController.navigate(NavigationScreens.ScriptsScreen) }
 		}
@@ -127,7 +124,7 @@ class WelcomeScreenTest {
 
 	private fun ComposeUiTest.setTestContent(
 		navController: NavController,
-		useCustomBubbleStrategy: Boolean = false,
+		useCustomAnimationStrategy: Boolean = false,
 	) {
 		setContent {
 			AppCommanderTheme(
@@ -138,9 +135,9 @@ class WelcomeScreenTest {
 							navController = navController,
 							savePreferenceUseCase = SavePreferenceUseCase(preferencesRepository = preferencesRepositoryMock),
 						),
-						bubblesStrategy = if (useCustomBubbleStrategy) {
-							object : BubblesStrategy {
-								override fun drawBubbles(
+						animationStrategy = if (useCustomAnimationStrategy) {
+							object : AnimationStrategy {
+								override fun render(
 									drawScope: DrawScope,
 									size: Size,
 									step: Float,
@@ -149,7 +146,7 @@ class WelcomeScreenTest {
 								}
 							}
 						} else {
-							MultiBubblesStrategy()
+							FadingInAnimationStrategy()
 						},
 						isInTextExecution = true,
 					)

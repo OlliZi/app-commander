@@ -9,14 +9,11 @@ Hello and welcome.
 
 App-Commander is a powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
 
-<kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/app_logo.png)</kbd>
-
 ## 🎥 First Impressions I (YouTube.com)
 | Demo & Preview                                                                                                        | Filter & Custom scripts for your apps                                                                                  | Write your own custom script                                                                                          |
 |-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
 | https://youtu.be/zCbUy9uB4mI                                                                                          | https://youtu.be/WFwn_gXWGB4                                                                                           | https://youtu.be/jtDFyReQ2e4                                                                                          |
 | <kbd>[![App Demo 1](https://img.youtube.com/vi/zCbUy9uB4mI/0.jpg)](https://www.youtube.com/watch?v=zCbUy9uB4mI)</kbd> | <kbd>[![App Demo  2](https://img.youtube.com/vi/WFwn_gXWGB4/0.jpg)](https://www.youtube.com/watch?v=WFwn_gXWGB4)</kbd> | <kbd>[![App Demo 3](https://img.youtube.com/vi/jtDFyReQ2e4/0.jpg)](https://www.youtube.com/watch?v=jtDFyReQ2e4)</kbd> |
-
 
 ## 📸 First Impressions II
 
@@ -31,7 +28,6 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/edit/screenshots/edit_script_ui.png)</kbd>
 
 **Settings Screen**
-<kbd>![Settings-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/default_label.png)</kbd>
 <kbd>![Settings-screen with changed label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 ## ✨ Key Features
