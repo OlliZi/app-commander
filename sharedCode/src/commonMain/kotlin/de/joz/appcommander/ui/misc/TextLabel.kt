@@ -35,6 +35,7 @@ fun TextLabel(
 			TextLabelType.BodyLarge -> MaterialTheme.typography.bodyLarge.applyThemeColor(textColor)
 			TextLabelType.BodyMedium -> MaterialTheme.typography.bodyMedium.applyThemeColor(textColor)
 			TextLabelType.BodySmall -> MaterialTheme.typography.bodySmall.applyThemeColor(textColor)
+			TextLabelType.HeadlineLarge -> MaterialTheme.typography.headlineLarge.applyThemeColor(textColor)
 			TextLabelType.HeadlineMedium -> MaterialTheme.typography.headlineMedium.applyThemeColor(textColor)
 			TextLabelType.HeadlineSmall -> MaterialTheme.typography.headlineSmall.applyThemeColor(textColor)
 		},
@@ -51,6 +52,7 @@ enum class TextLabelType {
 	BodyLarge,
 	BodyMedium,
 	BodySmall,
+	HeadlineLarge,
 	HeadlineMedium,
 	HeadlineSmall,
 }

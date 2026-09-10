@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,7 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.android_app_logo
+import de.joz.appcommander.resources.app_logo
 import de.joz.appcommander.resources.welcome_action
 import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_do_not_show_again
@@ -84,10 +83,11 @@ internal fun WelcomeContent(
 			Column(
 				modifier = Modifier.fillMaxWidth(),
 				horizontalAlignment = Alignment.CenterHorizontally,
+				verticalArrangement = Arrangement.spacedBy(16.dp),
 			) {
 				var isChecked by remember { mutableStateOf(false) }
 				LabelledSwitch(
-					modifier = Modifier.padding(all = 32.dp),
+					modifier = Modifier.padding(horizontal = 32.dp),
 					label = stringResource(Res.string.welcome_do_not_show_again),
 					checked = isChecked,
 					onCheckedChange = {
@@ -96,7 +96,7 @@ internal fun WelcomeContent(
 					},
 				)
 				Button(
-					modifier = Modifier.padding(all = 16.dp).navigationBarsPadding().width(300.dp),
+					modifier = Modifier.padding(horizontal = 32.dp).padding(bottom = 32.dp).width(300.dp),
 					onClick = onNavigateToScripts,
 				) {
 					Text(
@@ -114,7 +114,7 @@ internal fun WelcomeContent(
 				animationSpec = infiniteRepeatable(
 					repeatMode = RepeatMode.Restart,
 					animation = tween(
-						durationMillis = 4000,
+						durationMillis = 6000,
 						easing = LinearEasing,
 					),
 				),
@@ -133,21 +133,21 @@ internal fun WelcomeContent(
 			verticalArrangement = Arrangement.Center,
 		) {
 			TextLabel(
-				modifier = Modifier.padding(top = 24.dp),
+				modifier = Modifier.padding(top = 32.dp),
 				text = stringResource(Res.string.welcome_title),
-				textLabelType = TextLabelType.HeadlineMedium,
-				textAlign = TextAlign.Center,
-			)
-			Spacer(Modifier.height(16.dp))
-			TextLabel(
-				text = stringResource(Res.string.welcome_catch_phrase),
-				textLabelType = TextLabelType.BodyLarge,
+				textLabelType = TextLabelType.HeadlineLarge,
 				textAlign = TextAlign.Center,
 			)
 			Spacer(Modifier.height(24.dp))
+			TextLabel(
+				modifier = Modifier.padding(horizontal = 32.dp),
+				text = stringResource(Res.string.welcome_catch_phrase),
+				textLabelType = TextLabelType.HeadlineMedium,
+				textAlign = TextAlign.Center,
+			)
 			Image(
-				modifier = Modifier.size(300.dp), // fillMaxWidth(fraction = 0.8f),
-				painter = painterResource(Res.drawable.android_app_logo),
+				modifier = Modifier.size(400.dp),
+				painter = painterResource(Res.drawable.app_logo),
 				contentDescription = null,
 			)
 		}

@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
-// todo change alos video thumba
 @KoinViewModel
 class WelcomeViewModel(
 	@InjectedParam private val navController: NavController,
