@@ -19,19 +19,19 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 
 ## 📸 First Impressions II
 
-**Welcome Screen**
+### Welcome Screen
 
 <kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/welcome/screenshots/animation.png)</kbd>
 
-**Scripts Screen**
+### Scripts Screen
 
 <kbd>![Scripts-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/activated_scripts.png)</kbd>
 
-**Edit/Add Script Screen**
+### Edit/Add Script Screen
 
 <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/edit/screenshots/edit_script_ui.png)</kbd>
 
-**Settings Screen**
+### Settings Screen
 
 <kbd>![Settings-screen with changed label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
