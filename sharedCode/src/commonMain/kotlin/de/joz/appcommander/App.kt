@@ -51,7 +51,7 @@ fun App(
 
 				WelcomeScreen(
 					viewModel = viewModel,
-					bubblesStrategy = koinInject(),
+					animationStrategy = koinInject(),
 				)
 			}
 			composable<NavigationScreens.ScriptsScreen> {

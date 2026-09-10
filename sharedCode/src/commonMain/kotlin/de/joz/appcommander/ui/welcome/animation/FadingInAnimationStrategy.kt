@@ -1,4 +1,4 @@
-package de.joz.appcommander.ui.welcome.bubble
+package de.joz.appcommander.ui.welcome.animation
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -14,35 +14,35 @@ import kotlin.math.sin
 import kotlin.random.Random
 
 @Factory
-class FadingInBubblesStrategy : BubblesStrategy {
-	private val bubbles = createRandomBubbles()
+class FadingInAnimationStrategy : AnimationStrategy {
+	private val tokens = createRandomTokens()
 
-	override fun drawBubbles(
+	override fun render(
 		drawScope: DrawScope,
 		size: Size,
 		step: Float,
 	) {
-		bubbles.forEach { bubble ->
+		tokens.forEach { token ->
 			drawScope.translate(
-				left = size.width * bubble.x,
-				top = size.height * bubble.y,
+				left = size.width * token.x,
+				top = size.height * token.y,
 			) {
 				drawPath(
-					path = createHexagon(bubble, step),
-					color = bubble.color,
+					path = createHexagon(token, step),
+					color = token.color,
 				)
 			}
 		}
 	}
 
-	private fun createRandomBubbles(color: Color = BUBBLE_COLOR): List<Bubble> =
-		List(BUBBLE_COUNT) {
-			Bubble(
-				color = color.copy(
+	private fun createRandomTokens(): List<Token> =
+		List(TOKEN_COUNT) {
+			Token(
+				color = TOKEN_COLOR.copy(
 					alpha = min(
-						MAX_BUBBLE_COLOR_ALPHA,
+						MAX_TOKEN_COLOR_ALPHA,
 						max(
-							MIN_BUBBLE_COLOR_ALPHA,
+							MIN_TOKEN_COLOR_ALPHA,
 							RANDOM.nextFloat(),
 						),
 					),
@@ -54,14 +54,14 @@ class FadingInBubblesStrategy : BubblesStrategy {
 		}
 
 	private fun createHexagon(
-		bubble: Bubble,
+		token: Token,
 		step: Float,
 	): Path =
 		Path().apply {
 			(0..6).forEach {
-				val r = bubble.size / 2 * max(0f, step)
-				val x = bubble.x + r * cos(RADIANT * it).toFloat()
-				val y = bubble.y + r * sin(RADIANT * it).toFloat()
+				val r = token.size / 2 * max(0f, step)
+				val x = token.x + r * cos(RADIANT * it).toFloat()
+				val y = token.y + r * sin(RADIANT * it).toFloat()
 				if (isEmpty) {
 					moveTo(x, y)
 				} else {
@@ -73,12 +73,12 @@ class FadingInBubblesStrategy : BubblesStrategy {
 
 	companion object {
 		private const val RADIANT = 2 * PI / 6
-		private const val BUBBLE_COUNT = 50
-		private const val MIN_BUBBLE_COLOR_ALPHA = 0.3f
-		private const val MAX_BUBBLE_COLOR_ALPHA = 0.6f
+		private const val TOKEN_COUNT = 50
+		private const val MIN_TOKEN_COLOR_ALPHA = 0.3f
+		private const val MAX_TOKEN_COLOR_ALPHA = 0.6f
 		private const val MAX_SIZE = 200f
 		private const val MIN_SIZE = 50f
-		private val BUBBLE_COLOR = Color.Green.copy(green = 0.5f)
+		private val TOKEN_COLOR = Color.Green.copy(green = 0.5f)
 		private val RANDOM = Random(1)
 	}
 }

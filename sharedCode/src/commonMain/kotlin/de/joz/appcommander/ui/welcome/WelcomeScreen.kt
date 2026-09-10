@@ -41,8 +41,8 @@ import de.joz.appcommander.resources.welcome_title
 import de.joz.appcommander.ui.misc.LabelledSwitch
 import de.joz.appcommander.ui.misc.TextLabel
 import de.joz.appcommander.ui.misc.TextLabelType
-import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
-import de.joz.appcommander.ui.welcome.bubble.FadingInBubblesStrategy
+import de.joz.appcommander.ui.welcome.animation.AnimationStrategy
+import de.joz.appcommander.ui.welcome.animation.FadingInAnimationStrategy
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -50,7 +50,7 @@ import org.jetbrains.compose.resources.stringResource
 fun WelcomeScreen(
 	viewModel: WelcomeViewModel,
 	modifier: Modifier = Modifier,
-	bubblesStrategy: BubblesStrategy,
+	animationStrategy: AnimationStrategy,
 	isInTextExecution: Boolean = false,
 ) {
 	WelcomeContent(
@@ -61,14 +61,14 @@ fun WelcomeScreen(
 			viewModel.onEvent(event = WelcomeViewModel.Event.OnDoNotShowWelcomeAgain(value = checked))
 		},
 		modifier = modifier,
-		bubblesStrategy = bubblesStrategy,
+		animationStrategy = animationStrategy,
 		isInTextExecution = isInTextExecution,
 	)
 }
 
 @Composable
 internal fun WelcomeContent(
-	bubblesStrategy: BubblesStrategy,
+	animationStrategy: AnimationStrategy,
 	onNavigateToScripts: () -> Unit,
 	onDoNotShowWelcomeAgain: (Boolean) -> Unit,
 	isInTextExecution: Boolean,
@@ -105,7 +105,7 @@ internal fun WelcomeContent(
 			}
 		},
 	) { paddingValues ->
-		val progressValue = rememberInfiniteTransition(label = "bubble")
+		val progressValue = rememberInfiniteTransition(label = "token animation")
 			.animateFloat(
 				initialValue = 0.2f,
 				targetValue = 1.8f,
@@ -116,7 +116,7 @@ internal fun WelcomeContent(
 						easing = LinearEasing,
 					),
 				),
-				label = "bubble",
+				label = "token animation",
 			).value
 
 		Column(
@@ -124,7 +124,7 @@ internal fun WelcomeContent(
 				.padding(paddingValues)
 				.fillMaxSize()
 				.drawBehind {
-					renderBubbles(progressValue, isInTextExecution, bubblesStrategy)
+					renderAnimation(progressValue, isInTextExecution, animationStrategy)
 				}.padding(16.dp)
 				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally,
@@ -150,19 +150,19 @@ internal fun WelcomeContent(
 	}
 }
 
-private fun DrawScope.renderBubbles(
+private fun DrawScope.renderAnimation(
 	progressValue: Float,
 	isInTextExecution: Boolean,
-	bubblesStrategy: BubblesStrategy,
+	animationStrategy: AnimationStrategy,
 ) {
 	if (isInTextExecution) {
-		bubblesStrategy.drawBubbles(
+		animationStrategy.render(
 			drawScope = this,
 			size = size,
 			step = 0.6f,
 		)
 	} else {
-		bubblesStrategy.drawBubbles(
+		animationStrategy.render(
 			drawScope = this,
 			size = size,
 			step = progressValue,
@@ -174,7 +174,7 @@ private fun DrawScope.renderBubbles(
 @Composable
 private fun PreviewWelcomeScreen() {
 	WelcomeContent(
-		bubblesStrategy = FadingInBubblesStrategy(),
+		animationStrategy = FadingInAnimationStrategy(),
 		onNavigateToScripts = {},
 		onDoNotShowWelcomeAgain = {},
 		isInTextExecution = false,

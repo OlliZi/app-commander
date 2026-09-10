@@ -16,8 +16,8 @@ import de.joz.appcommander.domain.preference.SavePreferenceUseCase
 import de.joz.appcommander.helper.PreferencesRepositoryMock
 import de.joz.appcommander.helper.screenshot.ScreenshotVerifier
 import de.joz.appcommander.ui.theme.AppCommanderTheme
-import de.joz.appcommander.ui.welcome.bubble.BubblesStrategy
-import de.joz.appcommander.ui.welcome.bubble.FadingInBubblesStrategy
+import de.joz.appcommander.ui.welcome.animation.AnimationStrategy
+import de.joz.appcommander.ui.welcome.animation.FadingInAnimationStrategy
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -51,13 +51,13 @@ class WelcomeScreenTest {
 	}
 
 	@Test
-	fun `should render animation bubbles when app is started`() =
+	fun `should render animation tokens when app is started`() =
 		runTest {
 			val navController: NavController = mockk(relaxed = true)
 			runComposeUiTest {
 				setTestContent(
 					navController = navController,
-					useCustomBubbleStrategy = false,
+					useCustomAnimationStrategy = false,
 				)
 
 				screenshotVerifier.verifyScreenshot(source = this, screenshotName = "animation")
@@ -71,7 +71,7 @@ class WelcomeScreenTest {
 			runComposeUiTest {
 				setTestContent(
 					navController = navController,
-					useCustomBubbleStrategy = true,
+					useCustomAnimationStrategy = true,
 				)
 
 				onNodeWithText("Hide welcome screen on next start").performClick()
@@ -124,7 +124,7 @@ class WelcomeScreenTest {
 
 	private fun ComposeUiTest.setTestContent(
 		navController: NavController,
-		useCustomBubbleStrategy: Boolean = false,
+		useCustomAnimationStrategy: Boolean = false,
 	) {
 		setContent {
 			AppCommanderTheme(
@@ -135,9 +135,9 @@ class WelcomeScreenTest {
 							navController = navController,
 							savePreferenceUseCase = SavePreferenceUseCase(preferencesRepository = preferencesRepositoryMock),
 						),
-						bubblesStrategy = if (useCustomBubbleStrategy) {
-							object : BubblesStrategy {
-								override fun drawBubbles(
+						animationStrategy = if (useCustomAnimationStrategy) {
+							object : AnimationStrategy {
+								override fun render(
 									drawScope: DrawScope,
 									size: Size,
 									step: Float,
@@ -146,7 +146,7 @@ class WelcomeScreenTest {
 								}
 							}
 						} else {
-							FadingInBubblesStrategy()
+							FadingInAnimationStrategy()
 						},
 						isInTextExecution = true,
 					)
