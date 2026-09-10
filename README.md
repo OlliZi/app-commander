@@ -1,6 +1,6 @@
 # App-Commander 🚀
 
-**Your programmable multi-device execution helper.**
+**Your programmable multi-device execution helper. Execute your custom scripts for your apps on multiple devices.**
 
 [![App-Commander - Release](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml)
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
