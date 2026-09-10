@@ -5,11 +5,11 @@
 [![App-Commander - Release](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml)
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
 
-**Hello and welcome.**
+<p align="center">
+    <img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/app_logo.png" width="200"/>
+</p>
 
-<img src="https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/app_logo.png" width="200"/>
-
-App-Commander is a powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
+**Hello and welcome.** App-Commander is a powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
 
 ## 🎥 First Impressions I (YouTube.com)
 | Demo & Preview                                                                                         | Filter & Custom scripts for your apps                                                                   | Write your own custom script                                                                           |
