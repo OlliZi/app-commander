@@ -5,16 +5,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
+import org.koin.core.annotation.Factory
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sin
+import kotlin.random.Random
 
+@Factory
 class FadingInBubblesStrategy : BubblesStrategy {
-	private val darkOrange = Color(red = 199, green = 110, blue = 0).copy(alpha = 0.5f)
-	private val bubbles = BubblesStrategy.createRandomBubbles(
-		color = darkOrange,
-	)
+	private val bubbles = createRandomBubbles()
 
 	override fun drawBubbles(
 		drawScope: DrawScope,
@@ -33,6 +34,24 @@ class FadingInBubblesStrategy : BubblesStrategy {
 			}
 		}
 	}
+
+	private fun createRandomBubbles(color: Color = BUBBLE_COLOR): List<Bubble> =
+		List(BUBBLE_COUNT) {
+			Bubble(
+				color = color.copy(
+					alpha = min(
+						MAX_BUBBLE_COLOR_ALPHA,
+						max(
+							MIN_BUBBLE_COLOR_ALPHA,
+							RANDOM.nextFloat(),
+						),
+					),
+				),
+				size = max(MIN_SIZE, RANDOM.nextFloat() * MAX_SIZE),
+				x = RANDOM.nextFloat(),
+				y = RANDOM.nextFloat(),
+			)
+		}
 
 	private fun createHexagon(
 		bubble: Bubble,
@@ -54,5 +73,12 @@ class FadingInBubblesStrategy : BubblesStrategy {
 
 	companion object {
 		private const val RADIANT = 2 * PI / 6
+		private const val BUBBLE_COUNT = 50
+		private const val MIN_BUBBLE_COLOR_ALPHA = 0.3f
+		private const val MAX_BUBBLE_COLOR_ALPHA = 0.6f
+		private const val MAX_SIZE = 200f
+		private const val MIN_SIZE = 50f
+		private val BUBBLE_COLOR = Color.Green.copy(green = 0.5f)
+		private val RANDOM = Random(1)
 	}
 }
