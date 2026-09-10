@@ -8,7 +8,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -36,7 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.joz.appcommander.resources.Res
-import de.joz.appcommander.resources.app_logo
+import de.joz.appcommander.resources.android_app_logo
 import de.joz.appcommander.resources.welcome_action
 import de.joz.appcommander.resources.welcome_catch_phrase
 import de.joz.appcommander.resources.welcome_do_not_show_again
@@ -81,10 +81,20 @@ internal fun WelcomeContent(
 		containerColor = MaterialTheme.colorScheme.surface,
 		modifier = modifier,
 		bottomBar = {
-			Box(
+			Column(
 				modifier = Modifier.fillMaxWidth(),
-				contentAlignment = Alignment.Center,
+				horizontalAlignment = Alignment.CenterHorizontally,
 			) {
+				var isChecked by remember { mutableStateOf(false) }
+				LabelledSwitch(
+					modifier = Modifier.padding(all = 32.dp),
+					label = stringResource(Res.string.welcome_do_not_show_again),
+					checked = isChecked,
+					onCheckedChange = {
+						isChecked = !isChecked
+						onDoNotShowWelcomeAgain(isChecked)
+					},
+				)
 				Button(
 					modifier = Modifier.padding(all = 16.dp).navigationBarsPadding().width(300.dp),
 					onClick = onNavigateToScripts,
@@ -136,20 +146,9 @@ internal fun WelcomeContent(
 			)
 			Spacer(Modifier.height(24.dp))
 			Image(
-				modifier = Modifier.fillMaxWidth(fraction = 0.8f),
-				painter = painterResource(Res.drawable.app_logo),
+				modifier = Modifier.size(300.dp), // fillMaxWidth(fraction = 0.8f),
+				painter = painterResource(Res.drawable.android_app_logo),
 				contentDescription = null,
-			)
-
-			var isChecked by remember { mutableStateOf(false) }
-			LabelledSwitch(
-				modifier = Modifier.padding(all = 16.dp),
-				label = stringResource(Res.string.welcome_do_not_show_again),
-				checked = isChecked,
-				onCheckedChange = {
-					isChecked = !isChecked
-					onDoNotShowWelcomeAgain(isChecked)
-				},
 			)
 		}
 	}
