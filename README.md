@@ -5,7 +5,9 @@
 [![App-Commander - Release](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/release_build.yml)
 [![App-Commander - PR-Checks](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml/badge.svg)](https://github.com/OlliZi/app-commander/actions/workflows/pr_check.yml)
 
-Hello and welcome.
+**Hello and welcome.**
+
+<kbd>![App-Logo](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonMain/composeResources/drawable/app_logo.png)</kbd>
 
 App-Commander is a powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
 
@@ -18,16 +20,19 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 ## 📸 First Impressions II
 
 **Welcome Screen**
+
 <kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/welcome/screenshots/animation.png)</kbd>
 
 **Scripts Screen**
-<kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/show_all.png)</kbd>
-<kbd>![Scripts-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/default_label.png)</kbd>
+
+<kbd>![Scripts-screen with default label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/scripts/screenshots/activated_scripts.png)</kbd>
 
 **Edit/Add Script Screen**
+
 <kbd>![Scripts-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/edit/screenshots/edit_script_ui.png)</kbd>
 
 **Settings Screen**
+
 <kbd>![Settings-screen with changed label](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/settings/screenshots/changed_label.png)</kbd>
 
 ## ✨ Key Features
