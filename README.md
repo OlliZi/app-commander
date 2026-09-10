@@ -17,7 +17,7 @@ App-Commander is a powerful desktop application built with Compose Multiplatform
 
 ## 📸 First Impressions II
 
-**Welcome Screen Animation**
+**Welcome Screen**
 <kbd>![Welcome-screen](https://raw.githubusercontent.com/OlliZi/app-commander/refs/heads/main/sharedCode/src/commonTest/kotlin/de/joz/appcommander/ui/welcome/screenshots/animation.png)</kbd>
 
 **Scripts Screen**
