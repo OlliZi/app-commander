@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -79,14 +81,19 @@ internal fun WelcomeContent(
 		containerColor = MaterialTheme.colorScheme.surface,
 		modifier = modifier,
 		bottomBar = {
-			Button(
-				modifier = Modifier.padding(all = 16.dp).navigationBarsPadding().fillMaxWidth(),
-				onClick = onNavigateToScripts,
+			Box(
+				modifier = Modifier.fillMaxWidth(),
+				contentAlignment = Alignment.Center,
 			) {
-				Text(
-					text = stringResource(Res.string.welcome_action),
-					style = MaterialTheme.typography.headlineSmall,
-				)
+				Button(
+					modifier = Modifier.padding(all = 16.dp).navigationBarsPadding().width(300.dp),
+					onClick = onNavigateToScripts,
+				) {
+					Text(
+						text = stringResource(Res.string.welcome_action),
+						style = MaterialTheme.typography.headlineSmall,
+					)
+				}
 			}
 		},
 	) { paddingValues ->
