@@ -13,7 +13,9 @@
 
 **Mentioned on AndroidWeekly.net (#465 https://androidweekly.net/issues/issue-744)**
 
-[![App-Commander - PR-Checks](https://androidweekly.net/assets/header/logo.png)](https://androidweekly.net/issues/issue-744)
+<p align="center">
+    <img src="https://androidweekly.net/assets/header/logo.png" width="300" height="41"/>
+</p>
 
 
 ## 🎥 First Impressions I (YouTube.com)
