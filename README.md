@@ -11,10 +11,10 @@
 
 **Hello and welcome.** App-Commander is your powerful desktop application built with Compose Multiplatform (https://kotlinlang.org/compose-multiplatform/) and Kotlin Multiplatform (https://kotlinlang.org/multiplatform/) that simplifies your mobile development workflow. It allows you to define, manage, and execute custom scripts across multiple Android and iOS devices simultaneously. Say goodbye to repetitive manual tasks and hello to streamlined efficiency!
 
-**Mentioned on AndroidWeekly.net (#465 https://androidweekly.net/issues/issue-744)**
+**Mentioned on AndroidWeekly.net (#744 https://androidweekly.net/issues/issue-744)**
 <p align="center">
-<img src="https://androidweekly.net/assets/newsletter/mobile-logo-1-32c9864cfef4d65d90c78e10a0abf699.png" height="40"/>
-<img src="https://androidweekly.net/assets/newsletter/mobile-logo-2-a2cb204854de720ebebecc666c9a0525.png" height="40"/>
+    <img src="https://androidweekly.net/assets/newsletter/mobile-logo-1-32c9864cfef4d65d90c78e10a0abf699.png" height="40"/>
+    <img src="https://androidweekly.net/assets/newsletter/mobile-logo-2-a2cb204854de720ebebecc666c9a0525.png" height="40"/>
 </p>
 
 
