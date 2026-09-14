@@ -13,8 +13,8 @@
 
 **Mentioned on AndroidWeekly.net (#465 https://androidweekly.net/issues/issue-744)**
 <p align="center">
-<img src="https://androidweekly.net/assets/newsletter/mobile-logo-1-32c9864cfef4d65d90c78e10a0abf699.png"/>
-<img src="https://androidweekly.net/assets/newsletter/mobile-logo-2-a2cb204854de720ebebecc666c9a0525.png"/>
+<img src="https://androidweekly.net/assets/newsletter/mobile-logo-1-32c9864cfef4d65d90c78e10a0abf699.png" height="40p"/>
+<img src="https://androidweekly.net/assets/newsletter/mobile-logo-2-a2cb204854de720ebebecc666c9a0525.png" height="40p"/>
 </p>
 
 
