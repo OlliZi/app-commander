@@ -14,7 +14,7 @@
 **Mentioned on AndroidWeekly.net (#465 https://androidweekly.net/issues/issue-744)**
 
 <p align="center">
-    <img src="https://androidweekly.net/assets/header/logo.png" width="300" height="41"/>
+    <img src="https://androidweekly.net/assets/header/logo.png" style="object-fit: cover; width: 300px; height: 41px;"/>
 </p>
 
 
