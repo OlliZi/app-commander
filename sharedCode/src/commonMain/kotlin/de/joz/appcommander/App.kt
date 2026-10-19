@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -46,7 +47,7 @@ fun App(
 		) {
 			composable<NavigationScreens.WelcomeScreen> {
 				val viewModel: WelcomeViewModel = koinViewModel {
-					parametersOf(navHostController)
+					parametersOf(navHostController as NavController)
 				}
 
 				WelcomeScreen(
@@ -56,7 +57,7 @@ fun App(
 			}
 			composable<NavigationScreens.ScriptsScreen> {
 				val viewModel: ScriptsViewModel = koinViewModel {
-					parametersOf(navHostController)
+					parametersOf(navHostController as NavController)
 				}
 
 				ScriptsScreen(
@@ -65,7 +66,7 @@ fun App(
 			}
 			composable<NavigationScreens.NewScriptScreen> {
 				val viewModel: EditScriptViewModel = koinViewModel {
-					parametersOf(navHostController, it.toRoute<NavigationScreens.NewScriptScreen>().scriptKey)
+					parametersOf(navHostController as NavController, it.toRoute<NavigationScreens.NewScriptScreen>().scriptKey)
 				}
 
 				EditScriptScreen(
@@ -74,7 +75,7 @@ fun App(
 			}
 			composable<NavigationScreens.SettingsScreen> {
 				val viewModel: SettingsViewModel = koinViewModel {
-					parametersOf(navHostController)
+					parametersOf(navHostController as NavController)
 				}
 
 				SettingsScreen(

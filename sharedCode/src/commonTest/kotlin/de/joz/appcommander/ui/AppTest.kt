@@ -18,7 +18,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Rule
 import org.koin.dsl.module
-import org.koin.ksp.generated.*
+import org.koin.plugin.module.dsl.*
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import kotlin.test.Test
@@ -32,7 +32,7 @@ class AppTest :
 
 	@get:Rule
 	val koinTestRule = KoinTestRule.create {
-		modules(DependencyInjection().module)
+		module<DependencyInjection>()
 		modules(
 			module {
 				single<SavePreferenceUseCase> {

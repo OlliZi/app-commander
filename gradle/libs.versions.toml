@@ -9,13 +9,11 @@ navigationCompose = "2.9.2"
 datastorePreferences = "1.2.1"
 mockk = "1.14.11"
 koin = "4.2.2"
-ksp = "2.3.12"
+koin-plugin = "1.2.1"
 detekt = "1.23.8"
 compose-icons = "1.1.1"
 ktlintGradle = "14.2.0"
 
-koin-compiler = "2.3.1"
-koin-annotations = "2.3.1"
 json = "1.11.0"
 kover = "0.9.11"
 buildconfig = "6.1.2"
@@ -33,8 +31,7 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
-koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
-koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-compiler" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-test-rule = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
 compose-icons = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "compose-icons" }
@@ -53,7 +50,7 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
 io-gitlab-arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 koverCodeCoverage = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

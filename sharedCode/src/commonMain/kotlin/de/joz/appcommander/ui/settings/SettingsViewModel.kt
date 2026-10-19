@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
