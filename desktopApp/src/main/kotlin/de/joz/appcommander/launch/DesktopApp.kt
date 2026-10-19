@@ -14,7 +14,7 @@ import de.joz.appcommander.resources.app_name
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.koin.dsl.koinConfiguration
-import org.koin.ksp.generated.*
+import org.koin.plugin.module.dsl.*
 
 fun main() =
 	application {
@@ -28,7 +28,7 @@ fun main() =
 			onCloseRequest = ::exitApplication,
 		) {
 			KoinApplication(
-				configuration = koinConfiguration(declaration = { modules(DependencyInjection().module) }),
+				configuration = koinConfiguration(declaration = { module<DependencyInjection>() }),
 				content = {
 					App()
 				},

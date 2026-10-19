@@ -7,7 +7,7 @@ plugins {
 	alias(libs.plugins.composeMultiplatform)
 	alias(libs.plugins.composeCompiler)
 	alias(libs.plugins.kotlinSerialization)
-	alias(libs.plugins.ksp)
+	alias(libs.plugins.koin.compiler)
 	alias(libs.plugins.io.gitlab.arturbosch.detekt)
 	alias(libs.plugins.koverCodeCoverage)
 	alias(libs.plugins.buildConfig)
@@ -46,15 +46,6 @@ kotlin {
 	}
 }
 
-dependencies {
-	add("kspJvm", libs.koin.ksp)
-}
-
-ksp {
-	arg("KOIN_CONFIG_CHECK", "true")
-	arg("KOIN_DEFAULT_MODULE", "false")
-}
-
 buildConfig {
 	packageName(mainPackage)
 	buildConfigField(
@@ -78,7 +69,6 @@ kover {
 		filters {
 			excludes {
 				packages(
-					"org.koin.ksp.generated",
 					"$mainPackage.resources",
 					"$mainPackage.launch",
 					"$mainPackage.ui.internalpreviews",
